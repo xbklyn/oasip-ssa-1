@@ -22,8 +22,8 @@
 --
 -- create database
 --
-create database OASIP;
-use OASIP;
+create database oasip;
+use oasip;
 
 
 DROP TABLE IF EXISTS `eventcategories`;
