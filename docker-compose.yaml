@@ -1,0 +1,23 @@
+ services:
+  oasipdb:
+    build: ./Database
+    container_name: oasipdb
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_USESR='root'
+      - MYSQL_ROOT_PASSWORD='123'
+
+  
+  oasipbe:
+    build: ./Backend
+    container_name: oasipbe
+    environtment: 
+      - DB_SERVER='oasipdb'
+      - MYSQL_DATABASE='OASIP'
+      - MYSQL_USER='root'
+      - MYSQL_PASSWORD='123'
+    ports:
+      - 8080:8080
+    links:
+      - oasipdb
