@@ -13,10 +13,10 @@
     build: ./Backend
     container_name: oasipbe
     environtment: 
-      - DB_SERVER='oasipdb'
-      - MYSQL_DATABASE='OASIP'
-      - MYSQL_USER='root'
-      - MYSQL_PASSWORD='123'
+      - DB_SERVER=oasipdb
+      - MYSQL_DATABASE=oasip
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=123
     ports:
       - 8080:8080
     links:
