@@ -1,6 +1,12 @@
 <template>
-    <ClinicSelection />
-    <Dashboard />
+    <div class="mx-24">
+        <div>
+            <ClinicSelection />
+        </div>
+        <div>
+            <Dashboard />
+        </div>
+    </div>
 </template>
  
 <script setup>

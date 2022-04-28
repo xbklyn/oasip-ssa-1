@@ -1,9 +1,15 @@
 <template>
-  <Navbar />
-  <div class="mx-24">
-    <router-view></router-view>
+  <div>
+    <div>
+      <Navbar />
+    </div>
+    <div>
+      <router-view></router-view>
+    </div>
+    <div>
+      <Footer />
+    </div>
   </div>
-  <Footer />
 </template>
  
 <script setup>
@@ -37,5 +43,9 @@ body {
 
 .l-w-408 {
   width: 408px;
+}
+
+.l-bg-gray{
+  background-color: #F9FAFB;
 }
 </style>
