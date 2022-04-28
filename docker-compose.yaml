@@ -1,22 +1,23 @@
- services:
+version: '3.8'
+services:
   oasipdb:
-    build: ./Database
     container_name: oasipdb
+    image: mysql
+    restart: unless-stopped
     ports:
       - 3306:3306
     environment:
-      - MYSQL_USESR='root'
-      - MYSQL_ROOT_PASSWORD='123'
+      - MYSQL_ROOT_PASSWORD=123
+    volumes:
+      - ./database/script/:/docker-entrypoint-initdb.d/
 
   
   oasipbe:
-    build: ./Backend
     container_name: oasipbe
-    environtment: 
-      - DB_SERVER=oasipdb
-      - MYSQL_DATABASE=oasip
-      - MYSQL_USER=root
-      - MYSQL_PASSWORD=123
+    build: ./oasip-app
+    depends_on:
+      - oasipdb
+    restart: always
     ports:
       - 8080:8080
     links:
