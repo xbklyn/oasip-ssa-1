@@ -2,6 +2,7 @@ package sit.int221.oasip.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import sit.int221.oasip.entities.Event;
@@ -22,5 +23,12 @@ public class EventsController {
     @GetMapping("")
     public List<Event> getAllEvents() {
         return erepo.findAll();
+    }
+
+    @GetMapping("/category/{categpryId")
+    public List<Event> getEventByCategory(
+            @PathVariable Integer id
+    ){
+        return  erepo.findAllByEventCategoryId(id);
     }
 }
