@@ -10,7 +10,7 @@ export const getAllEvents = async() => {
 }
 
 
-GET Event by id
+// GET Event by id
 export const getEventById = async(id) => {
     const res = await fetch(`http://localhost:9999/events/${id}`)
     if (res.status === 200) {
