@@ -2,7 +2,7 @@
     <div class="">
         <div class="py-24">
             <div class="">
-                <h1 class="font-bold text-center text-4xl l-color-navi ">My Schedule</h1>
+                <h1 class="font-bold text-center text-4xl l-color-navi ">All Schedule</h1>
                 <div class="flex justify-center text-xs">
                     <div class="flex justify-center w-8/12 h-6 m-24 space-x-3 ">
                         <div class="grid justify-center w-9 h-6 l-color-navi rounded-md hover:">
@@ -31,7 +31,7 @@
                 </div>
             </div>
             <div class="mx-24">
-                <MySchedule :data="myEventData" />
+                <BaseEvent :data="AllEventsData" />
             </div>
         </div>
     </div>
@@ -40,28 +40,29 @@
 </template>
  
 <script setup>
-import { ref } from '@vue/reactivity';
-import { onBeforeMount } from '@vue/runtime-core';
-import MySchedule from '../components/MySchedule.vue';
-// import { getMySchedule } from '../FetchService.js';
+import { ref ,onBeforeMount} from 'vue'
+import BaseEvent from '../components/BaseEvent.vue';
+import { getAllEvents } from '../services/event.service.js'
 
 
 
 
+const AllEventsData = ref([])
 
-const myEventData = ref()
+// const getMySchedule = async() => {
+//     const res = await fetch('http://oasipdb/api/events')
+//     if (res.status === 200) {
+//         myEventData.value = await res.json();
+//     } else {
+//         console.log('err');
+//     }
+// }
 
-const getMySchedule = async() => {
-    const res = await fetch('http://localhost:9999/events')
-    if (res.status === 200) {
-        myEventData.value = await res.json();
-    } else {
-        console.log('err');
-    }
-}
 
 onBeforeMount(async () => {
-    await getMySchedule()
+    const res =  await getAllEvents()
+    console.log(res)
+    AllEventsData.value = res
 })
 </script>
  
