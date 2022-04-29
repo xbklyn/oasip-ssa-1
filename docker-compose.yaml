@@ -5,7 +5,7 @@ services:
     image: mysql
     restart: unless-stopped
     ports:
-      - "3306"
+      - "3306:3306"
     environment:
       - MYSQL_ROOT_PASSWORD=123
     volumes:
@@ -19,7 +19,7 @@ services:
       - oasipdb
     restart: always
     ports:
-      - "8080"
+      - "8080:8080"
     links:
       - oasipdb
   
