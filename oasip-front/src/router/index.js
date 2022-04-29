@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue'
 import Booking from '../views/Booking.vue'
 import Scheduled from '../views/Scheduled.vue'
+import EventInfo from '../views/EventInfo.vue'
 
 const history = createWebHistory()
 const routes = [{
@@ -18,6 +19,11 @@ const routes = [{
         path: '/scheduled',
         name: 'Scheduled',
         component: Scheduled
+    },
+    {
+        path: '/scheduled/event-info/:id',
+        name: 'event-info',
+        component: EventInfo
     }
 ]
 

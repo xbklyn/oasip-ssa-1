@@ -64,6 +64,14 @@ font-family: 'Nunito', 'Kanit';
   width: 408px;
 }
 
+.l-w-520{
+  width: 520px;
+}
+
+.l-w-624 {
+  width: 624px;
+}
+
 .l-w-720 {
   width: 720px;
 }

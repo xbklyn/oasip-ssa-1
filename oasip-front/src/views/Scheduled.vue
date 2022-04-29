@@ -42,7 +42,7 @@
 <script setup>
 import { ref ,onBeforeMount} from 'vue'
 import BaseEvent from '../components/BaseEvent.vue';
-import { getAllEvents } from '../services/event.service.js'
+import { getAllEvents } from '../services/FetchServices.js'
 
 
 
