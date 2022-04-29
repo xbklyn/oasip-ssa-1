@@ -9,7 +9,7 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=123
     volumes:
-      - ./database/script/:/docker-entrypoint-initdb.d/
+      - ./Database/script/:/docker-entrypoint-initdb.d/
 
   
   oasipbe:
