@@ -22,3 +22,15 @@ services:
       - 8080:8080
     links:
       - oasipdb
+  
+  oasipfe:
+    container_name: oasipfe
+    build: ./oasip-front
+    depends_on:
+      - oasipdb
+    restart: always
+    ports: 
+      - 3000:3000
+    links: 
+      - oasipbe
+
