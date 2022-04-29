@@ -1,6 +1,6 @@
 //GET All event
 export const getAllEvents = async() => {
-    const res = await fetch('http://oasipbe:8080/api/events')
+    const res = await fetch('http://oasipbe/events')
     if (res.status === 200) {
         console.log(res.status);
         return await res.json();
