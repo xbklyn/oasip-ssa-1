@@ -19,7 +19,7 @@
 -- Create database
 --
 
-create database OASIP;
+create database oasip;
 use oasip;
 
 --
