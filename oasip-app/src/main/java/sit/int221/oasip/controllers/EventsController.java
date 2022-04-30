@@ -30,7 +30,7 @@ public class EventsController {
     }
 
 
-    @GetMapping("/api/events/{id}")
+    @GetMapping("/{id}")
     public Event getEventById(
         @PathVariable Integer id
     ) {
