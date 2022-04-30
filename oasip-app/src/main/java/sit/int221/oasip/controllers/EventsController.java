@@ -11,7 +11,6 @@ import org.springframework.web.server.ResponseStatusException;
 import sit.int221.oasip.entities.Event;
 import sit.int221.oasip.repositories.EventRepository;
 
-import java.net.http.HttpResponse;
 import java.util.List;
 
 @CrossOrigin("*")
