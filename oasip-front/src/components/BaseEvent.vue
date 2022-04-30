@@ -1,5 +1,5 @@
 <template>
-    <div class="space-y-12" v-if="data.length > 0">
+    <div class="space-y-12 mb-24" v-if="(data.length > 0)">
         <div class="l-w-10-12 mx-auto" v-for="(value, index) in data" :key="index">
             <router-link :to="{ name: 'event-info', params: { id: value.id } }">
                 <div class="h-32 flex place-items-center space-x-6">
@@ -17,7 +17,8 @@
                                     {{ value.eventCategory.eventCategoryName }}
                                 </h3>
                                 <p class="grid text-xs font-bold justify-items-end place-items-center">
-                                    {{ value.eventStartTime }} - {{ value.eventStartTime + value.eventDuration }}
+                                    <!-- {{ value.eventStartTime }} - {{ value.eventStartTime + value.eventDuration }} -->
+                                    On {{ new Date(value.eventStartTime).toLocaleString() }}
                                 </p>
                             </div>
                             <div>
@@ -46,6 +47,8 @@
 </template>
  
 <script setup>
+
+const date = new Date()
 const prop = defineProps({
     data: {
         type: Array,

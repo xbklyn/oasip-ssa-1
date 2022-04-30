@@ -1,16 +1,12 @@
 <template>
     <div class="mx-24">
-        <div>
-            <ClinicSelection />
-        </div>
-        <div>
-            <Dashboard />
-        </div>
+        <ClinicDashBoard />
+        <Dashboard />
     </div>
 </template>
  
 <script setup>
-import ClinicSelection from '../components/ClinicSelection.vue';
+import ClinicDashBoard from '../components/ClinicDashBoard.vue';
 import Dashboard from '../components/Dashboard.vue';
 
 </script>

@@ -1,22 +1,28 @@
 <template>
-    <div class="space-y-6">
-        <div v-for="value, index in clinics" :key="index">
-            <router-link :to="{ name: '' }">
-                <div class="w-full h-48 rounded-lg flex justify-center place-items-center space-x-32 l-bg-blue">
-                    <div class="w-8/12 h-28 text-white">
-                        <h2 class="text-2xl font-bold mb-1">{{ value.name }}</h2>
-                        <p class="text-base font-light">{{ value.description }}</p>
-                    </div>
-                    <div class="w-24 h-24 text-7xl flex justify-center place-items-center">
-                        <img src="../assets/next.png" />
+    <div class="grid justify-center mb-24">
+        <h1 class="text-4xl font-bold l-color-navi mt-24 mb-8">Clinic</h1>
+        <div class="flex space-x-6">
+            <div class="grid place-items-center w-80 h-72 bg-black rounded-xl ease-out transition hover:scale-110 drop-shadow-md"
+                v-for="value, index in clinics" :key="index">
+                <div class="w-64 h-52">
+                    <h2 class="font-bold text-white text-2xl">{{ value.name }}</h2>
+                    <p class="text-xs text-white">{{ value.description }}</p>
+                    <div class="grid justify-center mt-12">
+                        <router-link :to="{ name: '' }">
+                            <div
+                                class="grid place-items-center text-white w-32 h-9 l-bg-blue font-semibold text-xs rounded-md hover:bg-blue-700 ease-out duration-75">
+                                Booking now
+                            </div>
+                        </router-link>
                     </div>
                 </div>
-            </router-link>
+            </div>
         </div>
     </div>
 </template>
  
 <script setup>
+
 const clinics = [
     {
         name: "Front end",
@@ -38,14 +44,13 @@ const clinics = [
         description: `Lorem ipsum dolorsit amet, consectetur adipiscing elit.Integer etiam nunc, vel lacus volutpat. Id suscipit at
             bibendumnec etiam quis nisi. Id ut nuncornare fusce ipsumtincidunt fermentum. Interdum nulla malesuada nunc in.`
     },
-    {
-        name: "Project Management",
-        description: `Lorem ipsum dolorsit amet, consectetur adipiscing elit.Integer etiam nunc, vel lacus volutpat. Id suscipit at
-            bibendumnec etiam quis nisi. Id ut nuncornare fusce ipsumtincidunt fermentum. Interdum nulla malesuada nunc in.`
-    }
+    // {
+    //     name: "Project Managemen",
+    //     description: `Lorem ipsum dolorsit amet, consectetur adipiscing elit.Integer etiam nunc, vel lacus volutpat. Id suscipit at
+    //         bibendumnec etiam quis nisi. Id ut nuncornare fusce ipsumtincidunt fermentum. Interdum nulla malesuada nunc in.`
+    // }
 ]
 </script>
  
 <style>
 </style>
-

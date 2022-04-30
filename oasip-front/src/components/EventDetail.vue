@@ -7,24 +7,29 @@
                 <div class="grid grid-cols-2 gap-6">
                     <div class="space-y-1">
                         <h4 class="text-base font-semibold text-gray-300">Name</h4>
-                        <p class="text-xs font-light">{{data.bookingName}}</p>
+                        <p class="text-xs font-light">{{ data.bookingName }}</p>
                     </div>
                     <div class="space-y-1">
                         <h4 class="text-base font-semibold text-gray-300">Email</h4>
-                        <p class="text-xs font-light">{{data.bookingEmail}}</p>
+                        <p class="text-xs font-light">{{ data.bookingEmail }}</p>
                     </div>
                     <div class="space-y-1">
                         <h4 class="text-base font-semibold text-gray-300">Time</h4>
-                        <p class="text-xs font-light">{{data.eventStartTime}} - {{data.eventStartTime + data.eventDuration}}</p>
+                        <p class="text-xs font-light">
+                            Start: {{ new Date(data.eventStartTime).toLocaleString() }}
+                        </p>
+                        <p class="text-xs font-light">
+                            End: {{ new Date(new Date(data.eventStartTime).getTime() + (data.eventDuration * 60000)).toLocaleString() }}
+                        </p>
                     </div>
                     <div class="space-y-1">
                         <h4 class="text-base font-semibold text-gray-300">Duration</h4>
-                        <p class="text-xs font-light">{{data.eventDuration}} Min.</p>
+                        <p class="text-xs font-light">{{ data.eventDuration }} Min.</p>
                     </div>
                     <div class="grid col-span-2 space-y-1">
                         <h4 class="text-base font-semibold text-gray-300">Note</h4>
-                        <p v-if="data.eventNotes.length > 0" class="text-xs font-light h-20 w-1/12">{{data.eventNotes}}</p>
-                        <p v-else class="text-xs font-light h-20 w-1/12">None</p>
+                        <p v-if="data.eventNotes.length > 0" class="text-xs font-light h-20">{{ data.eventNotes }}</p>
+                        <p v-else class="text-xs font-light h-20">None</p>
                     </div>
                 </div>
             </div>
@@ -37,15 +42,15 @@
                 <div class="grid grid-cols-2 gap-6 w-72 h-48 ">
                     <div class="space-y-1">
                         <h4 class="text-base font-semibold text-gray-300">Clinic name</h4>
-                        <p class="text-xs font-light">{{data.eventCategory.eventCategoryName}}</p>
+                        <p class="text-xs font-light">{{ data.eventCategory.eventCategoryName }}</p>
                     </div>
                     <div class="space-y-1">
                         <h4 class="text-base font-semibold text-gray-300">Duration</h4>
-                        <p class="text-xs font-light">{{data.eventDuration}} Min.</p>
+                        <p class="text-xs font-light">{{ data.eventDuration }} Min.</p>
                     </div>
                     <div class="col-span-2 space-y-1">
                         <h4 class="text-base font-semibold text-gray-300">Description</h4>
-                        <p class="text-xs font-light h-20 w-full">{{data.eventCategory.eventCategoryDescription}}</p>
+                        <p class="text-xs font-light h-20 w-full">{{ data.eventCategory.eventCategoryDescription }}</p>
                     </div>
                 </div>
             </div>

@@ -4,6 +4,7 @@ import Booking from '../views/Booking.vue'
 import Scheduled from '../views/Scheduled.vue'
 import EventInfo from '../views/EventInfo.vue'
 
+
 const history = createWebHistory()
 const routes = [{
         path: '/',

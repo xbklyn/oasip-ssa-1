@@ -36,7 +36,7 @@
             "eventNotes": "",
             "eventCategory": {
                 "id": 3,
-                "eventCategoryName": "Database Clinic",
+                "eventCategoryName": "Database",
                 "eventCategoryDescription": "ตารางนัดหมายนี้ใชKสําหรับนัดหมาย database clinic ใน วิชา INT221 integrated project I",
                 "eventDuration": 15
             }

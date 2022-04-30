@@ -3,6 +3,9 @@
     <div>
       <Navbar />
     </div>
+    <div v-show="(this.$route.name == 'scheduled')">
+      <!-- <CatagoryFilter  /> -->
+    </div>
     <div>
       <router-view></router-view>
     </div>
@@ -15,6 +18,7 @@
 <script setup>
 import Navbar from './components/Navbar.vue';
 import Footer from './components/Footer.vue';
+import CatagoryFilter from './components/CatagoryFilter.vue';
 </script>
  
 <style>
@@ -28,7 +32,7 @@ body {
   /* font-family: 'Nunito Sans', sans-serif; */
   /* font-family: 'Nunito', sans-serif; */
   /* font-family: 'Kanit', sans-serif; */
-  background-color: #F9FAFB;    
+  background-color: #F9FAFB;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #23374D;
@@ -36,15 +40,15 @@ body {
 }
 
 nav {
-font-family: 'Nunito', 'Kanit';
-/* font-family: 'Nunito Sans', sans-serif; */
+  font-family: 'Nunito', 'Kanit';
+  /* font-family: 'Nunito Sans', sans-serif; */
 }
 
 .l-color-navi {
   color: #23374D;
 }
 
-.l-color-gray{
+.l-color-gray {
   color: #D4DAEF;
 }
 
@@ -56,7 +60,7 @@ font-family: 'Nunito', 'Kanit';
   background-color: #1089FF;
 }
 
-.l-bg-navi{
+.l-bg-navi {
   background-color: #23374D;
 }
 
@@ -64,7 +68,7 @@ font-family: 'Nunito', 'Kanit';
   width: 408px;
 }
 
-.l-w-520{
+.l-w-520 {
   width: 520px;
 }
 
@@ -76,19 +80,19 @@ font-family: 'Nunito', 'Kanit';
   width: 720px;
 }
 
-.l-w-840{
+.l-w-840 {
   width: 840px;
 }
 
-.l-bg-gray{
+.l-bg-gray {
   background-color: #F9FAFB;
 }
 
-.l-w-10-12{
- width: 1056px
+.l-w-10-12 {
+  width: 1056px
 }
 
-.l-w-full{
+.l-w-full {
   width: 1272px;
 }
 </style>
