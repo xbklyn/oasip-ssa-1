@@ -36,7 +36,7 @@ public class EventsController {
         @PathVariable Integer id
     ) {
         return erepo.findById(id).orElseThrow(() -> {
-            new ResponseStatusException(HttpStatus.NOT_FOUND);
+            return new ResponseStatusException(HttpStatus.NOT_FOUND);
         });
     }
     
