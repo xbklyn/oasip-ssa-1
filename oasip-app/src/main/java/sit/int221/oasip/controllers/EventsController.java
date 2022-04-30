@@ -26,8 +26,8 @@ public class EventsController {
 
     @GetMapping("/category/{categoryId}")
     public List<Event> getEventByCategory(
-            @PathVariable Integer id
+            @PathVariable Integer categoryId
     ){
-        return  erepo.findAllByEventCategoryId(id);
+        return  erepo.findAllByEventCategoryId(categoryId);
     }
 }
