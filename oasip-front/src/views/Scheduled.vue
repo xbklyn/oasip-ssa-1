@@ -41,8 +41,8 @@ import { getAllEvents } from '../services/FetchServices.js'
 
 onBeforeMount(async () => {
     const res = await getAllEvents()
-    // console.log(res)
-    AllEventsData.value = res
+    console.log(JSON.stringify(res))
+    // AllEventsData.value = res
 })
 
 const AllEventsData = ref([])
