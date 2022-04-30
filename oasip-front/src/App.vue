@@ -3,9 +3,6 @@
     <div>
       <Navbar />
     </div>
-    <div v-show="(this.$route.name == 'scheduled')">
-      <!-- <CatagoryFilter  /> -->
-    </div>
     <div>
       <router-view></router-view>
     </div>
