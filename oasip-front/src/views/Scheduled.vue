@@ -35,7 +35,6 @@
                     <input class="w-48 h-6 rounded-md l-bg-gray px-6 border border-blue-400" type="text"
                     placeholder="Search">
                 </div>
-                
             </div>
         </div>
 
