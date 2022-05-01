@@ -29,6 +29,13 @@ public class EventsController {
         return erepo.findAll();
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("")
+    public Event createEvent(
+            @RequestBody Event event
+    ) {
+        return erepo.saveAndFlush(event);
+    }
 
     @GetMapping("/{id}")
     public Event getEventById(
