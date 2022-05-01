@@ -16,10 +16,10 @@
                     <div class="space-y-1">
                         <h4 class="text-base font-semibold text-gray-300">Time</h4>
                         <p class="text-xs font-light">
-                            Start: {{ new Date(data.eventStartTime).toLocaleString() }}
+                            Start: {{ new Date(data.eventStartTime).toLocaleString('th-TH') }}
                         </p>
                         <p class="text-xs font-light">
-                            End: {{ new Date(new Date(data.eventStartTime).getTime() + (data.eventDuration * 60000)).toLocaleString() }}
+                            End: {{ new Date(new Date(data.eventStartTime).getTime() + (data.eventDuration * 60000)).toLocaleString('th-TH') }}
                         </p>
                     </div>
                     <div class="space-y-1">

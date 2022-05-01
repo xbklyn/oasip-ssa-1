@@ -9,6 +9,10 @@ export const getAllEvents = async() => {
     }
 }
 
+const getAllEvents = async() => {
+    const res = await fetch('http://localhost:9999/events')
+}
+
 
 //GET Event by id
 export const getEventById = async(id) => {

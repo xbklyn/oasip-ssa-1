@@ -18,7 +18,7 @@
                                 </h3>
                                 <p class="grid text-xs font-bold justify-items-end place-items-center">
                                     <!-- {{ value.eventStartTime }} - {{ value.eventStartTime + value.eventDuration }} -->
-                                    On {{ new Date(value.eventStartTime).toLocaleString() }}
+                                    On {{ new Date(value.eventStartTime).toLocaleString('th-TH') }}
                                 </p>
                             </div>
                             <div>
