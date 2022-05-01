@@ -23,8 +23,19 @@
                 </div>
                 <div class="grid justify-center place-items-center w-36 h-6 l-color-navi rounded-md hover:">
                     <button>Product Management</button>
-                </div> 
-                <input class="w-48 h-6 rounded-md l-bg-gray px-4 border border-blue-400" type="text" placeholder="Search">
+                </div>
+                <div class="flex">
+                    <div class="mt-1">
+                        <svg class="absolute text-slate-400 h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <input class="w-48 h-6 rounded-md l-bg-gray px-6 border border-blue-400" type="text"
+                    placeholder="Search">
+                </div>
+                
             </div>
         </div>
 
