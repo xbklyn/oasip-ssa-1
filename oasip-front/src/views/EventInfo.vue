@@ -21,7 +21,6 @@ import { getEventById } from '../services/FetchServices.js';
 import { useRoute, useRouter } from 'vue-router'
 
 const { params } = useRoute()
-const eventInfoById = ref([])
 
 onBeforeMount(async () => {
     const res = await getEventById(params.id)
@@ -29,6 +28,7 @@ onBeforeMount(async () => {
     eventInfoById.value = res
 })
 
+const eventInfoById = ref([])
 
 const myRouter = useRouter()
 const goBack = () => myRouter.go(-1)

@@ -16,10 +16,10 @@
                     <div class="space-y-1">
                         <h4 class="text-base font-semibold text-gray-300">Time</h4>
                         <p class="text-xs font-light">
-                            Start: {{ new Date(data.eventStartTime).toLocaleString('th-TH') }}
+                            Start: {{ data.eventStartTime }}    
                         </p>
                         <p class="text-xs font-light">
-                            End: {{ new Date(new Date(data.eventStartTime).getTime() + (data.eventDuration * 60000)).toLocaleString('th-TH') }}
+                            End: {{ data.eventEndTime }}
                         </p>
                     </div>
                     <div class="space-y-1">
@@ -28,7 +28,7 @@
                     </div>
                     <div class="grid col-span-2 space-y-1">
                         <h4 class="text-base font-semibold text-gray-300">Note</h4>
-                        <p v-if="data.eventNotes.length > 0" class="text-xs font-light h-20">{{ data.eventNotes }}</p>
+                        <p v-if="(data.eventNotes)" class="text-xs font-light h-20">{{ data.eventNotes }}</p>
                         <p v-else class="text-xs font-light h-20">None</p>
                     </div>
                 </div>
