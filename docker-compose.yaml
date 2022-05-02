@@ -30,7 +30,7 @@ services:
       - oasipdb
     restart: always
     volumes: 
-      - ./oasip-front/nginxfe.conf:/etc/nginx/conf.d/default.conf:ro 
+      - ./oasip-front/nginxfe.conf:/etc/nginx/conf.d/default.conf
     ports: 
       - "80:80"
     links:
