@@ -5,7 +5,7 @@
         </div>
         <div class="rounded-xl text-center mt-24">
             <div class="">
-                <h1 class="text-7xl l-color-gray">รอไปก่อนนะไอสัส</h1>
+                <!-- <h1 class="text-7xl l-color-gray">รอไปก่อนนะไอสัส</h1> -->
             </div>
         </div>
     </div>
