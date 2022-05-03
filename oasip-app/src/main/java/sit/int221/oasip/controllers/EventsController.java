@@ -1,5 +1,6 @@
 package sit.int221.oasip.controllers;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 // import org.springframework.web.bind.annotation.GetMapping;
 // import org.springframework.web.bind.annotation.PathVariable;
@@ -26,7 +27,7 @@ public class EventsController {
 
     @GetMapping("")
     public List<Event> getAllEvents() {
-        return erepo.findAll();
+        return erepo.findAll(Sort.by("eventStartTime").descending().and(Sort.by("eventDate")).descending());
     }
 
     @ResponseStatus(HttpStatus.CREATED)

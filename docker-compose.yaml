@@ -9,7 +9,7 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=123
     volumes:
-      - ./Database/script/empty_data.sql :/docker-entrypoint-initdb.d/
+      - ./Database/script/:/docker-entrypoint-initdb.d/
 
   
   oasipbe:
@@ -30,7 +30,9 @@ services:
       - oasipdb
     restart: always
     ports: 
-      - 80:80
+      - "80:80"
     links:
       - oasipbe
+    volumes: 
+      - ./oasip-front/nginxfe.conf:/etc/nginx/conf.d/nginxfe.conf
 

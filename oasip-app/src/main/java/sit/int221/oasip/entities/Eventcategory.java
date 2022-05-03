@@ -9,7 +9,7 @@ import java.util.Set;
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
 @Entity
-@Table(name = "eventcategories")
+@Table(name = "eventCategories")
 public class Eventcategory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
