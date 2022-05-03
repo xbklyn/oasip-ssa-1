@@ -27,7 +27,7 @@ public class EventsController {
 
     @GetMapping("")
     public List<Event> getAllEvents() {
-        return erepo.findAll(Sort.by("eventStartTime").descending().and(Sort.by("eventDate")).descending());
+        return erepo.findAll(Sort.by("eventDate").descending().and(Sort.by("eventStartTime").descending()));
     }
 
     @ResponseStatus(HttpStatus.CREATED)
