@@ -36,6 +36,6 @@ CREATE TABLE `events` (
   `eventCategoryId` int NOT NULL,
   PRIMARY KEY (`bookingId`),
   KEY `fk_event_eventCategory_idx` (`eventCategoryId`),
-  CONSTRAINT `fk_event_eventCategory` FOREIGN KEY (`eventCategoryId`) REFERENCES `eventcategories` (`eventCategoryId`)
+  CONSTRAINT `fk_event_eventCategory` FOREIGN KEY (`eventCategoryId`) REFERENCES `eventCategories` (`eventCategoryId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
