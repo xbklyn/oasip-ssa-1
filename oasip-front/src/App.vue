@@ -92,4 +92,8 @@ nav {
 .l-w-full {
   width: 1272px;
 }
+
+.l-h-624 {
+  height: 624px;
+}
 </style>

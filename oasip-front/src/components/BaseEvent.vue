@@ -1,5 +1,5 @@
 <template>
-    <div class="space-y-12 mb-24" v-if="(data.length > 0)">
+    <div class="space-y-12 mb-24 l-w-10-12 l-h-624 mx-auto" v-if="(data.length > 0)">
         <div class="l-w-10-12 mx-auto" v-for="(value, index) in data" :key="index">
             <router-link :to="{ name: 'event-info', params: { id: value.id } }">
                 <div class="h-32 flex place-items-center space-x-6">

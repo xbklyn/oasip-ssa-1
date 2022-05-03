@@ -46,6 +46,22 @@
                 "eventCategoryDescription": "ตารางนัดหมายนี้ใชKสําหรับนัดหมาย database clinic ใน วิชา INT221 integrated project I",
                 "eventDuration": 15
             }
+        },
+        {
+            "id": 4,
+            "bookingName": "สมเกียรติ ขยันเรียน  (TT-4)",
+            "bookingEmail": "somkiat.kay@kmutt.ac.th",
+            "eventDate": "2022-05-23T00:00:00.000+00:00",
+            "eventStartTime": "16:30:00",
+            "eventEndTime": "17:00:00",
+            "eventDuration": 15,
+            "eventNotes": "",
+            "eventCategory": {
+                "id": 1,
+                "eventCategoryName": "Database Clinic",
+                "eventCategoryDescription": "ตารางนัดหมายนี้ใชKสําหรับนัดหมาย database clinic ใน วิชา INT221 integrated project I",
+                "eventDuration": 15
+            }
         }
     ]
 }
