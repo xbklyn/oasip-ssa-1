@@ -33,7 +33,7 @@
                         </svg>
                     </div>
                     <input class="w-48 h-6 rounded-md l-bg-gray px-6 border border-blue-400" type="text"
-                    placeholder="Search">
+                        placeholder="Search">
                 </div>
             </div>
         </div>
@@ -53,9 +53,30 @@ onBeforeMount(async () => {
     const res = await getAllEvents()
     console.log(res)
     AllEventsData.value = res
+    // sortTime()
+    // sortDate()
 })
 
 const AllEventsData = ref([])
+
+// const sortTime = () => {
+//      return AllEventsData.value.sort(function (a, b) {
+//         if (b.eventStartTime < a.eventStartTime) {
+//             return -1
+//         }
+//         if (b.eventStartTime > a.eventStartTime) {
+//             return 1
+//         }
+//         return 0
+//     })
+// }
+
+// const sortDate = () => {
+//     return AllEventsData.value.sort(function (a, b) {
+//         return new Date(a.eventDate) - new Date(b.eventDate);
+//     })
+// }
+
 
 </script>
  

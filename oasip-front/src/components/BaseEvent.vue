@@ -41,7 +41,7 @@
     </div>
     <div v-else>
         <div class="l-w-10-12 mx-auto h-96 my-24">
-            <h1 class="text-7xl l-color-gray text-center">No events scheduled</h1>
+            <h1 class="text-7xl l-color-gray text-center select-none">No events scheduled</h1>
         </div>
     </div>
 </template>
