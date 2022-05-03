@@ -33,6 +33,5 @@ services:
       - "80:80"
     links:
       - oasipbe
-    volumes: 
-      - ./oasip-front/nginxfe.conf:/etc/nginx/conf.d/nginxfe.conf
+
 
