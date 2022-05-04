@@ -30,13 +30,16 @@ const routes = [{
     {
         path: '/scheduled/event-info/:id',
         component: Scheduled,
-        children: [
-            {
-                path: '',
-                component: EventInfo,
-                name: 'event-info'
-            }
-        ]
+        children: [{
+            path: '',
+            component: EventInfo,
+            name: 'event-info'
+        }]
+    },
+    {
+        path: '/:catchNotMatchPath(.*)',
+        name: 'NotFound',
+        component: NotFound
     }
 ]
 
