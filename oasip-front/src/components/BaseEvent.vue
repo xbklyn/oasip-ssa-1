@@ -1,47 +1,42 @@
 <template>
-    <div class="space-y-12 mb-24 l-w-10-12 l-h-624 mx-auto" v-if="(data.length > 0)">
-        <div class="l-w-10-12 mx-auto" v-for="(value, index) in data" :key="index">
-            <router-link :to="{ name: 'event-info', params: { id: value.id } }">
-                <div class="h-32 flex place-items-center space-x-6">
-                    <div class="grid place-items-center w-48 h-16 l-bg-blue rounded-xl">
-                        <p class="text-white">
-                            {{ value.eventDuration }} Min.
-                        </p>
-                    </div>
-                    <div
-                        class="flex l-w-840 h-32 bg-white rounded-xl place-items-center ease-out transition hover:scale-110">
-                        <div class="w-10 h-32 l-bg-navi rounded-tl-xl rounded-bl-xl"></div>
-                        <div class="ml-12 l-w-720 h-20 place-items-center">
-                            <div class="grid grid-cols-2 ">
-                                <h3 class="grid place-items-start text-2xl font-bold">
-                                    {{ value.eventCategory.eventCategoryName }}
-                                </h3>
-                                <p class="grid text-xs font-bold justify-items-end place-items-center">
-                                    <!-- {{ value.eventStartTime }} - {{ value.eventStartTime + value.eventDuration }} -->
-                                    On {{ new Date(value.eventDate).toLocaleDateString('th-TH') }} At {{ value.eventStartTime }}
+    <div class="grid justify-center" v-if="(data.length > 0)">
+        <div class="l-w-1248 l-h-1176 pb-24 grid grid-cols-2 gap-6">
+            <div class="l-w-612 h-44 flex" v-for="value, index in data" :key="index">
+                <div class="l-w-106 h-44 grid place-items-center"><input type="checkbox" width="24" class="ml-10"></div>
+                <router-link :to="{ name: 'event-info', params: { id: value.id } }">
+                    <div class="l-w-506 h-44 l-bg-gray flex place-items-center">
+                        <div class="w-12 h-44 l-bg-navi"></div>
+                        <div class="l-w-408 h-28 ml-6">
+                            <div class="grid grid-cols-3">
+                                <div class="col-span-2">
+                                    <p class="text-md font-semibold">{{ value.eventCategoryName }}</p>
+                                </div>
+                                <div class="place-self-end">
+                                    <p class="text-xs font-semibold">On {{ new
+                                            Date(value.eventDate).toLocaleDateString()
+                                    }}</p>
+                                    <p class="text-xs grid justify-end mt-1">{{ value.eventDuration }} Min.</p>
+                                </div>
+                                <div class="col-span-3">
+                                    <h2 class="text-xl font-bold">{{ value.bookingName }}</h2>
+                                </div>
+                            </div>
+                            <div class="col-span-2 text-xs mt-6">
+                                <p class="l-color-gray-300"><span class="font-bold">Note: </span>{{ value.eventNotes == ''?'None':value.eventNotes }}
                                 </p>
                             </div>
-                            <div>
-                                <p class="text-xs font-regular mt-1">
-                                    By {{ value.bookingName }}
-                                </p>
-                            </div>
-                            <div>
-                                <p class="text-xs font-regular mt-2 text-slate-400">
-                                    {{ value.eventCategory.eventCategoryDescription }}
-                                </p>
-                            </div>
-
                         </div>
                     </div>
-                </div>
-            </router-link>
+                </router-link>
+            </div>
         </div>
-
+        <div class="font-bold text-4xl l-color-gray text-center pb-24">
+            <p>Page Number</p>
+        </div>
     </div>
     <div v-else>
-        <div class="l-w-10-12 mx-auto h-96 my-24">
-            <h1 class="text-7xl l-color-gray text-center select-none">No events scheduled</h1>
+        <div class="grid justify-cente h-96 my-24">
+            <h1 class="text-7xl l-color-gray text-center select-none">No scheduled event</h1>
         </div>
     </div>
 </template>
