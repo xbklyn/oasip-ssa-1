@@ -1,36 +1,37 @@
 <template>
   <div>
-      <div class="grid content-center justify-center place-items-center">
-          <div>
-        <div class="flex">
-          <div class="basis-1/4">
-            <img src="../assets/component/NotFound.png" />
-          </div>
-          <div class="grid place-items-center">
-            <div class="basis-3/4">
-              <div>
-                <h1 class="text-red-400 font-black text-9xl">ERROR 404</h1>
-              </div>
-              <div>
-                <h3 class="font-regular text-5xl">Page not found</h3>
-              </div>
-              <div >
-                <h4 @click="goBack" class="text-blue-400 font-regular text-2xl">
-                  Back to home page
-                </h4>
-              </div>
+    <div class="grid place-items-center h-screen">
+      <div class="flex">
+        <div>
+          <img src="../assets/component/NotFound.png" />
+        </div>
+        <div class="grid place-items-center">
+          <div class="">
+            <div>
+              <h1 class="text-red-400 font-black text-7xl">ERROR 404</h1>
             </div>
+            <div>
+              <p class="font-semibold text-4xl mb-6">Page not found</p>
+            </div>
+            <div>
+              <p @click="goBack" class="l-color-blue font-regular text-xl underline">
+                Back to home page
+              </p>
             </div>
           </div>
         </div>
       </div>
     </div>
+  </div>
 </template>
 
 <script setup>
 import { useRouter } from "vue-router";
 const myRouter = useRouter();
-const goBack = () => myRouter.go(-1);
+const goBack = () => myRouter.push({
+  name: 'Home'
+});
 </script>
 
-<style></style>
+<style>
+</style>

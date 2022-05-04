@@ -4,11 +4,11 @@
             <router-link :to="{ name: 'Booking' }" class="l-color-blue underline">Booking</router-link>
             <p> > Enter you infomation</p>
         </div>
-        <h1 class="text-7xl font-bold mb-24">Enter your information</h1>
+        <h1 class="text-7xl font-bold mb-24">Fill your information</h1>
         <div class="l-w-824 grid grid-cols-2 gap-6 space-y-4 mb-24">
             <div class="">
                 <h2 class="l-color-gray-300 text-base">Clinic Selected</h2>
-                <select class="l-w-400 h-12 l-bg-gray">
+                <select class="l-w-400 h-12 l-bg-gray pl-6">
                     <option value="Front-end">Front-end</option>
                     <option value="Back-end">Back-end</option>
                     <option value="Database">Database</option>

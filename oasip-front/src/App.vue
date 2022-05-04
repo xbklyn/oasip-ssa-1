@@ -16,6 +16,13 @@
 import Navbar from './components/Navbar.vue';
 import Footer from './components/Footer.vue';
 
+import { useRoute, useRouter } from 'vue-router'
+const myRouter = useRouter();
+
+myRouter.beforeEach((to, from, next) => {
+  document.title = to.meta.title
+  next()
+})
 </script>
  
 <style>
