@@ -1,15 +1,11 @@
 <template>
-    <div class="mx-24">
-        <div class="grid grid-cols-3 place-items-center">
-            <button @click="goBack" class="">
-                <div class="w-12 flex place-items-center">
-                    <img src="../assets/back.png" alt="" width="36">
-                    <span class="text-lg font-semibold">Back</span>
-                </div>
-            </button>
-            <h1 class="text-4xl font-bold mt-24 mb-8 text-center inline grid justity-center">EventDetail</h1>
+    <div>
+        <div class="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-49 w-screen h-screen"
+            @click="goBack">
         </div>
-        <EventDetail :data="eventInfoById" />
+        <div class="bg-black/80 fixed top-72 right-0 left-0 py-16 z-50">
+            <EventDetail :data="eventInfoById" @exit="goBack" />
+        </div>
     </div>
 </template>
  
@@ -23,6 +19,7 @@ import { useRoute, useRouter } from 'vue-router'
 const { params } = useRoute()
 
 onBeforeMount(async () => {
+    console.log(params.id);
     const res = await getEventById(params.id)
     console.log(res)
     eventInfoById.value = res
@@ -31,7 +28,9 @@ onBeforeMount(async () => {
 const eventInfoById = ref([])
 
 const myRouter = useRouter()
-const goBack = () => myRouter.go(-1)
+const goBack = () => myRouter.push({
+    name: 'Scheduled'
+})  
 </script>
  
 <style>
