@@ -23,7 +23,7 @@ public class Eventcategory {
     private String eventCategoryDescription;
 
     @Column(name = "eventDuration", nullable = false)
-    private Integer eventDuration;
+    private Integer eventCategoryDuration;
 
     @JsonIgnore
     @OneToMany(mappedBy="eventCategory")
