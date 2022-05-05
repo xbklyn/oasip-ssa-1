@@ -21,13 +21,19 @@
                 <input type="text" class="l-w-400 h-12 bg-white pl-2 text-gray-500 font-semibold" :disabled="true"
                     :value='eventsCategoryData.eventCategoryDuration' />
             </div>
-            <div>
-                <h2 class="l-color-gray-300 text-base">Fisrt name</h2>
-                <input type="text" class="l-w-400 h-12 l-bg-gray pl-2" v-model="firstName" />
-            </div>
-            <div>
-                <h2 class="l-color-gray-300 text-base">Last name</h2>
-                <input type="text" class="l-w-400 h-12 l-bg-gray pl-2" v-model="lastName" />
+            <div class="flex space-x-6">
+                <div>
+                    <h2 class="l-color-gray-300 text-base">Fisrt name</h2>
+                    <input type="text" class="l-w-294 h-12 l-bg-gray pl-2" v-model="firstName" />
+                </div>
+                <div>
+                    <h2 class="l-color-gray-300 text-base">Last name</h2>
+                    <input type="text" class="l-w-294 h-12 l-bg-gray pl-2" v-model="lastName" />
+                </div>
+                <div>
+                    <h2 class="l-color-gray-300 text-base">Group</h2>
+                    <input type="text" class="l-w-188 h-12 l-bg-gray pl-2" v-model="group" />
+                </div>
             </div>
             <div class="col-span-2">
                 <h2 class="l-color-gray-300 text-base">Email</h2>
@@ -56,12 +62,10 @@ import { getEventCategoryById, createEvent } from '../services/FetchServices.js'
 
 onBeforeUpdate(async () => {
     eventsCategoryData.value = await categoryData.value
-    // console.log(eventsCategoryData.value);
 })
 
 onBeforeMount(async () => {
     eventsCategoryData.value = await categoryData.value
-    // console.log(eventsCategoryData.value);
 })
 
 const eventCategoryId = ref(1)
@@ -69,38 +73,34 @@ const eventsCategoryData = ref([])
 
 const firstName = ref('')
 const lastName = ref('')
+const group = ref('')
 const email = ref('')
 const dateTime = ref()
 
 const date = computed(() => {
     return new Date(new Date(dateTime.value).toLocaleDateString()).toISOString()
 })
-// console.log(date.value);
 
 const startTime = computed(() => {
     return new Date(dateTime.value).toLocaleTimeString('th-TH')
 })
 
-// console.log(new Date('5/5/2022'))
-
-
 const note = ref('')
 
 const combineName = computed(() => {
-    return `${firstName.value} ${lastName.value}`
+    return `${firstName.value} ${lastName.value} (${group})`
 })
 
 const categoryData = computed(async () => {
     const temp = await getEventCategoryById(eventCategoryId.value)
-    // console.log(temp);
     return temp
 })
 
 const submit = (name, mail, dateTime, start, duration, categoryId, notes) => {
     createEvent(name, mail, dateTime, start, duration, categoryId, notes)
-
     firstName.value = ''
     lastName.value = ''
+    group = ''
     email.value = ''
     date.value = ''
     startTime.value = ''

@@ -1,7 +1,7 @@
 //GET METHOD - All event
 export const getAllEvents = async() => {
-    // const res = await fetch('http://10.4.56.107:8080/api/events')
-        const res = await fetch('http://localhost:8080/api/events')
+    const res = await fetch('http://10.4.56.107:8080/api/events')
+        // const res = await fetch('http://localhost:9999/events')
     if (res.status === 200) {
         console.log(res.status);
         return await res.json();

@@ -1,13 +1,13 @@
 <template>
   <div>
     <div>
-      <Navbar v-show="$route.name !== 'NotFound'"/>
+      <Navbar v-show="$route.name !== 'NotFound'" />
     </div>
     <div class="mx-auto">
       <router-view></router-view>
     </div>
     <div>
-      <Footer v-show="$route.name !== 'NotFound'"/>
+      <Footer v-show="$route.name !== 'NotFound'" />
     </div>
   </div>
 </template>
@@ -31,6 +31,7 @@ myRouter.beforeEach((to, from, next) => {
 @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
 body {
   font-family: 'Poppins', 'Prompt';
   /* font-family: 'Nunito Sans', sans-serif; */
@@ -77,8 +78,16 @@ nav {
   background-color: #23374D;
 }
 
-.l-w-106{
+.l-w-106 {
   width: 106px;
+}
+
+.l-w-188 {
+  width: 188px;
+}
+
+.l-w-294 {
+  width: 294px;
 }
 
 .l-w-400 {
