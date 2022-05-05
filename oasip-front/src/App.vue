@@ -1,13 +1,13 @@
 <template>
   <div>
     <div>
-      <Navbar v-show="this.$route.name !== 'NotFound'"/>
+      <Navbar v-show="$route.name !== 'NotFound'"/>
     </div>
     <div class="mx-auto">
       <router-view></router-view>
     </div>
     <div>
-      <Footer v-show="this.$route.name !== 'NotFound'"/>
+      <Footer v-show="$route.name !== 'NotFound'"/>
     </div>
   </div>
 </template>
