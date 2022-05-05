@@ -3,51 +3,51 @@
         <h1 class="font-bold text-center text-7xl l-color-navi mt-24">All Schedule Event</h1>
         <div class="flex justify-center text-xs">
             <div class="flex justify-center w-8/12 h-6 my-24 space-x-3">
-                <button @click="catagoryId = 0">
+                <button @click="status = ''">
                     <div :class="['grid justify-center place-items-center w-9 h-6 l-color-navi',
-                        catagoryId == 0 ? 'l-bg-blue text-white font-semibold' : 'hover:bg-gray-300'
+                        status == '' ? 'l-bg-blue text-white font-semibold' : 'hover:bg-gray-300'
                     ]">
                         All
                     </div>
                 </button>
-                <button @click="catagoryId = 'upcoming'">
+                <button @click="status = 'upcoming'">
                     <div :class="['grid justify-center place-items-center w-20 h-6 l-color-navi',
-                        catagoryId == 'upcoming' ? 'l-bg-blue text-white font-semibold' : 'hover:bg-gray-300'
+                        status == 'upcoming' ? 'l-bg-blue text-white font-semibold' : 'hover:bg-gray-300'
                     ]">
                         Upcoming
                     </div>
                 </button>
-                <button @click="catagoryId = 4">
+                <button @click="addToFilter(4)">
                     <div :class="['grid justify-center place-items-center w-20 h-6 l-color-navi',
-                        catagoryId == 4 ? 'l-bg-blue text-white font-semibold' : 'hover:bg-gray-300'
+                        filterCat.includes(4) ? 'l-bg-blue text-white font-semibold' : 'hover:bg-gray-300'
                     ]">
                         Front-end
                     </div>
                 </button>
-                <button @click="catagoryId = 5">
+                <button @click="addToFilter(5)">
                     <div :class="['grid justify-center place-items-center w-20 h-6 l-color-navi',
-                        catagoryId == 5 ? 'l-bg-blue text-white font-semibold' : 'hover:bg-gray-300'
+                        filterCat.includes(5) ? 'l-bg-blue text-white font-semibold' : 'hover:bg-gray-300'
                     ]">
                         Back-end
                     </div>
                 </button>
-                <button @click="catagoryId = 3">
+                <button @click="addToFilter(3)">
                     <div :class="['grid justify-center place-items-center w-20 h-6 l-color-navi',
-                        catagoryId == 3 ? 'l-bg-blue text-white font-semibold' : 'hover:bg-gray-300'
+                        filterCat.includes(3) ? 'l-bg-blue text-white font-semibold' : 'hover:bg-gray-300'
                     ]">
                         Database
                     </div>
                 </button>
-                <button @click="catagoryId = 2">
+                <button @click="addToFilter(2)">
                     <div :class="['grid justify-center place-items-center w-20 h-6 l-color-navi',
-                        catagoryId == 2 ? 'l-bg-blue text-white font-semibold' : 'hover:bg-gray-300'
+                        filterCat.includes(2) ? 'l-bg-blue text-white font-semibold' : 'hover:bg-gray-300'
                     ]">
                         DevOps
                     </div>
                 </button>
-                <button @click="catagoryId = 1">
+                <button @click="addToFilter(1)">
                     <div :class="['grid justify-center place-items-center w-40 h-6 l-color-navi',
-                        catagoryId == 1 ? 'l-bg-blue text-white font-semibold' : 'hover:bg-gray-300'
+                        filterCat.includes(1) ? 'l-bg-blue text-white font-semibold' : 'hover:bg-gray-300'
                     ]">
                         Product Management
                     </div>
@@ -88,17 +88,41 @@ onBeforeMount(async () => {
 
 const AllEventsData = ref([])
 
-const catagoryId = ref(0)
+const status = ref('')
+
+const filterCat = ref([])
+
+function addToFilter(catId)  {
+    if(filterCat.value.includes(catId)) {
+        filterCat.value.splice(filterCat.value.indexOf(catId),1)
+        console.log(filterCat.value);
+    }
+    else {
+        filterCat.value.push(catId)
+        console.log(filterCat.value);
+    }
+}
 
 const sortByCatagory = computed(() => {
-    if (catagoryId.value === 0) {
+    if(filterCat.value.length == 0){
         return AllEventsData.value
-    } else {
-        return AllEventsData.value.filter(e => {
-            return e.eventCategory.id === catagoryId.value
-        })
+    }else {
+        return AllEventsData.value.filter(event => filterCat.value.includes(event.categoryId))
     }
+    // const catagoryId = ref(0)
+    // if (catagoryId.value === 0) {
+    //     return AllEventsData.value
+    // } else {
+    //     return AllEventsData.value.filter(e => {
+    //         return e.eventCategory.id === catagoryId.value
+    //     })
+    // }
 })
+
+
+//Filter category 
+
+
 
 
 // const sortTime = () => {
