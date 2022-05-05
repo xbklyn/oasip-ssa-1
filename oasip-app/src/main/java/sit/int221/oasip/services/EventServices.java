@@ -45,7 +45,7 @@ public class EventServices {
 
     public Event save(AddEventDetailDTO newEvent){
         Event event = modelMapper.map(newEvent, Event.class);
-        event.setEventCategory(eventCategoryRepository.findByEventCategoryName(newEvent.getEventCategoryName()));
+        event.setEventCategory(eventCategoryRepository.findById(newEvent.getCategoryId()));
 
         //Add to end time
         LocalTime endTime = newEvent.getEventStartTime().toLocalTime().plusMinutes((long) newEvent.getEventDuration());

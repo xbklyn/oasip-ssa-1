@@ -14,6 +14,6 @@ public class AddEventDetailDTO {
     private Date eventDate;
     private Time eventStartTime;
     private Integer eventDuration;
-    private String eventCategoryName;
+    private Integer categoryId;
     private String eventNotes;
 }
