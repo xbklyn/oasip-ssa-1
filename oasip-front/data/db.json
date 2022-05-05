@@ -1,42 +1,107 @@
 {
-    "events": [{
-        "id": 1,
-        "bookingName": "Somchai Jaidee (OR-7)",
-        "bookingEmail": "somchai.jai@mail.kmutt.ac.th",
-        "eventDate": "2022-05-22T17:00:00.000+00:00",
-        "eventStartTime": "13:30:00",
-        "eventEndTime": "14:00:00",
-        "eventDuration": 30,
-        "eventCategoryName": "DevOps/Infra Clinic",
-        "eventCategoryDescription": "Use this event category for DevOps/Infra clinic.",
-        "eventCategoryDuration": "20",
-        "eventNotes": ""
+  "eventCategory": [
+    {
+      "id": 2,
+      "eventCategoryName": "DevOps/Infra Clinic",
+      "eventCategoryDescription": "Use this event category for DevOps/Infra clinic.",
+      "eventCategoryDuration": "20"
     },
     {
-        "id": 2,
-        "bookingName": "Somsri Rakdee (SJ-3)",
-        "bookingEmail": "somsri.rak@mail.kmutt.ac.th",
-        "eventDate": "2022-04-26T17:00:00.000+00:00",
-        "eventStartTime": "09:30:00",
-        "eventEndTime": "10:00:00",
-        "eventDuration": 30,
-        "eventCategoryName": "Project Management Clinic",
-        "eventCategoryDescription": " ตารางนัดหมายนี้ใชKสําหรับนัดหมาย project management clinic ในวิชา INT221 integrated project I ใหKนักศึกษาเตรียมเอกสารที่เกี่ยวขKองเพื่อแสดง ระหวaางขอคําปรึกษา",
-        "eventCategoryDuration": "30",
-        "eventNotes": "ขอปรึกษาปัญหาเพื่อนไม่ช่วยงาน"
+      "id": 1,
+      "eventCategoryName": "Project Management Clinic",
+      "eventCategoryDescription": " ตารางนัดหมายนี้ใชKสําหรับนัดหมาย project management clinic ในวิชา INT221 integrated project I ใหKนักศึกษาเตรียมเอกสารที่เกี่ยวขKองเพื่อแสดง ระหวaางขอคําปรึกษา",
+      "eventCategoryDuration": "30"
     },
     {
-        "id": 3,
-        "bookingName": "สมเกียรติ ขยันเรียน (TT-4)",
-        "bookingEmail": "somkiat.kay@kmutt.ac.th",
-        "eventDate": "2022-05-22T17:00:00.000+00:00",
-        "eventStartTime": "16:30:00",
-        "eventEndTime": "17:00:00",
-        "eventDuration": 15,
-        "eventCategoryName": "Database Clinic",
-        "eventCategoryDescription": "ตารางนัดหมายนี้ใชKสําหรับนัดหมาย database clinic ใน วิชา INT221 integrated project I",
-        "eventCategoryDuration": "15",
-        "eventNotes": ""
+      "id": 3,
+      "eventCategoryName": "Database Clinic",
+      "eventCategoryDescription": "ตารางนัดหมายนี้ใชKสําหรับนัดหมาย database clinic ใน วิชา INT221 integrated project I",
+      "eventCategoryDuration": "15"
+    },
+    {
+      "id": 4,
+      "eventCategoryName": "Front-end Clinic",
+      "eventCategoryDescription": "ตารางนัดหมายนี้ใชKสําหรับนัดหมาย database clinic ใน วิชา INT221 integrated project I",
+      "eventCategoryDuration": "15"
+    },
+    {
+      "id": 5,
+      "eventCategoryName": "Back-end Clinic",
+      "eventCategoryDescription": "ตารางนัดหมายนี้ใชKสําหรับนัดหมาย database clinic ใน วิชา INT221 integrated project I",
+      "eventCategoryDuration": "15"
     }
-    ]
+  ],
+  "events": [
+    {
+      "id": 1,
+      "bookingName": "Somchai Jaidee (OR-7)",
+      "bookingEmail": "somchai.jai@mail.kmutt.ac.th",
+      "eventDate": "2022-05-22T17:00:00.000+00:00",
+      "eventStartTime": "13:30:00",
+      "eventEndTime": "14:00:00",
+      "eventDuration": 30,
+      "eventCategoryName": "DevOps/Infra Clinic",
+      "eventCategoryDescription": "Use this event category for DevOps/Infra clinic.",
+      "eventCategoryDuration": "20",
+      "eventNotes": ""
+    },
+    {
+      "id": 2,
+      "bookingName": "Somsri Rakdee (SJ-3)",
+      "bookingEmail": "somsri.rak@mail.kmutt.ac.th",
+      "eventDate": "2022-04-26T17:00:00.000+00:00",
+      "eventStartTime": "09:30:00",
+      "eventEndTime": "10:00:00",
+      "eventDuration": 30,
+      "eventCategoryName": "Project Management Clinic",
+      "eventCategoryDescription": " ตารางนัดหมายนี้ใชKสําหรับนัดหมาย project management clinic ในวิชา INT221 integrated project I ใหKนักศึกษาเตรียมเอกสารที่เกี่ยวขKองเพื่อแสดง ระหวaางขอคําปรึกษา",
+      "eventCategoryDuration": "30",
+      "eventNotes": "ขอปรึกษาปัญหาเพื่อนไม่ช่วยงาน"
+    },
+    {
+      "id": 3,
+      "bookingName": "สมเกียรติ ขยันเรียน (TT-4)",
+      "bookingEmail": "somkiat.kay@kmutt.ac.th",
+      "eventDate": "2022-05-22T17:00:00.000+00:00",
+      "eventStartTime": "16:30:00",
+      "eventEndTime": "17:00:00",
+      "eventDuration": 15,
+      "eventCategoryName": "Database Clinic",
+      "eventCategoryDescription": "ตารางนัดหมายนี้ใชKสําหรับนัดหมาย database clinic ใน วิชา INT221 integrated project I",
+      "eventCategoryDuration": "15",
+      "eventNotes": ""
+    }
+  ],
+  "test": [
+    {
+      "bookingName": " ",
+      "bookingEmail": "",
+      "eventDate": "6/9/2022",
+      "eventStartTime": "12:31:00",
+      "eventDuration": "30",
+      "eventCategoryId": 1,
+      "eventNotes": "",
+      "id": 1
+    },
+    {
+      "bookingName": " ",
+      "bookingEmail": "",
+      "eventDate": "2565-03-05T17:00:00.000Z",
+      "eventStartTime": "19:32:00",
+      "eventDuration": "30",
+      "eventCategoryId": 1,
+      "eventNotes": "",
+      "id": 2
+    },
+    {
+      "bookingName": " ",
+      "bookingEmail": "",
+      "eventDate": "2022-05-23T17:00:00.000Z",
+      "eventStartTime": "00:32:00",
+      "eventDuration": "30",
+      "eventCategoryId": 1,
+      "eventNotes": "",
+      "id": 3
+    }
+  ]
 }
