@@ -34,7 +34,7 @@ const routes = [
         meta: { title: 'OASIP - List of all schedule events.' }
     },
     {
-        path: '/form',
+        path: '/booking/form',
         name: 'BookingForm',
         component: BookingForm,
         meta: { title: 'OASIP - Please complete your information.' }

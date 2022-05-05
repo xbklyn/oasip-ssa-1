@@ -23,6 +23,24 @@ myRouter.beforeEach((to, from, next) => {
   document.title = to.meta.title
   next()
 })
+
+// const sortTime = () => {
+//      return AllEventsData.value.sort(function (a, b) {
+//         if (b.eventStartTime < a.eventStartTime) {
+//             return -1
+//         }
+//         if (b.eventStartTime > a.eventStartTime) {
+//             return 1
+//         }
+//         return 0
+//     })
+// }
+
+// const sortDate = () => {
+//     return AllEventsData.value.sort(function (a, b) {
+//         return new Date(a.eventDate) - new Date(b.eventDate);
+//     })
+// }
 </script>
  
 <style>
