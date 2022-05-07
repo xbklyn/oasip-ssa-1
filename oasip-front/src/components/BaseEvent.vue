@@ -1,8 +1,11 @@
 <template>
-    <div class="grid justify-center" v-if="(data.length > 0)">
+    <div class="grid justify-center" v-if="(eventData.length > 0)">
+        {{ eventId }}
         <div class="l-w-1248 l-h-1176 pb-24 grid grid-cols-2 gap-6">
-            <div class="l-w-612 h-44 flex" v-for="value, index in data" :key="index">
-                <div class="l-w-106 h-44 grid place-items-center"><input type="checkbox" width="24" class="ml-10"></div>
+            <div class="l-w-612 h-44 flex" v-for="value, index in eventData" :key="index">
+                <div class="l-w-106 h-44 grid place-items-center">
+                    <input type="checkbox" width="24" class="ml-10" v-model="eventId" :value='value.id'>
+                </div>
                 <router-link :to="{ name: 'event-info', params: { id: value.id } }">
                     <div class="l-w-506 h-44 l-bg-gray flex place-items-center">
                         <div class="w-12 h-44 l-bg-navi"></div>
@@ -22,7 +25,9 @@
                                 </div>
                             </div>
                             <div class="col-span-2 text-xs mt-6">
-                                <p class="l-color-gray-300"><span class="font-bold">Note: </span>{{ value.eventNotes == ''?'None':value.eventNotes }}
+                                <p class="l-color-gray-300"><span class="font-bold">Note: </span>{{ value.eventNotes ==
+                                        '' ? 'None' : value.eventNotes
+                                }}
                                 </p>
                             </div>
                         </div>
@@ -30,8 +35,16 @@
                 </router-link>
             </div>
         </div>
-        <div class="font-bold text-4xl l-color-gray text-center pb-24">
-            <p>Page Number</p>
+
+        <div v-show="eventId.length > 0"
+            class="grid grid-cols-2 place-items-center w-screen h-16 bg-white drop-shadow-2xl overflow-y-auto overflow-x-hidden fixed bottom-0 right-0 left-0 z-50">
+            <div class="justify-self-start ml-24">
+                <button class="l-color-blue">Select All</button>
+            </div>
+            <div class="justify-self-end space-x-12 mr-24">
+                <button class="text-red-700" @click="deleteEvent(eventId)">Delete</button>
+                <button class="l-color-blue">Cancel</button>
+            </div>
         </div>
     </div>
     <div v-else>
@@ -42,6 +55,25 @@
 </template>
  
 <script setup>
+import { ref } from "@vue/reactivity"
+import { computed, onBeforeUnmount, onBeforeUpdate } from "@vue/runtime-core"
+import { useRoute, useRouter } from "vue-router"
+import { deleteEventById } from '../services/FetchServices.js'
+
+
+const eventId = ref([])
+const myRouter = useRouter()
+const eventData = computed(() => {
+    return prop.data
+})
+
+const deleteEvent = (id) => {
+    deleteEventById(id)
+    eventId.value = []
+    myRouter.push({
+        name: 'Schedule'
+    })
+}
 
 const date = new Date()
 const prop = defineProps({
