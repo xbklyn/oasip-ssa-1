@@ -1,6 +1,7 @@
 //GET METHOD - All event
 export const getAllEvents = async () => {
     const res = await fetch(`${import.meta.env.VITE_APP_TITLE}/events`)
+    console.log(import.meta.env.VITE_APP_TITLE);
     // const res = await fetch('http://localhost:9999/events')
     if (res.status === 200) {
         console.log(res.status);
