@@ -1,8 +1,8 @@
 <template>
-    <div class="grid justify-center" v-if="(eventData.length > 0)">
+    <div class="grid justify-center" v-if="(data.length > 0)">
         {{ eventId }}
         <div class="l-w-1248 l-h-1176 pb-24 grid grid-cols-2 gap-6">
-            <div class="l-w-612 h-44 flex" v-for="value, index in eventData" :key="index">
+            <div class="l-w-612 h-44 flex" v-for="value, index in data" :key="index">
                 <div class="l-w-106 h-44 grid place-items-center">
                     <input type="checkbox" width="24" class="ml-10" v-model="eventId" :value='value.id'>
                 </div>
@@ -63,9 +63,6 @@ import { deleteEventById } from '../services/FetchServices.js'
 
 const eventId = ref([])
 const myRouter = useRouter()
-const eventData = computed(() => {
-    return prop.data
-})
 
 const deleteEvent = (id) => {
     deleteEventById(id)
@@ -75,7 +72,6 @@ const deleteEvent = (id) => {
     })
 }
 
-const date = new Date()
 const prop = defineProps({
     data: {
         type: Array,

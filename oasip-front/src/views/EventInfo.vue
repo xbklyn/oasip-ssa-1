@@ -28,7 +28,7 @@ onBeforeMount(async () => {
 const eventInfoById = ref([])
 
 const myRouter = useRouter()
-const goBack = () => myRouter.push({
+const goBack = () => myRouter.forward({
     name: 'Scheduled'
 })  
 </script>
