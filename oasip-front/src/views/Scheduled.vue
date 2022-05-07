@@ -1,6 +1,8 @@
 <template>
     <div>
         <h1 class="font-bold text-center text-7xl l-color-navi mt-24">All Schedule Event</h1>
+
+        <!-- Menu - Filter category -->
         <div class="flex justify-center text-xs">
             <div class="flex justify-center w-8/12 h-6 my-24 space-x-3">
                 <button @click="status = ''">
@@ -64,6 +66,8 @@
                 </div>
             </div>
         </div>
+        
+        <!-- List - All events -->
         <div class="">
             <BaseEvent :data="sortByCatagory" @delete="events($event)"/>
         </div>

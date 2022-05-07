@@ -77,7 +77,7 @@
                     </div>
                     <div class="grid space-y-3">
                         <button class="w-80 h-12 l-bg-gray hover:translate-y-0.5 duration-150"
-                            @click="$emit('delete', eventId, eventId = [])">Confirm</button>
+                            @click="$emit('delete', eventId, eventId = [], show=false)">Confirm</button>
                         <button
                             class="w-80 h-12 bg-red-600 text-white hover:translate-y-0.5 duration-150" @click="show=false">Cancel</button>
                     </div>
