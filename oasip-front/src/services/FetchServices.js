@@ -20,6 +20,16 @@ export const getEventById = async (id) => {
         console.log('err');
     }
 }
+// GET METHOD - All category
+export const getAllCategory = async () => {
+    const res = await fetch(`${import.meta.env.VITE_BASE_URL}/category`)
+    // const res = await fetch(`http://localhost:9999/eventCategory/${id}`)
+    if (res.status === 200) {
+        return await res.json()
+    } else {
+        return console.log('err');
+    }
+}
 
 // GET METHOD - Event category by id
 export const getEventCategoryById = async (id) => {
@@ -48,7 +58,8 @@ export const createEvent = async (
             eventStartTime: startTime,
             eventDuration: duration,
             categoryId: categoryId,
-            eventNotes: notes
+            eventNotes: notes,
+            statusId: 3
         })
     })
     if (res.status === 201) {
