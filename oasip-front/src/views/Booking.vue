@@ -31,23 +31,23 @@ import { ref } from '@vue/reactivity';
 const clinics = [
     {
         name: "Front-end",
-        img: "../../images/booking/front-end.png"
+        img: '../../images/front-end.png'
     },
     {
         name: "Back-end",
-        img: "../../images/booking/back-end.png"
+        img: '../../images/back-end.png'
     },
     {
         name: "Database",
-        img: "../../images/booking/database.png"
+        img: '../../images/database.png'
     },
     {
         name: "DevOps",
-        img: "../../images/booking/dev-ops.png"
+        img: '../../images/dev-ops.png'
     },
     {
         name: "Project Management",
-        img: "../../images/booking/project-management.png"
+        img: '../../images/project-management.png'
     }
 ]
 
