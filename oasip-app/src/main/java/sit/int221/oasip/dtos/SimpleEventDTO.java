@@ -16,4 +16,5 @@ public class SimpleEventDTO {
     private Integer categoryId;
     private String categoryName;
     private String eventNotes;
+    private String statusName;
 }
