@@ -25,6 +25,9 @@ public class Eventcategory {
     @Column(name = "eventDuration", nullable = false)
     private Integer eventCategoryDuration;
 
+    @Column(name = "eventImagePath")
+    private String eventImagePath;
+
     @JsonIgnore
     @OneToMany(mappedBy="eventCategory")
     private Set<Event> events;
