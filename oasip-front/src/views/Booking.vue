@@ -5,7 +5,7 @@
             <div class="l-w-400 l-h-624" v-for="(value, index) in clinics" :key="index">
                 <div class="l-w-400 h-80">
                     <img :src="value.img" alt="">
-                    </div>
+                </div>
                 <div class="grid justify-center mt-6">
                     <h2 class="text-2xl font-bold">{{ value.name }}</h2>
                     <div class="l-w-344 h-40 my-3">
@@ -15,7 +15,7 @@
                             bibendumnec etiam quis nisi. Id ut nuncornare fusce ipsumtincidunt fermentum. Interdum nulla
                             malesuada nunc in.</p>
                     </div>
-                    <router-link :to="{ name: 'BookingForm' }" class="flex space-x-3">
+                    <router-link :to="{ name: 'BookingForm', params: { id: value.id } }" class="flex space-x-3">
                         <p class="l-color-blue">Go to booking</p>
                         <img src="../assets/component/next.png" alt="" width="24">
                     </router-link>
@@ -27,29 +27,15 @@
  
 <script setup>
 import { ref } from '@vue/reactivity';
+import { onBeforeMount } from '@vue/runtime-core';
+import { getAllCategory } from '../services/FetchServices.js';
 
-const clinics = [
-    {
-        name: "Front-end",
-        img: '../../images/front-end.png'
-    },
-    {
-        name: "Back-end",
-        img: '../../images/back-end.png'
-    },
-    {
-        name: "Database",
-        img: '../../images/database.png'
-    },
-    {
-        name: "DevOps",
-        img: '../../images/dev-ops.png'
-    },
-    {
-        name: "Project Management",
-        img: '../../images/project-management.png'
-    }
-]
+onBeforeMount(async () => {
+    const res = await getAllCategory()
+    clinics.value = res
+})
+
+const clinics = ref([])
 
 </script>
  
