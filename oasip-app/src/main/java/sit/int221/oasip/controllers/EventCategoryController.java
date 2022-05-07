@@ -1,26 +1,33 @@
 package sit.int221.oasip.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import sit.int221.oasip.entities.Eventcategory;
 import sit.int221.oasip.repositories.EventCategoryRepository;
+import sit.int221.oasip.services.EventCategoryService;
 
 import java.util.List;
 
 @RestController
+@CrossOrigin("*")
 @RequestMapping("/api/category")
 public class EventCategoryController {
 
-    private final EventCategoryRepository ecrepo;
+    private final EventCategoryService eventCategoryService;
 
-    public EventCategoryController(EventCategoryRepository ecrepo) {
-        this.ecrepo = ecrepo;
+    public EventCategoryController(EventCategoryService eventCategoryRepository) {
+        this.eventCategoryService = eventCategoryRepository;
     }
 
     @GetMapping("")
     public List<Eventcategory> getAllCategory() {
-        return ecrepo.findAll();
+        return eventCategoryService.getAllCategory();
+    }
+
+    @GetMapping("/{categoryId}")
+    public Eventcategory getCategoryById(
+            @PathVariable Integer categoryId
+    ){
+        return eventCategoryService.getCategoryById(categoryId);
     }
 }

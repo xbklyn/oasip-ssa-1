@@ -1,6 +1,7 @@
 package sit.int221.oasip.services;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -33,7 +34,9 @@ public class EventServices {
     }
 
     public List<SimpleEventDTO> getAllEvents() {
-        return listMapper.mapList(eventRepository.findAll(), SimpleEventDTO.class, modelMapper);
+        return listMapper.mapList(eventRepository.findAll(
+                Sort.by("eventDate").descending().and(Sort.by("eventStartTime").descending()))
+                , SimpleEventDTO.class, modelMapper);
     }
 
     public EventDetailDTO getEventById(Integer id ){
