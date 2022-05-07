@@ -38,6 +38,10 @@ public class Event {
     @Column(name = "eventNotes", length = 250)
     private String eventNotes;
 
+    @ManyToOne
+    @JoinColumn(name = "statusId")
+    private Status status;
+
 //    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "eventCategoryId", nullable = false)
