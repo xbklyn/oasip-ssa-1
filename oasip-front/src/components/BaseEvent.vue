@@ -62,15 +62,15 @@ import { deleteEventById } from '../services/FetchServices.js'
 
 
 const eventId = ref([])
-const myRouter = useRouter()
+// const myRouter = useRouter()
 
-const deleteEvent = (id) => {
-    deleteEventById(id)
-    eventId.value = []
-    myRouter.push({
-        name: 'Schedule'
-    })
-}
+// const deleteEvent = (id) => {
+//     deleteEventById(id)
+//     eventId.value = []
+//     myRouter.push({
+//         name: 'Schedule'
+//     })
+// }
 
 const prop = defineProps({
     data: {
