@@ -11,6 +11,7 @@ import sit.int221.oasip.dtos.SimpleEventDTO;
 import sit.int221.oasip.entities.Event;
 import sit.int221.oasip.repositories.EventCategoryRepository;
 import sit.int221.oasip.repositories.EventRepository;
+import sit.int221.oasip.repositories.StatusRepository;
 import sit.int221.oasip.utils.ListMapper;
 
 
@@ -25,12 +26,14 @@ public class EventServices {
     private final EventRepository eventRepository;
     private final ListMapper listMapper;
     private final EventCategoryRepository eventCategoryRepository;
+    private final StatusRepository statusRepository;
 
-    public EventServices(EventRepository eventRepository, ModelMapper modelMapper, ListMapper listMapper, EventCategoryRepository eventCategoryRepository) {
+    public EventServices(EventRepository eventRepository, ModelMapper modelMapper, ListMapper listMapper, EventCategoryRepository eventCategoryRepository, StatusRepository statusRepository) {
         this.eventRepository = eventRepository;
         this.modelMapper = modelMapper;
         this.listMapper = listMapper;
         this.eventCategoryRepository = eventCategoryRepository;
+        this.statusRepository = statusRepository;
     }
 
     public List<SimpleEventDTO> getAllEvents() {
@@ -51,11 +54,14 @@ public class EventServices {
         event.setEventCategory(eventCategoryRepository.findById(newEvent.getCategoryId()).orElseThrow(() ->
             new ResponseStatusException(HttpStatus.NOT_FOUND)));
 
+        event.setStatus(statusRepository.findById(3).orElseThrow());
         //Add to end time
         LocalTime endTime = newEvent.getEventStartTime().toLocalTime().plusMinutes((long) newEvent.getEventDuration());
         event.setEventEndTime(Time.valueOf(endTime));
 
         return eventRepository.saveAndFlush(event);
     }
+
+    public void delete(Integer id) { eventRepository.deleteById(id);}
 
 }
