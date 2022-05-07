@@ -58,8 +58,7 @@ export const createEvent = async (
             eventStartTime: startTime,
             eventDuration: duration,
             categoryId: categoryId,
-            eventNotes: notes,
-            statusId: 3
+            eventNotes: notes
         })
     })
     if (res.status === 201) {
