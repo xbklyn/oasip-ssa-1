@@ -19,6 +19,10 @@
                         Upcoming
                     </div>
                 </button>
+
+                <div class="h-6 w-0.5 bg-gray-100"> </div>
+
+                <!-- Category -->
                 <button @click="addToFilter(4)">
                     <div :class="['grid justify-center place-items-center w-20 h-6 l-color-navi',
                         filterCat.includes(4) ? 'l-bg-blue text-white font-semibold' : 'hover:bg-gray-300'
