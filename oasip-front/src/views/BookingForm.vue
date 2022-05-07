@@ -73,7 +73,7 @@ const eventsCategoryData = ref([])
 
 const firstName = ref('')
 const lastName = ref('')
-const group = ref('')
+const group = ref()
 const email = ref('')
 const dateTime = ref()
 
@@ -88,7 +88,7 @@ const startTime = computed(() => {
 const note = ref('')
 
 const combineName = computed(() => {
-    return `${firstName.value} ${lastName.value} (${group})`
+    return `${firstName.value} ${lastName.value} (${group.value})`
 })
 
 const categoryData = computed(async () => {
@@ -100,7 +100,6 @@ const submit = (name, mail, dateTime, start, duration, categoryId, notes) => {
     createEvent(name, mail, dateTime, start, duration, categoryId, notes)
     firstName.value = ''
     lastName.value = ''
-    group = ''
     email.value = ''
     date.value = ''
     startTime.value = ''

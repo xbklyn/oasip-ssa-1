@@ -65,35 +65,32 @@
             </div>
         </div>
         <div class="">
-            <BaseEvent :data="sortByCatagory" />
+            <BaseEvent :data="sortByCatagory" @delete="events($event)"/>
         </div>
         <router-view></router-view>
     </div>
 </template>
  
 <script setup>
-import BaseEvent from '../components/BaseEvent.vue';
-
 import { ref, onBeforeMount, computed } from 'vue'
-import { getAllEvents } from '../services/FetchServices.js'
+import { getAllEvents, deleteEventById } from '../services/FetchServices.js'
+import BaseEvent from '../components/BaseEvent.vue';
 
 onBeforeMount(async () => {
     const res = await getAllEvents()
     console.log(res)
     AllEventsData.value = res
-    // sortTime()
-    // sortDate()
 })
 
 const AllEventsData = ref([])
-
 const status = ref('')
 
+// Filter - event category
 const filterCat = ref([])
 
-function addToFilter(catId)  {
-    if(filterCat.value.includes(catId)) {
-        filterCat.value.splice(filterCat.value.indexOf(catId),1)
+function addToFilter(catId) {
+    if (filterCat.value.includes(catId)) {
+        filterCat.value.splice(filterCat.value.indexOf(catId), 1)
         console.log(filterCat.value);
     }
     else {
@@ -103,44 +100,27 @@ function addToFilter(catId)  {
 }
 
 const sortByCatagory = computed(() => {
-    if(filterCat.value.length == 0){
+    if (filterCat.value.length == 0) {
         return AllEventsData.value
-    }else {
+    } else {
         return AllEventsData.value.filter(event => filterCat.value.includes(event.categoryId))
     }
-    // const catagoryId = ref(0)
-    // if (catagoryId.value === 0) {
-    //     return AllEventsData.value
-    // } else {
-    //     return AllEventsData.value.filter(e => {
-    //         return e.eventCategory.id === catagoryId.value
-    //     })
-    // }
 })
 
-
-//Filter category 
-
-
-
-
-// const sortTime = () => {
-//      return AllEventsData.value.sort(function (a, b) {
-//         if (b.eventStartTime < a.eventStartTime) {
-//             return -1
-//         }
-//         if (b.eventStartTime > a.eventStartTime) {
-//             return 1
-//         }
-//         return 0
-//     })
-// }
-
-// const sortDate = () => {
-//     return AllEventsData.value.sort(function (a, b) {
-//         return new Date(a.eventDate) - new Date(b.eventDate);
-//     })
-// }
+// Delete - event
+const events = (eventId) => {
+    console.log(eventId);
+    if (eventId.length <= 0) {
+        deleteEventById(eventId)
+    } else {
+        for (let i = 0; i < eventId.length; i++) {
+            AllEventsData.value = AllEventsData.value.filter(e => {
+                return e.id != eventId[i]
+            })
+            deleteEventById(eventId[i])
+        }
+    }
+}
 
 </script>
  

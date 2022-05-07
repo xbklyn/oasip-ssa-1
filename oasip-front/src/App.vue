@@ -7,7 +7,7 @@
       <router-view></router-view>
     </div>
     <div>
-      <Footer v-show="$route.name !== 'NotFound'" />
+      <Footer v-show="$route.name !== 'NotFound'"/>
     </div>
   </div>
 </template>
@@ -23,6 +23,24 @@ myRouter.beforeEach((to, from, next) => {
   document.title = to.meta.title
   next()
 })
+
+// const sortTime = () => {
+//      return AllEventsData.value.sort(function (a, b) {
+//         if (b.eventStartTime < a.eventStartTime) {
+//             return -1
+//         }
+//         if (b.eventStartTime > a.eventStartTime) {
+//             return 1
+//         }
+//         return 0
+//     })
+// }
+
+// const sortDate = () => {
+//     return AllEventsData.value.sort(function (a, b) {
+//         return new Date(a.eventDate) - new Date(b.eventDate);
+//     })
+// }
 </script>
  
 <style>
@@ -130,6 +148,10 @@ nav {
   width: 840px;
 }
 
+.l-w-960 {
+  width: 960px;
+}
+
 .l-bg-gray {
   background-color: #F9FAFB;
 }
@@ -140,6 +162,10 @@ nav {
 
 .l-w-full {
   width: 1248px;
+}
+
+.l-h-520 {
+  height: 520px;
 }
 
 .l-h-624 {
