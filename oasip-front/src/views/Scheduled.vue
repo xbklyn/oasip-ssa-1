@@ -60,8 +60,7 @@
                                 clip-rule="evenodd" />
                         </svg>
                     </div>
-                    <input class="w-56 h-6 l-bg-gray px-6 focus:border-blue-400" type="text"
-                        placeholder="Search">
+                    <input class="w-56 h-6 l-bg-gray px-6 focus:border-blue-400" type="text" placeholder="Search">
                 </div>
             </div>
         </div>
