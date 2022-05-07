@@ -15,7 +15,7 @@
                             bibendumnec etiam quis nisi. Id ut nuncornare fusce ipsumtincidunt fermentum. Interdum nulla
                             malesuada nunc in.</p>
                     </div>
-                    <router-link :to="{ name: 'BookingForm' }" class="flex space-x-3">
+                    <router-link :to="{ name: '' }" class="flex space-x-3">
                         <p class="l-color-blue">Go to booking</p>
                         <img src="../assets/component/next.png" alt="" width="24">
                     </router-link>
