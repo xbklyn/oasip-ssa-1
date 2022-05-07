@@ -14,7 +14,7 @@
                         <div class="l-w-408 h-28 ml-6">
                             <div class="grid grid-cols-3">
                                 <div class="col-span-2">
-                                    <p class="text-sm">{{ value.eventCategoryName }}</p>
+                                    <p class="text-sm">{{ value.categoryName }}</p>
                                 </div>
                                 <div class="place-self-end">
                                     <p class="text-xs grid justify-end mt-1">{{ value.eventDuration }} Min.</p>
