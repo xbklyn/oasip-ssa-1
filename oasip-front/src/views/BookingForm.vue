@@ -8,12 +8,12 @@
         <div class="l-w-824 grid grid-cols-2 gap-6 space-y-4 mb-24">
             <div>
                 <h2 class="l-color-gray-300 text-base">Clinic Selected</h2>
-                <select class="l-w-400 h-12 l-bg-gray" v-model="eventCategoryId">
+                <select class="l-w-400 h-12 l-bg-gray pl-2" v-model="eventCategoryId">
                     <option value="4">Front-end</option>
                     <option value="5">Back-end</option>
                     <option value="3">Database</option>
                     <option value="2">DevOps</option>
-                    <option value="1">PM</option>
+                    <option value="1">Project Management</option>
                 </select>
             </div>
             <div>
