@@ -43,7 +43,6 @@
  
 <script setup>
 
-const date = new Date()
 const prop = defineProps({
     data: {
         type: Array,
