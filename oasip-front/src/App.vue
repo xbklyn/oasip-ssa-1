@@ -7,7 +7,7 @@
       <router-view></router-view>
     </div>
     <div>
-      <Footer v-show="$route.name !== 'NotFound'" />
+      <Footer v-show="$route.name !== 'NotFound'"/>
     </div>
   </div>
 </template>
@@ -148,6 +148,10 @@ nav {
   width: 840px;
 }
 
+.l-w-960 {
+  width: 960px;
+}
+
 .l-bg-gray {
   background-color: #F9FAFB;
 }
@@ -158,6 +162,10 @@ nav {
 
 .l-w-full {
   width: 1248px;
+}
+
+.l-h-520 {
+  height: 520px;
 }
 
 .l-h-624 {
