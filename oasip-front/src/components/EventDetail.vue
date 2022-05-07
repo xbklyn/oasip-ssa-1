@@ -1,5 +1,5 @@
 <template>
-    <div class="flex place-items-center mb-24 space-x-6 justify-center drop-shadow-md items-start">
+    <div class="flex place-items-center mb-24 pt-12 space-x-6 justify-center drop-shadow-md items-start">
 
         <!-- Detail - Clinic -->
         <div class="l-w-408 h-96 bg-white">

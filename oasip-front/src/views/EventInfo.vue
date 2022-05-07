@@ -3,7 +3,7 @@
         <div class="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-49 w-screen h-screen"
             @click="goBack">
         </div>
-        <div class="bg-black/80 fixed top-72 right-0 left-0 py-16 z-50">
+        <div class="bg-black/90 fixed bottom-0 right-0 left-0 z-50">
             <EventDetail :data="eventInfoById" @exit="goBack" />
         </div>
     </div>
