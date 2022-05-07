@@ -1,6 +1,6 @@
 <template>
     <nav class="grid grid-cols-3 justify-center place-items-center bg-white w-full drop-shadow-sm">
-        <div class="">
+        <div class="justify-self-start ml-24">
             <router-link :to="{ name: 'Home' }">
                 <div class="flex space-x-3">
                     <img src="../assets/logo.png" alt="" width="" class="">
