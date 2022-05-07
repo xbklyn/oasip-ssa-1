@@ -1,5 +1,7 @@
 <template>
     <div class="flex place-items-center mb-24 space-x-6 justify-center drop-shadow-md items-start">
+
+        <!-- Detail - Clinic -->
         <div class="l-w-408 h-96 bg-white">
             <div class="w-full h-12 l-bg-navi mb-6"></div>
             <div class="w-72 h-64 mx-auto space-y-3">
@@ -20,6 +22,8 @@
                 </div>
             </div>
         </div>
+        
+        <!-- Detail - Personal -->
         <div class="l-w-624 h-96 bg-white">
             <div class="l-bg-navi w-full h-12 grid place-items-center"></div>
             <div class="h-80 l-w-520 space-y-3 mx-auto mt-6">
@@ -53,6 +57,8 @@
                 </div>
             </div>
         </div>
+
+        <!-- Menu - Right bar -->
         <div class="grid gap-3">
             <button @click="$emit('exit')"><img src="../assets/component/quit.png" alt=""></button>
             <button @click="''"><img src="../assets/component/edit.png" alt=""></button>

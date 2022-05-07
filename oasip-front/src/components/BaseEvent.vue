@@ -1,36 +1,39 @@
 <template>
     <div class="grid justify-center" v-if="(data.length > 0)">
         <div class="l-w-1248 l-h-1176 pb-24 grid grid-cols-2 gap-6">
+
+            <!-- Main - Events List -->
             <div class="l-w-612 h-44 flex" v-for="value, index in data" :key="index">
                 <div class="l-w-106 h-44 grid place-items-center">
                     <input type="checkbox" width="36" class="ml-10" v-model="eventId" :value='value.id'>
                 </div>
                 <router-link :to="{ name: 'event-info', params: { id: value.id } }">
                     <div
-                        class="l-w-506 h-44 l-bg-gray flex place-items-center hover:drop-shadow-xl hover:-translate-y-1 duration-150">
+                        class="l-w-506 h-44 l-bg-gray flex place-items-center hover:drop-shadow-xl hover:scale-105 duration-150">
                         <div class="w-12 h-44 l-bg-navi"></div>
                         <div class="l-w-408 h-28 ml-6">
                             <div class="grid grid-cols-3">
                                 <div class="col-span-2">
-                                    <p class="text-md font-semibold">{{ value.eventCategoryName }}</p>
+                                    <p class="text-sm">{{ value.eventCategoryName }}</p>
                                 </div>
                                 <div class="place-self-end">
-                                    <p class="text-xs font-semibold">On {{ new
-                                            Date(value.eventDate).toLocaleDateString()
-                                    }}</p>
                                     <p class="text-xs grid justify-end mt-1">{{ value.eventDuration }} Min.</p>
                                 </div>
-                                <div class="col-span-3">
+                                <div class="col-span-3 mt-1">
                                     <h2 class="text-xl font-bold">{{ value.bookingName }}</h2>
                                 </div>
                             </div>
-                            <div class="col-span-2 text-xs mt-6">
+                            <div class="col-span-2 mt-1">
+                                <p class="text-xs">
+                                    On {{ new Date(value.eventDate).toLocaleDateString() }} at {{value.eventStartTime}}</p>
+                            </div>
+                            <div class="col-span-3 text-xs mt-4">
                                 <p class="l-color-gray-300"><span class="font-bold">Note: </span>{{ value.eventNotes ==
                                         '' ? 'None' : value.eventNotes
                                 }}
                                 </p>
                             </div>
-                            <div class="l-color-blue text-xs text-right mt-4">
+                            <div class="l-color-blue text-xs text-right">
                                 <p>Click for more detail</p>
                             </div>
                         </div>
@@ -45,8 +48,8 @@
             <div class="justify-self-start ml-24">
                 <button class="l-color-blue" @click="allEventId">Select All</button>
             </div>
-            <div class="justify-self-end space-x-12 mr-24">
-                <button class="text-red-700" @click="show=true">Delete ({{ eventId.length
+            <div class="justify-self-end space-x-12 mr-24 ">
+                <button class="text-red-700 " @click="show = true">Delete ({{ eventId.length
                 }})</button>
                 <button class="l-color-blue" @click="eventId = []">Cancel</button>
             </div>
@@ -76,10 +79,10 @@
                                 v-else>Events</span></p>
                     </div>
                     <div class="grid space-y-3">
-                        <button class="w-80 h-12 l-bg-gray hover:translate-y-0.5 duration-150"
-                            @click="$emit('delete', eventId, eventId = [], show=false)">Confirm</button>
-                        <button
-                            class="w-80 h-12 bg-red-600 text-white hover:translate-y-0.5 duration-150" @click="show=false">Cancel</button>
+                        <button class="w-80 h-12 l-bg-gray duration-150 border hover:bg-green-700 hover:text-white"
+                            @click="$emit('delete', eventId, eventId = [], show = false)">Confirm</button>
+                        <button class="w-80 h-12 bg-red-600 text-white hover:bg-red-800 duration-150"
+                            @click="show = false">Cancel</button>
                     </div>
                 </div>
             </div>
