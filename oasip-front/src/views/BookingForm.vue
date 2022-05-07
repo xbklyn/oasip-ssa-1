@@ -59,6 +59,9 @@
 import { ref } from "@vue/reactivity"
 import { computed, onBeforeMount, onBeforeUpdate } from "@vue/runtime-core";
 import { getEventCategoryById, createEvent } from '../services/FetchServices.js'
+import { useRoute, useRouter } from 'vue-router'
+
+const { params } = useRoute()
 
 onBeforeUpdate(async () => {
     eventsCategoryData.value = await categoryData.value
@@ -68,7 +71,7 @@ onBeforeMount(async () => {
     eventsCategoryData.value = await categoryData.value
 })
 
-const eventCategoryId = ref(1)
+const eventCategoryId = ref(params.id)
 const eventsCategoryData = ref([])
 
 const firstName = ref('')
