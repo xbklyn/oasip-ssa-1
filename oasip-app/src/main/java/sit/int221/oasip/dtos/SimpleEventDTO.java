@@ -14,5 +14,6 @@ public class SimpleEventDTO {
     private Time eventStartTime;
     private Integer eventDuration;
     private Integer categoryId;
+    private String categoryName;
     private String eventNotes;
 }
