@@ -91,8 +91,11 @@
 
     <!-- If no events -->
     <div v-else>
-        <div class="grid justify-cente h-96 my-24">
+        <div v-if="prop.data.status == '' " class="grid justify-cente h-96 my-24">
             <h1 class="text-7xl l-color-gray text-center select-none">No scheduled event</h1>
+        </div>
+        <div v-else class="grid justify-cente h-96 my-24">
+            <h1 class="text-5xl l-color-gray text-center select-none">No Ongoing / Upcoming event at the moment</h1>
         </div>
     </div>
 </template>
@@ -104,6 +107,10 @@ const prop = defineProps({
     data: {
         type: Array,
         require: false
+    },
+    status: {
+        type: String,
+        default: ''
     }
 })
 defineEmits(['delete'])
