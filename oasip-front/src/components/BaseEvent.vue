@@ -91,7 +91,7 @@
 
     <!-- If no events -->
     <div v-else>
-        <div v-if="prop.data.status == '' " class="grid justify-cente h-96 my-24">
+        <div v-if="prop.status == '' " class="grid justify-cente h-96 my-24">
             <h1 class="text-7xl l-color-gray text-center select-none">No scheduled event</h1>
         </div>
         <div v-else class="grid justify-cente h-96 my-24">
