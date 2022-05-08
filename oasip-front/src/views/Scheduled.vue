@@ -73,7 +73,7 @@
         
         <!-- List - All events -->
         <div class="">
-            <BaseEvent :data="sortByStatus" @delete="events($event)"/>
+            <BaseEvent :data="sortByStatus" :status="status" @delete="events($event)"/>
         </div>
         <router-view></router-view>
     </div>
