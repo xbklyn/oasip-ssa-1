@@ -21,7 +21,10 @@
                     </div>
                     <div class="l-w-632 h-24 grid content-center">
                         <div class="">
+                            <div class="flex place-items-center space-x-6">
                             <h2 class="text-xl font-bold">{{ value.eventCategoryName }}</h2>
+                            <p class="text-sm font-semibold">{{value.eventCategoryDuration}} Min.</p>
+                            </div>
                             <p class="text-xs text-gray-400">{{ value.eventCategoryDescription }}</p>
                         </div>
                     </div>
@@ -45,8 +48,8 @@
             </div>
             <div>
                 <p class="text-base font-semibold mb-4"><span
-                        class="l-color-blue underline underline-offset-auto cursor-pointer"
-                        @click="stepOne = true, stepTwo = false">Step 1</span>> Step 2: Enter your information</p>
+                        class="l-color-blue underline underline-offset-auto cursor-pointer font-normal"
+                        @click="stepOne = true, stepTwo = false">Step 1</span> / Step 2: Enter your information</p>
                 <h1 class="text-4xl font-bold mb-16">Step 2: Enter your information.</h1>
             </div>
             <div class="l-w-824 mx-auto">
@@ -76,7 +79,7 @@
                                 v-model="note"></textarea>
                         </div>
                     </div>
-                    <button class="mb-24 l-bg-blue l-w-824 h-12 font-xl text-white"
+                    <button class="l-bg-blue l-w-824 h-12 font-xl text-white"
                         @click="stepOne = false, stepTwo = false, stepThree = true">
                         Next
                     </button>
@@ -93,10 +96,10 @@
             </div>
             <div>
                 <p class="text-base font-semibold mb-4"><span
-                        class="l-color-blue underline underline-offset-auto cursor-pointer"
-                        @click="stepOne = true, stepTwo = false, stepThree = false">Step 1</span>><span
-                        class="l-color-blue underline underline-offset-auto cursor-pointer"
-                        @click="stepOne = false, stepTwo = true, stepThree = false">Step 2</span>> Step 3 : Select time
+                        class="l-color-blue underline underline-offset-auto cursor-pointer font-normal"
+                        @click="stepOne = true, stepTwo = false, stepThree = false">Step 1</span> / <span
+                        class="l-color-blue underline underline-offset-auto cursor-pointer font-normal"
+                        @click="stepOne = false, stepTwo = true, stepThree = false">Step 2</span> / Step 3 : Select time
                     period</p>
                 <h1 class="text-4xl font-bold mb-16">Step 3 : Select time period</h1>
             </div>
