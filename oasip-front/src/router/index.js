@@ -3,7 +3,6 @@ import HomePage from '../views/HomePage.vue'
 import Booking from '../views/Booking.vue'
 import Scheduled from '../views/Scheduled.vue'
 import EventInfo from '../views/EventInfo.vue'
-import BookingForm from '../views/BookingForm.vue'
 import NotFound from '../views/NotFound.vue'
 
 
@@ -32,12 +31,6 @@ const routes = [
         name: 'Scheduled',
         component: Scheduled,
         meta: { title: 'OASIP - List of all schedule events.' }
-    },
-    {
-        path: '/booking/form/:id',
-        name: 'BookingForm',
-        component: BookingForm,
-        meta: { title: 'OASIP - Please complete your information.' }
     },
     {
         path: '/scheduled/event-info/:id',

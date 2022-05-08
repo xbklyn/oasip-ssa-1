@@ -1,133 +1,107 @@
 {
   "eventCategory": [
     {
-      "id": 2,
-      "eventCategoryName": "DevOps/Infra Clinic",
-      "eventCategoryDescription": "Use this event category for DevOps/Infra clinic.",
-      "eventCategoryDuration": "20"
+        "categoryId": 1,
+        "eventCategoryName": "Project Management Clinic",
+        "eventCategoryDescription": " ตารางนัดหมายนี้ใช้สําหรับนัดหมาย project management clinic ในวิชา INT221 integrated project I ให้นักศึกษาเตรียมเอกสารที่เกี่ยวข้องเพื่อแสดง ระหว่างขอคําปรึกษา",
+        "eventCategoryDuration": 30,
+        "eventImagePath": "/images/project-management.png"
     },
     {
-      "id": 1,
-      "eventCategoryName": "Project Management Clinic",
-      "eventCategoryDescription": " ตารางนัดหมายนี้ใชKสําหรับนัดหมาย project management clinic ในวิชา INT221 integrated project I ใหKนักศึกษาเตรียมเอกสารที่เกี่ยวขKองเพื่อแสดง ระหวaางขอคําปรึกษา",
-      "eventCategoryDuration": "30"
+        "categoryId": 2,
+        "eventCategoryName": "DevOps/Infra Clinic",
+        "eventCategoryDescription": "Use this event category for DevOps/Infra clinic.",
+        "eventCategoryDuration": 20,
+        "eventImagePath": "/images/dev-ops.png"
     },
     {
-      "id": 3,
-      "eventCategoryName": "Database Clinic",
-      "eventCategoryDescription": "ตารางนัดหมายนี้ใชKสําหรับนัดหมาย database clinic ใน วิชา INT221 integrated project I",
-      "eventCategoryDuration": "15"
+        "categoryId": 3,
+        "eventCategoryName": "Database Clinic",
+        "eventCategoryDescription": "ตารางนัดหมายนี้ใช้สําหรับนัดหมาย database clinic ใน วิชา INT221 integrated project I",
+        "eventCategoryDuration": 15,
+        "eventImagePath": "/images/database.png"
     },
     {
-      "id": 4,
-      "eventCategoryName": "Front-end Clinic",
-      "eventCategoryDescription": "ตารางนัดหมายนี้ใชKสําหรับนัดหมาย database clinic ใน วิชา INT221 integrated project I",
-      "eventCategoryDuration": "15"
+        "categoryId": 4,
+        "eventCategoryName": "Client-side Clinic",
+        "eventCategoryDescription": "ตารางนัดหมายนี้ใช้สําหรับนัดหมาย client-side clinic ใน วิชา INT221 integrated project I",
+        "eventCategoryDuration": 30,
+        "eventImagePath": "/images/front-end.png"
     },
     {
-      "id": 5,
-      "eventCategoryName": "Back-end Clinic",
-      "eventCategoryDescription": "ตารางนัดหมายนี้ใชKสําหรับนัดหมาย database clinic ใน วิชา INT221 integrated project I",
-      "eventCategoryDuration": "15"
+        "categoryId": 5,
+        "eventCategoryName": "Server-side Clinic",
+        "eventCategoryDescription": "",
+        "eventCategoryDuration": 30,
+        "eventImagePath": "/images/back-end.png"
     }
-  ],
+],
   "events": [
     {
-      "id": 1,
-      "bookingName": "Somchai Jaidee (OR-7)",
-      "bookingEmail": "somchai.jai@mail.kmutt.ac.th",
-      "eventDate": "2022-05-22T17:00:00.000+00:00",
-      "eventStartTime": "13:30:00",
-      "eventEndTime": "14:00:00",
-      "eventDuration": 30,
-      "eventCategoryName": "DevOps/Infra Clinic",
-      "eventCategoryDescription": "Use this event category for DevOps/Infra clinic.",
-      "eventCategoryDuration": "20",
-      "eventNotes": ""
+        "id": 4,
+        "bookingName": "Chotiwit Souyan (SSA-1)",
+        "eventDate": "2076-01-21T00:00:00.000+00:00",
+        "eventStartTime": "09:00:00",
+        "eventDuration": 30,
+        "categoryId": 2,
+        "categoryName": "DevOps/Infra Clinic",
+        "eventNotes": "This is integration test for posting method",
+        "statusName": "UPCOMING"
     },
     {
-      "id": 2,
-      "bookingName": "Somsri Rakdee (SJ-3)",
-      "bookingEmail": "somsri.rak@mail.kmutt.ac.th",
-      "eventDate": "2022-04-26T17:00:00.000+00:00",
-      "eventStartTime": "09:30:00",
-      "eventEndTime": "10:00:00",
-      "eventDuration": 30,
-      "eventCategoryName": "Project Management Clinic",
-      "eventCategoryDescription": " ตารางนัดหมายนี้ใชKสําหรับนัดหมาย project management clinic ในวิชา INT221 integrated project I ใหKนักศึกษาเตรียมเอกสารที่เกี่ยวขKองเพื่อแสดง ระหวaางขอคําปรึกษา",
-      "eventCategoryDuration": "30",
-      "eventNotes": "ขอปรึกษาปัญหาเพื่อนไม่ช่วยงาน"
+        "id": 3,
+        "bookingName": "สมเกียรติ ขยันเรียน  (TT-4)",
+        "eventDate": "2022-05-23T00:00:00.000+00:00",
+        "eventStartTime": "16:30:00",
+        "eventDuration": 15,
+        "categoryId": 3,
+        "categoryName": "Database Clinic",
+        "eventNotes": "",
+        "statusName": "UPCOMING"
     },
     {
-      "id": 3,
-      "bookingName": "สมเกียรติ ขยันเรียน (TT-4)",
-      "bookingEmail": "somkiat.kay@kmutt.ac.th",
-      "eventDate": "2022-05-22T17:00:00.000+00:00",
-      "eventStartTime": "16:30:00",
-      "eventEndTime": "17:00:00",
-      "eventDuration": 15,
-      "eventCategoryName": "Database Clinic",
-      "eventCategoryDescription": "ตารางนัดหมายนี้ใชKสําหรับนัดหมาย database clinic ใน วิชา INT221 integrated project I",
-      "eventCategoryDuration": "15",
-      "eventNotes": ""
+        "id": 1,
+        "bookingName": "Somchai Jaidee (OR-7)",
+        "eventDate": "2022-05-23T00:00:00.000+00:00",
+        "eventStartTime": "13:30:00",
+        "eventDuration": 30,
+        "categoryId": 2,
+        "categoryName": "DevOps/Infra Clinic",
+        "eventNotes": "",
+        "statusName": "UPCOMING"
     },
     {
-      "id": 4,
-      "bookingName": "สมเกียรติ ขยันเรียน (TT-4)",
-      "bookingEmail": "somkiat.kay@kmutt.ac.th",
-      "eventDate": "2022-05-22T17:00:00.000+00:00",
-      "eventStartTime": "16:30:00",
-      "eventEndTime": "17:00:00",
-      "eventDuration": 15,
-      "eventCategoryName": "Database Clinic",
-      "eventCategoryDescription": "ตารางนัดหมายนี้ใชKสําหรับนัดหมาย database clinic ใน วิชา INT221 integrated project I",
-      "eventCategoryDuration": "15",
-      "eventNotes": ""
+        "id": 6,
+        "bookingName": "ณัฐธิดา มีบุญ (SSA-1)",
+        "eventDate": "2022-05-11T00:00:00.000+00:00",
+        "eventStartTime": "11:00:00",
+        "eventDuration": 15,
+        "categoryId": 3,
+        "categoryName": "Database Clinic",
+        "eventNotes": "-",
+        "statusName": "UPCOMING"
     },
     {
-      "id": 5,
-      "bookingName": "สมเกียรติ ขยันเรียน (TT-4)",
-      "bookingEmail": "somkiat.kay@kmutt.ac.th",
-      "eventDate": "2022-05-22T17:00:00.000+00:00",
-      "eventStartTime": "16:30:00",
-      "eventEndTime": "17:00:00",
-      "eventDuration": 15,
-      "eventCategoryName": "Database Clinic",
-      "eventCategoryDescription": "ตารางนัดหมายนี้ใชKสําหรับนัดหมาย database clinic ใน วิชา INT221 integrated project I",
-      "eventCategoryDuration": "15",
-      "eventNotes": ""
+        "id": 7,
+        "bookingName": "Chotiwit Souyan (SSA-1)",
+        "eventDate": "2022-05-01T00:00:00.000+00:00",
+        "eventStartTime": "05:06:00",
+        "eventDuration": 20,
+        "categoryId": 4,
+        "categoryName": "Client-side Clinic",
+        "eventNotes": "test",
+        "statusName": "UPCOMING"
+    },
+    {
+        "id": 2,
+        "bookingName": "Somsri Rakdee (SJ-3)",
+        "eventDate": "2022-04-27T00:00:00.000+00:00",
+        "eventStartTime": "09:30:00",
+        "eventDuration": 30,
+        "categoryId": 1,
+        "categoryName": "Project Management Clinic",
+        "eventNotes": "ขอปรึกษาปัญหาเพื่อนไม่ช่วยงาน",
+        "statusName": "ENDED"
     }
-  ],
-  "test": [
-    {
-      "bookingName": " ",
-      "bookingEmail": "",
-      "eventDate": "6/9/2022",
-      "eventStartTime": "12:31:00",
-      "eventDuration": "30",
-      "eventCategoryId": 1,
-      "eventNotes": "",
-      "id": 1
-    },
-    {
-      "bookingName": " ",
-      "bookingEmail": "",
-      "eventDate": "2565-03-05T17:00:00.000Z",
-      "eventStartTime": "19:32:00",
-      "eventDuration": "30",
-      "eventCategoryId": 1,
-      "eventNotes": "",
-      "id": 2
-    },
-    {
-      "bookingName": " ",
-      "bookingEmail": "",
-      "eventDate": "2022-05-23T17:00:00.000Z",
-      "eventStartTime": "00:32:00",
-      "eventDuration": "30",
-      "eventCategoryId": 1,
-      "eventNotes": "",
-      "id": 3
-    }
-  ]
+]
 }

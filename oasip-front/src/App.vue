@@ -1,13 +1,13 @@
 <template>
-  <div>
+  <div class="scroll-smooth">
     <div>
-      <Navbar v-show="$route.name !== 'NotFound'" />
+      <Navbar v-show="$route.name == 'Booking' | 'NotFound' ? false : true " />
     </div>
     <div class="mx-auto">
       <router-view></router-view>
     </div>
     <div>
-      <Footer v-show="$route.name !== 'NotFound'"/>
+      <Footer v-show="$route.name == 'Booking' | 'NotFound' ? false : true "/>
     </div>
   </div>
 </template>
@@ -134,6 +134,10 @@ nav {
 
 .l-w-624 {
   width: 624px;
+}
+
+.l-w-632 {
+  width: 632px;
 }
 
 .l-w-720 {

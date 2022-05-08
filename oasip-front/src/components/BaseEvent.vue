@@ -20,15 +20,15 @@
                                     <p class="text-xs grid justify-end mt-1">{{ value.eventDuration }} Min.</p>
                                 </div>
                                 <div class="col-span-3 mt-1">
-                                    <h2 class="text-xl font-bold">{{ value.bookingName }}</h2>
+                                    <h2 class="text-xl font-bold truncate">{{ value.bookingName }}</h2>
                                 </div>
                             </div>
                             <div class="col-span-2 mt-1">
                                 <p class="text-xs">
                                     On {{ new Date(value.eventDate).toLocaleDateString() }} at {{value.eventStartTime}}</p>
                             </div>
-                            <div class="col-span-3 text-xs mt-4">
-                                <p class="l-color-gray-300"><span class="font-bold">Note: </span>{{ value.eventNotes ==
+                            <div class="col-span-1 text-xs mt-4 h-4">
+                                <p class="l-color-gray-300 truncate w-60"><span class="font-bold">Note: </span>{{ value.eventNotes ==
                                         '' ? 'None' : value.eventNotes
                                 }}
                                 </p>

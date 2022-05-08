@@ -24,20 +24,20 @@
         </div>
         
         <!-- Detail - Personal -->
-        <div class="l-w-624 h-96 bg-white">
+        <div class="l-w-720 h-96 bg-white">
             <div class="l-bg-navi w-full h-12 grid place-items-center"></div>
-            <div class="h-80 l-w-520 space-y-3 mx-auto mt-6">
+            <div class="h-80 l-w-520 space-y-3 ml-12 mt-6">
                 <h3 class="text-2xl font-bold">Personal detail</h3>
-                <div class="grid grid-cols-2 gap-6">
-                    <div class="space-y-1">
+                <div class="grid grid-cols-4 gap-3">
+                    <div class="space-y-1 col-span-2">
                         <h4 class="text-base text-gray-300">Name</h4>
                         <p class="text-sm font-light">{{ data.bookingName }}</p>
                     </div>
-                    <div class="space-y-1">
+                    <div class="space-y-1 col-span-2 w-96">
                         <h4 class="text-base text-gray-300">Email</h4>
                         <p class="text-sm font-light">{{ data.bookingEmail }}</p>
                     </div>
-                    <div class="space-y-1">
+                    <div class="space-y-1 col-span-2">
                         <h4 class="text-base text-gray-300">Time</h4>
                         <p class="text-sm font-light">
                             Start: {{ data.eventStartTime }}
@@ -50,7 +50,7 @@
                         <h4 class="text-base text-gray-300">Duration</h4>
                         <p class="text-sm font-light">{{ data.eventDuration }} Min.</p>
                     </div>
-                    <div class="grid col-span-2 space-y-1">
+                    <div class="grid col-span-4 space-y-1">
                         <h4 class="text-base text-gray-300">Note</h4>
                         <p class="text-sm h-20 font-light">{{ data.eventNotes == '' ? 'None' : data.eventNotes }}</p>
                     </div>
