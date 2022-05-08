@@ -73,7 +73,7 @@
         
         <!-- List - All events -->
         <div class="">
-            <BaseEvent :data="sortByCatagory" @delete="events($event)"/>
+            <BaseEvent :data="sortByStatus" @delete="events($event)"/>
         </div>
         <router-view></router-view>
     </div>
@@ -91,7 +91,6 @@ onBeforeMount(async () => {
 })
 
 const AllEventsData = ref([])
-const status = ref('')
 
 // Filter - event category
 const filterCat = ref([])
@@ -107,13 +106,22 @@ function addToFilter(catId) {
     }
 }
 
-const sortByCatagory = computed(() => {
+const sortByCategory = computed(() => {
     if (filterCat.value.length == 0) {
         return AllEventsData.value
     } else {
         return AllEventsData.value.filter(event => filterCat.value.includes(event.categoryId))
     }
 })
+
+const status = ref('')
+const sortByStatus = computed(() => {
+    if(status.value == '') return sortByCategory.value;
+    else return sortByCategory.value.filter((event) => {
+        return event.statusName.toLowerCase() == status.value.toLowerCase() || event.statusName.toLowerCase() == 'ongoing'
+        })
+})
+
 
 // Delete - event
 const events = (eventId) => {
