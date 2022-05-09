@@ -25,10 +25,10 @@ use oasip;
 -- Table structure for table `eventcategories`
 --
 
-DROP TABLE IF EXISTS `eventcategories`;
+DROP TABLE IF EXISTS `eventCategories`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `eventcategories` (
+CREATE TABLE `eventCategories` (
   `eventCategoryId` int NOT NULL AUTO_INCREMENT,
   `eventCategoryName` varchar(100) NOT NULL,
   `eventCategoryDescription` varchar(500) DEFAULT NULL,
@@ -42,9 +42,9 @@ CREATE TABLE `eventcategories` (
 -- Dumping data for table `eventcategories`
 --
 
-LOCK TABLES `eventcategories` WRITE;
+LOCK TABLES `eventCategories` WRITE;
 /*!40000 ALTER TABLE `eventcategories` DISABLE KEYS */;
-INSERT INTO `eventcategories` VALUES (1,'Project Management Clinic',' ตารางนัดหมายนี้ใช้สําหรับนัดหมาย project management clinic ในวิชา INT221 integrated project I ให้นักศึกษาเตรียมเอกสารที่เกี่ยวข้องเพื่อแสดง ระหว่างขอคําปรึกษา',30,'/ssa1/images/project-management.png'),(2,'DevOps/Infra Clinic','Use this event category for DevOps/Infra clinic.',20,'/ssa1/images/dev-ops.png'),(3,'Database Clinic','ตารางนัดหมายนี้ใช้สําหรับนัดหมาย database clinic ใน วิชา INT221 integrated project I',15,'/ssa1/images/database.png'),(4,'Client-side Clinic','ตารางนัดหมายนี้ใช้สําหรับนัดหมาย client-side clinic ใน วิชา INT221 integrated project I',30,'/ssa1/images/front-end.png'),(5,'Server-side Clinic','',30,'/ssa1/images/back-end.png');
+INSERT INTO `eventCategories` VALUES (1,'Project Management Clinic',' ตารางนัดหมายนี้ใช้สําหรับนัดหมาย project management clinic ในวิชา INT221 integrated project I ให้นักศึกษาเตรียมเอกสารที่เกี่ยวข้องเพื่อแสดง ระหว่างขอคําปรึกษา',30,'/ssa1/images/project-management.png'),(2,'DevOps/Infra Clinic','Use this event category for DevOps/Infra clinic.',20,'/ssa1/images/dev-ops.png'),(3,'Database Clinic','ตารางนัดหมายนี้ใช้สําหรับนัดหมาย database clinic ใน วิชา INT221 integrated project I',15,'/ssa1/images/database.png'),(4,'Client-side Clinic','ตารางนัดหมายนี้ใช้สําหรับนัดหมาย client-side clinic ใน วิชา INT221 integrated project I',30,'/ssa1/images/front-end.png'),(5,'Server-side Clinic','',30,'/ssa1/images/back-end.png');
 /*!40000 ALTER TABLE `eventcategories` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -69,7 +69,7 @@ CREATE TABLE `events` (
   PRIMARY KEY (`bookingId`),
   KEY `fk_event_eventCategory_idx` (`eventCategoryId`),
   KEY `fk_events_status1_idx` (`statusId`),
-  CONSTRAINT `fk_event_eventCategory` FOREIGN KEY (`eventCategoryId`) REFERENCES `eventcategories` (`eventCategoryId`),
+  CONSTRAINT `fk_event_eventCategory` FOREIGN KEY (`eventCategoryId`) REFERENCES `eventCategories` (`eventCategoryId`),
   CONSTRAINT `fk_events_status1` FOREIGN KEY (`statusId`) REFERENCES `status` (`statusId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
