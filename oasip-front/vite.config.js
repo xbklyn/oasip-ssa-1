@@ -24,6 +24,8 @@ const defaultConfig = {
 export default defineConfig(({ command, mode }) => {
   if (command === 'build') {
     return {
+        plugins: [vue()],
+        base: '/ssa1/',
         server: {
             proxy: {
                 '/api': {
