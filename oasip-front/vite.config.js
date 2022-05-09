@@ -22,7 +22,7 @@ const defaultConfig = {
     }
 
 export default defineConfig(({ command, mode }) => {
-  if (command === 'serve') {
+  if (command === 'build') {
     return {
         server: {
             proxy: {
