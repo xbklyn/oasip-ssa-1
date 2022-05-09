@@ -16,7 +16,7 @@ import sit.int221.oasip.services.EventServices;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://intproj21.sit.kmutt.ac.th/ssa1/")
+@CrossOrigin
 @RestController
 @RequestMapping("/api/events")
 public class EventsController {
