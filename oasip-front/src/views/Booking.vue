@@ -29,7 +29,7 @@
                         </div>
                     </div>
                     <div>
-                        <img :src='value.eventImagePath' alt="">
+                        <img :src='value.imagePath' alt="">
                     </div>
                 </div>
             </div>
