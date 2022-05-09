@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/api/category")
+@RequestMapping("/ssa1/api/category")
 public class EventCategoryController {
 
     private final EventCategoryService eventCategoryService;
