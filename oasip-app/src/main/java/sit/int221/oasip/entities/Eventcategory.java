@@ -25,8 +25,8 @@ public class Eventcategory {
     @Column(name = "eventDuration", nullable = false)
     private Integer eventCategoryDuration;
 
-    @Column(name = "eventImagePath")
-    private String eventImagePath;
+    @Column(name = "imagePath")
+    private String imagePath;
 
     @JsonIgnore
     @OneToMany(mappedBy="eventCategory")
