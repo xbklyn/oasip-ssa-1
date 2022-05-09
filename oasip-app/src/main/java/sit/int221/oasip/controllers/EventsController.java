@@ -35,7 +35,6 @@ public class EventsController {
     //GET All
     @GetMapping("")
     public List<SimpleEventDTO> getAllEvents(ServerHttpResponse res) {
-        res.getHeaders().add("Access-Control-Allow-Origin" , "*");
         return eventServices.getAllEvents();
     }
 
