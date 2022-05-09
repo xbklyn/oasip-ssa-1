@@ -16,7 +16,7 @@ import vue from '@vitejs/plugin-vue'
 //         }
 //     }
 // })
-const defineConfig = {
+const defaultConfig = {
         plugins: [vue()],
         base: '/ssa1/',
     }
@@ -36,6 +36,6 @@ export default defineConfig(({ command, mode }) => {
         }
     }
   } else {
-    return defineConfig
+    return defaultConfig
   }
 })
