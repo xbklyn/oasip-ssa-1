@@ -35,7 +35,7 @@ public class Event {
     @Column(name = "eventDuration", nullable = false)
     private Integer eventDuration;
 
-    @Column(name = "eventNotes", length = 250)
+    @Column(name = "eventNotes", length = 500)
     private String eventNotes;
 
     @ManyToOne
