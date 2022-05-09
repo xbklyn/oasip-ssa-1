@@ -1,10 +1,6 @@
 //GET METHOD - All event
 export const getAllEvents = async () => {
-    const res = await fetch(`${import.meta.env.VITE_BASE_URL}/events`, {
-        headers: {
-            'Access-Control-Allow-Origin': 'no-cors'
-        }
-    })
+    const res = await fetch(`${import.meta.env.VITE_BASE_URL}/events`)
     if (res.status === 200) {
         console.log(res.status);
         return await res.json();
