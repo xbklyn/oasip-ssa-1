@@ -18,7 +18,7 @@ import java.util.List;
 
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/ssa1/api/events")
+@RequestMapping("/api/events")
 public class EventsController {
 
     private final EventServices eventServices;

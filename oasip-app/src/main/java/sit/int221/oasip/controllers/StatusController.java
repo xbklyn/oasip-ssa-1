@@ -11,7 +11,7 @@ import java.util.List;
 
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/ssa1/api/status")
+@RequestMapping("/api/status")
 public class StatusController {
 
     private final StatusService statusService;
