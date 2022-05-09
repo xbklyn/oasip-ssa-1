@@ -95,7 +95,7 @@
             <h1 class="text-7xl l-color-gray text-center select-none">No scheduled event</h1>
         </div>
         <div v-else class="grid justify-cente h-96 my-24">
-            <h1 class="text-5xl l-color-gray text-center select-none">No Ongoing / Upcoming event at the moment</h1>
+            <h1 class="text-7xl l-color-gray text-center select-none leading-normal">No Ongoing / Upcoming event <br>at this moment</h1>
         </div>
     </div>
 </template>

@@ -74,8 +74,8 @@
                             <input type="email" class="l-w-824 h-12 l-bg-gray pl-6" v-model="email" />
                         </div>
                         <div class="col-span-2">
-                            <h2 class="l-color-gray-300 text-base">Note (Optional)</h2>
-                            <textarea type="text" class="l-w-824 l-bg-gray pb-24 pl-2 resize-none"
+                            <h2 class="l-color-gray-300 text-base">Note (Optional) <span class="text-xs">{{note.length}}/500</span></h2>
+                            <textarea maxlength="500" type="text" class="l-w-824 l-bg-gray pb-24 pl-2 resize-none focus:outline-none"
                                 v-model="note"></textarea>
                         </div>
                     </div>
@@ -154,7 +154,7 @@ const firstName = ref('')
 const lastName = ref('')
 const group = ref('')
 const combineName = computed(() => {
-    return `${firstName.value} ${lastName.value} (${group.value})`
+    return `${firstName.value} ${lastName.value} ${group.value.length != 0 ? '(' + group.value + ')' : ''}`
 })
 
 const email = ref('')
