@@ -1,7 +1,6 @@
 //GET METHOD - All event
 export const getAllEvents = async () => {
-    // const res = await fetch(`${import.meta.env.VITE_BASE_URL}/events`)
-    const res = await fetch(`http://intproj21.sit.kmutt.ac.th:8080/ssa1/api/events`)
+    const res = await fetch(`${import.meta.env.VITE_BASE_URL}/events`)
     if (res.status === 200) {
         console.log(res.status);
         return await res.json();
