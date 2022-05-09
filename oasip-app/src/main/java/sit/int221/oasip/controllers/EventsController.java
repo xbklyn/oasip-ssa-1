@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 // import org.springframework.web.bind.annotation.PathVariable;
 // import org.springframework.web.bind.annotation.RequestMapping;
 // import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.*;
 
 import sit.int221.oasip.dtos.AddEventDetailDTO;
@@ -14,6 +15,7 @@ import sit.int221.oasip.entities.Event;
 import sit.int221.oasip.repositories.EventRepository;
 import sit.int221.oasip.services.EventServices;
 
+import java.net.http.HttpResponse;
 import java.util.List;
 
 // @CrossOrigin(origins = "http://intproj21.sit.kmutt.ac.th:80/ssa1")
@@ -32,7 +34,8 @@ public class EventsController {
 
     //GET All
     @GetMapping("")
-    public List<SimpleEventDTO> getAllEvents() {
+    public List<SimpleEventDTO> getAllEvents(ServerHttpResponse res) {
+        res.getHeaders().add("Access-Control-Allow-Origin" , "*");
         return eventServices.getAllEvents();
     }
 
