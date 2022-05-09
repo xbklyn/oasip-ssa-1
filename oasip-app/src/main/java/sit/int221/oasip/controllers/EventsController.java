@@ -19,7 +19,7 @@ import java.util.List;
 // @CrossOrigin(origins = "http://intproj21.sit.kmutt.ac.th:80/ssa1")
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/api/events")
+@RequestMapping("/ssa1/api/events")
 public class EventsController {
 
     private final EventServices eventServices;
