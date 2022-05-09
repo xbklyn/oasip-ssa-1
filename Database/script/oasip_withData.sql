@@ -25,9 +25,9 @@ DROP TABLE IF EXISTS `eventcategories`;
 CREATE TABLE `eventcategories` (
   `eventCategoryId` int NOT NULL AUTO_INCREMENT,
   `eventCategoryName` varchar(100) NOT NULL,
-  `eventCategoryDescription` varchar(250) DEFAULT NULL,
+  `eventCategoryDescription` varchar(500) DEFAULT NULL,
   `eventDuration` int NOT NULL,
-  `eventImagePath` varchar(250) NOT NULL,
+  `imagePath` varchar(250) NOT NULL,
   PRIMARY KEY (`eventCategoryId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -53,11 +53,11 @@ CREATE TABLE `events` (
   `bookingId` int NOT NULL AUTO_INCREMENT,
   `bookingName` varchar(100) NOT NULL,
   `bookingEmail` varchar(100) NOT NULL,
-  `eventDate` date DEFAULT NULL,
+  `eventDate` date NOT NULL,
   `eventStartTime` time NOT NULL,
-  `eventEndTime` time DEFAULT NULL,
+  `eventEndTime` time NOT NULL,
   `eventDuration` int NOT NULL,
-  `eventNotes` varchar(250) DEFAULT NULL,
+  `eventNotes` varchar(500) DEFAULT NULL,
   `eventCategoryId` int NOT NULL,
   `statusId` int NOT NULL,
   PRIMARY KEY (`bookingId`),
