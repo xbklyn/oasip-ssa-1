@@ -15,6 +15,12 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+-- -----------------------------------------------------
+-- Creaet database oasip
+-- -----------------------------------------------------
+create database if not exists oasip;
+use oasip;
+
 --
 -- Table structure for table `eventcategories`
 --
@@ -38,7 +44,7 @@ CREATE TABLE `eventcategories` (
 
 LOCK TABLES `eventcategories` WRITE;
 /*!40000 ALTER TABLE `eventcategories` DISABLE KEYS */;
-INSERT INTO `eventcategories` VALUES (1,'Project Management Clinic',' ตารางนัดหมายนี้ใช้สําหรับนัดหมาย project management clinic ในวิชา INT221 integrated project I ให้นักศึกษาเตรียมเอกสารที่เกี่ยวข้องเพื่อแสดง ระหว่างขอคําปรึกษา',30,'/images/project-management.png'),(2,'DevOps/Infra Clinic','Use this event category for DevOps/Infra clinic.',20,'/images/dev-ops.png'),(3,'Database Clinic','ตารางนัดหมายนี้ใช้สําหรับนัดหมาย database clinic ใน วิชา INT221 integrated project I',15,'/images/database.png'),(4,'Client-side Clinic','ตารางนัดหมายนี้ใช้สําหรับนัดหมาย client-side clinic ใน วิชา INT221 integrated project I',30,'/images/front-end.png'),(5,'Server-side Clinic','',30,'/images/back-end.png');
+INSERT INTO `eventcategories` VALUES (1,'Project Management Clinic',' ตารางนัดหมายนี้ใช้สําหรับนัดหมาย project management clinic ในวิชา INT221 integrated project I ให้นักศึกษาเตรียมเอกสารที่เกี่ยวข้องเพื่อแสดง ระหว่างขอคําปรึกษา',30,'/ssa1/images/project-management.png'),(2,'DevOps/Infra Clinic','Use this event category for DevOps/Infra clinic.',20,'/ssa1/images/dev-ops.png'),(3,'Database Clinic','ตารางนัดหมายนี้ใช้สําหรับนัดหมาย database clinic ใน วิชา INT221 integrated project I',15,'/ssa1/images/database.png'),(4,'Client-side Clinic','ตารางนัดหมายนี้ใช้สําหรับนัดหมาย client-side clinic ใน วิชา INT221 integrated project I',30,'/ssa1/images/front-end.png'),(5,'Server-side Clinic','',30,'/ssa1/images/back-end.png');
 /*!40000 ALTER TABLE `eventcategories` ENABLE KEYS */;
 UNLOCK TABLES;
 
