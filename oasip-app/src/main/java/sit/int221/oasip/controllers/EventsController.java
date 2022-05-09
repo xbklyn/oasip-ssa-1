@@ -34,7 +34,7 @@ public class EventsController {
 
     //GET All
     @GetMapping("")
-    public List<SimpleEventDTO> getAllEvents(ServerHttpResponse res) {
+    public List<SimpleEventDTO> getAllEvents() {
         return eventServices.getAllEvents();
     }
 
