@@ -6,7 +6,7 @@ import EventInfo from '../views/EventInfo.vue'
 import NotFound from '../views/NotFound.vue'
 
 
-const history = createWebHistory()
+const history = createWebHistory('/ssa1')
 const routes = [
     {
         path: '/:catchNotMatchPath(.*)',
