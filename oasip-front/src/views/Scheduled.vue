@@ -27,14 +27,14 @@
                     <div :class="['grid justify-center place-items-center w-20 h-6 l-color-navi',
                         filterCat.includes(4) ? 'l-bg-blue text-white font-semibold' : 'hover:bg-gray-300'
                     ]">
-                        Front-end
+                        Client-Sided
                     </div>
                 </button>
                 <button @click="addToFilter(5)">
                     <div :class="['grid justify-center place-items-center w-20 h-6 l-color-navi',
                         filterCat.includes(5) ? 'l-bg-blue text-white font-semibold' : 'hover:bg-gray-300'
                     ]">
-                        Back-end
+                        Server-Sided
                     </div>
                 </button>
                 <button @click="addToFilter(3)">
@@ -55,7 +55,7 @@
                     <div :class="['grid justify-center place-items-center w-40 h-6 l-color-navi',
                         filterCat.includes(1) ? 'l-bg-blue text-white font-semibold' : 'hover:bg-gray-300'
                     ]">
-                        Product Management
+                        Project Management
                     </div>
                 </button>
                 <div class="flex">
