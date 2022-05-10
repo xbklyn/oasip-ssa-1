@@ -34,9 +34,9 @@
             </div>
         </div>
         
-        <button class="justify-self-end mr-24 w-32 h-10 text-white bg-green-400 font-bold grid place-items-center l-color-navi hover:bg-green-600 duration-150">
+        <button class="justify-self-end mr-24 w-32 h-10 bg-gradient-to-bl from-green-400 via-purple-500 to-blue-500 font-bold grid place-items-center text-white hover:bg-blue-600 hover:text-white hover:border-0 duration-150">
                 <router-link :to="{ name: 'Booking' }" class="flex place-items-center space-x-2">
-                  <span class="text-xl font-black">+</span><p>book now</p>
+                  <span class="text-xl font-black">+</span><p>Book now</p>
                 </router-link>
             </button>
     </nav>

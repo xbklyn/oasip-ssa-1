@@ -17,8 +17,7 @@ const routes = [
         path: '/',
         name: 'Home',
         component: HomePage,
-        meta: { title: 'OASIP - Welcome to Online Appointment Sevice for IntegratedProject Clinic.' 
-    }
+        meta: { title: 'OASIP - Welcome to Online Appointment Sevice for IntegratedProject Clinic.' }
     },
     {
         path: '/booking',

@@ -11,7 +11,7 @@ export default defineConfig({
                 target: 'http://intproj21.sit.kmutt.ac.th/ssa1',
                 changeOrigin: true,
                 secure: false,
-                rewrite: (path) => path.replace(/^\/api/, '')
+                // rewrite: (path) => path.replace(/^\/api/, '')
             }
         }
     }
