@@ -133,7 +133,6 @@
 import { ref } from "@vue/reactivity"
 import { computed, onBeforeMount, onBeforeUpdate } from "@vue/runtime-core";
 import { getAllCategory, getEventCategoryById, createEvent } from '../services/FetchServices.js'
-import BookingForm from '../components/BookingForm.vue'
 import { useRoute, useRouter } from "vue-router";
 const myRouter = useRouter()
 
