@@ -9,6 +9,7 @@ import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.*;
 
 import sit.int221.oasip.dtos.AddEventDetailDTO;
+import sit.int221.oasip.dtos.EditEventDTO;
 import sit.int221.oasip.dtos.EventDetailDTO;
 import sit.int221.oasip.dtos.SimpleEventDTO;
 import sit.int221.oasip.entities.Event;
@@ -65,6 +66,18 @@ public class EventsController {
         eventServices.delete(id);
     }
 
-    
+
+//      PUT Method
+        //Update Event
+        @ResponseStatus(HttpStatus.OK)
+        @PutMapping("/{id}")
+        public Event edit(
+                @RequestBody EditEventDTO editEventDTO,
+                @PathVariable Integer id
+                ){
+            return eventServices.update(id , editEventDTO);
+        }
+
+
 
 }

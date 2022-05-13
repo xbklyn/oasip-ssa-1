@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import sit.int221.oasip.dtos.AddEventDetailDTO;
+import sit.int221.oasip.dtos.EditEventDTO;
 import sit.int221.oasip.dtos.EventDetailDTO;
 import sit.int221.oasip.dtos.SimpleEventDTO;
 import sit.int221.oasip.entities.Event;
@@ -17,6 +18,7 @@ import sit.int221.oasip.utils.ListMapper;
 
 import java.sql.Time;
 import java.time.LocalTime;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -64,4 +66,17 @@ public class EventServices {
 
     public void delete(Integer id) { eventRepository.deleteById(id);}
 
+    public Event update(Integer id , EditEventDTO editEventDTO){
+        Event event = eventRepository.findById(id).orElseThrow(() ->
+            new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        // Set new details
+        event.setEventNotes(editEventDTO.getEventNotes());
+        event.setEventDate(editEventDTO.getEventDate());
+        event.setEventStartTime(editEventDTO.getEventStartTime());
+        LocalTime endTime = event.getEventStartTime().toLocalTime().plusMinutes((long) event.getEventDuration());
+        event.setEventEndTime(Time.valueOf(endTime));
+
+        return eventRepository.saveAndFlush(event);
+    }
 }
