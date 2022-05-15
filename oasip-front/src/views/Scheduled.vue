@@ -94,21 +94,25 @@
                 </div>
 
                 <div class="flex gap-6">
-                    <button>
-                        <div class="grid justify-center place-items-center w-24 h-6 text-sm font-light l-color-navi">
+                    <button @click="status = ''">
+                        <div :class="['grid justify-center place-items-center w-24 h-6 text-sm font-light l-color-navi',
+                        status == '' ? 'l-bg-blue text-white font-semibold' : 'hover:bg-gray-300']">
                             All</div>
                     </button>
-                    <button>
-                        <div class="grid justify-center place-items-center w-24 h-6 text-sm font-light l-color-navi">
+                    <button @click="status = 'upcoming'">
+                        <div :class="['grid justify-center place-items-center w-24 h-6 text-sm font-light l-color-navi', 
+                        status == 'upcoming' ? 'l-bg-blue text-white font-semibold' : 'hover:bg-gray-300']">
                             Upcoming</div>
                     </button>
-                    <button>
-                        <div class="grid justify-center place-items-center w-24 h-6 text-sm font-light l-color-navi">
+                    <button @click="status= 'ongoing'">
+                        <div :class="['grid justify-center place-items-center w-24 h-6 text-sm font-light l-color-navi',
+                        status == 'ongoing' ? 'l-bg-blue text-white font-semibold' : 'hover:bg-gray-300']">
                             On going</div>
                     </button>
-                    <button>
-                        <div class="grid justify-center place-items-center w-24 h-6 text-sm font-light l-color-navi">
-                            Complete</div>
+                    <button @click="status = 'completed'">
+                        <div :class="['grid justify-center place-items-center w-24 h-6 text-sm font-light l-color-navi',
+                        status == 'completed' ? 'l-bg-blue text-white font-semibold' : 'hover:bg-gray-300']">
+                            Completed</div>
                     </button>
                 </div>
 
@@ -142,34 +146,36 @@ const AllEventsData = ref([])
 const allEventCategory = ref([])
 
 // Filter - event category
-const filterCat = ref([])
-const filter = ref('Category')
 
-function addToFilter(catId) {
-    if (filterCat.value.includes(catId)) {
-        filterCat.value.splice(filterCat.value.indexOf(catId), 1)
-        console.log(filterCat.value);
-    }
-    else {
-        filterCat.value.push(catId)
-        console.log(filterCat.value);
-    }
-}
+const filter = ref('Category')
 
 const sortByCategory = computed(() => {
     if (filter.value == 0 || filter.value == 'Category') {
         return AllEventsData.value
     } else {
-        return AllEventsData.value.filter(event => filterCat.value.includes(event.categoryId))
+        return AllEventsData.value.filter(event => event.categoryId == filter.value)
     }
 })
 
 const status = ref('')
 const sortByStatus = computed(() => {
     if (status.value == '') return sortByCategory.value;
-    else return sortByCategory.value.filter((event) => {
-        return event.statusName.toLowerCase() == status.value.toLowerCase() || event.statusName.toLowerCase() == 'ongoing'
-    })
+    else if (status.value == 'upcoming') {
+        return sortByCategory.value.filter(event => {
+            return event.statusName.toLowerCase() == 'upcoming' || event.statusName.toLowerCase() == 'ongoing'
+        })
+    }
+    else if (status.value == 'ongoing') {
+        return sortByCategory.value.filter(event => {
+            return event.statusName.toLowerCase() == 'ongoing'
+        })
+    }
+    else {
+        return sortByCategory.value.filter(event => {
+            return event.statusName.toLowerCase() == 'completed'
+        })
+    }
+    
 })
 
 
