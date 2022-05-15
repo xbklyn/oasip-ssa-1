@@ -106,9 +106,17 @@
         <div v-if="prop.status == ''" class="grid justify-center place-items-center h-96 my-24">
             <h1 class="text-7xl l-color-gray text-center select-none">No scheduled event</h1>
         </div>
-        <div v-else class="grid justify-cente h-96 my-24">
-            <h1 class="text-7xl l-color-gray text-center select-none leading-normal">No Ongoing / Upcoming event <br>at
+        <div v-else-if="prop.status == 'upcoming'" class="grid justify-cente h-96 my-24">
+            <h1 class="text-7xl l-color-gray text-center select-none leading-normal">No Upcoming / Ongoing event <br>at
                 this moment</h1>
+        </div>
+        <div v-else-if="prop.status == 'ongoing'" class="grid justify-cente h-96 my-24">
+            <h1 class="text-7xl l-color-gray text-center select-none leading-normal">No Ongoing event 
+                <br>at this moment</h1>
+        </div>
+        <div v-else class="grid justify-cente h-96 my-24">
+            <h1 class="text-7xl l-color-gray text-center select-none leading-normal">No Completed event 
+                <br>at this moment</h1>
         </div>
     </div>
 </template>
