@@ -1,20 +1,18 @@
 <template>
-  <div>
+  <div class="bg-black">
     <div class="grid place-items-center h-screen">
       <div class="flex">
-        <div>
-          <img src="../assets/component/NotFound.png" />
-        </div>
         <div class="grid place-items-center">
-          <div class="">
+          <div>
             <div>
-              <h1 class="text-red-400 font-black text-7xl">ERROR 404</h1>
+              <h1 class="text-white font-bold text-9xl">ERROR 404</h1>
             </div>
             <div>
-              <p class="font-semibold text-4xl mb-6">Page not found</p>
+              <p class="text-white text-2xl mb-6 text-center mt-8">Page not found</p>
             </div>
-            <div>
-              <p @click="goBack" class="l-color-blue font-regular text-xl underline">
+            <div class="flex place-content-center mt-24">
+              <img src="../assets/component/backNotFound.png" width="24" >
+              <p @click="goBack" class="l-color-blue font-regular text-2xl ml-4">
                 Back to home page
               </p>
             </div>
@@ -34,4 +32,5 @@ const goBack = () => myRouter.push({
 </script>
 
 <style>
+
 </style>
