@@ -31,7 +31,7 @@
         <!-- Step 1 - Select clinic -->
         <div class="l-w-824 h-40 mx-auto flex">
             <div class="w-52 h-40 place-items-center">
-                <h2>Step 1</h2>
+                <h2>Step 1 <span class="text-red-500">*</span></h2>
                 <p class="l-text-xxs">What clinic do you want to book?</p>
             </div>
             <div>
@@ -62,26 +62,28 @@
 
                 <!-- Input - Email -->
                 <div class="relative">
-                    <span v-show="wrongEmail" style="color:red">Incorrect email address</span>
+
                     <input type="text" id="email" v-model="email" @change="isEmailValid"
                         class="l-w-612 h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                         placeholder=" " />
                     <label for="email"
                         class="absolute text-sm l-color-gray-300 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1">
-                        Email
+                        Email<span class="text-red-500">*</span>
                     </label>
+                    <p v-show="wrongEmail" class="absolute text-sm text-red-500 ml-2">Incorrect email address</p>
                 </div>
                 <div class="grid grid-cols-3 gap-6">
 
                     <!-- Input - First name -->
                     <div class="relative">
-                        <input type="text" id="firstName" v-model="firstName"
-                            class="l-w-188 h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                        <input type="text" id="firstName" v-model="firstName" @input="isFirstNameValid"
+                            :class="['l-w-188 h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer', firstNameNotValid ? 'border-red-500 focus:border-red-500' : '']"
                             placeholder=" " />
                         <label for="firstName"
                             class="absolute text-sm l-color-gray-300 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1">
-                            First Name
+                            First Name<span class="text-red-500">*</span>
                         </label>
+
                     </div>
 
                     <!-- Input - Last name -->
@@ -125,15 +127,15 @@
         <!-- Step 3 - Select time period -->
         <div class="l-w-824 h-24 mx-auto flex m-12">
             <div class="w-52 h-24 place-items-center">
-                <h2>Step 3</h2>
+                <h2>Step 3<span class="text-red-500">*</span></h2>
                 <p class="l-text-xxs">Select time period.</p>
 
             </div>
-            <div class="l-w-612 h-12 grid grid-cols-2 gap-6">
+            <div class="l-w-612 h-24 grid grid-cols-2 gap-6">
 
                 <!-- Input - Date -->
                 <div class="relative">
-                    <input type="date" id="dateTime" v-model="dateTime" :min="currentDate"
+                    <input type="date" id="dateTime" v-model="dateTime" :min="currentDate" @input="isTimeValid"
                         class="block l-w-294 h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                         placeholder=" " />
                     <label for="dateTime"
@@ -141,21 +143,29 @@
                         Date
                     </label>
                 </div>
+
                 <!-- Input - Start time -->
+
                 <div class="relative">
-                    <input type="time" id="startTime" v-model="startTime"
-                        class="block l-w-294 h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+
+                    <input type="time" id="startTime" v-model="startTime" @input="isTimeValid"
+                        :class="['block l-w-294 h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer', timeNotValid ? 'border-red-500 focus:border-red-600' : '']"
                         placeholder=" " />
                     <label for="startTime"
                         class="absolute text-sm l-color-gray-300 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1">
                         Start time
                     </label>
+                    <p v-show="timeNotValid" class="absolute text-sm text-red-500 ml-2">Time invalid</p>
                 </div>
 
             </div>
         </div>
+
+        <!-- Button - Submition -->
         <div class="l-w-824 h-12 mx-auto">
-            <button class="w-full h-full l-bg-navi text-white hover:bg-slate-500 duration-150"
+            <button
+                :class="['w-full h-full text-white duration-150', isAllvalid ? 'bg-slate-200' : 'l-bg-navi hover:bg-slate-800']"
+                :disabled="isAllvalid"
                 @click="submit(combineName, email, date, time, clinics[clinicIndex].eventCategoryDuration, clinicId, note)">Submit</button>
         </div>
     </div>
@@ -173,18 +183,9 @@ onBeforeMount(async () => {
     clinics.value = res
 })
 
-const currentDate = computed(() => {
-    const date =ref(new Date().getFullYear())
-    const month = ref((new Date().getMonth()+1).toString())
-    const day = ref(new Date().getDate())
-    if(month.value.length === 1){
-        return `${date.value}-0${month.value}-${day.value}`
-    }
-    return `${date.value}-${month.value}-${day.value}`
-})
-
+// Attribute
 const clinics = ref([])
-const clinicId = ref()
+const clinicId = ref(0)
 const clinicIndex = ref()
 
 const firstName = ref('')
@@ -193,44 +194,93 @@ const group = ref('')
 const combineName = computed(() => {
     return `${firstName.value} ${lastName.value} ${group.value.length != 0 ? '(' + group.value + ')' : ''}`
 })
-
 const email = ref('')
-const emailRe = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
-const  wrongEmail = ref(false)
-
- const isEmailValid=() => {
-      if (emailRe.test(email.value)) {
-       return wrongEmail.value = false;
-      } else {
-       return wrongEmail.value = true;
-      }
-    }
-
 const dateTime = ref()
 const date = computed(() => {
     return new Date(new Date(dateTime.value)).toISOString()
 })
-
 const startTime = ref()
 const time = computed(() => {
     return `${startTime.value}:00`
 })
-
 const note = ref('')
 
-const submit = (name, mail, date, start, duration, categoryId, notes) => {
-    createEvent(name, mail, date, start, duration, categoryId, notes)
-    firstName.value = ''
-    lastName.value = ''
-    email.value = ''
-    dateTime.value = ''
-    startTime.value = ''
-    note.value = ''
 
-    myRouter.push({
-        name: 'Home'
-    })
+
+//################## Function - Validation ##################
+const isAllvalid = computed(() => {
+    if (timeNotValid.value || wrongEmail.value || firstNameNotValid.value || clinicId.value === 0) {
+        return true
+    }  if (email.value.length === 0 || firstName.value.length === 0 || dateTime.value.length === 0 || startTime.value.length === 0) {
+        return true
+    } return false
+})
+
+// Validate - Email
+const checkEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+const wrongEmail = ref(false)
+const isEmailValid = () => {
+    if (checkEmail.test(email.value)) {
+        wrongEmail.value = false;
+        return true
+    } else {
+        wrongEmail.value = true;
+        return false
+    }
+}
+
+const firstNameNotValid = ref(false)
+const isFirstNameValid = computed(() => {
+    if (firstName.value.length == 0) {
+        firstNameNotValid.value = true
+        return false
+    } else {
+        firstNameNotValid.value = false
+        return true
+    }
+})
+
+// Validate -  Date
+const currentDate = computed(() => {
+    const date = ref(new Date().getFullYear())
+    const month = ref((new Date().getMonth() + 1).toString())
+    const day = ref(new Date().getDate())
+    if (month.value.length === 1) {
+        return `${date.value}-0${month.value}-${day.value}`
+    }
+    return `${date.value}-${month.value}-${day.value}`
+})
+
+
+// Validate - Start time
+const timeNotValid = ref(false)
+const isTimeValid = () => {
+    if (date.value < new Date().toISOString() && new Date().toLocaleTimeString('th-TH') > time.value) {
+        timeNotValid.value = true
+        return false
+    } else {
+        timeNotValid.value = false
+        return true
+    }
+}
+
+//############################################################################################################
+
+const submit = (name, mail, date, start, duration, categoryId, notes) => {
+   
+
+        createEvent(name, mail, date, start, duration, categoryId, notes)
+        firstName.value = ''
+        lastName.value = ''
+        email.value = ''
+        dateTime.value = ''
+        startTime.value = ''
+        note.value = ''
+
+        myRouter.push({
+            name: 'Home'
+        })
+    
 }
 
 </script>

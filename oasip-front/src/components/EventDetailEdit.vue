@@ -76,7 +76,7 @@
 
                 <!-- Input - Note -->
                 <div class="relative">
-                    <textarea type="text" id="note" maxlength="500" v-model="currentData.note"
+                    <textarea type="text" id="note" maxlength="500" v-model="note"
                         class="resize-none l-w-612 h-44 pl-2 pt-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                         placeholder="Your note..." />
                     <label for="note"
@@ -98,7 +98,7 @@
 
                 <!-- Input - Date -->
                 <div class="relative">
-                    <input type="date" id="dateTime" :min="currentDate" v-model="dateTime"
+                    <input type="date" id="dateTime" :min="currentDate" @input="isTimeValid" v-model="dateTime"
                         class="block l-w-294 h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" />
                     <label for="dateTime"
                         class="absolute text-sm l-color-gray-300 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1">
@@ -108,13 +108,14 @@
                 
                 <!-- Input - Start time -->
                 <div class="relative">
-                    <input type="time" id="startTime" v-model="currentData.startTime"
+                    <input type="time" id="startTime" @input="isTimeValid"  v-model="startTime"
                         class="block l-w-294 h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                         placeholder=" " />
                     <label for="startTime"
                         class="absolute text-sm l-color-gray-300 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1">
                         Start time
                     </label>
+                    <p v-show="timeNotValid" class="absolute text-sm text-red-500 ml-2">Time invalid</p>
                 </div>
             </div>
         </div>
@@ -122,8 +123,8 @@
         <div class="l-w-612 h-px bg-black mx-auto"></div>
 
         <div class="l-w-612 h-12 mx-auto my-12">
-            <button @click="$emit('edit', currentData)"
-                class="w-full h-full bg-green-600 text-white hover:bg-green-700 duration-150">Update</button>
+            <button @click="$emit('edit', currentData)" :disabled="timeNotValid"
+                :class="['w-full h-full text-white  duration-150', timeNotValid ? 'bg-slate-300' : 'bg-green-600  hover:bg-green-700']">Update</button>
         </div>
     </div>
 </template>
@@ -139,7 +140,30 @@ const prop = defineProps({
         require: false
     }
 })
+const currentData = computed(() => {
+    const firstName = ref()
+    const lastName = ref()
+    const group = ref()
 
+    const newDate = computed(() => {
+        return new Date(dateTime.value)
+    })
+
+    firstName.value = prop.data.bookingName.split(" ")[0]
+    lastName.value = prop.data.bookingName.split(" ")[1]
+    group.value = prop.data.bookingName.split(" ")[2]
+
+    return {
+        id: params.id,
+        email: prop.data.bookingEmail,
+        firstName: firstName.value,
+        lastName: lastName.value,
+        group: group.value,
+        note: note.value,
+        date: dateTime.value,
+        startTime: time.value
+    }
+})
 defineEmits(['edit'])
 
 const currentDate = computed(() => {
@@ -163,33 +187,27 @@ const continueDate = computed(()=>{
 })
 
 const dateTime = ref(continueDate.value)
-
-const startTime = ref()
-
-const currentData = computed(() => {
-    const firstName = ref()
-    const lastName = ref()
-    const group = ref()
-
-    const newDate = computed(() => {
-        return new Date(dateTime.value)
-    })
-
-    firstName.value = prop.data.bookingName.split(" ")[0]
-    lastName.value = prop.data.bookingName.split(" ")[1]
-    group.value = prop.data.bookingName.split(" ")[2]
-
-    return {
-        id: params.id,
-        email: prop.data.bookingEmail,
-        firstName: firstName.value,
-        lastName: lastName.value,
-        group: group.value,
-        note: prop.data.eventNotes,
-        date: dateTime.value,
-        startTime: prop.data.eventStartTime
+const startTime = ref(prop.data.eventStartTime)
+const time = computed(() => {
+    if(startTime.value == prop.data.eventStartTime){
+        return prop.data.eventStartTime
     }
+    return `${startTime.value}:00`
 })
+
+const timeNotValid = ref(false)
+const isTimeValid = () => {
+    if (new Date(dateTime.value).toISOString() < new Date().toISOString() && new Date().toLocaleTimeString('th-TH') > currentData.value.startTime) {
+        timeNotValid.value = true
+        return false
+    } else {
+        timeNotValid.value = false
+        return true
+    }
+}
+
+const note = ref(prop.data.eventNotes)
+
 </script>
  
 <style>

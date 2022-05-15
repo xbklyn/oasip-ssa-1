@@ -5,7 +5,7 @@
             <!-- Main - Events List -->
             <div class="l-w-400 h-44 bg-white drop-shadow-sm hover:bg-slate-100 hover:text-black duration-150 grid place-items-center"
                 v-for="value, index in data" :key="index">
-                <router-link :to="{ name: 'scheduled-info', params: { id: value.id } }">
+                <router-link :to="{ name: 'scheduled-info', params: { id: value.id } }" class="l-w-400 h-44 grid place-items-center">
                     <div class="l-w-366 h-32">
                         <div class="grid grid-cols-2">
                             <div class="flex place-items-center gap-2 col-span-2 mb-3 l-text-xxs font-light">
