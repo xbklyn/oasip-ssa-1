@@ -1,10 +1,16 @@
 <template>
     <div>
-        <h1 class="font-bold text-center text-7xl l-color-navi mt-24">All Schedule Event</h1>
-
+        <div class="l-w-400 mx-auto mt-24 grid gap-4 justify-center">
+            <h1 class="font-medium text-center text-4xl l-color-navi ">All Schedule Event</h1>
+            <p class="font-light text-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lectus amet a lectus aliquam semper mi sem. Dui
+                urna
+                dolor ultrices venenatis commodo. Orci pellentesque rhoncus sagittis, odio pretium vitae tristique.
+                Ultrices
+                non pellentesque ac velit aliquam sed non nisl eget.</p>
+        </div>
         <!-- Menu - Filter category -->
         <div class="flex justify-center text-xs">
-            <div class="flex justify-center w-8/12 h-6 my-24 space-x-3">
+            <div class="flex justify-center w-8/12 h-6 mt-24 mb-8 space-x-3">
                 <button @click="status = ''">
                     <div :class="['grid justify-center place-items-center w-9 h-6 l-color-navi',
                         status == '' ? 'l-bg-blue text-white font-semibold' : 'hover:bg-gray-300'
@@ -70,17 +76,16 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- List - All events -->
-        <div class="">
-            <BaseEvent :data="sortByStatus" :status="status" @delete="events($event)"/>
+        <div class="l-bg-gray">
+            <BaseEvent :data="sortByStatus" :status="status" @delete="events($event)" />
         </div>
-        <router-view></router-view>
     </div>
 </template>
  
 <script setup>
-import { ref, onBeforeMount, computed } from 'vue'
+import { ref, onBeforeMount, computed, onUpdated } from 'vue'
 import { getAllEvents, deleteEventById } from '../services/FetchServices.js'
 import BaseEvent from '../components/BaseEvent.vue';
 
@@ -116,27 +121,27 @@ const sortByCategory = computed(() => {
 
 const status = ref('')
 const sortByStatus = computed(() => {
-    if(status.value == '') return sortByCategory.value;
+    if (status.value == '') return sortByCategory.value;
     else return sortByCategory.value.filter((event) => {
         return event.statusName.toLowerCase() == status.value.toLowerCase() || event.statusName.toLowerCase() == 'ongoing'
-        })
+    })
 })
 
 
-// Delete - event
-const events = (eventId) => {
-    console.log(eventId);
-    if (eventId.length <= 0) {
-        deleteEventById(eventId)
-    } else {
-        for (let i = 0; i < eventId.length; i++) {
-            AllEventsData.value = AllEventsData.value.filter(e => {
-                return e.id != eventId[i]
-            })
-            deleteEventById(eventId[i])
-        }
-    }
-}
+// // Delete - event
+// const events = (eventId) => {
+//     console.log(eventId);
+//     if (eventId.length <= 0) {
+//         deleteEventById(eventId)
+//     } else {
+//         for (let i = 0; i < eventId.length; i++) {
+//             AllEventsData.value = AllEventsData.value.filter(e => {
+//                 return e.id != eventId[i]
+//             })
+//             deleteEventById(eventId[i])
+//         }
+//     }
+// }
 
 </script>
  

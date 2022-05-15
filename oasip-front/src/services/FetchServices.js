@@ -69,3 +69,23 @@ export const deleteEventById = async (id) => {
         method: 'DELETE'
     })
 }
+
+// PUT METHOD - Edit event by id
+export const editEventById = async (replace) => {
+    const res = await fetch(`${import.meta.env.VITE_BASE_URL}/events/${replace.id}`, {
+        method: 'PUT',
+        headers: {
+            'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+            eventNotes:replace.note,
+            eventDate:replace.date,
+            eventStartTime:replace.startTime
+        })
+    })
+    if(res.status === 200){
+        return await res.json()
+    }else{
+        console.log('err');
+    }
+}

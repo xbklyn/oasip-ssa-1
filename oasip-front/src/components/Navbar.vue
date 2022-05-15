@@ -6,7 +6,7 @@
             <router-link :to="{ name: 'Home' }">
                 <div class="flex space-x-3">
                     <img src="../assets/logo.png" alt="" width="" class="">
-                    <p class="font-black text-2xl">OASIP</p>
+                    <p class="font-light text-2xl">OASIP</p>
                 </div>
             </router-link>
         </div>
@@ -23,7 +23,7 @@
             </div>
 
             <!-- Booking -->
-            
+
 
             <!-- Scheduled -->
             <div :class="['grid place-items-center l-color-navi h-24 w-24',
@@ -33,12 +33,12 @@
                 </router-link>
             </div>
         </div>
-        
-        <button class="justify-self-end mr-24 w-32 h-10 bg-gradient-to-bl from-green-400 via-purple-500 to-blue-500 font-bold grid place-items-center text-white hover:bg-blue-600 hover:text-white hover:border-0 duration-150">
-                <router-link :to="{ name: 'Booking' }" class="flex place-items-center space-x-2">
-                  <span class="text-xl font-black">+</span><p>Book now</p>
-                </router-link>
+        <router-link :to="{ name: 'Booking' }" class="flex place-items-center space-x-2 justify-self-end">
+            <button
+                class="mr-24 w-28 h-10 bg-white font-light grid place-items-center border border-green-600  text-green-600 hover:bg-green-800 hover:border-green-800 hover:text-white hover:border-2 duration-150">
+                <p>Book now</p>
             </button>
+        </router-link>
     </nav>
 </template>
  

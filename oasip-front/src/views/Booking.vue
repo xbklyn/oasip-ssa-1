@@ -1,130 +1,161 @@
 <template>
-    <div class="l-w-full mt-12 mx-auto justify-center">
-        <button class="float-right" @click="quit"><img src="../assets/component/quit.png" alt=""></button>
-        <!-- Booking - Step 1 -->
-        <div v-show="stepOne">
-            <div class="w-20 h-4 flex gap-4 mx-auto">
-                <div class="w-4 h-4 l-bg-blue"></div>
-                <div class="w-4 h-4 l-bg-gray"></div>
-                <div class="w-4 h-4 l-bg-gray"></div>
-            </div>
-            <div>
-                <p class="text-base font-semibold mb-4">Step 1: What clinic do you want to book?</p>
-                <h1 class="text-4xl font-bold mb-12">Step 1: What clinic do you want to book?</h1>
-            </div>
-            <div class="grid justify-center gap-2 cursor-pointer l-w-824 mx-auto">
-                <div class="l-w-824 h-24 l-bg-gray flex" v-for="value, index in clinics" :key="index"
-                    @click="clinicId = value.categoryId, clinicIndex = index">
-                    <div class="w-24 h-24 grid place-items-center">
-                        <div v-if="clinicId == value.categoryId" class="w-4 h-4 l-bg-blue"></div>
-                        <div v-else class="w-4 h-4 bg-white border border-blue-300"></div>
-                    </div>
-                    <div class="l-w-632 h-24 grid content-center">
-                        <div class="">
-                            <div class="flex place-items-center space-x-6">
-                            <h2 class="text-xl font-bold">{{ value.eventCategoryName }}</h2>
-                            <p class="text-sm font-semibold">{{value.eventCategoryDuration}} Min.</p>
-                            </div>
-                            <p class="text-xs text-gray-400">{{ value.eventCategoryDescription }}</p>
-                        </div>
-                    </div>
-                    <div>
-                        <img :src='value.imagePath' alt="">
-                    </div>
-                </div>
-            </div>
+    <div class="l-w-full mb-12 mx-auto justify-center">
 
-            <button
-                :class="['grid place-items-center mx-auto l-w-824 h-12 l-bg-blue mt-6 text-white', clinicId == 0 ? 'bg-gray-300' : '']"
-                :disabled="clinicId == 0" @click="stepOne = false, stepTwo = true">Next</button>
+        <!-- Menu - Breadcrumbs -->
+        <div class="l-w-824 mx-auto mt-12 mb-4">
+            <div class="flex items-center">
+                <router-link :to="{ name: 'Scheduled' }"
+                    class="inline-flex items-center text-sm font-medium l-color-blue hover:text-blue-600 hover:underline hover:underline-offset-4">
+                    <svg class="w-5 h-5 mr-1" viewBox="0 0 512 512">
+                        <path
+                            d="M427 234.625H167.296l119.702-119.702L256 85 85 256l171 171 29.922-29.924-118.626-119.701H427v-42.75z"
+                            fill="currentColor"></path>
+                    </svg>
+                    Back to home
+                </router-link>
+            </div>
         </div>
 
-        <!-- Booking - Step 2 -->
-        <div v-show="stepTwo">
-            <div class="w-20 h-4 flex gap-4 mx-auto">
-                <div class="w-4 h-4 l-bg-blue"></div>
-                <div class="w-4 h-4 l-bg-blue"></div>
-                <div class="w-4 h-4 l-bg-gray"></div>
+        <div class="l-w-824 mx-auto my-24">
+            <div class="l-w-400 mt-24 grid gap-4">
+                <h1 class="font-bold text-4xl l-color-navi ">Booking</h1>
+                <p class="font-light text-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lectus amet a
+                    lectus aliquam semper mi sem. Dui
+                    urna
+                    dolor ultrices venenatis commodo. Orci pellentesque rhoncus sagittis, odio pretium vitae tristique.
+                    Ultrices
+                    non pellentesque ac velit aliquam sed non nisl eget.</p>
+            </div>
+        </div>
+
+        <!-- Step 1 - Select clinic -->
+        <div class="l-w-824 h-40 mx-auto flex">
+            <div class="w-52 h-40 place-items-center">
+                <h2>Step 1</h2>
+                <p class="l-text-xxs">What clinic do you want to book?</p>
             </div>
             <div>
-                <p class="text-base font-semibold mb-4"><span
-                        class="l-color-blue underline underline-offset-auto cursor-pointer font-normal"
-                        @click="stepOne = true, stepTwo = false">Step 1</span> / Step 2: Enter your information</p>
-                <h1 class="text-4xl font-bold mb-16">Step 2: Enter your information.</h1>
-            </div>
-            <div class="l-w-824 mx-auto">
-                <div class="grid justify-center">
-                    <div class="l-w-824 grid grid-cols-2 gap-6 mb-24">
-                        <div class="flex space-x-6">
-                            <div>
-                                <h2 class="l-color-gray-300 text-base">Fisrt name</h2>
-                                <input type="text" class="l-w-294 h-12 l-bg-gray pl-6" v-model="firstName" />
-                            </div>
-                            <div>
-                                <h2 class="l-color-gray-300 text-base">Last name</h2>
-                                <input type="text" class="l-w-294 h-12 l-bg-gray pl-6" v-model="lastName" />
-                            </div>
-                            <div>
-                                <h2 class="l-color-gray-300 text-base">Group</h2>
-                                <input type="text" class="l-w-188 h-12 l-bg-gray pl-6" v-model="group" />
-                            </div>
-                        </div>
-                        <div class="col-span-2">
-                            <h2 class="l-color-gray-300 text-base">Email</h2>
-                            <input type="email" class="l-w-824 h-12 l-bg-gray pl-6" v-model="email" />
-                        </div>
-                        <div class="col-span-2">
-                            <h2 class="l-color-gray-300 text-base">Note (Optional) <span class="text-xs">{{note.length}}/500</span></h2>
-                            <textarea maxlength="500" type="text" class="l-w-824 l-bg-gray pb-24 pl-2 resize-none focus:outline-none"
-                                v-model="note"></textarea>
-                        </div>
+                <div class="flex place-items-center" v-for="value, index in clinics" :key="index">
+                    <div class="w-56">
+                        <input :id="value.eventCategoryName" type="radio" :value='value.categoryId' name="eventCategory"
+                            v-model="clinicId" @click="clinicIndex = index"
+                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300">
+                        <label :for="value.eventCategoryName"
+                            class="ml-2 text-sm font-light hover:text-blue-400 cursor-pointer">
+                            {{ value.eventCategoryName }}
+                        </label>
                     </div>
-                    <button class="l-bg-blue l-w-824 h-12 font-xl text-white"
-                        @click="stepOne = false, stepTwo = false, stepThree = true">
-                        Next
-                    </button>
+                    <p class="l-text-xxs font-semibold ml-3">{{ value.eventCategoryDuration }} Mins</p>
                 </div>
             </div>
         </div>
 
-        <!-- Booking - Step 3 -->
-        <div v-show="stepThree">
-            <div class="w-20 h-4 flex gap-4 mx-auto">
-                <div class="w-4 h-4 l-bg-blue"></div>
-                <div class="w-4 h-4 l-bg-blue"></div>
-                <div class="w-4 h-4 l-bg-blue"></div>
+        <div class="l-w-824 h-px bg-black mx-auto"></div>
+
+        <!-- Step 2 - Fill infomation -->
+        <div class="l-w-824 h-64 mx-auto flex m-12">
+            <div class="w-52 h-64 place-items-center">
+                <h2>Step 2</h2>
+                <p class="l-text-xxs">Fill your infomation.</p>
             </div>
-            <div>
-                <p class="text-base font-semibold mb-4"><span
-                        class="l-color-blue underline underline-offset-auto cursor-pointer font-normal"
-                        @click="stepOne = true, stepTwo = false, stepThree = false">Step 1</span> / <span
-                        class="l-color-blue underline underline-offset-auto cursor-pointer font-normal"
-                        @click="stepOne = false, stepTwo = true, stepThree = false">Step 2</span> / Step 3 : Select time
-                    period</p>
-                <h1 class="text-4xl font-bold mb-16">Step 3 : Select time period</h1>
-            </div>
-            <div class="l-w-824 mx-auto">
-                <div class="grid justify-center">
-                    <div class="l-w-824 grid grid-cols-2 gap-6 mb-24">
-                        <div class="flex space-x-6">
-                            <div>
-                                <h2 class="l-color-gray-300 text-base">Date</h2>
-                                <input type="date" class="l-w-400 h-12 l-bg-gray pl-2" v-model="dateTime" />
-                            </div>
-                            <div>
-                                <h2 class="l-color-gray-300 text-base">StartTime</h2>
-                                <!-- <select type="time" class="l-w-400 h-12 l-bg-gray pl-2" v-model="startTime">
-                                    <option v-for="" value=""></option>
-                                </select> -->
-                                <input type="time" class="l-w-400 h-12 l-bg-gray pl-2" v-model="startTime" />
-                            </div>
-                        </div>
-                    </div><button class="mb-24 l-bg-blue l-w-824 h-12 font-xl text-white"
-                        @click="submit(combineName, email, date, time, clinics[clinicIndex].eventCategoryDuration, clinicId, note)">
-                        Submit
-                    </button>
+            <div class="space-y-6">
+
+                <!-- Input - Email -->
+                <div class="relative">
+                    <input type="text" id="email" v-model="email"
+                        class="l-w-612 h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                        placeholder=" " />
+                    <label for="email"
+                        class="absolute text-sm l-color-gray-300 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1">
+                        Email
+                    </label>
+                </div>
+                <div class="grid grid-cols-3 gap-6">
+
+                    <!-- Input - First name -->
+                    <div class="relative">
+                        <input type="text" id="firstName" v-model="firstName"
+                            class="l-w-188 h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                            placeholder=" " />
+                        <label for="firstName"
+                            class="absolute text-sm l-color-gray-300 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1">
+                            First Name
+                        </label>
+                    </div>
+
+                    <!-- Input - Last name -->
+                    <div class="relative">
+                        <input type="text" id="lastName" v-model="lastName"
+                            class="block l-w-188 h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                            placeholder=" " />
+                        <label for="lastName"
+                            class="absolute text-sm l-color-gray-300 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1">
+                            Last Name
+                        </label>
+                    </div>
+
+                    <!-- Input - Group -->
+                    <div class="relative">
+                        <input type="text" id="group" v-model="group"
+                            class="block l-w-188 h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                            placeholder=" " />
+                        <label for="group"
+                            class="absolute text-sm l-color-gray-300 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1">
+                            Group
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Input - Note -->
+                <div class="relative">
+                    <textarea type="text" id="note" maxlength="500" v-model="note"
+                        class="resize-none l-w-612 h-28 pl-2 pt-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                        placeholder="Your note..." />
+                    <label for="note"
+                        class="absolute text-sm l-color-gray-300 duration-300 transform -translate-y-4 scale-75 top-2 z-10  bg-white px-2 left-1">
+                        Note {{ note.length }}/500
+                    </label>
                 </div>
             </div>
+        </div>
+
+        <div class="l-w-824 h-px bg-black mx-auto"></div>
+
+        <!-- Step 3 - Select time period -->
+        <div class="l-w-824 h-24 mx-auto flex m-12">
+            <div class="w-52 h-24 place-items-center">
+                <h2>Step 3</h2>
+                <p class="l-text-xxs">Select time period.</p>
+
+            </div>
+            <div class="l-w-612 h-12 grid grid-cols-2 gap-6">
+
+                <!-- Input - Date -->
+                <div class="relative">
+                    <input type="date" id="dateTime" v-model="dateTime" :min="currentDate"
+                        class="block l-w-294 h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                        placeholder=" " />
+                    <label for="dateTime"
+                        class="absolute text-sm l-color-gray-300 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1">
+                        Date
+                    </label>
+                </div>
+                <!-- Input - Start time -->
+                <div class="relative">
+                    <input type="time" id="startTime" v-model="startTime"
+                        class="block l-w-294 h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                        placeholder=" " />
+                    <label for="startTime"
+                        class="absolute text-sm l-color-gray-300 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1">
+                        Start time
+                    </label>
+                </div>
+
+            </div>
+        </div>
+        <div class="l-w-824 h-12 mx-auto">
+            <button class="w-full h-full l-bg-navi text-white hover:bg-slate-500 duration-150"
+                @click="submit(combineName, email, date, time, clinics[clinicIndex].eventCategoryDuration, clinicId, note)">Submit</button>
         </div>
     </div>
 </template>
@@ -141,13 +172,19 @@ onBeforeMount(async () => {
     clinics.value = res
 })
 
-const stepOne = ref(true)
-const stepTwo = ref(false)
-const stepThree = ref(false)
+const currentDate = computed(() => {
+    const date =ref(new Date().getFullYear())
+    const month = ref((new Date().getMonth()+1).toString())
+    const day = ref(new Date().getDate())
+    if(month.value.length === 1){
+        return `${date.value}-0${month.value}-${day.value}`
+    }
+    return `${date.value}-${month.value}-${day.value}`
+})
 
 const clinics = ref([])
-const clinicId = ref(1)
-const clinicIndex = ref(1)
+const clinicId = ref()
+const clinicIndex = ref()
 
 const firstName = ref('')
 const lastName = ref('')
@@ -178,21 +215,6 @@ const submit = (name, mail, date, start, duration, categoryId, notes) => {
     dateTime.value = ''
     startTime.value = ''
     note.value = ''
-
-    myRouter.push({
-        name: 'Home'
-    })
-}
-
-const quit = () => {
-    firstName.value = ''
-    lastName.value = ''
-    email.value = ''
-    dateTime.value = ''
-    startTime.value = ''
-    note.value = ''
-    clinicId.value = 1
-    clinicIndex.value = 1
 
     myRouter.push({
         name: 'Home'

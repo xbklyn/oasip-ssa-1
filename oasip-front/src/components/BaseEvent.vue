@@ -1,49 +1,61 @@
 <template>
     <div class="grid justify-center" v-if="(data.length > 0)">
-        <div class="l-w-1248 l-h-1176 pb-24 grid grid-cols-2 gap-6">
+        <div class="pb-24 grid grid-cols-3 gap-6 p-12">
 
             <!-- Main - Events List -->
-            <div class="l-w-612 h-44 flex" v-for="value, index in data" :key="index">
-                <div class="l-w-106 h-44 grid place-items-center">
-                    <input type="checkbox" width="36" class="ml-10" v-model="eventId" :value='value.id'>
-                </div>
-                <router-link :to="{ name: 'event-info', params: { id: value.id } }">
-                    <div
-                        class="l-w-506 h-44 l-bg-gray flex place-items-center hover:drop-shadow-xl hover:scale-105 duration-150">
-                        <div class="w-12 h-44 l-bg-navi"></div>
-                        <div class="l-w-408 h-28 ml-6">
-                            <div class="grid grid-cols-3">
-                                <div class="col-span-2">
-                                    <p class="text-sm">{{ value.categoryName }}</p>
-                                </div>
-                                <div class="place-self-end">
-                                    <p class="text-xs grid justify-end mt-1">{{ value.eventDuration }} Min.</p>
-                                </div>
-                                <div class="col-span-3 mt-1">
-                                    <h2 class="text-xl font-bold truncate">{{ value.bookingName }}</h2>
-                                </div>
+            <div class="l-w-400 h-44 bg-white drop-shadow-sm hover:bg-slate-100 hover:text-black duration-150 grid place-items-center"
+                v-for="value, index in data" :key="index">
+                <router-link :to="{ name: 'scheduled-info', params: { id: value.id } }">
+                    <div class="l-w-366 h-32">
+                        <div class="grid grid-cols-2">
+                            <div class="flex place-items-center gap-2 col-span-2 mb-3 l-text-xxs font-light">
+                                <div v-if="value.statusName == 'UPCOMING'" class="w-2 h-2 bg-blue-700"></div>
+                                <div v-else-if="value.statusName == 'ONGOING'" class="w-2 h-2 bg-red-600"></div>
+                                <div v-else class="w-2 h-2 bg-green-400"></div>
+                                <p v-if="value.statusName == 'UPCOMING'" class="text-blue-700">Upcoming
+                                </p>
+                                <p v-else-if="value.statusName == 'ONGOING'" class="text-red-600">On going
+                                </p>
+                                <p v-else class=" text-green-700">Complete</p>
                             </div>
-                            <div class="col-span-2 mt-1">
-                                <p class="text-xs">
-                                    On {{ new Date(value.eventDate).toLocaleDateString() }} at {{value.eventStartTime}}</p>
+
+                            <div class=" col-span-2 justify-self-end">
+                                <p class="text-xs mt-1 grid justify-end">{{ value.eventDuration }} Min.</p>
                             </div>
-                            <div class="col-span-1 text-xs mt-4 h-4">
-                                <p class="l-color-gray-300 truncate w-60"><span class="font-bold">Note: </span>{{ value.eventNotes ==
-                                        '' ? 'None' : value.eventNotes
-                                }}
+
+                            <div class="col-span-4">
+                                <p class="text-xs">{{ value.categoryName }}</p>
+                            </div>
+
+                            <div class="col-span-3 mb-1">
+                                <h2 class="text-xl font-normal truncate">{{ value.bookingName }}</h2>
+                            </div>
+
+                            <div class="col-span-4 mb-3">
+                                <p class="text-xs font-light">
+                                    On {{ new Date(value.eventDate).toLocaleDateString('th-TH') }} at {{
+                                            value.eventStartTime
+                                    }}
                                 </p>
                             </div>
-                            <div class="l-color-blue text-xs text-right">
-                                <p>Click for more detail</p>
-                            </div>
+                        </div>
+
+                        <div class="col-span-4 text-xs font-light">
+                            <p class="l-color-gray overflow-hidden l-w-366 h-8"><span class="font-semibold">Note:
+                                </span>{{
+                                        value.eventNotes ==
+                                            '' ? 'None' : value.eventNotes
+                                }}
+                            </p>
                         </div>
                     </div>
+
                 </router-link>
             </div>
         </div>
 
         <!-- Menu - Delete events -->
-        <div v-show="eventId.length > 0"
+        <!-- <div v-show="eventId.length > 0"
             class="grid grid-cols-2 place-items-center w-screen h-16 bg-white drop-shadow-2xl overflow-y-auto overflow-x-hidden fixed bottom-0 right-0 left-0 z-50">
             <div class="justify-self-start ml-24">
                 <button class="l-color-blue" @click="allEventId">Select All</button>
@@ -53,10 +65,10 @@
                 }})</button>
                 <button class="l-color-blue" @click="eventId = []">Cancel</button>
             </div>
-        </div>
+        </div> -->
 
         <!-- Modal box - Confirmation -->
-        <div v-show="show"
+        <!-- <div v-show="show"
             class="grid place-items-center fixed top-0 right-0 left-0 z-50 bg-black/80 w-screen h-screen">
             <div class="bg-white l-w-960 l-h-520 flex">
                 <div>
@@ -86,16 +98,17 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
 
     <!-- If no events -->
-    <div v-else>
-        <div v-if="prop.status == '' " class="grid justify-cente h-96 my-24">
+    <div v-else class="w-full h-full grid place-items-center">
+        <div v-if="prop.status == ''" class="grid justify-center place-items-center h-96 my-24">
             <h1 class="text-7xl l-color-gray text-center select-none">No scheduled event</h1>
         </div>
         <div v-else class="grid justify-cente h-96 my-24">
-            <h1 class="text-7xl l-color-gray text-center select-none leading-normal">No Ongoing / Upcoming event <br>at this moment</h1>
+            <h1 class="text-7xl l-color-gray text-center select-none leading-normal">No Ongoing / Upcoming event <br>at
+                this moment</h1>
         </div>
     </div>
 </template>
