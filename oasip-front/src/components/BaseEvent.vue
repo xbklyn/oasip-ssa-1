@@ -1,6 +1,6 @@
 <template>
     <div class="grid justify-center" v-if="(data.length > 0)">
-        <div class="pb-24 grid grid-cols-3 gap-6 p-12">
+        <div class="l-h-1248 w-full pb-24 grid grid-cols-3 gap-6 p-12 mb-96">
 
             <!-- Main - Events List -->
             <div class="l-w-400 h-44 bg-white drop-shadow-sm hover:bg-slate-100 hover:text-black duration-150 grid place-items-center"

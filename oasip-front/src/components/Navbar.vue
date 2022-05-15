@@ -16,7 +16,7 @@
 
             <!-- Dashboard -->
             <div :class="['grid place-items-center l-color-navi h-24 w-24',
-            $route.name == 'Home' ? 'text-blue-400' : '']">
+            $route.name == 'Home' ? 'text-blue-400 border-b-2 border-blue-600' : '']">
                 <router-link class="hover:text-blue-400 ease-out duration-150" :to="{ name: 'Home' }">
                     Dashboard
                 </router-link>
@@ -27,7 +27,7 @@
 
             <!-- Scheduled -->
             <div :class="['grid place-items-center l-color-navi h-24 w-24',
-            $route.name == 'Scheduled' ? 'text-blue-400' : '']">
+            $route.name == 'Scheduled' ? 'text-blue-400 border-b-2 border-blue-600' : '']">
                 <router-link class="hover:text-blue-400 ease-out duration-150" :to="{ name: 'Scheduled' }">
                     Scheduled
                 </router-link>

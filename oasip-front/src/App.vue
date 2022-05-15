@@ -7,7 +7,7 @@
       <router-view></router-view>
     </div>
     <div>
-      <Footer v-show="$route.name == 'NotFound' ? false : true "/>
+      <!-- <Footer v-show="$route.name == 'NotFound' ? false : true "/> -->
     </div>
   </div>
 </template>
@@ -185,11 +185,16 @@ nav {
   height: 624px;
 }
 
-.l-h-1176 {
-  width: 1176px;
+.l-h-1248 {
+  width: 1248px;
 }
 
 .l-text-xxs {
   font-size: 0.5rem;
+}
+
+.l-py-624{
+  padding-bottom: 624px;
+  padding-top: 624px;
 }
 </style>
