@@ -62,7 +62,8 @@
 
                 <!-- Input - Email -->
                 <div class="relative">
-                    <input type="text" id="email" v-model="email"
+                    <span v-show="wrongEmail" style="color:red">Incorrect email address</span>
+                    <input type="text" id="email" v-model="email" @change="isEmailValid"
                         class="l-w-612 h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                         placeholder=" " />
                     <label for="email"
@@ -194,6 +195,17 @@ const combineName = computed(() => {
 })
 
 const email = ref('')
+const emailRe = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+const  wrongEmail = ref(false)
+
+ const isEmailValid=() => {
+      if (emailRe.test(email.value)) {
+       return wrongEmail.value = false;
+      } else {
+       return wrongEmail.value = true;
+      }
+    }
 
 const dateTime = ref()
 const date = computed(() => {
