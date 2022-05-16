@@ -3,8 +3,6 @@ package sit.int221.oasip.entities;
 import lombok.*;
 
 import javax.persistence.*;
-import java.sql.Time;
-import java.time.Instant;
 import java.util.Date;
 
 @Getter @Setter

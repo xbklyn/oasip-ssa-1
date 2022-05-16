@@ -1,7 +1,5 @@
 package sit.int221.oasip.services;
 
-import org.apache.tomcat.jni.Local;
-import org.joda.time.DateTime;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -17,12 +15,10 @@ import sit.int221.oasip.repositories.EventRepository;
 import sit.int221.oasip.repositories.StatusRepository;
 import sit.int221.oasip.utils.ListMapper;
 
-
-import java.sql.Time;
-import java.time.*;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
