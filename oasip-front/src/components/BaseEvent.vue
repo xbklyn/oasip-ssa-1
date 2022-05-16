@@ -5,7 +5,7 @@
             <!-- Main - Events List -->
             <div class="l-w-400 h-44 bg-white drop-shadow-sm hover:bg-slate-100 hover:text-black duration-150 grid place-items-center"
                 v-for="value, index in data" :key="index">
-                <router-link :to="{ name: 'scheduled-info', params: { id: value.id } }" class="l-w-400 h-44 grid place-items-center">
+                <router-link :to="{ name: 'scheduled-info', params: { id: value.bookingId } }" class="l-w-400 h-44 grid place-items-center">
                     <div class="l-w-366 h-32">
                         <div class="grid grid-cols-2">
                             <div class="flex place-items-center gap-2 col-span-2 mb-3 l-text-xxs font-light">
@@ -52,52 +52,6 @@
                 </router-link>
             </div>
         </div>
-
-        <!-- Menu - Delete events -->
-        <!-- <div v-show="eventId.length > 0"
-            class="grid grid-cols-2 place-items-center w-screen h-16 bg-white drop-shadow-2xl overflow-y-auto overflow-x-hidden fixed bottom-0 right-0 left-0 z-50">
-            <div class="justify-self-start ml-24">
-                <button class="l-color-blue" @click="allEventId">Select All</button>
-            </div>
-            <div class="justify-self-end space-x-12 mr-24 ">
-                <button class="text-red-700 " @click="show = true">Delete ({{ eventId.length
-                }})</button>
-                <button class="l-color-blue" @click="eventId = []">Cancel</button>
-            </div>
-        </div> -->
-
-        <!-- Modal box - Confirmation -->
-        <!-- <div v-show="show"
-            class="grid place-items-center fixed top-0 right-0 left-0 z-50 bg-black/80 w-screen h-screen">
-            <div class="bg-white l-w-960 l-h-520 flex">
-                <div>
-                    <img src="../assets/component/confirmation.png" alt="">
-                </div>
-                <div class="l-w-520 l-h-520 grid place-items-center">
-                    <div class="grid justify-center">
-                        <img src="../assets/component/warning.png" alt="">
-                    </div>
-                    <div class="text-center space-y-3">
-                        <h2 v-if="eventId.length === 1" class="font-bold text-2xl">
-                            Are you sure<br>
-                            delete this event?
-                        </h2>
-                        <h2 v-else class="font-bold text-2xl">
-                            Are you sure<br>
-                            delete these events?
-                        </h2>
-                        <p class="text-red-600">{{ eventId.length }} <span v-if="eventId.length === 1">Event</span><span
-                                v-else>Events</span></p>
-                    </div>
-                    <div class="grid space-y-3">
-                        <button class="w-80 h-12 l-bg-gray duration-150 border hover:bg-green-700 hover:text-white"
-                            @click="$emit('delete', eventId, eventId = [], show = false)">Confirm</button>
-                        <button class="w-80 h-12 bg-red-600 text-white hover:bg-red-800 duration-150"
-                            @click="show = false">Cancel</button>
-                    </div>
-                </div>
-            </div>
-        </div> -->
     </div>
 
     <!-- If no events -->
