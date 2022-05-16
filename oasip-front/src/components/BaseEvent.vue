@@ -33,9 +33,8 @@
 
                             <div class="col-span-4 mb-3">
                                 <p class="text-xs font-light">
-                                    On {{ new Date(value.eventDate).toLocaleDateString('th-TH') }} at {{
-                                            value.eventStartTime
-                                    }}
+                                    On {{ new Date(value.eventStartTime).toLocaleDateString('th-TH') }} 
+                                    at {{ new Date(value.eventStartTime).toLocaleTimeString('th-TH') }}
                                 </p>
                             </div>
                         </div>

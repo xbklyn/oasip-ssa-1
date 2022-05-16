@@ -40,7 +40,7 @@ export const getEventCategoryById = async (id) => {
 
 // POST METHOD - Create event
 export const createEvent = async (
-    name, email, date, startTime, duration, categoryId, notes) => {
+    name, email, startTime, categoryId, notes) => {
     const res = await fetch(`${import.meta.env.VITE_BASE_URL}/events`,{
         method: 'POST',
         headers: {
@@ -49,9 +49,7 @@ export const createEvent = async (
         body: JSON.stringify({
             bookingName: name,
             bookingEmail: email,
-            eventDate: date,
             eventStartTime: startTime,
-            eventDuration: duration,
             categoryId: categoryId,
             eventNotes: notes
         })
@@ -79,8 +77,7 @@ export const editEventById = async (replace) => {
         },
         body: JSON.stringify({
             eventNotes:replace.note,
-            eventDate:replace.date,
-            eventStartTime:replace.startTime
+            eventStartTime:replace.time
         })
     })
     if(res.status === 200){

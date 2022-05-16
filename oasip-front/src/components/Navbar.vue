@@ -22,9 +22,6 @@
                 </router-link>
             </div>
 
-            <!-- Booking -->
-
-
             <!-- Scheduled -->
             <div :class="['grid place-items-center l-color-navi h-24 w-24',
             $route.name == 'Scheduled' ? 'text-blue-400 border-b-2 border-blue-600' : '']">
@@ -33,6 +30,8 @@
                 </router-link>
             </div>
         </div>
+        
+        <!-- Booking -->
         <router-link :to="{ name: 'Booking' }" class="flex place-items-center space-x-2 justify-self-end">
             <button
                 class="mr-24 w-28 h-10 bg-white font-light grid place-items-center border border-green-600  text-green-600 hover:bg-green-800 hover:border-green-800 hover:text-white hover:border-2 duration-150">

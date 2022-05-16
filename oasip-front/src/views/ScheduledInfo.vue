@@ -95,7 +95,7 @@
                     <div class="grid space-y-3">
                         <button
                             class="w-80 h-12 bg-white text-green-700 duration-150 border border-green-700 hover:bg-green-700 hover:text-white"
-                            @click="deleteEvent(params.id), show = false">Confirm</button>
+                            @click="deleteEvent(params.id)">Confirm</button>
                         <button class="w-80 h-12 bg-red-600 text-white hover:bg-red-800 duration-150"
                             @click="show = false">Cancel</button>
                     </div>
@@ -130,16 +130,18 @@ const myRouter = useRouter()
 // Delete - event
 const deleteEvent = (eventId) => {
     deleteEventById(eventId)
-    myRouter.push({
-        name: 'Home'
-    })
+    show.value = false
+    location.reload()
+    myRouter.go(-1)
+    
 }
 
 // Edit - event
 const editEvent = (obj) => {
     editEventById(obj)
+    location.reload()
     myRouter.go({
-        path: `/scheduled/scheduled-info/${params.id}`
+        path: `scheduled/scheduled-info/${params.id}`
     })
     modifyMode.value = false
 }

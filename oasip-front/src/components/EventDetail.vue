@@ -17,7 +17,7 @@
                     <div class="space-y-1 col-span-2">
                         <h4 class="text-base text-gray-300">Time</h4>
                         <p class="text-sm font-light">
-                           On {{new Date(data.eventDate).toDateString('th-TH')}} at {{ data.eventStartTime }} - {{ data.eventEndTime }}
+                           On {{new Date(data.eventStartTime).toLocaleString('th-TH')}} - {{new Date(data.eventEndTime).toLocaleTimeString('th-TH')}}
                         </p>
                     </div>
                     <div class="space-y-1">

@@ -4,7 +4,7 @@
         <!-- Menu - Breadcrumbs -->
         <div class="l-w-824 mx-auto mt-12 mb-4">
             <div class="flex items-center">
-                <router-link :to="{ name: 'Scheduled' }"
+                <router-link :to="{ name: 'Home' }"
                     class="inline-flex items-center text-sm font-medium l-color-blue hover:text-blue-600 hover:underline hover:underline-offset-4">
                     <svg class="w-5 h-5 mr-1" viewBox="0 0 512 512">
                         <path
@@ -135,25 +135,13 @@
 
                 <!-- Input - Date -->
                 <div class="relative">
-                    <input type="date" id="dateTime" v-model="dateTime" :min="currentDate" @input="isTimeValid"
-                        class="block l-w-294 h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                    <input type="datetime-local" id="dateTime" v-model="startTime" :min="currentDate"
+                        @input="isTimeValid"
+                        class="block l-w-612 h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                         placeholder=" " />
                     <label for="dateTime"
                         class="absolute text-sm l-color-gray-300 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1">
                         Date
-                    </label>
-                </div>
-
-                <!-- Input - Start time -->
-
-                <div class="relative">
-
-                    <input type="time" id="startTime" v-model="startTime" @input="isTimeValid"
-                        :class="['block l-w-294 h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer', timeNotValid ? 'border-red-500 focus:border-red-600' : '']"
-                        placeholder=" " />
-                    <label for="startTime"
-                        class="absolute text-sm l-color-gray-300 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1">
-                        Start time
                     </label>
                     <p v-show="timeNotValid" class="absolute text-sm text-red-500 ml-2">Time invalid</p>
                 </div>
@@ -161,12 +149,13 @@
             </div>
         </div>
 
+
         <!-- Button - Submition -->
         <div class="l-w-824 h-12 mx-auto">
             <button
                 :class="['w-full h-full text-white duration-150', isAllvalid ? 'bg-slate-200' : 'l-bg-navi hover:bg-slate-800']"
                 :disabled="isAllvalid"
-                @click="submit(combineName, email, date, time, clinics[clinicIndex].eventCategoryDuration, clinicId, note)">Submit</button>
+                @click="submit(combineName, email, startTime, clinicId, note)">Submit</button>
         </div>
     </div>
 </template>
@@ -186,7 +175,7 @@ onBeforeMount(async () => {
 // Attribute
 const clinics = ref([])
 const clinicId = ref(0)
-const clinicIndex = ref()
+// const clinicIndex = ref()
 
 const firstName = ref('')
 const lastName = ref('')
@@ -195,14 +184,15 @@ const combineName = computed(() => {
     return `${firstName.value} ${lastName.value} ${group.value.length != 0 ? '(' + group.value + ')' : ''}`
 })
 const email = ref('')
-const dateTime = ref()
-const date = computed(() => {
-    return new Date(new Date(dateTime.value)).toISOString()
-})
+
+// const dateTime = ref()
+// const date = computed(() => {
+//     return new Date(new Date(dateTime.value)).toISOString()
+// })
 const startTime = ref()
-const time = computed(() => {
-    return `${startTime.value}:00`
-})
+// const time = computed(() => {
+//     return `${startTime.value}:00`
+// })
 const note = ref('')
 
 
@@ -211,7 +201,7 @@ const note = ref('')
 const isAllvalid = computed(() => {
     if (timeNotValid.value || wrongEmail.value || firstNameNotValid.value || clinicId.value === 0) {
         return true
-    }  if (email.value.length === 0 || firstName.value.length === 0 || dateTime.value.length === 0 || startTime.value.length === 0) {
+    } if (email.value.length === 0 || firstName.value.length === 0 || startTime.value.length === 0) {
         return true
     } return false
 })
@@ -246,16 +236,17 @@ const currentDate = computed(() => {
     const month = ref((new Date().getMonth() + 1).toString())
     const day = ref(new Date().getDate())
     if (month.value.length === 1) {
-        return `${date.value}-0${month.value}-${day.value}`
+        return `${date.value}-0${month.value}-${day.value}T00:00`
     }
-    return `${date.value}-${month.value}-${day.value}`
+    return `${date.value}-${month.value}-${day.value}T00:00`
+    // return new Date().toLocaleDateString()
 })
 
 
 // Validate - Start time
 const timeNotValid = ref(false)
 const isTimeValid = () => {
-    if (date.value < new Date().toISOString() && new Date().toLocaleTimeString('th-TH') > time.value) {
+    if (new Date(startTime.value) < new Date()) {
         timeNotValid.value = true
         return false
     } else {
@@ -266,21 +257,11 @@ const isTimeValid = () => {
 
 //############################################################################################################
 
-const submit = (name, mail, date, start, duration, categoryId, notes) => {
-   
-
-        createEvent(name, mail, date, start, duration, categoryId, notes)
-        firstName.value = ''
-        lastName.value = ''
-        email.value = ''
-        dateTime.value = ''
-        startTime.value = ''
-        note.value = ''
-
-        myRouter.push({
-            name: 'Home'
-        })
-    
+const submit = (name, mail, start, categoryId, notes) => {
+    createEvent(name, mail, start, categoryId, notes)
+    myRouter.push({
+        name: 'Home'
+    })
 }
 
 </script>

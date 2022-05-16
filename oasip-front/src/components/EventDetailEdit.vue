@@ -98,25 +98,26 @@
 
                 <!-- Input - Date -->
                 <div class="relative">
-                    <input type="date" id="dateTime" :min="currentDate" @input="isTimeValid" v-model="dateTime"
-                        class="block l-w-294 h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" />
+                    <input type="datetime-local" id="dateTime" :min="currentDate" @input="isTimeValid" v-model="startTime"
+                        class="block l-w-612 h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" />
                     <label for="dateTime"
                         class="absolute text-sm l-color-gray-300 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1">
                         Date
                     </label>
+                    <p v-show="timeNotValid" class="absolute text-sm text-red-500 ml-2">Time invalid</p>
                 </div>
                 
                 <!-- Input - Start time -->
-                <div class="relative">
+                <!-- <div class="relative">
                     <input type="time" id="startTime" @input="isTimeValid"  v-model="startTime"
-                        class="block l-w-294 h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                        :class="['block l-w-294 h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer', timeNotValid ? 'border-red-500 focus:border-red-600' : '']"
                         placeholder=" " />
                     <label for="startTime"
                         class="absolute text-sm l-color-gray-300 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1">
                         Start time
                     </label>
                     <p v-show="timeNotValid" class="absolute text-sm text-red-500 ml-2">Time invalid</p>
-                </div>
+                </div> -->
             </div>
         </div>
 
@@ -160,8 +161,7 @@ const currentData = computed(() => {
         lastName: lastName.value,
         group: group.value,
         note: note.value,
-        date: dateTime.value,
-        startTime: time.value
+        time: startTime.value
     }
 })
 defineEmits(['edit'])
@@ -171,33 +171,35 @@ const currentDate = computed(() => {
     const month = ref((new Date().getMonth() + 1).toString())
     const day = ref(new Date().getDate())
     if (month.value.length === 1) {
-        return `${date.value}-0${month.value}-${day.value}`
+        return `${date.value}-0${month.value}-${day.value}T00:00`
     }
-    return `${date.value}-${month.value}-${day.value}`
+    return `${date.value}-${month.value}-${day.value}T00:00`
 })
 
 const continueDate = computed(()=>{
-    const date = ref(new Date(prop.data.eventDate).getFullYear())
-    const month = ref((new Date(prop.data.eventDate).getMonth() + 1).toString())
-    const day = ref(new Date(prop.data.eventDate).getDate())
-    if (month.value.length === 1) {
-        return `${date.value}-0${month.value}-${day.value}`
+    const date = ref(new Date(prop.data.eventStartTime).getFullYear())
+    const month = ref((new Date(prop.data.eventStartTime).getMonth() + 1).toString())
+    const day = ref(new Date(prop.data.eventStartTime).getDate())
+    const hours = ref(new Date(prop.data.eventStartTime).getHours())
+    const min = ref(new Date(prop.data.eventStartTime).getMinutes())
+    if (month.value.length === 1 || hours.value.length === 1) {
+        return `${date.value}-0${month.value}-${day.value}T0${hours.value}:${min.value}`
     }
-    return `${date.value}-${month.value}-${day.value}`
+    return `${date.value}-${month.value}-${day.value}T${hours.value}:${min.value}`
 })
 
-const dateTime = ref(continueDate.value)
-const startTime = ref(prop.data.eventStartTime)
-const time = computed(() => {
-    if(startTime.value == prop.data.eventStartTime){
-        return prop.data.eventStartTime
-    }
-    return `${startTime.value}:00`
-})
+// const dateTime = ref(continueDate.value)
+const startTime = ref(continueDate.value)
+// const time = computed(() => {
+//     if(startTime.value == prop.data.eventStartTime){
+//         return prop.data.eventStartTime
+//     }
+//     return `${startTime.value}:00`
+// })
 
 const timeNotValid = ref(false)
 const isTimeValid = () => {
-    if (new Date(dateTime.value).toISOString() < new Date().toISOString() && new Date().toLocaleTimeString('th-TH') > currentData.value.startTime) {
+    if (new Date(startTime.value) < new Date()) {
         timeNotValid.value = true
         return false
     } else {

@@ -192,9 +192,4 @@ nav {
 .l-text-xxs {
   font-size: 0.5rem;
 }
-
-.l-py-624{
-  padding-bottom: 624px;
-  padding-top: 624px;
-}
 </style>
