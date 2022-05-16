@@ -16,4 +16,5 @@ public class EventDetailDTO {
     private String eventCategoryDescription;
     private String eventCategoryDuration;
     private String eventNotes;
+    private Integer statusId;
 }
