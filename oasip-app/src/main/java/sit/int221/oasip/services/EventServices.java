@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 import sit.int221.oasip.dtos.EventDetailDTO;
 import sit.int221.oasip.dtos.PostEventDTO;
@@ -21,6 +22,8 @@ import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
+
+import static org.springframework.http.HttpStatus.*;
 
 @Service
 public class EventServices {
@@ -40,14 +43,14 @@ public class EventServices {
     }
 
     public List<SimpleEventDTO> getAllEvents() {
-        return listMapper.mapList(eventRepository.findAll(
+       return listMapper.mapList(eventRepository.findAll(
                 Sort.by("eventStartTime").descending()
         ), SimpleEventDTO.class, modelMapper);
     }
 
     public EventDetailDTO getEventById(Integer id ){
         Event event = eventRepository.findById(id).orElseThrow(() ->
-            new ResponseStatusException(HttpStatus.NOT_FOUND, id + "does not exist."));
+            new ResponseStatusException(NOT_FOUND, id + "does not exist."));
         return modelMapper.map(event, EventDetailDTO.class);
     }
 
@@ -57,7 +60,7 @@ public class EventServices {
     public Event save(PostEventDTO newEvent){
         Event event = modelMapper.map(newEvent, Event.class);
         event.setEventCategory(eventCategoryRepository.findById(newEvent.getCategoryId()).orElseThrow(() ->
-            new ResponseStatusException(HttpStatus.NOT_FOUND)));
+            new ResponseStatusException(NOT_FOUND)));
 
         event.setStatus(statusRepository.findById(3).orElseThrow());
         event.setEventDuration(event.getEventCategory().getEventCategoryDuration());
@@ -72,11 +75,12 @@ public class EventServices {
     // Delete Existing Event
     public void delete(Integer id) { eventRepository.deleteById(id);}
 
-
+    // PUT Method
+    // Edit Existing Event
     public Event update(Integer id , PutEventDTO editEvent){
         // Find an event to edit
         Event event = eventRepository.findById(id).orElseThrow(() ->
-            new ResponseStatusException(HttpStatus.NOT_FOUND));
+            new ResponseStatusException(NOT_FOUND));
 
 //      Set new details
         event.setEventNotes(editEvent.getEventNotes());

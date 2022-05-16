@@ -13,7 +13,7 @@ public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "bookingId", nullable = false)
-    private Integer id;
+    private Integer bookingId;
 
     @Column(name = "bookingName", nullable = false, length = 100)
     private String bookingName;

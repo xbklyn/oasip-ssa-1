@@ -10,7 +10,6 @@ public class PostEventDTO {
     private String bookingName;
     private String bookingEmail;
     private Date eventStartTime;
-    private Integer eventDuration;
     private Integer categoryId;
     private String eventNotes;
 }
