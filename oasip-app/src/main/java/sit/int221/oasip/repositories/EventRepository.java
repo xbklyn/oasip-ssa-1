@@ -13,7 +13,13 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
 
     public List<Event> findAllByEventCategory_CategoryId(Integer id);
 
-//    @Modifying(flushAutomatically = true)
-//    @Query(value = "UPDATE Event e SET e.status = 2 WHERE e.eventStartTime > :now and e.eventEndTime < :now")
-//    public void checkStatus(@Param("now") Date now);
+    //Check if event is in booked time
+    @Modifying(flushAutomatically = true)
+    @Query(value = "UPDATE Event e SET e.status = 2 WHERE current_timestamp BETWEEN e.eventStartTime and e.eventEndTime")
+    public void checkStatusOngoing();
+
+    //Check if event is already passed a booked time
+    @Modifying(flushAutomatically = true)
+    @Query(value = "UPDATE Event e SET e.status = 1 WHERE e.eventEndTime < current_timestamp")
+    public void checkStatusComplete();
 }
