@@ -3,18 +3,21 @@
         <div class="l-h-1248 w-full pb-24 grid grid-cols-3 gap-6 p-12 mb-96">
 
             <!-- Main - Events List -->
-            <div class="l-w-400 h-44 bg-white drop-shadow-sm hover:bg-slate-100 hover:text-black duration-150 grid place-items-center"
-                v-for="value, index in data" :key="index">
-                <router-link :to="{ name: 'scheduled-info', params: { id: value.bookingId } }" class="l-w-400 h-44 grid place-items-center">
+            <div v-for="value, index in data" :key="index" :class="['l-w-400 h-44 duration-150 grid place-items-center', value.statusName == 'COMPLETED' ? 'bg-slate-100 text-gray-500': 'bg-white drop-shadow-sm hover:bg-slate-100 hover:text-black']"
+                >
+                <router-link :to="{ name: 'scheduled-info', params: { id: value.id } }" class="sl-w-400 h-44 grid place-items-center">
                     <div class="l-w-366 h-32">
                         <div class="grid grid-cols-2">
                             <div class="flex place-items-center gap-2 col-span-2 mb-3 l-text-xxs font-light">
-                                <div v-if="value.statusName == 'UPCOMING'" class="w-2 h-2 bg-blue-700"></div>
-                                <div v-else-if="value.statusName == 'ONGOING'" class="w-2 h-2 bg-red-600"></div>
-                                <div v-else class="w-2 h-2 bg-green-400"></div>
-                                <p v-if="value.statusName == 'UPCOMING'" class="text-blue-700">Upcoming
+                                <div v-if="value.statusName == 'UPCOMING'" class="w-2 h-2 bg-blue-700">
+                                </div>
+                                <div v-else-if="value.statusName == 'ONGOING'" class="w-2 h-2 bg-red-600">
+                                <div class="animate-ping w-2- h-2 bg-red-600"></div></div>
+                                <div v-else class=" w-2 h-2 bg-green-400">
+                                </div>
+                                <p v-if="value.statusName == 'UPCOMING'" class=" text-blue-700">Upcoming
                                 </p>
-                                <p v-else-if="value.statusName == 'ONGOING'" class="text-red-600">On going
+                                <p v-else-if="value.statusName == 'ONGOING'" class=" text-red-600">On going
                                 </p>
                                 <p v-else class=" text-green-700">Complete</p>
                             </div>
@@ -40,7 +43,7 @@
                         </div>
 
                         <div class="col-span-4 text-xs font-light">
-                            <p class="l-color-gray overflow-hidden l-w-366 h-8"><span class="font-semibold">Note:
+                            <p class="l-color-gray overflow-hidden l-w-366 h-8"><span class="font-medium">Note:
                                 </span>{{
                                         value.eventNotes ==
                                             '' ? 'None' : value.eventNotes
