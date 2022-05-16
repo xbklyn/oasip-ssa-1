@@ -3,8 +3,6 @@ package sit.int221.oasip.entities;
 import lombok.*;
 
 import javax.persistence.*;
-import java.sql.Time;
-import java.time.Instant;
 import java.util.Date;
 
 @Getter @Setter
@@ -23,14 +21,11 @@ public class Event {
     @Column(name = "bookingEmail", nullable = false, length = 100)
     private String bookingEmail;
 
-    @Column(name = "eventDate", nullable = false)
-    private Date eventDate;
-
     @Column(name = "eventStartTime", nullable = false)
-    private Time eventStartTime;
+    private Date eventStartTime;
 
     @Column(name = "eventEndTime" , nullable = false)
-    private Time eventEndTime;
+    private Date eventEndTime;
 
     @Column(name = "eventDuration", nullable = false)
     private Integer eventDuration;
