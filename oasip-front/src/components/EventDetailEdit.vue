@@ -98,7 +98,8 @@
 
                 <!-- Input - Date -->
                 <div class="relative">
-                    <input type="datetime-local" id="dateTime" :min="currentDate" @input="isTimeValid" v-model="startTime"
+                    <input type="datetime-local" id="dateTime" :min="currentDate" @input="isTimeValid"
+                        v-model="startTime"
                         class="block l-w-612 h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" />
                     <label for="dateTime"
                         class="absolute text-sm l-color-gray-300 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1">
@@ -106,7 +107,7 @@
                     </label>
                     <p v-show="timeNotValid" class="absolute text-sm text-red-500 ml-2">Time invalid</p>
                 </div>
-                
+
                 <!-- Input - Start time -->
                 <!-- <div class="relative">
                     <input type="time" id="startTime" @input="isTimeValid"  v-model="startTime"
@@ -120,7 +121,7 @@
                 </div> -->
             </div>
         </div>
-
+        {{ continueDate }}
         <div class="l-w-612 h-px bg-black mx-auto"></div>
 
         <div class="l-w-612 h-12 mx-auto my-12">
@@ -161,7 +162,7 @@ const currentData = computed(() => {
         lastName: lastName.value,
         group: group.value,
         note: note.value,
-        time: new Date(startTime.value).toISOString('th-TH')
+        time: new Date(startTime.value)
     }
 })
 defineEmits(['edit'])
@@ -176,14 +177,22 @@ const currentDate = computed(() => {
     return `${date.value}-${month.value}-${day.value}T00:00`
 })
 
-const continueDate = computed(()=>{
+const continueDate = computed(() => {
     const date = ref(new Date(prop.data.eventStartTime).getFullYear())
     const month = ref((new Date(prop.data.eventStartTime).getMonth() + 1).toString())
     const day = ref(new Date(prop.data.eventStartTime).getDate())
-    const hours = ref(new Date(prop.data.eventStartTime).getHours())
+    const hours = ref(new Date(prop.data.eventStartTime).getHours().toString())
     const min = ref(new Date(prop.data.eventStartTime).getMinutes())
-    if (month.value.length === 1 || hours.value.length === 1) {
-        return `${date.value}-0${month.value}-${day.value}T0${hours.value}:${min.value}`
+
+    // if (month.value.length === 1 || hours.value.length === 1) {
+    //     return `${date.value}-0${month.value}-${day.value}T0${hours.value}:${min.value}`
+    // }
+
+    if (month.value.length === 1) {
+        month.value = `0${month.value}`
+    }
+    if (hours.value.length === 1) {
+        hours.value = `0${hours.value}`
     }
     return `${date.value}-${month.value}-${day.value}T${hours.value}:${min.value}`
 })
