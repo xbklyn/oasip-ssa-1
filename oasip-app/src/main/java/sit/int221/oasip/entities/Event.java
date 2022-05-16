@@ -3,6 +3,7 @@ package sit.int221.oasip.entities;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import java.util.Date;
 
 @Getter @Setter
@@ -18,6 +19,7 @@ public class Event {
     @Column(name = "bookingName", nullable = false, length = 100)
     private String bookingName;
 
+    @Email
     @Column(name = "bookingEmail", nullable = false, length = 100)
     private String bookingEmail;
 

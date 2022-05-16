@@ -25,6 +25,7 @@ import java.util.List;
 
 import static org.springframework.http.HttpStatus.*;
 
+@Transactional
 @Service
 public class EventServices {
 
@@ -43,6 +44,7 @@ public class EventServices {
     }
 
     public List<SimpleEventDTO> getAllEvents() {
+       check();
        return listMapper.mapList(eventRepository.findAll(
                 Sort.by("eventStartTime").descending()
         ), SimpleEventDTO.class, modelMapper);
@@ -51,6 +53,7 @@ public class EventServices {
     public EventDetailDTO getEventById(Integer id ){
         Event event = eventRepository.findById(id).orElseThrow(() ->
             new ResponseStatusException(NOT_FOUND, id + "does not exist."));
+        check();
         return modelMapper.map(event, EventDetailDTO.class);
     }
 
@@ -68,12 +71,16 @@ public class EventServices {
         LocalDateTime endTime = newEvent.getEventStartTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().plus(Duration.of(event.getEventDuration(), ChronoUnit.MINUTES));
         event.setEventEndTime(Date.from(endTime.atZone(ZoneId.systemDefault()).toInstant()));
 
+        check();
         return eventRepository.saveAndFlush(event);
     }
 
     // DELETE Method
     // Delete Existing Event
-    public void delete(Integer id) { eventRepository.deleteById(id);}
+    public void delete(Integer id) {
+        eventRepository.deleteById(id);
+        check();
+    }
 
     // PUT Method
     // Edit Existing Event
@@ -88,6 +95,12 @@ public class EventServices {
         LocalDateTime endTime = event.getEventStartTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().plus(Duration.of(event.getEventDuration(), ChronoUnit.MINUTES));
         event.setEventEndTime(Date.from(endTime.atZone(ZoneId.systemDefault()).toInstant()));
 
+        check();
         return eventRepository.saveAndFlush(event);
+    }
+
+    public void check(){
+        eventRepository.checkStatusOngoing();
+        eventRepository.checkStatusComplete();
     }
 }
