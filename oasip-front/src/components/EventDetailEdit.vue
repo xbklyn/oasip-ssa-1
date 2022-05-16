@@ -121,7 +121,6 @@
                 </div> -->
             </div>
         </div>
-        {{ continueDate }}
         <div class="l-w-612 h-px bg-black mx-auto"></div>
 
         <div class="l-w-612 h-12 mx-auto my-12">

@@ -48,9 +48,10 @@
             <div>
                 <h1 class="font-semibold text-4xl l-color-navi ">Scheduled Infomation</h1>
             </div>
+            {{eventInfoById}}
             <div class="justify-self-end space-x-6 text-sm place-items-center">
-                <button @click="modifyMode = true"
-                    class="w-20 h-8 border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white duration-150">Edit</button>
+                <button @click="modifyMode = true" :disable="eventInfoById.statusName == 'COMPLETED'"
+                    class="w-20 h-8 border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white duration-150 disabled:bg-gray-400 disabled:border disabled:text-gray-400">Edit</button>
                 <button @click="show = true"
                     class="w-20 h-8 bg-red-500 text-white font-medium hover:bg-red-700 hover:text-white duration-150">Delete</button>
             </div>
