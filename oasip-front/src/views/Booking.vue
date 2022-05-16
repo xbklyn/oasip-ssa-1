@@ -189,7 +189,7 @@ const email = ref('')
 // const date = computed(() => {
 //     return new Date(new Date(dateTime.value)).toISOString()
 // })
-const startTime = ref()
+const startTime = ref('')
 // const time = computed(() => {
 //     return `${startTime.value}:00`
 // })
@@ -220,7 +220,7 @@ const isEmailValid = () => {
 }
 
 const firstNameNotValid = ref(false)
-const isFirstNameValid = computed(() => {
+const isFirstNameValid = () => {
     if (firstName.value.length == 0) {
         firstNameNotValid.value = true
         return false
@@ -228,7 +228,7 @@ const isFirstNameValid = computed(() => {
         firstNameNotValid.value = false
         return true
     }
-})
+}
 
 // Validate -  Date
 const currentDate = computed(() => {
