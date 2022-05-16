@@ -1,9 +1,7 @@
 package sit.int221.oasip.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import sit.int221.oasip.entities.Eventcategory;
-import sit.int221.oasip.repositories.EventCategoryRepository;
 import sit.int221.oasip.services.EventCategoryService;
 
 import java.util.List;

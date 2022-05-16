@@ -10,8 +10,7 @@ import java.util.Date;
 public class SimpleEventDTO {
     private Integer id;
     private String bookingName;
-    private Date eventDate;
-    private Time eventStartTime;
+    private Date eventStartTime;
     private Integer eventDuration;
     private Integer categoryId;
     private String categoryName;

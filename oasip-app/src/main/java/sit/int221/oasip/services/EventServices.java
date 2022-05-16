@@ -1,13 +1,15 @@
 package sit.int221.oasip.services;
 
+import org.apache.tomcat.jni.Local;
+import org.joda.time.DateTime;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-import sit.int221.oasip.dtos.AddEventDetailDTO;
-import sit.int221.oasip.dtos.EditEventDTO;
 import sit.int221.oasip.dtos.EventDetailDTO;
+import sit.int221.oasip.dtos.PostEventDTO;
+import sit.int221.oasip.dtos.PutEventDTO;
 import sit.int221.oasip.dtos.SimpleEventDTO;
 import sit.int221.oasip.entities.Event;
 import sit.int221.oasip.repositories.EventCategoryRepository;
@@ -17,7 +19,10 @@ import sit.int221.oasip.utils.ListMapper;
 
 
 import java.sql.Time;
-import java.time.LocalTime;
+import java.time.*;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -40,8 +45,8 @@ public class EventServices {
 
     public List<SimpleEventDTO> getAllEvents() {
         return listMapper.mapList(eventRepository.findAll(
-                Sort.by("eventDate").descending().and(Sort.by("eventStartTime").descending()))
-                , SimpleEventDTO.class, modelMapper);
+                Sort.by("eventStartTime").descending()
+        ), SimpleEventDTO.class, modelMapper);
     }
 
     public EventDetailDTO getEventById(Integer id ){
@@ -50,32 +55,38 @@ public class EventServices {
         return modelMapper.map(event, EventDetailDTO.class);
     }
 
+    // POST Method
+    // Save new event
 
-    public Event save(AddEventDetailDTO newEvent){
+    public Event save(PostEventDTO newEvent){
         Event event = modelMapper.map(newEvent, Event.class);
         event.setEventCategory(eventCategoryRepository.findById(newEvent.getCategoryId()).orElseThrow(() ->
             new ResponseStatusException(HttpStatus.NOT_FOUND)));
 
         event.setStatus(statusRepository.findById(3).orElseThrow());
+        event.setEventDuration(event.getEventCategory().getEventCategoryDuration());
         //Add to end time
-        LocalTime endTime = newEvent.getEventStartTime().toLocalTime().plusMinutes((long) newEvent.getEventDuration());
-        event.setEventEndTime(Time.valueOf(endTime));
+        LocalDateTime endTime = newEvent.getEventStartTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().plus(Duration.of(event.getEventDuration(), ChronoUnit.MINUTES));
+        event.setEventEndTime(Date.from(endTime.atZone(ZoneId.systemDefault()).toInstant()));
 
         return eventRepository.saveAndFlush(event);
     }
 
+    // DELETE Method
+    // Delete Existing Event
     public void delete(Integer id) { eventRepository.deleteById(id);}
 
-    public Event update(Integer id , EditEventDTO editEventDTO){
+
+    public Event update(Integer id , PutEventDTO editEvent){
+        // Find an event to edit
         Event event = eventRepository.findById(id).orElseThrow(() ->
             new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        // Set new details
-        event.setEventNotes(editEventDTO.getEventNotes());
-        event.setEventDate(editEventDTO.getEventDate());
-        event.setEventStartTime(editEventDTO.getEventStartTime());
-        LocalTime endTime = event.getEventStartTime().toLocalTime().plusMinutes((long) event.getEventDuration());
-        event.setEventEndTime(Time.valueOf(endTime));
+//      Set new details
+        event.setEventNotes(editEvent.getEventNotes());
+        event.setEventStartTime(editEvent.getEventStartTime());
+        LocalDateTime endTime = event.getEventStartTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().plus(Duration.of(event.getEventDuration(), ChronoUnit.MINUTES));
+        event.setEventEndTime(Date.from(endTime.atZone(ZoneId.systemDefault()).toInstant()));
 
         return eventRepository.saveAndFlush(event);
     }
