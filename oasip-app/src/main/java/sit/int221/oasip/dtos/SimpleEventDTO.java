@@ -6,7 +6,7 @@ import java.util.Date;
 
 @Getter @Setter
 public class SimpleEventDTO {
-    private Integer id;
+    private Integer bookingId;
     private String bookingName;
     private Date eventStartTime;
     private Integer eventDuration;
