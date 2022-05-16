@@ -47,6 +47,7 @@ export const createEvent = async (
             'content-type': 'application/json'
         },
         body: JSON.stringify({
+            bookingId: null,
             bookingName: name,
             bookingEmail: email,
             eventStartTime: startTime,

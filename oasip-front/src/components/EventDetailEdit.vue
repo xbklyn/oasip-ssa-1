@@ -161,7 +161,7 @@ const currentData = computed(() => {
         lastName: lastName.value,
         group: group.value,
         note: note.value,
-        time: startTime.value
+        time: new Date(startTime.value).toISOString('th-TH')
     }
 })
 defineEmits(['edit'])
