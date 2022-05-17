@@ -27,6 +27,6 @@ public class PostEventDTO {
     @NotNull
     private Integer categoryId;
 
-    @Max(value = 500 , message = "Size must be less than 500")
+    @Size(min = 0, max = 500 , message = "Size must be less than 500")
     private String eventNotes;
 }
