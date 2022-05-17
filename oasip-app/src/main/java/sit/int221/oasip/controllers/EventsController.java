@@ -11,7 +11,8 @@ import sit.int221.oasip.entities.Event;
 import sit.int221.oasip.repositories.EventRepository;
 import sit.int221.oasip.services.EventServices;
 
-        import java.util.List;
+import javax.validation.Valid;
+import java.util.List;
 
 
 @CrossOrigin("*")
@@ -48,7 +49,7 @@ public class EventsController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("")
     public Event createEvent(
-            @RequestBody PostEventDTO newEvent
+           @Valid @RequestBody PostEventDTO newEvent
     ) {
         return eventServices.save(newEvent);
     }
