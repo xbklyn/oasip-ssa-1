@@ -148,7 +148,11 @@
 
             </div>
         </div>
-
+        <!-- TEST -->
+        <div class="border border-red-600 []" v-for="(time , index) in computeTimePeriod" :key="index" >
+                <p>{{time.startTime}}</p>
+                <p>{{time.endTime}}</p>
+        </div>
 
         <!-- Button - Submition -->
         <div class="l-w-824 h-12 mx-auto">
@@ -174,8 +178,8 @@ onBeforeMount(async () => {
 
 // Attribute
 const clinics = ref([])
-const clinicId = ref(0)
-// const clinicIndex = ref()
+const clinicId = ref()
+const clinicIndex = ref()
 
 const firstName = ref('')
 const lastName = ref('')
@@ -263,6 +267,48 @@ const submit = (name, mail, start, categoryId, notes) => {
         name: 'Home'
     })
 }
+
+
+
+// TEST
+const CATE_DURATION = computed(() => clinics.value[clinicIndex.value].eventCategoryDuration) ;
+const MAX = 480;
+const BREAK = 10;
+const TimePeriod = ref([])
+
+
+
+const computeTimePeriod = computed(() => {
+    if(!clinicId.value){ return []}
+    else{
+        TimePeriod.value = []
+        let init = new Date();
+        init.setHours(8);
+        init.setMinutes(0);
+        init.setSeconds(0);
+        let i = 0
+        while(i  < MAX) {
+            let start = new Date(init);
+            console.log("Start : " + start.toLocaleTimeString());
+            let plusMinutes = start.getMinutes() + CATE_DURATION.value;
+    
+            let end = new Date(start);
+            end.setMinutes(plusMinutes);
+            console.log("Plus : " + plusMinutes + " => End : " + end.toLocaleTimeString());
+            TimePeriod.value.push({startTime: start.toLocaleTimeString() , endTime : end.toLocaleTimeString() })
+    
+            init = new Date(end);
+            init.setMinutes(end.getMinutes() + BREAK)
+            console.log("------ Break : " + BREAK);
+            
+            i += (CATE_DURATION.value + BREAK)
+        
+        }
+    }
+    return TimePeriod.value;
+})
+
+
 
 </script>
  
