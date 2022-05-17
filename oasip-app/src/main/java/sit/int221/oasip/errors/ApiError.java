@@ -1,14 +1,15 @@
 package sit.int221.oasip.errors;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.Map;
 
-@Data
+@Getter @Setter
 @AllArgsConstructor
 public class ApiError {
     private Date timestamp;
