@@ -44,6 +44,7 @@ public class EventServices {
     }
 
     public List<SimpleEventDTO> getAllEvents() {
+        System.out.println(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
        check();
        return listMapper.mapList(eventRepository.findAll(
                 Sort.by("eventStartTime").descending()
