@@ -8,4 +8,20 @@ import java.util.Date;
 public class PutEventDTO {
     private String eventNotes;
     private Date eventStartTime;
+
+    public String getEventNotes() {
+        return eventNotes;
+    }
+
+    public void setEventNotes(String eventNotes) {
+        this.eventNotes = eventNotes;
+    }
+
+    public Date getEventStartTime() {
+        return eventStartTime;
+    }
+
+    public void setEventStartTime(Date eventStartTime) {
+        this.eventStartTime = eventStartTime;
+    }
 }

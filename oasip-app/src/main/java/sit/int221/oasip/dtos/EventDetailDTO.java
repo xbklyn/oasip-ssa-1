@@ -17,4 +17,92 @@ public class EventDetailDTO {
     private String eventCategoryDuration;
     private String eventNotes;
     private Integer statusId;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getBookingName() {
+        return bookingName;
+    }
+
+    public void setBookingName(String bookingName) {
+        this.bookingName = bookingName;
+    }
+
+    public String getBookingEmail() {
+        return bookingEmail;
+    }
+
+    public void setBookingEmail(String bookingEmail) {
+        this.bookingEmail = bookingEmail;
+    }
+
+    public Date getEventStartTime() {
+        return eventStartTime;
+    }
+
+    public void setEventStartTime(Date eventStartTime) {
+        this.eventStartTime = eventStartTime;
+    }
+
+    public Date getEventEndTime() {
+        return eventEndTime;
+    }
+
+    public void setEventEndTime(Date eventEndTime) {
+        this.eventEndTime = eventEndTime;
+    }
+
+    public Integer getEventDuration() {
+        return eventDuration;
+    }
+
+    public void setEventDuration(Integer eventDuration) {
+        this.eventDuration = eventDuration;
+    }
+
+    public String getEventCategoryName() {
+        return eventCategoryName;
+    }
+
+    public void setEventCategoryName(String eventCategoryName) {
+        this.eventCategoryName = eventCategoryName;
+    }
+
+    public String getEventCategoryDescription() {
+        return eventCategoryDescription;
+    }
+
+    public void setEventCategoryDescription(String eventCategoryDescription) {
+        this.eventCategoryDescription = eventCategoryDescription;
+    }
+
+    public String getEventCategoryDuration() {
+        return eventCategoryDuration;
+    }
+
+    public void setEventCategoryDuration(String eventCategoryDuration) {
+        this.eventCategoryDuration = eventCategoryDuration;
+    }
+
+    public String getEventNotes() {
+        return eventNotes;
+    }
+
+    public void setEventNotes(String eventNotes) {
+        this.eventNotes = eventNotes;
+    }
+
+    public Integer getStatusId() {
+        return statusId;
+    }
+
+    public void setStatusId(Integer statusId) {
+        this.statusId = statusId;
+    }
 }
