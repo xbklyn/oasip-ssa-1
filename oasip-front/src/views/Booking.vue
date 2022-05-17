@@ -154,9 +154,12 @@
         <div class="l-w-824 h-12 mx-auto">
             <button
                 :class="['w-full h-full text-white duration-150', isAllvalid ? 'bg-slate-200' : 'l-bg-navi hover:bg-slate-800']"
-                :disabled="isAllvalid"
-                @click="submit(combineName, email, startTime, clinicId, note)">Submit</button>
+                :disabled="isAllvalid" @click="submit(combineName, email, startTime, clinicId, note)">Submit</button>
         </div>
+
+
+        {{ timeBox }}
+        {{ duration }}
     </div>
 </template>
  
@@ -174,8 +177,8 @@ onBeforeMount(async () => {
 
 // Attribute
 const clinics = ref([])
-const clinicId = ref(0)
-// const clinicIndex = ref()
+const clinicId = ref(1)
+const clinicIndex = ref(0)
 
 const firstName = ref('')
 const lastName = ref('')
