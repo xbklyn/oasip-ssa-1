@@ -147,14 +147,13 @@
 
             </div>
         </div>
-
-
+        {{s}}
+        {{t}}
         <!-- Button - Submition -->
         <div class="l-w-824 h-12 mx-auto">
             <button
                 :class="['w-full h-full text-white duration-150', isAllvalid ? 'bg-slate-200' : 'l-bg-navi hover:bg-slate-800']"
-                :disabled="isAllvalid"
-                @click="submit(combineName, email, startTime, clinicId, note)">Submit</button>
+                :disabled="isAllvalid" @click="submit(combineName, email, startTime, clinicId, note)">Submit</button>
         </div>
     </div>
 </template>
@@ -162,9 +161,8 @@
 <script setup>
 import { ref } from "@vue/reactivity"
 import { computed, onBeforeMount, onBeforeUpdate } from "@vue/runtime-core";
-import { getAllCategory, getEventCategoryById, createEvent,getAllEvents } from '../services/FetchServices.js'
+import { getAllCategory, getEventCategoryById, createEvent, getAllEvents } from '../services/FetchServices.js'
 import { useRoute, useRouter } from "vue-router";
-import { createLogger } from "vite";
 const myRouter = useRouter()
 
 onBeforeMount(async () => {
@@ -267,23 +265,39 @@ const submit = (name, mail, start, categoryId, notes) => {
     })
 }
 
-// const currentClinic = computed(()=>{
-//     return clinics.value.filter(c => {
-//         return c.categoryId == clinicId.value
+const currentClinic = computed(() => {
+    return clinics.value.filter(c => {
+        return c.categoryId == clinicId.value
+    })
+})
+
+// const s = computed(() => {
+//     scheduled.value.filter(s => {
+//         if (
+//             (new Date(s.eventStartTime) < new Date(startTime.value) && new Date(s.eventStartTime) < new Date(new Date(s.startTime).getTime() + currentClinic.value.eventCategoryDuration * 60000)) ||
+//             (new Date(new Date(s.eventStartTime).getTime() + currentClinic.value.eventCategoryDuration * 60000) > new Date(startTime.value)) && (new Date(new Date(s.eventStartTime).getTime() + currentClinic.value.eventCategoryDuration * 60000) > new Date(new Date(s.startTime).getTime() + currentClinic.value.eventCategoryDuration * 60000)) ||
+//             (new Date(s.eventStartTime) < new Date(startTime.value) && new Date(new Date(s.eventStartTime).getTime() + currentClinic.value.eventCategoryDuration * 60000) > new Date(new Date(startTime).getTime() + currentClinic.value.eventCategoryDuration * 60000)) ||
+//             (new Date(s.eventStartTime) > new Date(startTime.value) && new Date(new Date(s.eventStartTime).getTime() + currentClinic.value.eventCategoryDuration * 60000) < new Date(new Date(startTime).getTime() + currentClinic.value.eventCategoryDuration * 60000))
+//             ) {
+//             return console.log('object');
+//         }return 5
 //     })
 // })
 
-// const s = computed(()=>{
-//     return scheduled.value.filter(s => {
-//         if(
-//             (new Date(s.eventStartTime) < new Date(startTime.value) && new Date(s.eventStartTime) < new Date(new Date(s.startTime).getTime() + currentClinic.value.eventCategoryDuration * 60000)) || 
-//         (new Date(new Date(s.eventStartTime).getTime() + currentClinic.value.eventCategoryDuration * 60000) > new Date(startTime.value)) && (new Date(new Date(s.eventStartTime).getTime() + currentClinic.value.eventCategoryDuration * 60000) > new Date(new Date(s.startTime).getTime() + currentClinic.value.eventCategoryDuration * 60000)) ||
-//             (new Date(s.eventStartTime) < new Date(startTime.value) && new Date(new Date(s.eventStartTime).getTime() + currentClinic.value.eventCategoryDuration * 60000) > new Date(new Date(startTime).getTime() + currentClinic.value.eventCategoryDuration * 60000)) || 
-//             (new Date(s.eventStartTime) > new Date(startTime.value) && new Date(new Date(s.eventStartTime).getTime() + currentClinic.value.eventCategoryDuration * 60000) < new Date(new Date(startTime).getTime() + currentClinic.value.eventCategoryDuration * 60000))){
-//             return 
-//     }
-// })
-// })
+const t = computed(() =>{
+   for (let i = 0; i < scheduled.value.length; i++) {
+        if (
+            (new Date(scheduled.value[i].eventStartTime) < new Date(startTime.value) && new Date(scheduled.value[i].eventStartTime) > new Date(new Date(startTime.value).getTime() + currentClinic.value.eventCategoryDuration * 60000)) ||
+            (new Date(new Date(scheduled.value[i].eventStartTime).getTime() + currentClinic.value.eventCategoryDuration * 60000) < new Date(startTime.value)) && (new Date(new Date(scheduled.value[i].eventStartTime).getTime() + currentClinic.value.eventCategoryDuration * 60000) > new Date(new Date(startTime.value).getTime() + currentClinic.value.eventCategoryDuration * 60000)) ||
+            (new Date(scheduled.value[i].eventStartTime) < new Date(startTime.value) && new Date(new Date(scheduled.value[i].eventStartTime).getTime() + currentClinic.value.eventCategoryDuration * 60000) > new Date(new Date(startTime).getTime() + currentClinic.value.eventCategoryDuration * 60000)) ||
+            (new Date(scheduled.value[i].eventStartTime) > new Date(startTime.value) && new Date(new Date(scheduled.value[i].eventStartTime).getTime() + currentClinic.value.eventCategoryDuration * 60000) < new Date(new Date(startTime).getTime() + currentClinic.value.eventCategoryDuration * 60000))
+            ) {
+            return 1
+        }else{
+            return 0
+        }
+    }
+    })
 
 </script>
  
