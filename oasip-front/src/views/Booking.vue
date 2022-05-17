@@ -132,7 +132,6 @@
 
             </div>
             <div class="l-w-612 h-24 grid grid-cols-2 gap-6">
-
                 <!-- Input - Date -->
                 <div class="relative">
                     <input type="datetime-local" id="dateTime" v-model="startTime" :min="currentDate"
@@ -163,13 +162,16 @@
 <script setup>
 import { ref } from "@vue/reactivity"
 import { computed, onBeforeMount, onBeforeUpdate } from "@vue/runtime-core";
-import { getAllCategory, getEventCategoryById, createEvent } from '../services/FetchServices.js'
+import { getAllCategory, getEventCategoryById, createEvent,getAllEvents } from '../services/FetchServices.js'
 import { useRoute, useRouter } from "vue-router";
+import { createLogger } from "vite";
 const myRouter = useRouter()
 
 onBeforeMount(async () => {
     const res = await getAllCategory()
     clinics.value = res
+    const temp = await getAllEvents()
+    scheduled.value = temp
 })
 
 // Attribute
@@ -177,6 +179,7 @@ const clinics = ref([])
 const clinicId = ref(0)
 // const clinicIndex = ref()
 
+const scheduled = ref([])
 const firstName = ref('')
 const lastName = ref('')
 const group = ref('')
@@ -263,6 +266,24 @@ const submit = (name, mail, start, categoryId, notes) => {
         name: 'Home'
     })
 }
+
+// const currentClinic = computed(()=>{
+//     return clinics.value.filter(c => {
+//         return c.categoryId == clinicId.value
+//     })
+// })
+
+// const s = computed(()=>{
+//     return scheduled.value.filter(s => {
+//         if(
+//             (new Date(s.eventStartTime) < new Date(startTime.value) && new Date(s.eventStartTime) < new Date(new Date(s.startTime).getTime() + currentClinic.value.eventCategoryDuration * 60000)) || 
+//         (new Date(new Date(s.eventStartTime).getTime() + currentClinic.value.eventCategoryDuration * 60000) > new Date(startTime.value)) && (new Date(new Date(s.eventStartTime).getTime() + currentClinic.value.eventCategoryDuration * 60000) > new Date(new Date(s.startTime).getTime() + currentClinic.value.eventCategoryDuration * 60000)) ||
+//             (new Date(s.eventStartTime) < new Date(startTime.value) && new Date(new Date(s.eventStartTime).getTime() + currentClinic.value.eventCategoryDuration * 60000) > new Date(new Date(startTime).getTime() + currentClinic.value.eventCategoryDuration * 60000)) || 
+//             (new Date(s.eventStartTime) > new Date(startTime.value) && new Date(new Date(s.eventStartTime).getTime() + currentClinic.value.eventCategoryDuration * 60000) < new Date(new Date(startTime).getTime() + currentClinic.value.eventCategoryDuration * 60000))){
+//             return 
+//     }
+// })
+// })
 
 </script>
  
