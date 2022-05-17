@@ -17,8 +17,8 @@ public class PostEventDTO {
     private String bookingName;
 
     @NotNull
-    @Email
     @Size(min = 1 , max = 100 , message = "Size must be between 1 and 100")
+    @Email
     private String bookingEmail;
 
     @NotNull
