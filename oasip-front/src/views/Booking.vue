@@ -135,7 +135,7 @@
 
                 <!-- Input - Date -->
                 <div class="relative">
-                    <input type="datetime-local" id="dateTime" v-model="startTime" :min="currentDate"
+                    <input type="date" id="dateTime" v-model="selectDate" :min="currentDate" 
                         @input="isTimeValid"
                         class="block l-w-612 h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                         placeholder=" " />
@@ -149,9 +149,10 @@
             </div>
         </div>
         <!-- TEST -->
-        <div class="border border-red-600 []" v-for="(time , index) in computeTimePeriod" :key="index" >
-                <p>{{time.startTime}}</p>
-                <p>{{time.endTime}}</p>
+        <div  class="p-2" v-for="(time , index) in TimePeriod" :key="index" >
+            <button :class="[isOverlap(index) ? 'bg-slate-200': '']" :disabled="isOverlap(index)">
+                <p>{{time.startTime}} - {{time.endTime}}</p>
+            </button>
         </div>
 
         <!-- Button - Submition -->
@@ -167,7 +168,7 @@
 <script setup>
 import { ref } from "@vue/reactivity"
 import { computed, onBeforeMount, onBeforeUpdate } from "@vue/runtime-core";
-import { getAllCategory, getEventCategoryById, createEvent } from '../services/FetchServices.js'
+import { getAllCategory, getEventCategoryById, createEvent , getEventByCatAndDate} from '../services/FetchServices.js'
 import { useRoute, useRouter } from "vue-router";
 const myRouter = useRouter()
 
@@ -193,7 +194,7 @@ const email = ref('')
 // const date = computed(() => {
 //     return new Date(new Date(dateTime.value)).toISOString()
 // })
-const startTime = ref('')
+const selectDate = ref('')
 // const time = computed(() => {
 //     return `${startTime.value}:00`
 // })
@@ -205,7 +206,7 @@ const note = ref('')
 const isAllvalid = computed(() => {
     if (timeNotValid.value || wrongEmail.value || firstNameNotValid.value || clinicId.value === 0) {
         return true
-    } if (email.value.length === 0 || firstName.value.length === 0 || startTime.value.length === 0) {
+    } if (email.value.length === 0 || firstName.value.length === 0 || selectDate.value.length === 0) {
         return true
     } return false
 })
@@ -240,9 +241,12 @@ const currentDate = computed(() => {
     const month = ref((new Date().getMonth() + 1).toString())
     const day = ref(new Date().getDate())
     if (month.value.length === 1) {
-        return `${date.value}-0${month.value}-${day.value}T00:00`
+        // return `${date.value}-0${month.value}-${day.value}T00:00`
+        return `${date.value}-0${month.value}-${day.value}`
+
     }
-    return `${date.value}-${month.value}-${day.value}T00:00`
+    return `${date.value}-${month.value}-${day.value}`
+
     // return new Date().toLocaleDateString()
 })
 
@@ -250,7 +254,7 @@ const currentDate = computed(() => {
 // Validate - Start time
 const timeNotValid = ref(false)
 const isTimeValid = () => {
-    if (new Date(startTime.value) < new Date()) {
+    if ( new Date() < new Date(selectDate.value)) {
         timeNotValid.value = true
         return false
     } else {
@@ -273,39 +277,45 @@ const submit = (name, mail, start, categoryId, notes) => {
 // TEST
 const CATE_DURATION = computed(() => clinics.value[clinicIndex.value].eventCategoryDuration) ;
 const MAX = 480;
-const BREAK = 10;
+const BREAK = 5;
 const TimePeriod = ref([])
+const TimeBooked = ref([])
 
+const isOverlap = (index) => {
+    return TimeBooked.value.some(e => {
+        return new Date(e.eventStartTime).toLocaleTimeString("th-TH") == TimePeriod.value[index].startTime
+    }
+)}
 
-
-const computeTimePeriod = computed(() => {
-    if(!clinicId.value){ return []}
+const computeTimePeriod = computed( async () => {
+    if(!clinicId.value && selectDate.value == '' || !clinicId.value && selectDate.value !== '' || clinicId.value && selectDate.value == ''){}
     else{
+        TimeBooked.value = await getEventByCatAndDate(clinicId.value , selectDate.value)
+        console.log(TimeBooked.value);
         TimePeriod.value = []
         let init = new Date();
         init.setHours(8);
         init.setMinutes(0);
         init.setSeconds(0);
+
         let i = 0
         while(i  < MAX) {
             let start = new Date(init);
-            console.log("Start : " + start.toLocaleTimeString());
+
             let plusMinutes = start.getMinutes() + CATE_DURATION.value;
     
             let end = new Date(start);
             end.setMinutes(plusMinutes);
-            console.log("Plus : " + plusMinutes + " => End : " + end.toLocaleTimeString());
-            TimePeriod.value.push({startTime: start.toLocaleTimeString() , endTime : end.toLocaleTimeString() })
-    
+            
+            TimePeriod.value.push({startTime: start.toLocaleTimeString("th-TH") , endTime : end.toLocaleTimeString("th-TH") })
+        
             init = new Date(end);
             init.setMinutes(end.getMinutes() + BREAK)
-            console.log("------ Break : " + BREAK);
-            
+
             i += (CATE_DURATION.value + BREAK)
-        
+
         }
     }
-    return TimePeriod.value;
 })
 
 
