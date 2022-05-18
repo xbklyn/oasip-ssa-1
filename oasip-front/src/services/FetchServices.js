@@ -18,6 +18,7 @@ export const getEventById = async (id) => {
         console.log('err');
     }
 }
+
 // GET METHOD - All category
 export const getAllCategory = async () => {
     const res = await fetch(`${import.meta.env.VITE_BASE_URL}/category`)
@@ -31,6 +32,16 @@ export const getAllCategory = async () => {
 // GET METHOD - Event category by id
 export const getEventCategoryById = async (id) => {
     const res = await fetch(`${import.meta.env.VITE_BASE_URL}/category/${id}`)
+    if (res.status === 200) {
+        return await res.json()
+    } else {
+        return console.log('err');
+    }
+}
+
+// GET METHOD - Event by category and date
+export const getEventByCatAndDate = async (category, date) => {
+    const res = await fetch(`${import.meta.env.VITE_BASE_URL}/events/${category}/${date}`)
     if (res.status === 200) {
         return await res.json()
     } else {
