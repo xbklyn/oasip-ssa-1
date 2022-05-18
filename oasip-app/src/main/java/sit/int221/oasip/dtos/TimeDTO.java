@@ -1,6 +1,8 @@
 package sit.int221.oasip.dtos;
 
 
+import java.util.Date;
+
 public class TimeDTO {
     private Date eventStartTime;
 
