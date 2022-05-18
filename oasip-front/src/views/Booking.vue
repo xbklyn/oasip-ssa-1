@@ -216,7 +216,7 @@ const TimePeriod = ref([])
 const TimeBooked = ref([])
 const startTime = ref(-1)
 const dateTime = computed(()=>{
-    return `${selectDate.value}T${TimePeriod.value[startTime.value].startTime}`
+    return new Date(`${selectDate.value}T${TimePeriod.value[startTime.value].startTime}`)
 })
 
 
