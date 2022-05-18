@@ -90,16 +90,17 @@
         <div class="l-w-612 h-px bg-black mx-auto"></div>
 
         <!-- Step 3 - Select time period -->
-        <div class="l-w-824 h-36 mx-auto grid justify-center mt-12">
+        <div class="l-w-824 h-96 mx-auto grid justify-center mt-12">
             <div class="">
                 <h2 class="text-2xl mb-6"><span class="font-bold"> Step 3 </span>- Select time period</h2>
             </div>
-            <div class="l-w-612 h-24 grid grid-cols-2 gap-6">
+            <div class="l-w-612 h-12 grid grid-cols-2 gap-6">
 
                 <!-- Input - Date -->
-               <!-- Input - Date -->
+
                 <div class="relative">
-                    <input type="date" id="dateTime" v-model="selectDate" :min="currentDate" @input="computeTimePeriod" @change="startTime = -1"
+                    <input type="date" id="dateTime" v-model="selectDate" :min="currentDate" @input="computeTimePeriod"
+                        @change="startTime = timeContain"
                         class="block l-w-612 h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                         placeholder=" " />
                     <label for="dateTime"
@@ -107,46 +108,60 @@
                         Date
                     </label>
                 </div>
+            </div>
 
-                <!-- Button - Time selector -->
-                <div class="l-w-612 grid grid-cols-6 gap-6 mt-6">
-                    <button v-for="(time, index) in TimePeriod" :key="index" @click="startTime = index"
-                        :class="['h-8 text-sm duration-150 bg-white', startTime == index ? 'bg-blue-500 text-white border-0' : '', isOverlap(index) ? 'bg-slate-200 text-gray-300' : 'hover:bg-blue-500 hover:text-white border border-gray-300 hover:border-none']"
-                        :disabled="isOverlap(index)">
-                        {{ time.startTime }}
-                    </button>
-                </div>
+            <!-- Button - Time selector -->
+            <div class="l-w-612 grid grid-cols-6 gap-6 my-12">
+                <button v-for="(time, index) in computeTimePeriod" :key="index" @click="startTime = index"
+                    :class="['h-8 text-sm duration-150 bg-white', startTime == index ? 'bg-blue-500 text-white border-0' : '', isOverlap(index) ? 'bg-slate-200 text-gray-300' : 'hover:bg-blue-500 hover:text-white border border-gray-300 hover:border-none']"
+                    :disabled="isOverlap(index)">
+                    {{ time.startTime }}
+                </button>
             </div>
 
         </div>
+
         <div class="l-w-612 h-px bg-black mx-auto"></div>
 
         <div class="l-w-612 h-12 mx-auto my-12">
             <button @click="$emit('edit', currentData)" :disabled="timeNotValid"
                 :class="['w-full h-full text-white  duration-150', timeNotValid ? 'bg-slate-300' : 'bg-green-600  hover:bg-green-700']">Update</button>
         </div>
+        {{ f }}
     </div>
 </template>
  
 <script setup>
-import { computed, ref } from "@vue/runtime-core"
+import { computed, onBeforeMount, onBeforeUpdate, ref } from "@vue/runtime-core"
 import { useRoute, useRouter } from 'vue-router'
+import { getEventByCatAndDate } from '../services/FetchServices.js';
 const { params } = useRoute()
+
 
 const prop = defineProps({
     data: {
         type: Object,
         require: false
+    },
+    duration: {
+        type: Number,
+        require: false
+    },
+    MAX: {
+        type: Number,
+        require: false
+    },
+    BREAK: {
+        type: Number,
+        require: false
     }
 })
 
-const getTime = computed(async () => {
-    const temp = await getEventByCatAndDate(clinicId.value, selectDate.value)
-    return temp
-})
+defineEmits(['edit', 'getDate'])
+onBeforeMount(() => {
+    // computeTimePeriod()
 
-onBeforeUpdate(async () => {
-    TimeBooked.value = await getTime.value
+
 })
 
 const currentData = computed(() => {
@@ -169,19 +184,18 @@ const currentData = computed(() => {
         lastName: lastName.value,
         group: group.value,
         note: note.value,
-        time: new Date(startTime.value)
+        time: new Date(dateTime.value)
     }
 })
-defineEmits(['edit'])
 
 const currentDate = computed(() => {
     const date = ref(new Date().getFullYear())
     const month = ref((new Date().getMonth() + 1).toString())
     const day = ref(new Date().getDate())
     if (month.value.length === 1) {
-        return `${date.value}-0${month.value}-${day.value}T00:00`
+        return `${date.value}-0${month.value}-${day.value}`
     }
-    return `${date.value}-${month.value}-${day.value}T00:00`
+    return `${date.value}-${month.value}-${day.value}`
 })
 
 const continueDate = computed(() => {
@@ -191,49 +205,15 @@ const continueDate = computed(() => {
     const hours = ref(new Date(prop.data.eventStartTime).getHours().toString())
     const min = ref(new Date(prop.data.eventStartTime).getMinutes())
 
-    // if (month.value.length === 1 || hours.value.length === 1) {
-    //     return `${date.value}-0${month.value}-${day.value}T0${hours.value}:${min.value}`
-    // }
-
     if (month.value.length === 1) {
         month.value = `0${month.value}`
     }
     if (hours.value.length === 1) {
         hours.value = `0${hours.value}`
     }
-    return `${date.value}-${month.value}-${day.value}T${hours.value}:${min.value}`
+    return `${date.value}-${month.value}-${day.value}`
 })
 
-// const dateTime = ref(continueDate.value)
-// const startTime = ref(continueDate.value)
-// const time = computed(() => {
-//     if(startTime.value == prop.data.eventStartTime){
-//         return prop.data.eventStartTime
-//     }
-//     return `${startTime.value}:00`
-// })
-const selectDate = ref('')
-const TimePeriod = ref([])
-const TimeBooked = ref([])
-const startTime = ref(-1)
-const dateTime = computed(()=>{
-    return `${selectDate.value}T${TimePeriod.value[startTime.value].startTime}`
-})
-
-const timeNotValid = ref(false)
-const isTimeValid = () => {
-    if (new Date(startTime.value) < new Date()) {
-        timeNotValid.value = true
-        return false
-    } else {
-        timeNotValid.value = false
-        return true
-    }
-}
-
-const note = ref(prop.data.eventNotes)
-
-// Get All start time
 const allEventStartTime = computed(() => {
     const bookedStartTime = ref([])
     for (let i = 0; i < TimeBooked.value.length; i++) {
@@ -242,13 +222,50 @@ const allEventStartTime = computed(() => {
     return bookedStartTime
 })
 
+const allStartTime = computed(() => {
+    const bookedStartTime = ref([])
+    for (let i = 0; i < computeTimePeriod.value.length; i++) {
+        bookedStartTime.value.push(computeTimePeriod.value[i].startTime)
+    }
+    return bookedStartTime
+})
+
+const withoutBooked = computed(()=> {
+    return allEventStartTime.value.value.filter(e => {
+        return e !== new Date(prop.data.eventStartTime).toLocaleTimeString('th-TH')
+    })
+})
+
+const note = ref(prop.data.eventNotes)
+
+const getTime = computed(async () => {
+    const temp = await getEventByCatAndDate(prop.data.categoryId, selectDate.value)
+    return temp
+})
+
+onBeforeUpdate(async () => {
+    TimeBooked.value = await getTime.value
+})
+
+
+const MAX = parseInt(480);
+const BREAK = parseInt(5);
+const CATE_DURATION = computed(() => parseInt(prop.duration));
+
+// const TimePeriod = ref([])
+const selectDate = ref(continueDate.value)
+const TimeBooked = ref([])
+
+
+
+
 // Check overlap
 const isOverlap = (index) => {
-    let start = new Date(new Date(currentDate.value).getFullYear(), new Date(currentDate.value).getMonth(), new Date(currentDate.value).getDate(), TimePeriod.value[index].startTime.split(":")[0], TimePeriod.value[index].startTime.split(":")[1]).getTime();
+    let start = new Date(new Date(currentDate.value).getFullYear(), new Date(currentDate.value).getMonth(), new Date(currentDate.value).getDate(), computeTimePeriod.value[index].startTime.split(":")[0], computeTimePeriod.value[index].startTime.split(":")[1]).getTime();
     let cur = new Date().getTime()
 
     // Check if overlap with booked time
-    if (allEventStartTime.value.value.includes(TimePeriod.value[index].startTime) || 
+    if (withoutBooked.value.includes(computeTimePeriod.value[index].startTime) ||
         (start < cur && new Date(selectDate.value).getDate() == new Date(currentDate.value).getDate())
     ) {
         return true
@@ -257,33 +274,43 @@ const isOverlap = (index) => {
     }
 }
 
-// Create time period
-const MAX = 480;
-const BREAK = 5;
-const CATE_DURATION = computed(() => clinics.value[clinicIndex.value].eventCategoryDuration);
-const computeTimePeriod = async () => {
-    console.log("in time method");
-    if (!clinicId.value && selectDate.value == '' || !clinicId.value && selectDate.value !== '' || clinicId.value && selectDate.value == '') { }
-    else {
-        TimePeriod.value = []
-        let init = new Date();
-        init.setHours(8);
-        init.setMinutes(0);
-        init.setSeconds(0);
 
-        let i = 0
-        while (i < MAX) {
-            let start = new Date(init);
-            let plusMinutes = start.getMinutes() + CATE_DURATION.value;
-            let end = new Date(start);
-            end.setMinutes(plusMinutes);
-            TimePeriod.value.push({ startTime: start.toLocaleTimeString("th-TH"), endTime: end.toLocaleTimeString("th-TH") })
-            init = new Date(end);
-            init.setMinutes(end.getMinutes() + BREAK)
-            i += (CATE_DURATION.value + BREAK)
-        }
+// Create time period
+const dateTime = computed(() => {
+    return `${selectDate.value}T${computeTimePeriod.value[startTime.value].startTime}`
+})
+
+
+const computeTimePeriod = computed(() => {
+    console.log("in time method");
+    const TimePeriod = ref([])
+    let init = new Date();
+    init.setHours(8);
+    init.setMinutes(0);
+    init.setSeconds(0);
+
+    let i = 0
+    while (i < MAX) {
+
+        let start = new Date(init);
+        let plusMinutes = start.getMinutes() + CATE_DURATION.value;
+        let end = new Date(start);
+        end.setMinutes(plusMinutes);
+        TimePeriod.value.push({ startTime: start.toLocaleTimeString('th-TH'), endTime: end.toLocaleTimeString('th-TH') })
+
+        init = new Date(end);
+        init.setMinutes(end.getMinutes() + BREAK)
+        i += parseInt(CATE_DURATION.value + BREAK)
+        console.log(i);
     }
-}
+
+    return TimePeriod.value
+
+})
+const timeContain = computed(() => {
+    return allStartTime.value.value.indexOf(new Date(prop.data.eventStartTime).toLocaleTimeString('th-TH'))
+})
+const startTime = ref(timeContain.value)
 </script>
  
 <style>

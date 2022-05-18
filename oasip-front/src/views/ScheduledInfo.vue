@@ -71,7 +71,7 @@
         <EventDetail :data="eventInfoById" v-if="(!modifyMode)" />
 
         <!-- Data - Scheduled Detail Editing mode -->
-        <EventDetailEdit :data="eventInfoById" @edit="editEvent($event)" v-else />
+        <EventDetailEdit :data="eventInfoById" @edit="editEvent($event)" :duration="eventInfoById.eventCategoryDuration" :MAX="480" :BREAK="5" v-else />
 
 
         <!-- Modal box - Confirmation -->
@@ -106,28 +106,37 @@
 </template>
  
 <script setup>
-import { ref } from '@vue/reactivity';
-import { onBeforeMount } from '@vue/runtime-core';
+import { computed ,ref } from '@vue/reactivity';
+import { onBeforeMount, onBeforeUpdate } from '@vue/runtime-core';
 import EventDetail from '../components/EventDetail.vue';
 import EventDetailEdit from '../components/EventDetailEdit.vue'
-import { getEventById, deleteEventById, editEventById } from '../services/FetchServices.js';
+import { getEventById, deleteEventById, editEventById, getEventByCatAndDate } from '../services/FetchServices.js';
 import { useRoute, useRouter } from 'vue-router'
-
-
 const { params } = useRoute()
 
+
+
+// @@@@@@ HOOK @@@@@@
 onBeforeMount(async () => {
     const res = await getEventById(params.id)
-    // console.log(res)
     eventInfoById.value = res
+    // const temp = await getEventCategoryById(eventInfoById.value.categoryId)
+    // CATEGORY.value = temp
 })
 
+// @@@@@@ ATTIBUTE @@@@@@
 const eventInfoById = ref([])
+const CATEGORY = ref({})
 const show = ref(false)
 const modifyMode = ref(false)
 const myRouter = useRouter()
 
-// Delete - event
+
+
+
+
+// @@@@@@ FUNCTION @@@@@@
+// Delete - Event
 const deleteEvent = (eventId) => {
     deleteEventById(eventId)
     show.value = false
@@ -136,7 +145,7 @@ const deleteEvent = (eventId) => {
     
 }
 
-// Edit - event
+// Edit - Event
 const editEvent = (obj) => {
     editEventById(obj)
     location.reload()
@@ -145,6 +154,8 @@ const editEvent = (obj) => {
     })
     modifyMode.value = false
 }
+
+
 
 </script>
  

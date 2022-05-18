@@ -12,11 +12,13 @@ public class EventDetailDTO {
     private Date eventStartTime;
     private Date eventEndTime;
     private Integer eventDuration;
+    private Integer categoryId;
     private String eventCategoryName;
     private String eventCategoryDescription;
     private String eventCategoryDuration;
     private String eventNotes;
     private Integer statusId;
+
 
     public Integer getId() {
         return id;
@@ -64,6 +66,14 @@ public class EventDetailDTO {
 
     public void setEventDuration(Integer eventDuration) {
         this.eventDuration = eventDuration;
+    }
+
+    public Integer getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Integer categoryId) {
+        this.categoryId = categoryId;
     }
 
     public String getEventCategoryName() {
