@@ -282,7 +282,13 @@ const allEventStartTime = computed(()=>{
 })
 
 const isOverlap = (index) => {
-    if(allEventStartTime.value.value.includes(TimePeriod.value[index].startTime)){
+        let start = new Date(new Date(currentDate.value).getFullYear() , new Date(currentDate.value).getMonth() , new Date(currentDate.value).getDate() , TimePeriod.value[index].startTime.split(":")[0] , TimePeriod.value[index].startTime.split(":")[1]).getTime();
+
+        let cur = new Date().getTime()
+
+    if(allEventStartTime.value.value.includes(TimePeriod.value[index].startTime) || // Check if overlap with booked time
+    (start < cur && new Date(selectDate.value).getDate() ==  new Date(currentDate.value).getDate())
+    ){
         return true
     }else{
         return false
