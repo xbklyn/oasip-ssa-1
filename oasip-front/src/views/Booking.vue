@@ -161,6 +161,8 @@
                 :class="['w-full h-full text-white duration-150', isAllvalid ? 'bg-slate-200' : 'l-bg-navi hover:bg-slate-800']"
                 :disabled="isAllvalid" @click="submit(combineName, email, startTime, clinicId, note)">Submit</button>
         </div>
+
+        {{isPast}}
     </div>
 </template>
  
@@ -281,12 +283,26 @@ const allEventStartTime = computed(()=>{
     return bookedStartTime
 })
 
-const isOverlap = (index) => {
-    if(allEventStartTime.value.value.includes(TimePeriod.value[index].startTime)){
+// const allEventDate = computed(()=>{
+//     const bookedDate = ref('')
+//     bookedDate.value = TimeBooked.value[i].eventStartTime.toLocaleDateString()
+//     return bookedDate.value
+// })
+
+const isPast = computed(()=>{
+    if(new Date(selectDate.value).getDate() < new Date().getDate() + 1 && TimePeriod.value[index].startTime < new Date().toLocaleTimeString('th-TH')){
         return true
     }else{
         return false
     }
+})
+
+const isOverlap = (index) => {
+    if(allEventStartTime.value.value.includes(TimePeriod.value[index].startTime)) {
+        return true
+    }else{
+        return false
+}
 }
 
 const getTime = computed(async () => {
@@ -302,12 +318,6 @@ const computeTimePeriod = async () => {
     console.log("in time method");
     if (!clinicId.value && selectDate.value == '' || !clinicId.value && selectDate.value !== '' || clinicId.value && selectDate.value == '') { }
     else {
-        // console.log("Old : " + TimeBooked.value);
-        // const temp = await getEventByCatAndDate(clinicId.value, selectDate.value)
-        // TimeBooked.value = temp
-        // getTime.value
-        // console.log("New : " + TimeBooked.value.toString());
-        // TimeBooked.value = await getTime.value
         TimePeriod.value = []
         let init = new Date();
         init.setHours(8);
@@ -317,19 +327,13 @@ const computeTimePeriod = async () => {
         let i = 0
         while (i < MAX) {
             let start = new Date(init);
-
             let plusMinutes = start.getMinutes() + CATE_DURATION.value;
-
             let end = new Date(start);
             end.setMinutes(plusMinutes);
-
             TimePeriod.value.push({ startTime: start.toLocaleTimeString("th-TH"), endTime: end.toLocaleTimeString("th-TH") })
-
             init = new Date(end);
             init.setMinutes(end.getMinutes() + BREAK)
-
             i += (CATE_DURATION.value + BREAK)
-
         }
     }
 }
