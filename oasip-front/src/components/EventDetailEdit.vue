@@ -97,29 +97,27 @@
             <div class="l-w-612 h-24 grid grid-cols-2 gap-6">
 
                 <!-- Input - Date -->
+               <!-- Input - Date -->
                 <div class="relative">
-                    <input type="datetime-local" id="dateTime" :min="currentDate" @input="isTimeValid"
-                        v-model="startTime"
-                        class="block l-w-612 h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" />
+                    <input type="date" id="dateTime" v-model="selectDate" :min="currentDate" @input="computeTimePeriod" @change="startTime = -1"
+                        class="block l-w-612 h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                        placeholder=" " />
                     <label for="dateTime"
                         class="absolute text-sm l-color-gray-300 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1">
                         Date
                     </label>
-                    <p v-show="timeNotValid" class="absolute text-sm text-red-500 ml-2">Time invalid</p>
                 </div>
 
-                <!-- Input - Start time -->
-                <!-- <div class="relative">
-                    <input type="time" id="startTime" @input="isTimeValid"  v-model="startTime"
-                        :class="['block l-w-294 h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer', timeNotValid ? 'border-red-500 focus:border-red-600' : '']"
-                        placeholder=" " />
-                    <label for="startTime"
-                        class="absolute text-sm l-color-gray-300 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1">
-                        Start time
-                    </label>
-                    <p v-show="timeNotValid" class="absolute text-sm text-red-500 ml-2">Time invalid</p>
-                </div> -->
+                <!-- Button - Time selector -->
+                <div class="l-w-612 grid grid-cols-6 gap-6 mt-6">
+                    <button v-for="(time, index) in TimePeriod" :key="index" @click="startTime = index"
+                        :class="['h-8 text-sm duration-150 bg-white', startTime == index ? 'bg-blue-500 text-white border-0' : '', isOverlap(index) ? 'bg-slate-200 text-gray-300' : 'hover:bg-blue-500 hover:text-white border border-gray-300 hover:border-none']"
+                        :disabled="isOverlap(index)">
+                        {{ time.startTime }}
+                    </button>
+                </div>
             </div>
+
         </div>
         <div class="l-w-612 h-px bg-black mx-auto"></div>
 
@@ -141,6 +139,16 @@ const prop = defineProps({
         require: false
     }
 })
+
+const getTime = computed(async () => {
+    const temp = await getEventByCatAndDate(clinicId.value, selectDate.value)
+    return temp
+})
+
+onBeforeUpdate(async () => {
+    TimeBooked.value = await getTime.value
+})
+
 const currentData = computed(() => {
     const firstName = ref()
     const lastName = ref()
@@ -197,13 +205,20 @@ const continueDate = computed(() => {
 })
 
 // const dateTime = ref(continueDate.value)
-const startTime = ref(continueDate.value)
+// const startTime = ref(continueDate.value)
 // const time = computed(() => {
 //     if(startTime.value == prop.data.eventStartTime){
 //         return prop.data.eventStartTime
 //     }
 //     return `${startTime.value}:00`
 // })
+const selectDate = ref('')
+const TimePeriod = ref([])
+const TimeBooked = ref([])
+const startTime = ref(-1)
+const dateTime = computed(()=>{
+    return `${selectDate.value}T${TimePeriod.value[startTime.value].startTime}`
+})
 
 const timeNotValid = ref(false)
 const isTimeValid = () => {
@@ -218,6 +233,57 @@ const isTimeValid = () => {
 
 const note = ref(prop.data.eventNotes)
 
+// Get All start time
+const allEventStartTime = computed(() => {
+    const bookedStartTime = ref([])
+    for (let i = 0; i < TimeBooked.value.length; i++) {
+        bookedStartTime.value.push(new Date(TimeBooked.value[i].eventStartTime).toLocaleTimeString('th-TH'))
+    }
+    return bookedStartTime
+})
+
+// Check overlap
+const isOverlap = (index) => {
+    let start = new Date(new Date(currentDate.value).getFullYear(), new Date(currentDate.value).getMonth(), new Date(currentDate.value).getDate(), TimePeriod.value[index].startTime.split(":")[0], TimePeriod.value[index].startTime.split(":")[1]).getTime();
+    let cur = new Date().getTime()
+
+    // Check if overlap with booked time
+    if (allEventStartTime.value.value.includes(TimePeriod.value[index].startTime) || 
+        (start < cur && new Date(selectDate.value).getDate() == new Date(currentDate.value).getDate())
+    ) {
+        return true
+    } else {
+        return false
+    }
+}
+
+// Create time period
+const MAX = 480;
+const BREAK = 5;
+const CATE_DURATION = computed(() => clinics.value[clinicIndex.value].eventCategoryDuration);
+const computeTimePeriod = async () => {
+    console.log("in time method");
+    if (!clinicId.value && selectDate.value == '' || !clinicId.value && selectDate.value !== '' || clinicId.value && selectDate.value == '') { }
+    else {
+        TimePeriod.value = []
+        let init = new Date();
+        init.setHours(8);
+        init.setMinutes(0);
+        init.setSeconds(0);
+
+        let i = 0
+        while (i < MAX) {
+            let start = new Date(init);
+            let plusMinutes = start.getMinutes() + CATE_DURATION.value;
+            let end = new Date(start);
+            end.setMinutes(plusMinutes);
+            TimePeriod.value.push({ startTime: start.toLocaleTimeString("th-TH"), endTime: end.toLocaleTimeString("th-TH") })
+            init = new Date(end);
+            init.setMinutes(end.getMinutes() + BREAK)
+            i += (CATE_DURATION.value + BREAK)
+        }
+    }
+}
 </script>
  
 <style>

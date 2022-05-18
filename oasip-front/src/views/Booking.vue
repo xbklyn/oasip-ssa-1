@@ -135,16 +135,16 @@
 
                 <!-- Input - Date -->
                 <div class="relative">
-                    <input type="date" id="dateTime" v-model="selectDate" :min="currentDate" @input="computeTimePeriod"
+                    <input type="date" id="dateTime" v-model="selectDate" :min="currentDate" @input="computeTimePeriod" @change="startTime = -1"
                         class="block l-w-612 h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                         placeholder=" " />
                     <label for="dateTime"
                         class="absolute text-sm l-color-gray-300 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1">
                         Date
                     </label>
-                    <!-- <p v-show="timeNotValid" class="absolute text-sm text-red-500 ml-2">Time invalid</p> -->
                 </div>
 
+                <!-- Button - Time selector -->
                 <div class="l-w-612 grid grid-cols-6 gap-6 mt-6">
                     <button v-for="(time, index) in TimePeriod" :key="index" @click="startTime = index"
                         :class="['h-8 text-sm duration-150 bg-white', startTime == index ? 'bg-blue-500 text-white border-0' : '', isOverlap(index) ? 'bg-slate-200 text-gray-300' : 'hover:bg-blue-500 hover:text-white border border-gray-300 hover:border-none']"
@@ -159,30 +159,41 @@
         <div class="l-w-824 h-12 mx-auto">
             <button
                 :class="['w-full h-full text-white duration-150', isAllvalid ? 'bg-slate-200' : 'l-bg-navi hover:bg-slate-800']"
-                :disabled="isAllvalid" @click="submit(combineName, email, startTime, clinicId, note)">Submit</button>
+                :disabled="isAllvalid" @click="submit(combineName, email, dateTime, clinicId, note)">Submit</button>
         </div>
-
-        {{isPast}}
     </div>
 </template>
  
 <script setup>
 import { ref } from "@vue/reactivity"
 import { computed, onBeforeMount, onBeforeUpdate } from "@vue/runtime-core";
-import { getAllCategory, getEventCategoryById, createEvent, getEventByCatAndDate } from '../services/FetchServices.js'
+import { getAllCategory, createEvent, getEventByCatAndDate } from '../services/FetchServices.js'
 import { useRoute, useRouter } from "vue-router";
 
+
+
+// @@@@@@ HOOK @@@@@@
 onBeforeMount(async () => {
     const res = await getAllCategory()
     clinics.value = res
 })
 
-// Attribute
+const getTime = computed(async () => {
+    const temp = await getEventByCatAndDate(clinicId.value, selectDate.value)
+    return temp
+})
+
+onBeforeUpdate(async () => {
+    TimeBooked.value = await getTime.value
+})
+
+
+
+// @@@@@@ ATTIBUTE @@@@@@
+const myRouter = useRouter()
 const clinics = ref([])
 const clinicId = ref(1)
 const clinicIndex = ref(0)
-
-const scheduled = ref([])
 const firstName = ref('')
 const lastName = ref('')
 const group = ref('')
@@ -190,74 +201,28 @@ const combineName = computed(() => {
     return `${firstName.value} ${lastName.value} ${group.value.length != 0 ? '(' + group.value + ')' : ''}`
 })
 const email = ref('')
-const selectDate = ref('')
 const note = ref('')
-
-
-
-//################## Function - Validation ##################
-const isAllvalid = computed(() => {
-    if (timeNotValid.value || wrongEmail.value || firstNameNotValid.value || clinicId.value === 0) {
-        return true
-    } if (email.value.length === 0 || firstName.value.length === 0 || selectDate.value.length === 0) {
-        return true
-    } return false
-})
-
-// Validate - Email
-const checkEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-const wrongEmail = ref(false)
-const isEmailValid = () => {
-    if (checkEmail.test(email.value)) {
-        wrongEmail.value = false;
-        return true
-    } else {
-        wrongEmail.value = true;
-        return false
-    }
-}
-
-const firstNameNotValid = ref(false)
-const isFirstNameValid = () => {
-    if (firstName.value.length == 0) {
-        firstNameNotValid.value = true
-        return false
-    } else {
-        firstNameNotValid.value = false
-        return true
-    }
-}
-
-// Validate -  Date
 const currentDate = computed(() => {
     const date = ref(new Date().getFullYear())
     const month = ref((new Date().getMonth() + 1).toString())
     const day = ref(new Date().getDate())
     if (month.value.length === 1) {
-        // return `${date.value}-0${month.value}-${day.value}T00:00`
         return `${date.value}-0${month.value}-${day.value}`
-
     }
     return `${date.value}-${month.value}-${day.value}`
-
-    // return new Date().toLocaleDateString()
+})
+const selectDate = ref('')
+const TimePeriod = ref([])
+const TimeBooked = ref([])
+const startTime = ref(-1)
+const dateTime = computed(()=>{
+    return `${selectDate.value}T${TimePeriod.value[startTime.value].startTime}`
 })
 
 
-// Validate - Start time
-const timeNotValid = ref(false)
-const isTimeValid = () => {
-    if (new Date() < new Date(selectDate.value)) {
-        timeNotValid.value = true
-        return false
-    } else {
-        timeNotValid.value = false
-        return true
-    }
-}
 
-//############################################################################################################
-
+// @@@@@@ FUNCTION @@@@@@
+// Create event
 const submit = (name, mail, start, categoryId, notes) => {
     createEvent(name, mail, start, categoryId, notes)
     myRouter.push({
@@ -265,55 +230,34 @@ const submit = (name, mail, start, categoryId, notes) => {
     })
 }
 
-
-
-// TEST
-const CATE_DURATION = computed(() => clinics.value[clinicIndex.value].eventCategoryDuration);
-const MAX = 480;
-const BREAK = 5;
-const TimePeriod = ref([])
-const TimeBooked = ref([])
-const startTime = ref('')
-
-const allEventStartTime = computed(()=>{
+// Get All start time
+const allEventStartTime = computed(() => {
     const bookedStartTime = ref([])
     for (let i = 0; i < TimeBooked.value.length; i++) {
-       bookedStartTime.value.push(new Date(TimeBooked.value[i].eventStartTime).toLocaleTimeString('th-TH'))
+        bookedStartTime.value.push(new Date(TimeBooked.value[i].eventStartTime).toLocaleTimeString('th-TH'))
     }
     return bookedStartTime
 })
 
-// const allEventDate = computed(()=>{
-//     const bookedDate = ref('')
-//     bookedDate.value = TimeBooked.value[i].eventStartTime.toLocaleDateString()
-//     return bookedDate.value
-// })
+// Check overlap
+const isOverlap = (index) => {
+    let start = new Date(new Date(currentDate.value).getFullYear(), new Date(currentDate.value).getMonth(), new Date(currentDate.value).getDate(), TimePeriod.value[index].startTime.split(":")[0], TimePeriod.value[index].startTime.split(":")[1]).getTime();
+    let cur = new Date().getTime()
 
-const isPast = computed(()=>{
-    if(new Date(selectDate.value).getDate() < new Date().getDate() + 1 && TimePeriod.value[index].startTime < new Date().toLocaleTimeString('th-TH')){
+    // Check if overlap with booked time
+    if (allEventStartTime.value.value.includes(TimePeriod.value[index].startTime) || 
+        (start < cur && new Date(selectDate.value).getDate() == new Date(currentDate.value).getDate())
+    ) {
         return true
-    }else{
+    } else {
         return false
     }
-})
-
-const isOverlap = (index) => {
-    if(allEventStartTime.value.value.includes(TimePeriod.value[index].startTime)) {
-        return true
-    }else{
-        return false
-}
 }
 
-const getTime = computed(async () => {
-    const temp = await getEventByCatAndDate(clinicId.value, selectDate.value)
-    return temp
-})
-
-onBeforeUpdate( async()=>{
-    TimeBooked.value = await getTime.value
-})
-
+// Create time period
+const MAX = 480;
+const BREAK = 5;
+const CATE_DURATION = computed(() => clinics.value[clinicIndex.value].eventCategoryDuration);
 const computeTimePeriod = async () => {
     console.log("in time method");
     if (!clinicId.value && selectDate.value == '' || !clinicId.value && selectDate.value !== '' || clinicId.value && selectDate.value == '') { }
@@ -338,7 +282,41 @@ const computeTimePeriod = async () => {
     }
 }
 
+// Check all validate
+const isAllvalid = computed(() => {
+    if (wrongEmail.value || firstNameNotValid.value) {
+        return true
+    } 
+    if (email.value.length === 0 || firstName.value.length === 0 || selectDate.value.length === 0 || startTime.value == -1) {
+        return true
+    } 
+    return false
+})
 
+// Email validation
+const checkEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+const wrongEmail = ref(false)
+const isEmailValid = () => {
+    if (checkEmail.test(email.value)) {
+        wrongEmail.value = false;
+        return true
+    } else {
+        wrongEmail.value = true;
+        return false
+    }
+}
+
+// Name validation
+const firstNameNotValid = ref(false)
+const isFirstNameValid = () => {
+    if (firstName.value.length == 0) {
+        firstNameNotValid.value = true
+        return false
+    } else {
+        firstNameNotValid.value = false
+        return true
+    }
+}
 
 </script>
  
