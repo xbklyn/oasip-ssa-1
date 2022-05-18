@@ -38,11 +38,7 @@
                 <div class="flex place-items-center" v-for="value, index in clinics" :key="index">
                     <div class="w-56">
                         <input :id="value.eventCategoryName" type="radio" :value='value.categoryId' name="eventCategory"
-<<<<<<< HEAD
                             v-model="clinicId" @click="clinicIndex = index" @input="computeTimePeriod"
-=======
-                            v-model="clinicId" @click="clinicIndex = index; computeTimePeriod()" 
->>>>>>> ef7919f0f9683a9521b6d96e3bf53b7bc98b564d
                             class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300">
                         <label :for="value.eventCategoryName"
                             class="ml-2 text-sm font-light hover:text-blue-400 cursor-pointer">
@@ -135,20 +131,11 @@
                 <p class="l-text-xxs">Select time period.</p>
 
             </div>
-<<<<<<< HEAD
-            <div class="l-w-612 h-24 grid grid-cols-2 gap-6">
-=======
             <div class="l-w-612 h-12 grid gap-6">
 
->>>>>>> dev
                 <!-- Input - Date -->
                 <div class="relative">
-<<<<<<< HEAD
                     <input type="date" id="dateTime" v-model="selectDate" :min="currentDate" @input="computeTimePeriod"
-=======
-                    <input type="date" id="dateTime" v-model="selectDate" :min="currentDate" 
-                        @input="computeTimePeriod"
->>>>>>> ef7919f0f9683a9521b6d96e3bf53b7bc98b564d
                         class="block l-w-612 h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                         placeholder=" " />
                     <label for="dateTime"
@@ -160,34 +147,20 @@
 
                 <div class="l-w-612 grid grid-cols-6 gap-6 mt-6">
                     <button v-for="(time, index) in TimePeriod" :key="index" @click="startTime = index"
-                        :class="['h-8 border border-gray-300 hover:border-none duration-150',startTime == index?'bg-blue-500 text-white':'', isOverlap(index) ? 'bg-slate-600' : 'hover:bg-blue-500 hover:text-white']"
+                        :class="['h-8 text-sm duration-150 bg-white', startTime == index ? 'bg-blue-500 text-white border-0' : '', isOverlap(index) ? 'bg-slate-200 text-gray-300' : 'hover:bg-blue-500 hover:text-white border border-gray-300 hover:border-none']"
                         :disabled="isOverlap(index)">
                         {{ time.startTime }}
                     </button>
                 </div>
-                <!-- {{TimePeriod[startTime].startTime}} -->
             </div>
         </div>
-<<<<<<< HEAD
-=======
 
-        <!-- TEST -->
-        <div  class="p-2" v-for="(time , index) in TimePeriod" :key="index" >
-            <button :class="[isOverlap(index) ? 'bg-slate-200': '']" :disabled="isOverlap(index)">
-                <p>{{time.startTime}} - {{time.endTime}}</p>
-            </button>
-        </div>
-
->>>>>>> ef7919f0f9683a9521b6d96e3bf53b7bc98b564d
         <!-- Button - Submition -->
         <div class="l-w-824 h-12 mx-auto">
             <button
                 :class="['w-full h-full text-white duration-150', isAllvalid ? 'bg-slate-200' : 'l-bg-navi hover:bg-slate-800']"
                 :disabled="isAllvalid" @click="submit(combineName, email, startTime, clinicId, note)">Submit</button>
         </div>
-
-
-
     </div>
 </template>
  
@@ -197,10 +170,9 @@ import { computed, onBeforeMount, onBeforeUpdate } from "@vue/runtime-core";
 import { getAllCategory, getEventCategoryById, createEvent, getEventByCatAndDate } from '../services/FetchServices.js'
 import { useRoute, useRouter } from "vue-router";
 
-onBeforeMount(async() => {
+onBeforeMount(async () => {
     const res = await getAllCategory()
-    const temp = await getAllEvents()
-    scheduled.value = temp
+    clinics.value = res
 })
 
 // Attribute
@@ -216,16 +188,7 @@ const combineName = computed(() => {
     return `${firstName.value} ${lastName.value} ${group.value.length != 0 ? '(' + group.value + ')' : ''}`
 })
 const email = ref('')
-
-// const dateTime = ref()
-// const date = computed(() => {
-//     return new Date(new Date(dateTime.value)).toISOString()
-// })
 const selectDate = ref('')
-const startTime = ref('')
-// const time = computed(() => {
-//     return `${startTime.value}:00`
-// })
 const note = ref('')
 
 
@@ -308,29 +271,43 @@ const MAX = 480;
 const BREAK = 5;
 const TimePeriod = ref([])
 const TimeBooked = ref([])
-const showSelectTime = ref(false)
-const isOverlap = (index) => {
-    return TimeBooked.value.some(e => {
-        return new Date(e.eventStartTime).toLocaleTimeString("th-TH") == TimePeriod.value[index].startTime || new Date("2022-05-18 10:00:00").toLocaleTimeString('th-TH') >= TimePeriod.value[index].startTime 
+const startTime = ref('')
+
+const allEventStartTime = computed(()=>{
+    const bookedStartTime = ref([])
+    for (let i = 0; i < TimeBooked.value.length; i++) {
+       bookedStartTime.value.push(new Date(TimeBooked.value[i].eventStartTime).toLocaleTimeString('th-TH'))
     }
-    )
+    return bookedStartTime
+})
+
+const isOverlap = (index) => {
+    if(allEventStartTime.value.value.includes(TimePeriod.value[index].startTime)){
+        return true
+    }else{
+        return false
+    }
 }
 
-<<<<<<< HEAD
+const getTime = computed(async () => {
+    const temp = await getEventByCatAndDate(clinicId.value, selectDate.value)
+    return temp
+})
+
+onBeforeUpdate( async()=>{
+    TimeBooked.value = await getTime.value
+})
+
 const computeTimePeriod = async () => {
+    console.log("in time method");
     if (!clinicId.value && selectDate.value == '' || !clinicId.value && selectDate.value !== '' || clinicId.value && selectDate.value == '') { }
     else {
-        TimeBooked.value = await getEventByCatAndDate(clinicId.value, selectDate.value)
-        console.log(TimeBooked.value);
-=======
-const computeTimePeriod =  async () => {
-    console.log("in time method");
-    if(!clinicId.value && selectDate.value == '' || !clinicId.value && selectDate.value !== '' || clinicId.value && selectDate.value == ''){}
-    else{
-        console.log("Old : " + TimeBooked.value);
-        TimeBooked.value = await getEventByCatAndDate(clinicId.value , selectDate.value)
-        console.log("New : " + TimeBooked.value.toString());
->>>>>>> ef7919f0f9683a9521b6d96e3bf53b7bc98b564d
+        // console.log("Old : " + TimeBooked.value);
+        // const temp = await getEventByCatAndDate(clinicId.value, selectDate.value)
+        // TimeBooked.value = temp
+        // getTime.value
+        // console.log("New : " + TimeBooked.value.toString());
+        // TimeBooked.value = await getTime.value
         TimePeriod.value = []
         let init = new Date();
         init.setHours(8);
