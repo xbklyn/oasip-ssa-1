@@ -2,13 +2,13 @@ package sit.int221.oasip.dtos;
 
 
 public class TimeDTO {
-    private String eventStartTime;
+    private Date eventStartTime;
 
-    public String getEventStartTime() {
+    public Date getEventStartTime() {
         return eventStartTime;
     }
 
-    public void setEventStartTime(String eventStartTime) {
+    public void setEventStartTime(Date eventStartTime) {
         this.eventStartTime = eventStartTime;
     }
 }
