@@ -1,6 +1,8 @@
 package sit.int221.oasip.controllers;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import sit.int221.oasip.dtos.*;
@@ -8,10 +10,8 @@ import sit.int221.oasip.entities.Event;
 import sit.int221.oasip.repositories.EventRepository;
 import sit.int221.oasip.services.EventServices;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 
@@ -56,10 +56,11 @@ public class EventsController {
 //    Create new event
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("")
-    public Event createEvent(
-           @Valid @RequestBody PostEventDTO newEvent
-    ) {
-        return eventServices.save(newEvent);
+    public ResponseEntity createEvent(
+           @Valid @RequestBody PostEventDTO newEvent,
+           HttpServletRequest req
+    ) throws MethodArgumentNotValidException {
+        return eventServices.save(newEvent , req);
     }
 
 //  DELETE Method

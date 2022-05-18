@@ -2,24 +2,28 @@ package sit.int221.oasip.services;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.server.ResponseStatusException;
 import sit.int221.oasip.dtos.*;
 import sit.int221.oasip.entities.Event;
+import sit.int221.oasip.errors.ApiError;
 import sit.int221.oasip.repositories.EventCategoryRepository;
 import sit.int221.oasip.repositories.EventRepository;
 import sit.int221.oasip.repositories.StatusRepository;
 import sit.int221.oasip.utils.ListMapper;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -64,7 +68,14 @@ public class EventServices {
     // POST Method
     // Save new event
 
-    public Event save(PostEventDTO newEvent){
+    public ResponseEntity save(PostEventDTO newEvent, HttpServletRequest req) throws MethodArgumentNotValidException {
+
+        //Check Overlap
+        List<Event> overlapEvent = eventRepository.findByEventStartTimeAndEventCategory_CategoryId(newEvent.getEventStartTime() , newEvent.getCategoryId());
+        if(!overlapEvent.isEmpty()) {
+            return ResponseEntity.status(400).body("Time is overlapping");
+        }
+
         Event event = modelMapper.map(newEvent, Event.class);
         event.setEventCategory(eventCategoryRepository.findById(newEvent.getCategoryId()).orElseThrow(() ->
             new ResponseStatusException(NOT_FOUND)));
@@ -76,7 +87,7 @@ public class EventServices {
         event.setEventEndTime(Date.from(endTime.atZone(ZoneId.systemDefault()).toInstant()));
 
         check();
-        return eventRepository.saveAndFlush(event);
+        return ResponseEntity.status(201).body(eventRepository.saveAndFlush(event));
     }
 
     // DELETE Method

@@ -38,7 +38,11 @@
                 <div class="flex place-items-center" v-for="value, index in clinics" :key="index">
                     <div class="w-56">
                         <input :id="value.eventCategoryName" type="radio" :value='value.categoryId' name="eventCategory"
+<<<<<<< HEAD
                             v-model="clinicId" @click="clinicIndex = index" @input="computeTimePeriod"
+=======
+                            v-model="clinicId" @click="clinicIndex = index; computeTimePeriod()" 
+>>>>>>> ef7919f0f9683a9521b6d96e3bf53b7bc98b564d
                             class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300">
                         <label :for="value.eventCategoryName"
                             class="ml-2 text-sm font-light hover:text-blue-400 cursor-pointer">
@@ -139,7 +143,12 @@
 >>>>>>> dev
                 <!-- Input - Date -->
                 <div class="relative">
+<<<<<<< HEAD
                     <input type="date" id="dateTime" v-model="selectDate" :min="currentDate" @input="computeTimePeriod"
+=======
+                    <input type="date" id="dateTime" v-model="selectDate" :min="currentDate" 
+                        @input="computeTimePeriod"
+>>>>>>> ef7919f0f9683a9521b6d96e3bf53b7bc98b564d
                         class="block l-w-612 h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                         placeholder=" " />
                     <label for="dateTime"
@@ -159,6 +168,17 @@
                 <!-- {{TimePeriod[startTime].startTime}} -->
             </div>
         </div>
+<<<<<<< HEAD
+=======
+
+        <!-- TEST -->
+        <div  class="p-2" v-for="(time , index) in TimePeriod" :key="index" >
+            <button :class="[isOverlap(index) ? 'bg-slate-200': '']" :disabled="isOverlap(index)">
+                <p>{{time.startTime}} - {{time.endTime}}</p>
+            </button>
+        </div>
+
+>>>>>>> ef7919f0f9683a9521b6d96e3bf53b7bc98b564d
         <!-- Button - Submition -->
         <div class="l-w-824 h-12 mx-auto">
             <button
@@ -291,16 +311,26 @@ const TimeBooked = ref([])
 const showSelectTime = ref(false)
 const isOverlap = (index) => {
     return TimeBooked.value.some(e => {
-        return new Date(e.eventStartTime).toLocaleTimeString("th-TH") == TimePeriod.value[index].startTime
+        return new Date(e.eventStartTime).toLocaleTimeString("th-TH") == TimePeriod.value[index].startTime || new Date("2022-05-18 10:00:00").toLocaleTimeString('th-TH') >= TimePeriod.value[index].startTime 
     }
     )
 }
 
+<<<<<<< HEAD
 const computeTimePeriod = async () => {
     if (!clinicId.value && selectDate.value == '' || !clinicId.value && selectDate.value !== '' || clinicId.value && selectDate.value == '') { }
     else {
         TimeBooked.value = await getEventByCatAndDate(clinicId.value, selectDate.value)
         console.log(TimeBooked.value);
+=======
+const computeTimePeriod =  async () => {
+    console.log("in time method");
+    if(!clinicId.value && selectDate.value == '' || !clinicId.value && selectDate.value !== '' || clinicId.value && selectDate.value == ''){}
+    else{
+        console.log("Old : " + TimeBooked.value);
+        TimeBooked.value = await getEventByCatAndDate(clinicId.value , selectDate.value)
+        console.log("New : " + TimeBooked.value.toString());
+>>>>>>> ef7919f0f9683a9521b6d96e3bf53b7bc98b564d
         TimePeriod.value = []
         let init = new Date();
         init.setHours(8);
