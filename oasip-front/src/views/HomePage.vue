@@ -37,7 +37,7 @@
         <div class="bg-white drop-shadow-md flex">
           <div class="absolute w-2 h-full bg-blue-500"></div>
           <div class="ml-6 my-4">
-            <p class="text-base text-gray-100 mb-4">Today event</p>
+            <p class="text-base text-gray-100 mb-4">Today events</p>
             <p class="font-bold text-4xl text-blue-500">
               {{ countToday.length }}
             </p>
