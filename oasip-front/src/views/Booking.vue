@@ -38,7 +38,7 @@
                 <div class="flex place-items-center" v-for="value, index in clinics" :key="index">
                     <div class="w-56">
                         <input :id="value.eventCategoryName" type="radio" :value='value.categoryId' name="eventCategory"
-                            v-model="clinicId" @click="clinicIndex = index"
+                            v-model="clinicId" @click="clinicIndex = index" @input="computeTimePeriod"
                             class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300">
                         <label :for="value.eventCategoryName"
                             class="ml-2 text-sm font-light hover:text-blue-400 cursor-pointer">
@@ -125,34 +125,35 @@
         <div class="l-w-824 h-px bg-black mx-auto"></div>
 
         <!-- Step 3 - Select time period -->
-        <div class="l-w-824 h-24 mx-auto flex m-12">
+        <div class="l-w-824 h-96 mx-auto flex m-12 mb-12">
             <div class="w-52 h-24 place-items-center">
                 <h2>Step 3<span class="text-red-500">*</span></h2>
                 <p class="l-text-xxs">Select time period.</p>
 
             </div>
-            <div class="l-w-612 h-24 grid grid-cols-2 gap-6">
+            <div class="l-w-612 h-12 grid gap-6">
 
                 <!-- Input - Date -->
                 <div class="relative">
-                    <input type="date" id="dateTime" v-model="selectDate" :min="currentDate" 
-                        @input="isTimeValid"
+                    <input type="date" id="dateTime" v-model="selectDate" :min="currentDate" @input="computeTimePeriod"
                         class="block l-w-612 h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                         placeholder=" " />
                     <label for="dateTime"
                         class="absolute text-sm l-color-gray-300 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1">
                         Date
                     </label>
-                    <p v-show="timeNotValid" class="absolute text-sm text-red-500 ml-2">Time invalid</p>
+                    <!-- <p v-show="timeNotValid" class="absolute text-sm text-red-500 ml-2">Time invalid</p> -->
                 </div>
 
+                <div class="l-w-612 grid grid-cols-6 gap-6 mt-6">
+                    <button v-for="(time, index) in TimePeriod" :key="index" @click="startTime = index"
+                        :class="['h-8 border border-gray-300 hover:border-none duration-150',startTime == index?'bg-blue-500 text-white':'', isOverlap(index) ? 'bg-slate-600' : 'hover:bg-blue-500 hover:text-white']"
+                        :disabled="isOverlap(index)">
+                        {{ time.startTime }}
+                    </button>
+                </div>
+                <!-- {{TimePeriod[startTime].startTime}} -->
             </div>
-        </div>
-        <!-- TEST -->
-        <div  class="p-2" v-for="(time , index) in TimePeriod" :key="index" >
-            <button :class="[isOverlap(index) ? 'bg-slate-200': '']" :disabled="isOverlap(index)">
-                <p>{{time.startTime}} - {{time.endTime}}</p>
-            </button>
         </div>
 
         <!-- Button - Submition -->
@@ -163,15 +164,14 @@
         </div>
 
 
-        {{ timeBox }}
-        {{ duration }}
+
     </div>
 </template>
  
 <script setup>
 import { ref } from "@vue/reactivity"
 import { computed, onBeforeMount, onBeforeUpdate } from "@vue/runtime-core";
-import { getAllCategory, getEventCategoryById, createEvent , getEventByCatAndDate} from '../services/FetchServices.js'
+import { getAllCategory, getEventCategoryById, createEvent, getEventByCatAndDate } from '../services/FetchServices.js'
 import { useRoute, useRouter } from "vue-router";
 const myRouter = useRouter()
 
@@ -182,8 +182,8 @@ onBeforeMount(async () => {
 
 // Attribute
 const clinics = ref([])
-const clinicId = ref()
-const clinicIndex = ref()
+const clinicId = ref(1)
+const clinicIndex = ref(0)
 
 const firstName = ref('')
 const lastName = ref('')
@@ -198,6 +198,7 @@ const email = ref('')
 //     return new Date(new Date(dateTime.value)).toISOString()
 // })
 const selectDate = ref('')
+const startTime = ref('')
 // const time = computed(() => {
 //     return `${startTime.value}:00`
 // })
@@ -257,7 +258,7 @@ const currentDate = computed(() => {
 // Validate - Start time
 const timeNotValid = ref(false)
 const isTimeValid = () => {
-    if ( new Date() < new Date(selectDate.value)) {
+    if (new Date() < new Date(selectDate.value)) {
         timeNotValid.value = true
         return false
     } else {
@@ -278,22 +279,23 @@ const submit = (name, mail, start, categoryId, notes) => {
 
 
 // TEST
-const CATE_DURATION = computed(() => clinics.value[clinicIndex.value].eventCategoryDuration) ;
+const CATE_DURATION = computed(() => clinics.value[clinicIndex.value].eventCategoryDuration);
 const MAX = 480;
 const BREAK = 5;
 const TimePeriod = ref([])
 const TimeBooked = ref([])
-
+const showSelectTime = ref(false)
 const isOverlap = (index) => {
     return TimeBooked.value.some(e => {
         return new Date(e.eventStartTime).toLocaleTimeString("th-TH") == TimePeriod.value[index].startTime
     }
-)}
+    )
+}
 
-const computeTimePeriod = computed( async () => {
-    if(!clinicId.value && selectDate.value == '' || !clinicId.value && selectDate.value !== '' || clinicId.value && selectDate.value == ''){}
-    else{
-        TimeBooked.value = await getEventByCatAndDate(clinicId.value , selectDate.value)
+const computeTimePeriod = async () => {
+    if (!clinicId.value && selectDate.value == '' || !clinicId.value && selectDate.value !== '' || clinicId.value && selectDate.value == '') { }
+    else {
+        TimeBooked.value = await getEventByCatAndDate(clinicId.value, selectDate.value)
         console.log(TimeBooked.value);
         TimePeriod.value = []
         let init = new Date();
@@ -302,16 +304,16 @@ const computeTimePeriod = computed( async () => {
         init.setSeconds(0);
 
         let i = 0
-        while(i  < MAX) {
+        while (i < MAX) {
             let start = new Date(init);
 
             let plusMinutes = start.getMinutes() + CATE_DURATION.value;
-    
+
             let end = new Date(start);
             end.setMinutes(plusMinutes);
-            
-            TimePeriod.value.push({startTime: start.toLocaleTimeString("th-TH") , endTime : end.toLocaleTimeString("th-TH") })
-        
+
+            TimePeriod.value.push({ startTime: start.toLocaleTimeString("th-TH"), endTime: end.toLocaleTimeString("th-TH") })
+
             init = new Date(end);
             init.setMinutes(end.getMinutes() + BREAK)
 
@@ -319,7 +321,7 @@ const computeTimePeriod = computed( async () => {
 
         }
     }
-})
+}
 
 
 
