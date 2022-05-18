@@ -3,15 +3,15 @@ package sit.int221.oasip.controllers;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-        import sit.int221.oasip.dtos.EventDetailDTO;
-import sit.int221.oasip.dtos.PostEventDTO;
-import sit.int221.oasip.dtos.PutEventDTO;
-import sit.int221.oasip.dtos.SimpleEventDTO;
+import sit.int221.oasip.dtos.*;
 import sit.int221.oasip.entities.Event;
 import sit.int221.oasip.repositories.EventRepository;
 import sit.int221.oasip.services.EventServices;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 
@@ -42,6 +42,14 @@ public class EventsController {
         return eventServices.getEventById(id);
     }
 
+    @GetMapping("/{categoryId}/{date}")
+    public List<TimeDTO> getEventByCategoryIdAndDate(
+            @PathVariable Integer categoryId,
+            @PathVariable String date
+    ){
+        System.out.println(categoryId + " " + date);
+        return eventServices.getEventByCatIdAndDate(categoryId, date);
+    }
 
 //   POST Method
 

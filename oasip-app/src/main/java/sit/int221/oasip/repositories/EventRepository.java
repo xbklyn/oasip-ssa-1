@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import sit.int221.oasip.entities.Event;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -22,4 +23,9 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
     @Modifying(flushAutomatically = true)
     @Query(value = "UPDATE Event e SET e.status = 1 WHERE e.eventEndTime < current_timestamp")
     public void checkStatusComplete();
+
+    @Query(value = "SELECT * FROM events WHERE eventCategoryId = :cat_id and date(eventStartTime) = :input_date" , nativeQuery = true)
+    public List<Event> getByCategoryAndDate(
+            @Param("cat_id") Integer id,
+            @Param("input_date") String date);
 }

@@ -6,10 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
-import sit.int221.oasip.dtos.EventDetailDTO;
-import sit.int221.oasip.dtos.PostEventDTO;
-import sit.int221.oasip.dtos.PutEventDTO;
-import sit.int221.oasip.dtos.SimpleEventDTO;
+import sit.int221.oasip.dtos.*;
 import sit.int221.oasip.entities.Event;
 import sit.int221.oasip.repositories.EventCategoryRepository;
 import sit.int221.oasip.repositories.EventRepository;
@@ -17,6 +14,7 @@ import sit.int221.oasip.repositories.StatusRepository;
 import sit.int221.oasip.utils.ListMapper;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
@@ -56,6 +54,11 @@ public class EventServices {
             new ResponseStatusException(NOT_FOUND, id + "does not exist."));
         check();
         return modelMapper.map(event, EventDetailDTO.class);
+    }
+
+    public List<TimeDTO> getEventByCatIdAndDate(Integer catId , String date){
+        List<Event> event = eventRepository.getByCategoryAndDate(catId, date);
+        return listMapper.mapList(event , TimeDTO.class , modelMapper);
     }
 
     // POST Method
