@@ -181,13 +181,8 @@ onBeforeMount(async () => {
 
 // Attribute
 const clinics = ref([])
-<<<<<<< HEAD
-const clinicId = ref(1)
-const clinicIndex = ref(0)
-=======
 const clinicId = ref()
 const clinicIndex = ref()
->>>>>>> 84ff46be51eaf316718f897930efbfd707f7aad6
 
 const firstName = ref('')
 const lastName = ref('')
