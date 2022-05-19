@@ -269,7 +269,7 @@ const computeTimePeriod = async () => {
         init.setSeconds(0);
 
         let i = 0
-        while (i < MAX) {
+        while (i + CATE_DURATION.value < MAX) {
             let start = new Date(init);
             let plusMinutes = start.getMinutes() + CATE_DURATION.value;
             let end = new Date(start);
