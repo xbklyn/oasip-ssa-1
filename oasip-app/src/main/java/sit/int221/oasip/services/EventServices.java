@@ -17,6 +17,7 @@ import sit.int221.oasip.utils.ListMapper;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
@@ -24,6 +25,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -46,7 +48,6 @@ public class EventServices {
     }
 
     public List<SimpleEventDTO> getAllEvents() {
-        System.out.println(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
        check();
        return listMapper.mapList(eventRepository.findAll(
                 Sort.by("eventStartTime").descending()
@@ -70,14 +71,15 @@ public class EventServices {
 
     public ResponseEntity save(PostEventDTO newEvent, HttpServletRequest req) throws MethodArgumentNotValidException {
 
-
-
         //Check future date
-        if(newEvent.getEventStartTime().before(new Date())) return ResponseEntity.status(400).body(getResponseEntity("eventStartTime" , "Time must be in a future" , req));
+        if(newEvent.getEventStartTime().before(new Date()))
+            return ResponseEntity.status(400).body(getResponseEntity("eventStartTime" , "Time must be in a future" , req));
+
 
         //Check valid Email
         String regex = "^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
-        if(!newEvent.getBookingEmail().matches(regex)) return ResponseEntity.status(400).body(getResponseEntity("bookingEmail" , "must be a well-formed email address" , req));
+        if(!newEvent.getBookingEmail().matches(regex))
+            return ResponseEntity.status(400).body(getResponseEntity("bookingEmail" , "must be a well-formed email address" , req));
 
 
         Event event = modelMapper.map(newEvent, Event.class);
@@ -91,7 +93,8 @@ public class EventServices {
         event.setEventEndTime(Date.from(endTime.atZone(ZoneId.systemDefault()).toInstant()));
 
         //Check Overlap
-        if(checkIsOverlap(event)) return ResponseEntity.status(401).body(getResponseEntity("eventStartTime" , "Time is overlapping" , req));
+        if(checkIsOverlap(event))
+            return ResponseEntity.status(400).body(getResponseEntity("eventStartTime" , "Time is overlapping" , req));
 
         check();
         return ResponseEntity.status(201).body(eventRepository.saveAndFlush(event));
@@ -128,21 +131,41 @@ public class EventServices {
 
     // CHECK OVERLAP
     private boolean checkIsOverlap(Event PostEvent) {
-
+        List<Event> allEvent = eventRepository.getByCategoryAndDate(
+                //Category Id
+                PostEvent.getEventCategory().getCategoryId() ,
+                //String Date
+                LocalDate.from(PostEvent.getEventStartTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()).toString()
+        );
         //Check with Start Time
-        if(eventRepository.findBy) {
+        if(!eventRepository.findByEventStartTimeAndEventCategory_CategoryId(PostEvent.getEventStartTime() , PostEvent.getEventCategory().getCategoryId()).isEmpty()) {
             return true;
         }
 
-        return false;
+        AtomicBoolean isOverLap = new AtomicBoolean(false);
+        allEvent.forEach(e2 -> {
+            if (
+              //Check Outside e2
+              (PostEvent.getEventStartTime().getTime() < e2.getEventStartTime().getTime() && PostEvent.getEventEndTime().getTime() > e2.getEventEndTime().getTime()) ||
+              //Check Inside e2
+              (PostEvent.getEventStartTime().getTime() > e2.getEventStartTime().getTime() && PostEvent.getEventEndTime().getTime() < e2.getEventEndTime().getTime()) ||
+              //Check Between
+              (PostEvent.getEventStartTime().after(e2.getEventStartTime()) && PostEvent.getEventStartTime().before(e2.getEventEndTime())) ||
+              (PostEvent.getEventEndTime().after(e2.getEventStartTime()) && PostEvent.getEventEndTime().before(e2.getEventEndTime()))
+            ){
+                isOverLap.set(true);
+            }
+        });
+        return isOverLap.get();
     }
 
-    public ResponseEntity getResponseEntity(String field , String errorMes , HttpServletRequest req){
+    public ApiError getResponseEntity(String field , String errorMes , HttpServletRequest req){
         ApiError error = new ApiError(400, "Validation Failed", req.getServletPath());
 
         Map<String , String> details = new HashMap<>();
         details.put( field, errorMes);
 
-        return ResponseEntity.badRequest().body(error);
+        error.setDetails(details);
+        return error;
     }
 }
