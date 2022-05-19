@@ -62,7 +62,7 @@
 
                 <!-- Input - Email -->
                 <div class="relative">
-
+                    
                     <input type="text" id="email" v-model="email" @change="isEmailValid"
                         class="l-w-612 h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                         placeholder=" " />
@@ -88,8 +88,8 @@
 
                     <!-- Input - Last name -->
                     <div class="relative">
-                        <input type="text" id="lastName" v-model="lastName"
-                            class="block l-w-188 h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                        <input type="text" id="lastName" v-model="lastName" @input="isFirstNameValid"
+                            :class="['l-w-188 h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer', firstNameNotValid ? 'border-red-500 focus:border-red-500' : '']"
                             placeholder=" " />
                         <label for="lastName"
                             class="absolute text-sm l-color-gray-300 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1">
@@ -99,14 +99,15 @@
 
                     <!-- Input - Group -->
                     <div class="relative">
-                        <input type="text" id="group" v-model="group"
-                            class="block l-w-188 h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                        <input type="text" id="group" v-model="group" @input="isFirstNameValid"
+                            :class="['l-w-188 h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer', firstNameNotValid ? 'border-red-500 focus:border-red-500' : '']"
                             placeholder=" " />
                         <label for="group"
                             class="absolute text-sm l-color-gray-300 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1">
                             Group
                         </label>
                     </div>
+                    <p v-show="firstNameNotValid" class="absolute text-sm text-red-500 ml-2">Name size must be beween 1 and 100</p>
                 </div>
 
                 <!-- Input - Note -->
@@ -309,7 +310,8 @@ const isEmailValid = () => {
 // Name validation
 const firstNameNotValid = ref(false)
 const isFirstNameValid = () => {
-    if (firstName.value.length == 0) {
+    if (combineName.value.length == 0 || combineName.value.length > 100) {
+        console.log(combineName.value.length);
         firstNameNotValid.value = true
         return false
     } else {
