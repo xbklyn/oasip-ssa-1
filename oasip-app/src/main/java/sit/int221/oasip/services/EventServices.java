@@ -70,25 +70,15 @@ public class EventServices {
 
     public ResponseEntity save(PostEventDTO newEvent, HttpServletRequest req) throws MethodArgumentNotValidException {
 
-        //Check Overlap
-        List<Event> overlapEvent = eventRepository.findByEventStartTimeAndEventCategory_CategoryId(newEvent.getEventStartTime() , newEvent.getCategoryId());
-        if(!overlapEvent.isEmpty()) {
-            return ResponseEntity.status(400).body("Time is overlapping");
-        }
+
+
         //Check future date
-        if(newEvent.getEventStartTime().before(new Date())) return ResponseEntity.status(400).body("Time must be in a future");
+        if(newEvent.getEventStartTime().before(new Date())) return ResponseEntity.status(400).body(getResponseEntity("eventStartTime" , "Time must be in a future" , req));
 
         //Check valid Email
         String regex = "^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
-        if(!newEvent.getBookingEmail().matches(regex)) {
-            ApiError error = new ApiError(400, "Validation Failed", req.getServletPath());
+        if(!newEvent.getBookingEmail().matches(regex)) return ResponseEntity.status(400).body(getResponseEntity("bookingEmail" , "must be a well-formed email address" , req));
 
-            Map<String , String> details = new HashMap<>();
-            details.put("bookingEmail" , "must be a well-formed email address");
-            
-            error.setDetails(details);
-            return ResponseEntity.status(400).body(error);
-        }
 
         Event event = modelMapper.map(newEvent, Event.class);
         event.setEventCategory(eventCategoryRepository.findById(newEvent.getCategoryId()).orElseThrow(() ->
@@ -99,6 +89,9 @@ public class EventServices {
         //Add to end time
         LocalDateTime endTime = newEvent.getEventStartTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().plus(Duration.of(event.getEventDuration(), ChronoUnit.MINUTES));
         event.setEventEndTime(Date.from(endTime.atZone(ZoneId.systemDefault()).toInstant()));
+
+        //Check Overlap
+        if(checkIsOverlap(event)) return ResponseEntity.status(401).body(getResponseEntity("eventStartTime" , "Time is overlapping" , req));
 
         check();
         return ResponseEntity.status(201).body(eventRepository.saveAndFlush(event));
@@ -131,5 +124,25 @@ public class EventServices {
     public void check(){
         eventRepository.checkStatusOngoing();
         eventRepository.checkStatusComplete();
+    }
+
+    // CHECK OVERLAP
+    private boolean checkIsOverlap(Event PostEvent) {
+
+        //Check with Start Time
+        if(eventRepository.findBy) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public ResponseEntity getResponseEntity(String field , String errorMes , HttpServletRequest req){
+        ApiError error = new ApiError(400, "Validation Failed", req.getServletPath());
+
+        Map<String , String> details = new HashMap<>();
+        details.put( field, errorMes);
+
+        return ResponseEntity.badRequest().body(error);
     }
 }
