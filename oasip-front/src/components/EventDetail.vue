@@ -45,7 +45,7 @@
                     </div>
                     <div class="space-y-1 col-span-2">
                         <h4 class="text-base text-gray-300">Duration (Clinic)</h4>
-                        <p class="text-sm font-light">{{ data.eventDuration }} Min.</p>
+                        <p class="text-sm font-light">{{ data.eventCategoryDuration }} Min.</p>
                     </div>
                     <div class="col-span-4 space-y-1">
                         <h4 class="text-base text-gray-300">Description</h4>

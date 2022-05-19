@@ -50,10 +50,10 @@
             </div>
         </div>
 
-        <div class="l-w-824 h-px bg-black mx-auto"></div>
+        <div class="l-w-824 h-px bg-black mx-auto" v-show="clinicId"></div>
 
         <!-- Step 2 - Fill infomation -->
-        <div class="l-w-824 h-64 mx-auto flex m-12">
+        <div class="l-w-824 h-64 mx-auto flex m-12 duration-150 ease-in-out transition" v-show="clinicId">
             <div class="w-52 h-64 place-items-center">
                 <h2>Step 2</h2>
                 <p class="l-text-xxs">Fill your infomation.</p>
@@ -62,16 +62,17 @@
 
                 <!-- Input - Email -->
                 <div class="relative">
-
+                    
                     <input type="text" id="email" v-model="email" @change="isEmailValid"
-:class="['l-w-612 h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer', wrongEmail ? 'border-red-500 focus:border-red-500' : '']"
+                        :class="['l-w-612 h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer', wrongEmail || email.length > 100 ? 'border-red-500 focus:border-red-500' : '']"
                         placeholder=" " />
                     <label for="email"
                         class="absolute text-sm l-color-gray-300 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1">
-                        Email<span class="text-red-500">*</span>
+                        Email {{email.length}}/100<span class="text-red-500"> * </span><span v-show="(email.length > 100)" class="text-sm text-red-500 ml-2">Email size more than 100
+                    </span>
                     </label>
-                    <p v-show="wrongEmail" class="absolute text-sm text-red-500 ml-2">Incorrect email address or Email
-                        size more than 100</p>
+                    <p v-show="wrongEmail" class="absolute text-sm text-red-500 ml-2">Incorrect email address</p>
+
                 </div>
                 <div class="grid gap-6">
 
@@ -125,10 +126,10 @@
             </div>
         </div>
 
-        <div class="l-w-824 h-px bg-black mx-auto"></div>
+        <div class="l-w-824 h-px bg-black mx-auto" v-show="firstName !== '' && email !== ''"></div>
 
         <!-- Step 3 - Select time period -->
-        <div class="l-w-824 h-96 mx-auto flex m-12 mb-12">
+        <div class="l-w-824 h-96 mx-auto flex m-12 mb-12" v-show="firstName !== '' && email !== ''">
             <div class="w-52 h-24 place-items-center">
                 <h2>Step 3<span class="text-red-500">*</span></h2>
                 <p class="l-text-xxs">Select time period.</p>
@@ -196,8 +197,8 @@ onBeforeUpdate(async () => {
 // @@@@@@ ATTIBUTE @@@@@@
 const myRouter = useRouter()
 const clinics = ref([])
-const clinicId = ref(1)
-const clinicIndex = ref(0)
+const clinicId = ref(0)
+const clinicIndex = ref()
 const firstName = ref('')
 const lastName = ref('')
 const group = ref('')
