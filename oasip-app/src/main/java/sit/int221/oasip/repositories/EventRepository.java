@@ -25,6 +25,7 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
     @Query(value = "UPDATE Event e SET e.status = 1 WHERE e.eventEndTime < current_timestamp")
     public void checkStatusComplete();
 
+    // Get Start time for front-end to check overlap
     @Query(value = "SELECT * FROM events WHERE eventCategoryId = :cat_id and date(eventStartTime) = :input_date" , nativeQuery = true)
     public List<Event> getByCategoryAndDate(
             @Param("cat_id") Integer id,

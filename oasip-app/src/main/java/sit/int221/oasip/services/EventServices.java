@@ -75,6 +75,8 @@ public class EventServices {
         if(!overlapEvent.isEmpty()) {
             return ResponseEntity.status(400).body("Time is overlapping");
         }
+        //Check future date
+        if(newEvent.getEventStartTime().before(new Date())) return ResponseEntity.status(400).body("Time must be in a future");
 
         Event event = modelMapper.map(newEvent, Event.class);
         event.setEventCategory(eventCategoryRepository.findById(newEvent.getCategoryId()).orElseThrow(() ->
