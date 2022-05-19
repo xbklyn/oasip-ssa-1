@@ -78,6 +78,18 @@ public class EventServices {
         //Check future date
         if(newEvent.getEventStartTime().before(new Date())) return ResponseEntity.status(400).body("Time must be in a future");
 
+        //Check valid Email
+        String regex = "^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
+        if(!newEvent.getBookingEmail().matches(regex)) {
+            ApiError error = new ApiError(400, "Validation Failed", req.getServletPath());
+
+            Map<String , String> details = new HashMap<>();
+            details.put("bookingEmail" , "must be a well-formed email address");
+            
+            error.setDetails(details);
+            return ResponseEntity.status(400).body(error);
+        }
+
         Event event = modelMapper.map(newEvent, Event.class);
         event.setEventCategory(eventCategoryRepository.findById(newEvent.getCategoryId()).orElseThrow(() ->
             new ResponseStatusException(NOT_FOUND)));
