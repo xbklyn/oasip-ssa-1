@@ -78,7 +78,7 @@ public class EventsController {
         @ResponseStatus(HttpStatus.OK)
         @PutMapping("/{id}")
         public Event edit(
-                @RequestBody PutEventDTO editEventDTO,
+                @Valid @RequestBody PutEventDTO editEventDTO,
                 @PathVariable Integer id
                 ){
             return eventServices.update(id , editEventDTO);
