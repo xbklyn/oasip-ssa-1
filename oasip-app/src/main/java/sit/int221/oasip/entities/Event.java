@@ -3,8 +3,7 @@ package sit.int221.oasip.entities;
 import lombok.*;
 
 import javax.persistence.*;
-import java.sql.Time;
-import java.time.Instant;
+import javax.validation.constraints.Email;
 import java.util.Date;
 
 @Getter @Setter
@@ -15,22 +14,20 @@ public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "bookingId", nullable = false)
-    private Integer id;
+    private Integer bookingId;
 
     @Column(name = "bookingName", nullable = false, length = 100)
     private String bookingName;
 
+    @Email
     @Column(name = "bookingEmail", nullable = false, length = 100)
     private String bookingEmail;
 
-    @Column(name = "eventDate", nullable = false)
-    private Date eventDate;
-
     @Column(name = "eventStartTime", nullable = false)
-    private Time eventStartTime;
+    private Date eventStartTime;
 
     @Column(name = "eventEndTime" , nullable = false)
-    private Time eventEndTime;
+    private Date eventEndTime;
 
     @Column(name = "eventDuration", nullable = false)
     private Integer eventDuration;
@@ -47,4 +44,76 @@ public class Event {
     @JoinColumn(name = "eventCategoryId", nullable = false)
     private Eventcategory eventCategory;
 
+
+    public Integer getBookingId() {
+        return bookingId;
+    }
+
+    public void setBookingId(Integer bookingId) {
+        this.bookingId = bookingId;
+    }
+
+    public String getBookingName() {
+        return bookingName;
+    }
+
+    public void setBookingName(String bookingName) {
+        this.bookingName = bookingName;
+    }
+
+    public String getBookingEmail() {
+        return bookingEmail;
+    }
+
+    public void setBookingEmail(String bookingEmail) {
+        this.bookingEmail = bookingEmail;
+    }
+
+    public Date getEventStartTime() {
+        return eventStartTime;
+    }
+
+    public void setEventStartTime(Date eventStartTime) {
+        this.eventStartTime = eventStartTime;
+    }
+
+    public Date getEventEndTime() {
+        return eventEndTime;
+    }
+
+    public void setEventEndTime(Date eventEndTime) {
+        this.eventEndTime = eventEndTime;
+    }
+
+    public Integer getEventDuration() {
+        return eventDuration;
+    }
+
+    public void setEventDuration(Integer eventDuration) {
+        this.eventDuration = eventDuration;
+    }
+
+    public String getEventNotes() {
+        return eventNotes;
+    }
+
+    public void setEventNotes(String eventNotes) {
+        this.eventNotes = eventNotes;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public Eventcategory getEventCategory() {
+        return eventCategory;
+    }
+
+    public void setEventCategory(Eventcategory eventCategory) {
+        this.eventCategory = eventCategory;
+    }
 }

@@ -1,24 +1,20 @@
 package sit.int221.oasip.controllers;
 
 import org.springframework.http.HttpStatus;
-// import org.springframework.web.bind.annotation.GetMapping;
-// import org.springframework.web.bind.annotation.PathVariable;
-// import org.springframework.web.bind.annotation.RequestMapping;
-// import org.springframework.web.bind.annotation.RestController;
-import org.springframework.http.server.ServerHttpResponse;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
-import sit.int221.oasip.dtos.AddEventDetailDTO;
-import sit.int221.oasip.dtos.EventDetailDTO;
-import sit.int221.oasip.dtos.SimpleEventDTO;
+import sit.int221.oasip.dtos.*;
 import sit.int221.oasip.entities.Event;
 import sit.int221.oasip.repositories.EventRepository;
 import sit.int221.oasip.services.EventServices;
 
-import java.net.http.HttpResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.List;
 
-// @CrossOrigin(origins = "http://intproj21.sit.kmutt.ac.th:80/ssa1")
+
 @CrossOrigin("*")
 @RestController
 @RequestMapping("/api/events")
@@ -46,18 +42,30 @@ public class EventsController {
         return eventServices.getEventById(id);
     }
 
+    @GetMapping("/{categoryId}/{date}")
+    public List<TimeDTO> getEventByCategoryIdAndDate(
+            @PathVariable Integer categoryId,
+            @PathVariable String date
+    ){
+        System.out.println(categoryId + " " + date);
+        return eventServices.getEventByCatIdAndDate(categoryId, date);
+    }
 
 //   POST Method
 
-    //Create new event
+//    Create new event
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("")
-    public Event createEvent(
-            @RequestBody AddEventDetailDTO newEvent
-    ) {
-        return eventServices.save(newEvent);
+    public ResponseEntity createEvent(
+           @Valid @RequestBody PostEventDTO newEvent,
+           HttpServletRequest req
+    ) throws MethodArgumentNotValidException {
+        return eventServices.save(newEvent , req);
     }
 
+//  DELETE Method
+
+//  Delete existing event
     @DeleteMapping("/{id}")
     public void delete(
             @PathVariable Integer id
@@ -65,6 +73,17 @@ public class EventsController {
         eventServices.delete(id);
     }
 
-    
+//         PUT Method
+//        //Update Event
+        @ResponseStatus(HttpStatus.OK)
+        @PutMapping("/{id}")
+        public Event edit(
+                @Valid @RequestBody PutEventDTO editEventDTO,
+                @PathVariable Integer id
+                ){
+            return eventServices.update(id , editEventDTO);
+        }
+
+
 
 }

@@ -18,6 +18,7 @@ export const getEventById = async (id) => {
         console.log('err');
     }
 }
+
 // GET METHOD - All category
 export const getAllCategory = async () => {
     const res = await fetch(`${import.meta.env.VITE_BASE_URL}/category`)
@@ -38,9 +39,19 @@ export const getEventCategoryById = async (id) => {
     }
 }
 
+// GET METHOD - Event by category and date
+export const getEventByCatAndDate = async (category, date) => {
+    const res = await fetch(`${import.meta.env.VITE_BASE_URL}/events/${category}/${date}`)
+    if (res.status === 200) {
+        return await res.json()
+    } else {
+        return console.log('err');
+    }
+}
+
 // POST METHOD - Create event
 export const createEvent = async (
-    name, email, date, startTime, duration, categoryId, notes) => {
+    name, email, startTime, categoryId, notes) => {
     const res = await fetch(`${import.meta.env.VITE_BASE_URL}/events`,{
         method: 'POST',
         headers: {
@@ -49,9 +60,7 @@ export const createEvent = async (
         body: JSON.stringify({
             bookingName: name,
             bookingEmail: email,
-            eventDate: date,
             eventStartTime: startTime,
-            eventDuration: duration,
             categoryId: categoryId,
             eventNotes: notes
         })
@@ -68,4 +77,23 @@ export const deleteEventById = async (id) => {
     await fetch(`${import.meta.env.VITE_BASE_URL}/events/${id}`, {
         method: 'DELETE'
     })
+}
+
+// PUT METHOD - Edit event by id
+export const editEventById = async (replace) => {
+    const res = await fetch(`${import.meta.env.VITE_BASE_URL}/events/${replace.id}`, {
+        method: 'PUT',
+        headers: {
+            'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+            eventNotes:replace.note,
+            eventStartTime:replace.time
+        })
+    })
+    if(res.status === 200){
+        return await res.json()
+    }else{
+        console.log('err');
+    }
 }

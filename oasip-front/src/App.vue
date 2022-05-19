@@ -1,13 +1,13 @@
 <template>
   <div class="scroll-smooth">
     <div>
-      <Navbar v-show="$route.name == 'Booking' | 'NotFound' ? false : true " />
+      <Navbar v-show="$route.name == 'NotFound' ? false : true " />
     </div>
     <div class="mx-auto">
       <router-view></router-view>
     </div>
     <div>
-      <Footer v-show="$route.name == 'Booking' | 'NotFound' ? false : true "/>
+      <!-- <Footer v-show="$route.name == 'NotFound' ? false : true "/> -->
     </div>
   </div>
 </template>
@@ -64,8 +64,9 @@ body {
 }
 
 nav {
-  font-family: 'Nunito', 'Kanit';
+  /* font-family: 'Nunito', 'Kanit'; */
   /* font-family: 'Nunito Sans', sans-serif; */
+  font-family: 'Poppins', 'Prompt';
 }
 
 .l-color-navi {
@@ -77,7 +78,7 @@ nav {
 }
 
 .l-color-gray-300 {
-  color: #9E9E9E;
+  color: #8d8d8d;
 }
 
 .l-color-blue {
@@ -90,6 +91,10 @@ nav {
 
 .l-bg-blue {
   background-color: #1089FF;
+}
+
+.l-bg-gray-100 {
+  background-color: #f5f6f7;
 }
 
 .l-bg-navi {
@@ -106,6 +111,10 @@ nav {
 
 .l-w-294 {
   width: 294px;
+}
+
+.l-w-366{
+  width: 366px
 }
 
 .l-w-400 {
@@ -161,7 +170,7 @@ nav {
 }
 
 .l-w-10-12 {
-  width: 1056px
+  width: 1036px
 }
 
 .l-w-full {
@@ -176,7 +185,11 @@ nav {
   height: 624px;
 }
 
-.l-h-1176 {
-  width: 1176px;
+.l-h-1248 {
+  width: 1248px;
+}
+
+.l-text-xxs {
+  font-size: 0.5rem;
 }
 </style>
