@@ -38,7 +38,7 @@
                 <div class="flex place-items-center" v-for="value, index in clinics" :key="index">
                     <div class="w-56">
                         <input :id="value.eventCategoryName" type="radio" :value='value.categoryId' name="eventCategory"
-                            v-model="clinicId" @click="clinicIndex = index" @input="computeTimePeriod"
+                            v-model="clinicId" @click="clinicIndex = index" @input="computeTimePeriod" @change="startTime = -1"
                             class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300">
                         <label :for="value.eventCategoryName"
                             class="ml-2 text-sm font-light hover:text-blue-400 cursor-pointer">
