@@ -302,7 +302,7 @@ const isAllvalid = computed(() => {
 const checkEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 const wrongEmail = ref(false)
 const isEmailValid = () => {
-    if (checkEmail.test(email.value) && email.value.length <= 100) {
+    if (checkEmail.test(email.value) || email.value.length <= 100) {
         wrongEmail.value = false;
         return true
     }
