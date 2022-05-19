@@ -77,7 +77,7 @@
 
                     <!-- Input - First name -->
                     <div class="relative">
-                        <input type="text" id="firstName" v-model="firstName" @input="isFirstNameValid"
+                        <input type="text" id="firstName" v-model="firstName" @change="isFirstNameValid"
                             :class="['l-w-612 h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer', firstNameNotValid ? 'border-red-500 focus:border-red-500' : '']"
                             placeholder=" " />
                         <label for="firstName"
