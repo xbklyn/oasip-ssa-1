@@ -62,7 +62,7 @@
 
                 <!-- Input - Email -->
                 <div class="relative">
-                    
+
                     <input type="text" id="email" v-model="email" @change="isEmailValid"
                         class="l-w-612 h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                         placeholder=" " />
@@ -70,24 +70,26 @@
                         class="absolute text-sm l-color-gray-300 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1">
                         Email<span class="text-red-500">*</span>
                     </label>
-                    <p v-show="wrongEmail" class="absolute text-sm text-red-500 ml-2">Incorrect email address</p>
+                    <p v-show="wrongEmail" class="absolute text-sm text-red-500 ml-2">Incorrect email address or Email
+                        size more than 100</p>
                 </div>
-                <div class="grid grid-cols-3 gap-6">
+                <div class="grid gap-6">
 
                     <!-- Input - First name -->
                     <div class="relative">
                         <input type="text" id="firstName" v-model="firstName" @input="isFirstNameValid"
-                            :class="['l-w-188 h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer', firstNameNotValid ? 'border-red-500 focus:border-red-500' : '']"
+                            :class="['l-w-612 h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer', firstNameNotValid ? 'border-red-500 focus:border-red-500' : '']"
                             placeholder=" " />
                         <label for="firstName"
                             class="absolute text-sm l-color-gray-300 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1">
-                            First Name<span class="text-red-500">*</span>
+                            Name<span class="text-red-500">*</span>
                         </label>
-
+                        <p v-show="firstNameNotValid" class="absolute text-sm text-red-500 ml-2">Name size must be
+                            beween 1 and 100</p>
                     </div>
 
                     <!-- Input - Last name -->
-                    <div class="relative">
+                    <!-- <div class="relative">
                         <input type="text" id="lastName" v-model="lastName" @input="isFirstNameValid"
                             :class="['l-w-188 h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer', firstNameNotValid ? 'border-red-500 focus:border-red-500' : '']"
                             placeholder=" " />
@@ -95,10 +97,10 @@
                             class="absolute text-sm l-color-gray-300 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1">
                             Last Name
                         </label>
-                    </div>
+                    </div> -->
 
                     <!-- Input - Group -->
-                    <div class="relative">
+                    <!-- <div class="relative">
                         <input type="text" id="group" v-model="group" @input="isFirstNameValid"
                             :class="['l-w-188 h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer', firstNameNotValid ? 'border-red-500 focus:border-red-500' : '']"
                             placeholder=" " />
@@ -106,8 +108,8 @@
                             class="absolute text-sm l-color-gray-300 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1">
                             Group
                         </label>
-                    </div>
-                    <p v-show="firstNameNotValid" class="absolute text-sm text-red-500 ml-2">Name size must be beween 1 and 100</p>
+                    </div> -->
+
                 </div>
 
                 <!-- Input - Note -->
@@ -136,7 +138,8 @@
 
                 <!-- Input - Date -->
                 <div class="relative">
-                    <input type="date" id="dateTime" v-model="selectDate" :min="currentDate" @input="computeTimePeriod" @change="startTime = -1"
+                    <input type="date" id="dateTime" v-model="selectDate" :min="currentDate" @input="computeTimePeriod"
+                        @change="startTime = -1"
                         class="block l-w-612 h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                         placeholder=" " />
                     <label for="dateTime"
@@ -199,7 +202,8 @@ const firstName = ref('')
 const lastName = ref('')
 const group = ref('')
 const combineName = computed(() => {
-    return `${firstName.value} ${lastName.value} ${group.value.length != 0 ? '(' + group.value + ')' : ''}`
+    // return `${firstName.value} ${lastName.value} ${group.value.length != 0 ? '(' + group.value + ')' : ''}`
+    return `${firstName.value}`
 })
 const email = ref('')
 const note = ref('')
@@ -216,7 +220,7 @@ const selectDate = ref('')
 const TimePeriod = ref([])
 const TimeBooked = ref([])
 const startTime = ref(-1)
-const dateTime = computed(()=>{
+const dateTime = computed(() => {
     return new Date(`${selectDate.value}T${TimePeriod.value[startTime.value].startTime}`)
 })
 
@@ -246,7 +250,7 @@ const isOverlap = (index) => {
     let cur = new Date().getTime()
 
     // Check if overlap with booked time
-    if (allEventStartTime.value.value.includes(TimePeriod.value[index].startTime) || 
+    if (allEventStartTime.value.value.includes(TimePeriod.value[index].startTime) ||
         (start < cur && new Date(selectDate.value).getDate() == new Date(currentDate.value).getDate())
     ) {
         return true
@@ -287,10 +291,10 @@ const computeTimePeriod = async () => {
 const isAllvalid = computed(() => {
     if (wrongEmail.value || firstNameNotValid.value) {
         return true
-    } 
+    }
     if (email.value.length === 0 || firstName.value.length === 0 || selectDate.value.length === 0 || startTime.value == -1) {
         return true
-    } 
+    }
     return false
 })
 
@@ -298,10 +302,11 @@ const isAllvalid = computed(() => {
 const checkEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 const wrongEmail = ref(false)
 const isEmailValid = () => {
-    if (checkEmail.test(email.value)) {
+    if (checkEmail.test(email.value) && email.value.length <= 100) {
         wrongEmail.value = false;
         return true
-    } else {
+    }
+    else {
         wrongEmail.value = true;
         return false
     }
