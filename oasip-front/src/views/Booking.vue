@@ -64,7 +64,7 @@
                 <div class="relative">
 
                     <input type="text" id="email" v-model="email" @change="isEmailValid"
-                        class="l-w-612 h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+:class="['l-w-612 h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer', wrongEmail ? 'border-red-500 focus:border-red-500' : '']"
                         placeholder=" " />
                     <label for="email"
                         class="absolute text-sm l-color-gray-300 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1">
@@ -299,10 +299,10 @@ const isAllvalid = computed(() => {
 })
 
 // Email validation
-const checkEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+const checkEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z\-0-9]{2,}))$/;
 const wrongEmail = ref(false)
 const isEmailValid = () => {
-    if (checkEmail.test(email.value) || email.value.length <= 100) {
+    if (checkEmail.test(email.value) && email.value.length <= 100) {
         wrongEmail.value = false;
         return true
     }
