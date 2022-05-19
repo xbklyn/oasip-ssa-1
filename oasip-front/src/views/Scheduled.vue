@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="l-w-400 mx-auto mt-24 grid gap-4 justify-center">
-            <h1 class="font-medium text-center text-4xl l-color-navi ">All Schedule Event</h1>
+            <h1 class="font-bold text-center text-4xl l-color-navi ">All Schedule Event</h1>
             <p class="font-light text-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lectus amet a lectus
                 aliquam semper mi sem. Dui
                 urna
