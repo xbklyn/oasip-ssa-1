@@ -1,6 +1,7 @@
 package sit.int221.oasip.dtos;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 public class PutCategoryDTO {
 
