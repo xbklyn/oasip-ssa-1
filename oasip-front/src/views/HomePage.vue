@@ -58,7 +58,40 @@
         </div>
 
       </div>
-
+    </div>
+      <!-- clinic -->
+    <div>
+      <div class="bg-gray-100">
+        <div class="max-w-7xl mx-auto px-4">
+          <div class="max-w-5xl mx-auto py-16">
+            <h2 class="font-bold text-5xl text-gray-900">Clinics</h2>
+            <div>
+              <div class="grid grid-cols-2 gap-6 mt-6">
+                <div
+                  v-for="(clinic, index) in AllCategory"
+                  class="group relative"
+                >
+                  <div
+                    class="relative w-full h-80 bg-white overflow-hidden group-hover:opacity-75"
+                  >
+                    <img
+                      :src="clinicImages[index].img"
+                      class="w-full h-full object-center object-cover"
+                    />
+                  </div>
+                  <h3 class="mt-6 text-sm text-gray-500">
+                    <span class="absolute inset-0" />
+                    {{ clinic.eventCategoryName }}
+                  </h3>
+                  <p class="text-base font-semibold text-gray-900">
+                    {{ clinic.eventCategoryDescription }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -66,14 +99,16 @@
 <script setup>
 import { ref } from "@vue/reactivity";
 import { computed, onBeforeMount } from "@vue/runtime-core";
-import { getAllEvents } from "../services/FetchServices.js";
+import { getAllEvents , getAllCategory } from "../services/FetchServices.js";
 onBeforeMount(async () => {
   const res = await getAllEvents();
-  console.log(res);
+  const temp = await getAllCategory();
   AllEventsData.value = res;
+  AllCategory.value = temp;
 });
 
 const AllEventsData = ref([]);
+const AllCategory = ref([]);
 
 const countUpcoming = computed(() =>
   AllEventsData.value.filter(
@@ -92,6 +127,24 @@ const countComplete = computed(() =>
     (event) => event.statusName.toLowerCase() == "completed"
   )
 );
+
+const clinicImages = [
+  {
+    img: "/images/clinicImages/pic1.png",
+  },
+  {
+    img: "/images/clinicImages/pic2.png",
+  },
+  {
+    img: "/images/clinicImages/pic3.png",
+  },
+  {
+    img: "/images/clinicImages/pic4.png",
+  },
+  {
+    img: "/images/clinicImages/pic5.png",
+  },
+];
 </script>
  
 <style>
