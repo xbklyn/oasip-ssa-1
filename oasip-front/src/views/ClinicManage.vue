@@ -41,7 +41,7 @@
                 <!-- Input - Clinic name -->
                 <div class="relative">
                     <input type="text" id="name" v-model="clinicData.eventCategoryName"
-                        @input="clinicNameValidate"
+                        @input="clinicNameValidate" maxlength="100"
                         :class="['l-w-400 h-12 pl-2 text-sm text-black border-2 bg-white peer focus:outline-none focus:ring-0 focus:border-blue-600', isClinicNamevalid ? 'border-2 border-red-600 focus:outline-none focus:ring-0 focus:border-red-600' : '']"
                         placeholder=" " />
                     <label for="name"
@@ -84,7 +84,7 @@
 
             <div class="flex gap-6">
                 <button @click="updateCategory(clinicData)"
-                    class="my-12 bg-emerald-400 text-white l-w-188 h-12 duration-150 ">Update</button>
+                    class="my-12 bg-emerald-400 text-white l-w-188 h-12 duration-150 hover:bg-emerald-600">Update</button>
                 <button @click="CURR_CLINIC = 0"
                     class="my-12 bg-white text-red-600 l-w-188 h-12 border border-red-600 duration-150 hover:bg-red-600 hover:text-white">Discard</button>
             </div>
