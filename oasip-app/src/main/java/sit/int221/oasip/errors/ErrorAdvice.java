@@ -27,4 +27,15 @@ public class ErrorAdvice {
         error.setDetails(details);
         return error;
     }
+
+    //Manually create ResponseEntity returning 400 Bad Request
+    public ApiError getResponseEntity(String field , String errorMes , HttpServletRequest req){
+        ApiError error = new ApiError(400, "Validation Failed", req.getServletPath());
+
+        Map<String , String> details = new HashMap<>();
+        details.put( field, errorMes);
+
+        error.setDetails(details);
+        return error;
+    }
 }
