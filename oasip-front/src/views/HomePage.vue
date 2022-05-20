@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="header w-srceen h-screen py-36 l-color-navi">
+    <div class="header w-srceen h-screen py-24 l-color-navi">
       <p class="text-center font-light">Welcome to</p>
       <h1 class="text-8xl font-medium text-center leading-relaxed mb-6">
         Online Appointment<br>
@@ -9,7 +9,7 @@
 
       <p class="l-w-824 text-center mx-auto">
         Website for booking a teacher's consultation.</p>
-      <router-link :to="{ name: 'Booking' }" class="flex place-items-center justify-center m-12">
+      <router-link :to="{ name: 'Booking' }" class="flex place-items-center justify-center m-16">
         <button
           class="hover:scale-110 duration-700 booking w-36 h-12 bg-white font-light grid place-items-center border border-green-400  text-green-600 hover:border-green-200 hover:text-white hover:border duration-50">
           <p>Book now</p>

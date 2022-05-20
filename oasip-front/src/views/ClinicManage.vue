@@ -22,7 +22,7 @@
 
         <div class="l-w-824 mx-auto mt-12 grid grid-cols-4 gap-6 mb-16">
             <a href="#edit" v-for="value, index in CLINICS" :key="index" @click="CURR_CLINIC = value.categoryId"
-                :class="['l-w-188 l-h-188 bg-white grid place-items-center duration-150 drop-shadow-md border hover:bg-gradient-to-b to-rose-700 from-sky-700 hover:text-white', CURR_CLINIC == value.categoryId ? 'bg-gradient-to-b to-indigo-700 from-sky-300 text-white': '']">
+                :class="['l-w-188 l-h-188 bg-white grid place-items-center duration-200 drop-shadow-md border hover:bg-gradient-to-b to-indigo-700 from-sky-300 hover:text-white', CURR_CLINIC == value.categoryId ? 'bg-gradient-to-b to-indigo-700 from-sky-300 text-white': '']">
                 <div class="w-32 h-32 grid place-items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                         aria-hidden="true" role="img" class="iconify iconify--dashicons" width="72" height="72"
