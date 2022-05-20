@@ -61,14 +61,14 @@
     </div>
       <!-- clinic -->
     <div>
-      <div class="bg-gray-100">
+      <div class="l-bg-gray">
         <div class="max-w-7xl mx-auto px-4">
           <div class="max-w-5xl mx-auto py-16">
             <h2 class="font-bold text-5xl text-gray-900">Clinics</h2>
             <div>
               <div class="grid grid-cols-2 gap-6 mt-6">
                 <div
-                  v-for="(clinic, index) in AllCategory"
+                  v-for="(clinic, index) in AllCategory" :key="index"
                   class="group relative"
                 >
                   <div

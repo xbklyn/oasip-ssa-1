@@ -173,8 +173,20 @@ nav {
   width: 1036px
 }
 
+.l-w-1060 {
+  width: 1060px;
+}
+
 .l-w-full {
   width: 1248px;
+}
+
+.l-h-188{
+  height: 188px;
+}
+
+.l-h-294 {
+  height: 294px;
 }
 
 .l-h-520 {
@@ -183,6 +195,10 @@ nav {
 
 .l-h-624 {
   height: 624px;
+}
+
+.l-h-824 {
+  height: 824px;
 }
 
 .l-h-1248 {

@@ -46,6 +46,8 @@ public class EventCategoryService {
         //Set details
         category.setEventCategoryName(categoryDTO.getEventCategoryName());
         category.setEventCategoryDuration(categoryDTO.getEventCategoryDuration());
+        category.setEventCategoryDescription(categoryDTO.getEventCategoryDescription());
+
         return ResponseEntity.status(200).body(eventCategoryRepository.saveAndFlush(category));
     }
 
@@ -59,6 +61,9 @@ public class EventCategoryService {
 
         if( categoryDTO.getEventCategoryDuration() <= 0 || categoryDTO.getEventCategoryDuration() > 480)
             details.put("eventCategoryDuration" , "Duration must be between 1 and 480");
+
+        if (categoryDTO.getEventCategoryDescription().length() < 500)
+            details.put("eventCategoryDescription", "Description must be less than 500 letter.");
 
         error.setDetails(details);
         return error;

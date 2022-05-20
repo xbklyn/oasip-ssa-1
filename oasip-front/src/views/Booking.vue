@@ -19,12 +19,11 @@
         <div class="l-w-824 mx-auto my-24">
             <div class="l-w-400 mt-24 grid gap-4">
                 <h1 class="font-bold text-4xl l-color-navi ">Booking</h1>
-                <p class="font-light text-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lectus amet a
-                    lectus aliquam semper mi sem. Dui
-                    urna
-                    dolor ultrices venenatis commodo. Orci pellentesque rhoncus sagittis, odio pretium vitae tristique.
-                    Ultrices
-                    non pellentesque ac velit aliquam sed non nisl eget.</p>
+                <p class="font-light text-sm">Users must follow the following steps<br>
+                    Step 1 : Select the clinic you want to book.<br>
+                    Step 2 : fill in your information<br>
+                    Step 3 : Select the date you wish to book. and select the desired time slot in the available time
+                    slots</p>
             </div>
         </div>
 
@@ -38,8 +37,8 @@
                 <div class="flex place-items-center" v-for="value, index in clinics" :key="index">
                     <div class="w-56">
                         <input :id="value.eventCategoryName" type="radio" :value='value.categoryId' name="eventCategory"
-                            v-model="clinicId" @click="clinicIndex = index" @input="computeTimePeriod" @change="startTime = -1"
-                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300">
+                            v-model="clinicId" @click="clinicIndex = index" @input="computeTimePeriod"
+                            @change="startTime = -1" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300">
                         <label :for="value.eventCategoryName"
                             class="ml-2 text-sm font-light hover:text-blue-400 cursor-pointer">
                             {{ value.eventCategoryName }}
@@ -62,14 +61,15 @@
 
                 <!-- Input - Email -->
                 <div class="relative">
-                    
+
                     <input type="text" id="email" v-model="email" @change="isEmailValid"
                         :class="['l-w-612 h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer', wrongEmail || email.length > 100 ? 'border-red-500 focus:border-red-500' : '']"
                         placeholder=" " />
                     <label for="email"
                         class="absolute text-sm l-color-gray-300 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1">
-                        Email {{email.length}}/100<span class="text-red-500"> * </span><span v-show="(email.length > 100)" class="text-sm text-red-500 ml-2">Email size more than 100
-                    </span>
+                        Email {{ email.length }}/100<span class="text-red-500"> * </span><span
+                            v-show="(email.length > 100)" class="text-sm text-red-500 ml-2">Email size more than 100
+                        </span>
                     </label>
                     <p v-show="wrongEmail" class="absolute text-sm text-red-500 ml-2">Incorrect email address</p>
 

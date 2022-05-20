@@ -97,3 +97,23 @@ export const editEventById = async (replace) => {
         console.log('err');
     }
 }
+
+//PUT METHOD - Edit category by id
+export const editCategoryById = async(category) => {
+    const res = await fetch (`${import.meta.env.VITE_BASE_URL}/category/${category.categoryId}`, {
+        method: 'PUT',
+        headers: {
+            'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+            eventCategoryName:category.eventCategoryName,
+            eventCategoryDuration:category.eventCategoryDuration,
+            eventCategoryDescription:category.eventCategoryDescription
+        })
+    })
+    if(res.status === 200){
+        return 
+    }else{
+        console.log('err');
+    }
+}

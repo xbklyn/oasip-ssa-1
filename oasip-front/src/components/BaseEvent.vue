@@ -3,7 +3,7 @@
         <div class="l-h-1248 w-full pb-24 grid grid-cols-3 gap-6 p-12 mb-96">
 
             <!-- Main - Events List -->
-            <div v-for="value, index in data" :key="index" :class="['l-w-400 h-44 duration-150 grid place-items-center', value.statusName == 'COMPLETED' ? 'bg-slate-100 text-gray-500': 'bg-white drop-shadow-sm hover:bg-slate-100 hover:text-black']"
+            <div v-for="value, index in data" :key="index" :class="['l-w-400 h-44 duration-150 grid place-items-center', value.statusName == 'COMPLETED' ? 'bg-slate-50 text-gray-500 border': 'bg-white drop-shadow-sm hover:bg-slate-100 hover:text-black']"
                 >
                 <router-link :to="{ name: 'scheduled-info', params: { id: value.bookingId } }" class="sl-w-400 h-44 grid place-items-center">
                     <div class="l-w-366 h-32">
@@ -31,7 +31,7 @@
                             </div>
 
                             <div class="col-span-3 mb-1">
-                                <h2 class="text-xl font-normal truncate">{{ value.bookingName }}</h2>
+                                <h2 class="text-xl font-medium truncate">{{ value.bookingName }}</h2>
                             </div>
 
                             <div class="col-span-4 mb-3">

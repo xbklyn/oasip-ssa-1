@@ -11,6 +11,8 @@ public class PutCategoryDTO {
     @NotNull
     private Integer eventCategoryDuration;
 
+    private String eventCategoryDescription;
+
     public String getEventCategoryName() {
         return eventCategoryName;
     }
@@ -25,5 +27,13 @@ public class PutCategoryDTO {
 
     public void setEventCategoryDuration(Integer eventCategoryDuration) {
         this.eventCategoryDuration = eventCategoryDuration;
+    }
+
+    public String getEventCategoryDescription() {
+        return eventCategoryDescription;
+    }
+
+    public void setEventCategoryDescription(String eventCategoryDescription) {
+        this.eventCategoryDescription = eventCategoryDescription;
     }
 }
