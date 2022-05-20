@@ -62,7 +62,7 @@ public class EventCategoryService {
         if( categoryDTO.getEventCategoryDuration() <= 0 || categoryDTO.getEventCategoryDuration() > 480)
             details.put("eventCategoryDuration" , "Duration must be between 1 and 480");
 
-        if (categoryDTO.getEventCategoryDescription().length() < 500)
+        if (categoryDTO.getEventCategoryDescription().length() > 500)
             details.put("eventCategoryDescription", "Description must be less than 500 letter.");
 
         error.setDetails(details);
