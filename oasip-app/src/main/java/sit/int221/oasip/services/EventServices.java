@@ -9,7 +9,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.server.ResponseStatusException;
 import sit.int221.oasip.dtos.*;
 import sit.int221.oasip.entities.Event;
-import sit.int221.oasip.errors.ApiError;
+import sit.int221.oasip.errors.ErrorAdvice;
 import sit.int221.oasip.repositories.EventCategoryRepository;
 import sit.int221.oasip.repositories.EventRepository;
 import sit.int221.oasip.repositories.StatusRepository;
@@ -22,9 +22,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.springframework.http.HttpStatus.*;
@@ -38,13 +36,15 @@ public class EventServices {
     private final ListMapper listMapper;
     private final EventCategoryRepository eventCategoryRepository;
     private final StatusRepository statusRepository;
+    private final ErrorAdvice errorAdvice;
 
-    public EventServices(EventRepository eventRepository, ModelMapper modelMapper, ListMapper listMapper, EventCategoryRepository eventCategoryRepository, StatusRepository statusRepository) {
+    public EventServices(EventRepository eventRepository, ModelMapper modelMapper, ListMapper listMapper, EventCategoryRepository eventCategoryRepository, StatusRepository statusRepository, ErrorAdvice errorAdvice) {
         this.eventRepository = eventRepository;
         this.modelMapper = modelMapper;
         this.listMapper = listMapper;
         this.eventCategoryRepository = eventCategoryRepository;
         this.statusRepository = statusRepository;
+        this.errorAdvice = errorAdvice;
     }
 
     public List<SimpleEventDTO> getAllEvents() {
@@ -73,13 +73,13 @@ public class EventServices {
 
         //Check future date
         if(newEvent.getEventStartTime().before(new Date()))
-            return ResponseEntity.status(400).body(getResponseEntity("eventStartTime" , "Time must be in a future" , req));
+            return ResponseEntity.status(400).body(errorAdvice.getResponseEntity("eventStartTime" , "Time must be in a future" , req));
 
 
         //Check valid Email
         String regex = "^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
         if(!newEvent.getBookingEmail().matches(regex))
-            return ResponseEntity.status(400).body(getResponseEntity("bookingEmail" , "must be a well-formed email address" , req));
+            return ResponseEntity.status(400).body(errorAdvice.getResponseEntity("bookingEmail" , "must be a well-formed email address" , req));
 
 
         Event event = modelMapper.map(newEvent, Event.class);
@@ -94,7 +94,7 @@ public class EventServices {
 
         //Check Overlap
         if(checkIsOverlap(event))
-            return ResponseEntity.status(400).body(getResponseEntity("eventStartTime" , "Time is overlapping" , req));
+            return ResponseEntity.status(400).body(errorAdvice.getResponseEntity("eventStartTime" , "Time is overlapping" , req));
 
         check();
         return ResponseEntity.status(201).body(eventRepository.saveAndFlush(event));
@@ -159,13 +159,4 @@ public class EventServices {
         return isOverLap.get();
     }
 
-    public ApiError getResponseEntity(String field , String errorMes , HttpServletRequest req){
-        ApiError error = new ApiError(400, "Validation Failed", req.getServletPath());
-
-        Map<String , String> details = new HashMap<>();
-        details.put( field, errorMes);
-
-        error.setDetails(details);
-        return error;
-    }
 }
