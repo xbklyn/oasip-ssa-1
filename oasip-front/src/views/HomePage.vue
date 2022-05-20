@@ -15,7 +15,7 @@
             <div class="box absolute w-1 h-5 bg-green-400 top-76 left-60"></div> -->
 
       <!-- Dash board -->
-      <div class="grid grid-cols-4 w-full gap-6 mt-32">
+      <div class="grid grid-cols-4 w-full gap-12 mt-32">
 
         <div class="bg-white drop-shadow-lg flex hover:scale-105 duration-150 ease-in-out">
           <div class="absolute w-2 h-full bg-purple-500"></div>

@@ -16,18 +16,13 @@
         </div>
         <div class="l-w-400 grid gap-4">
             <h1 class="font-bold text-4xl l-color-navi ">Clinic manage</h1>
-            <p class="font-light text-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lectus amet a
-                lectus aliquam semper mi sem. Dui
-                urna
-                dolor ultrices venenatis commodo. Orci pellentesque rhoncus sagittis, odio pretium vitae tristique.
-                Ultrices
-                non pellentesque ac velit aliquam sed non nisl eget.</p>
+            <p class="font-light text-sm">A page for editing category information. Can change the name, duration, and description of a category.</p>
 
         </div>
 
         <div class="l-w-824 mx-auto mt-12 grid grid-cols-4 gap-6 mb-16">
             <a href="#edit" v-for="value, index in CLINICS" :key="index" @click="CURR_CLINIC = value.categoryId"
-                :class="['l-w-188 l-h-188 bg-white grid place-items-center duration-150 drop-shadow-md border hover:bg-blue-500 hover:text-white', CURR_CLINIC == value.categoryId ? 'bg-blue-600 text-white': '']">
+                :class="['l-w-188 l-h-188 bg-white grid place-items-center duration-150 drop-shadow-md border hover:bg-gradient-to-b to-rose-700 from-sky-700 hover:text-white', CURR_CLINIC == value.categoryId ? 'bg-gradient-to-b to-indigo-700 from-sky-300 text-white': '']">
                 <div class="w-32 h-32 grid place-items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                         aria-hidden="true" role="img" class="iconify iconify--dashicons" width="72" height="72"
@@ -89,7 +84,7 @@
 
             <div class="flex gap-6">
                 <button @click="updateCategory(clinicData)"
-                    class="my-12 bg-green-600 text-white l-w-188 h-12 duration-150 hover:bg-green-800">Update</button>
+                    class="my-12 bg-emerald-400 text-white l-w-188 h-12 duration-150 ">Update</button>
                 <button @click="CURR_CLINIC = 0"
                     class="my-12 bg-white text-red-600 l-w-188 h-12 border border-red-600 duration-150 hover:bg-red-600 hover:text-white">Discard</button>
             </div>
@@ -166,7 +161,7 @@ const clinicNameValidate = () => {
 
 const updateCategory = (category) => {
     editCategoryById(category)
-    // location.reload()
+    location.reload()
 }
 </script>
  

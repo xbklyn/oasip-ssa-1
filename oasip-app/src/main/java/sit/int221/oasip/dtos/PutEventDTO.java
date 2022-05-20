@@ -15,6 +15,7 @@ public class PutEventDTO {
     @NotNull
     private Date eventStartTime;
 
+
     public String getEventNotes() {
         return eventNotes;
     }

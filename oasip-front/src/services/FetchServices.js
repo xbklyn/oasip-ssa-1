@@ -106,6 +106,7 @@ export const editCategoryById = async(category) => {
             'content-type': 'application/json'
         },
         body: JSON.stringify({
+            categoryId:category.categoryId,
             eventCategoryName:category.eventCategoryName,
             eventCategoryDuration:category.eventCategoryDuration,
             eventCategoryDescription:category.eventCategoryDescription

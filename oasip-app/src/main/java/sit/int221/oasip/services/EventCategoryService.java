@@ -56,7 +56,7 @@ public class EventCategoryService {
 
         Map<String, String> details = new HashMap<>();
         //Check if name is not the same
-        if(!eventCategoryRepository.checkUniqueName(categoryDTO.getEventCategoryName()).isEmpty())
+        if(!eventCategoryRepository.checkUniqueName(categoryDTO.getEventCategoryName(), categoryDTO.getCategoryId()).isEmpty())
             details.put("eventCategoryName" , "Name is not unique");
 
         if( categoryDTO.getEventCategoryDuration() <= 0 || categoryDTO.getEventCategoryDuration() > 480)
