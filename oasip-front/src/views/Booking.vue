@@ -21,7 +21,7 @@
                 <h1 class="font-bold text-4xl l-color-navi ">Booking</h1>
                 <p class="font-light text-sm">Users must follow the following steps<br>
                     Step 1 : Select the clinic you want to book.<br>
-                    Step 2 : fill in your information<br>
+                    Step 2 : Fill in your information<br>
                     Step 3 : Select the date you wish to book. and select the desired time slot in the available time
                     slots</p>
             </div>
@@ -220,6 +220,17 @@ const currentDate = computed(() => {
 const selectDate = ref('')
 const TimePeriod = ref([])
 const TimeBooked = ref([])
+const TimePeriodWithDate = ref([])
+const TimeBookedWithDate = computed(() => {
+    const BOOKED_DATE = ref([])
+    for (let i = 0; i < TimeBooked.value.length; i++) {
+        BOOKED_DATE.value.push({
+            startTime: new Date(TimeBooked.value[i].eventStartTime),
+            endTime: new Date(TimeBooked.value[i].eventEndTime)
+        })
+    }
+    return BOOKED_DATE.value
+})
 const startTime = ref(-1)
 const dateTime = computed(() => {
     return new Date(`${selectDate.value}T${TimePeriod.value[startTime.value].startTime}`)
@@ -250,14 +261,31 @@ const isOverlap = (index) => {
     let start = new Date(new Date(currentDate.value).getFullYear(), new Date(currentDate.value).getMonth(), new Date(currentDate.value).getDate(), TimePeriod.value[index].startTime.split(":")[0], TimePeriod.value[index].startTime.split(":")[1]).getTime();
     let cur = new Date().getTime()
 
-    // Check if overlap with booked time
-    if (allEventStartTime.value.value.includes(TimePeriod.value[index].startTime) ||
-        (start < cur && new Date(selectDate.value).getDate() == new Date(currentDate.value).getDate())
-    ) {
+    let START_TIME = new Date(new Date(selectDate.value).getFullYear(), new Date(selectDate.value).getMonth(), new Date(selectDate.value).getDate(), TimePeriod.value[index].startTime.split(":")[0], TimePeriod.value[index].startTime.split(":")[1])
+    let END_TIME = new Date(new Date(selectDate.value).getFullYear(), new Date(selectDate.value).getMonth(), new Date(selectDate.value).getDate(), TimePeriod.value[index].endTime.split(":")[0], TimePeriod.value[index].endTime.split(":")[1])
+    
+    // Check if future
+    if (
+        allEventStartTime.value.value.includes(TimePeriod.value[index].startTime) ||
+        start < cur && new Date(selectDate.value).getDate() == new Date(currentDate.value).getDate()) 
         return true
-    } else {
-        return false
-    }
+
+    // CHECK OVERLAP
+    let isOverRapYo = false
+    TimeBookedWithDate.value.forEach(e => {
+
+        //OUTSIDE -> INSIDE -> START_TIME BETWEEN -> END_TIME BETWEEN
+        if (
+            (e.startTime < START_TIME && e.endTime > END_TIME) ||
+            (e.startTime > START_TIME && e.endTime < END_TIME) ||
+            (e.startTime > START_TIME && e.startTime < END_TIME) ||
+            (e.endTime > START_TIME && e.endTime < END_TIME)
+            ) {
+            isOverRapYo = true
+        }
+    })
+    return isOverRapYo
+
 }
 
 // Create time period
@@ -269,7 +297,9 @@ const computeTimePeriod = async () => {
     if (!clinicId.value && selectDate.value == '' || !clinicId.value && selectDate.value !== '' || clinicId.value && selectDate.value == '') { }
     else {
         TimePeriod.value = []
-        let init = new Date();
+        TimePeriodWithDate.value = []
+        // let init = new Date();
+        let init = new Date(selectDate.value);
         init.setHours(8);
         init.setMinutes(0);
         init.setSeconds(0);
@@ -281,6 +311,7 @@ const computeTimePeriod = async () => {
             let end = new Date(start);
             end.setMinutes(plusMinutes);
             TimePeriod.value.push({ startTime: start.toLocaleTimeString("th-TH"), endTime: end.toLocaleTimeString("th-TH") })
+            TimePeriodWithDate.value.push({ startTime: start, endTime: end })
             init = new Date(end);
             init.setMinutes(end.getMinutes() + BREAK)
             i += (CATE_DURATION.value + BREAK)
@@ -325,6 +356,7 @@ const isFirstNameValid = () => {
         return true
     }
 }
+
 
 </script>
  

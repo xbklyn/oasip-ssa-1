@@ -11,7 +11,7 @@
         Website for booking a teacher's consultation.</p>
       <router-link :to="{ name: 'Booking' }" class="flex place-items-center justify-center m-16">
         <button
-          class="hover:scale-110 duration-700 booking w-36 h-12 bg-white font-light grid place-items-center border border-green-400  text-green-600 hover:border-green-200 hover:text-white hover:border duration-50">
+          class="hover:scale-110 transition duration-1000 booking w-36 h-12 bg-white font-light grid place-items-center border border-green-400  text-green-600 hover:border-green-200 hover:text-white hover:border duration-50">
           <p>Book now</p>
         </button>
       </router-link>
@@ -260,15 +260,20 @@ const clinicImages = [
 
 .booking {
   background: linear-gradient(-90deg, #ffffff, #ffffff, #36be00), #36be00;
-  background-size: 400%;
+  background-size: 300%;
   background-position: right;
+  transition: background-position 0.5s;
+   transition: 0.5s;
 }
 
-.booking:hover {
-  animation: gradient 0.5s ease forwards;
+.booking:hover, .booking:focus {
+  /* animation: gradient 0.5s ease forwards; */
+  transition: 0.5s;
+  background-position: left;
 }
 
-@keyframes gradient {
+
+/* @keyframes gradient {
   0% {
     background-position: right;
 
@@ -277,5 +282,5 @@ const clinicImages = [
   100% {
     background-position: left;
   }
-}
+} */
 </style>
