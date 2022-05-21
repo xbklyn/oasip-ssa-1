@@ -5,6 +5,7 @@ import java.util.Date;
 
 public class TimeDTO {
     private Date eventStartTime;
+    private Date eventEndTime;
 
     public Date getEventStartTime() {
         return eventStartTime;
