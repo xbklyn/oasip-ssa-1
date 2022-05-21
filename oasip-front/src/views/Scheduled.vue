@@ -45,17 +45,18 @@
                 </div>
 
                 <div class="l-w-188 h-6">
-                    <input type="date"
+                    <input type="date" v-model="selectDate" 
                         class="pl-2 py-1 l-w-188 border l-color-gray-300 text-sm l-color-gray-300 focus:outline-none focus:ring-0 focus:border-blue-500" />
                 </div>
-
+   
             </div>
         </div>
 
         <!-- List - All events -->
         <div class="l-bg-gray">
-            <BaseEvent :data="sortByStatus" :status="status" @delete="events($event)" />
+            <BaseEvent :data="sortByDate" :status="status" @delete="events($event)" />
         </div>
+   
     </div>
 </template>
  
@@ -107,6 +108,25 @@ const sortByStatus = computed(() => {
     }
 
 })
+
+
+const selectDate = ref('')
+const sortByDate = computed(()=>{
+    if(selectDate.value == ''){
+        return sortByStatus.value;
+        } else {
+        return sortByStatus.value.filter(event =>{
+            return convert(event.eventStartTime) == selectDate.value
+        })
+    }
+})
+
+const convert = (time) => {
+    let date = new Date(time) ;
+    return date.getFullYear() + '-'
+         + ('0' + (date.getMonth()+1)).slice(-2) + '-'
+         + ('0' + date.getDate()).slice(-2);
+}
 
 
 // // Delete - event
