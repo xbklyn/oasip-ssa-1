@@ -37,7 +37,7 @@ public class EventCategoryService {
 
     // PUT
     public ResponseEntity edit(Integer id , PutCategoryDTO categoryDTO , HttpServletRequest req){
-        ApiError hasError = validate(categoryDTO, req);
+        ApiError hasError = validate(id , categoryDTO, req);
         if (!hasError.getDetails().isEmpty())
             return ResponseEntity.status(400).body(hasError);
 
@@ -51,12 +51,12 @@ public class EventCategoryService {
         return ResponseEntity.status(200).body(eventCategoryRepository.saveAndFlush(category));
     }
 
-    private ApiError validate(PutCategoryDTO categoryDTO, HttpServletRequest req) {
+    private ApiError validate(Integer id, PutCategoryDTO categoryDTO, HttpServletRequest req) {
         ApiError error = new ApiError(400 , "Validation Failed" , req.getServletPath());
 
         Map<String, String> details = new HashMap<>();
         //Check if name is not the same
-        if(!eventCategoryRepository.checkUniqueName(categoryDTO.getEventCategoryName(), categoryDTO.getCategoryId()).isEmpty())
+        if(!eventCategoryRepository.checkUniqueName(categoryDTO.getEventCategoryName(), id).isEmpty())
             details.put("eventCategoryName" , "Name is not unique");
 
         if( categoryDTO.getEventCategoryDuration() <= 0 || categoryDTO.getEventCategoryDuration() > 480)

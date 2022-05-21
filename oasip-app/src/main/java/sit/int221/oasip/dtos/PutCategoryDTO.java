@@ -5,8 +5,6 @@ import javax.validation.constraints.Size;
 
 public class PutCategoryDTO {
 
-    @NotNull
-    private Integer categoryId;
 
     @NotNull
     private String eventCategoryName;
@@ -15,14 +13,6 @@ public class PutCategoryDTO {
     private Integer eventCategoryDuration;
 
     private String eventCategoryDescription;
-
-    public Integer getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(Integer categoryId) {
-        this.categoryId = categoryId;
-    }
 
     public String getEventCategoryName() {
         return eventCategoryName;
