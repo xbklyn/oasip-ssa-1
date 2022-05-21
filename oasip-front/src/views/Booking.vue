@@ -129,13 +129,13 @@
         <div class="l-w-824 h-px bg-black mx-auto" v-show="firstName !== '' && email !== ''"></div>
 
         <!-- Step 3 - Select time period -->
-        <div class="l-w-824 h-96 mx-auto flex m-12 mb-12" v-show="firstName !== '' && email !== ''">
+        <div class="l-w-824 h-full mx-auto flex m-12 mb-12" v-show="firstName !== '' && email !== ''">
             <div class="w-52 h-24 place-items-center">
                 <h2>Step 3<span class="text-red-500">*</span></h2>
                 <p class="l-text-xxs">Select time period.</p>
 
             </div>
-            <div class="l-w-612 h-12 grid gap-6">
+            <div class="l-w-612 h-full grid gap-6">
 
                 <!-- Input - Date -->
                 <div class="relative">
@@ -157,6 +157,7 @@
                         {{ time.startTime }}
                     </button>
                 </div>
+
             </div>
         </div>
 
@@ -263,11 +264,11 @@ const isOverlap = (index) => {
 
     let START_TIME = new Date(new Date(selectDate.value).getFullYear(), new Date(selectDate.value).getMonth(), new Date(selectDate.value).getDate(), TimePeriod.value[index].startTime.split(":")[0], TimePeriod.value[index].startTime.split(":")[1])
     let END_TIME = new Date(new Date(selectDate.value).getFullYear(), new Date(selectDate.value).getMonth(), new Date(selectDate.value).getDate(), TimePeriod.value[index].endTime.split(":")[0], TimePeriod.value[index].endTime.split(":")[1])
-    
+
     // Check if future
     if (
         allEventStartTime.value.value.includes(TimePeriod.value[index].startTime) ||
-        start < cur && new Date(selectDate.value).getDate() == new Date(currentDate.value).getDate()) 
+        start < cur && new Date(selectDate.value).getDate() == new Date(currentDate.value).getDate())
         return true
 
     // CHECK OVERLAP
@@ -280,7 +281,7 @@ const isOverlap = (index) => {
             (e.startTime > START_TIME && e.endTime < END_TIME) ||
             (e.startTime > START_TIME && e.startTime < END_TIME) ||
             (e.endTime > START_TIME && e.endTime < END_TIME)
-            ) {
+        ) {
             isOverRapYo = true
         }
     })

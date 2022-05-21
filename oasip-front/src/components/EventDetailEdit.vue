@@ -13,7 +13,8 @@
                             {{ data.eventCategoryName }}
                         </label>
                     </div>
-                    <p class="justify-self-start l-text-xxs font-semibold ml-3">{{ data.eventCategoryDuration }} Mins</p>
+                    <p class="justify-self-start l-text-xxs font-semibold ml-3">{{ data.eventCategoryDuration }} Mins
+                    </p>
                 </div>
             </div>
 
@@ -38,21 +39,21 @@
                     </label>
                 </div>
 
-                <div class="grid grid-cols-3 gap-6">
+                <div class="grid gap-6">
 
                     <!-- Input - First name -->
                     <div class="relative">
                         <input disabled type="text" id="firstName" v-model="currentData.firstName"
-                            class="cursor-not-allowed l-w-188 h-12 pl-2 text-sm text-gray-400 border-2 appearance-none l-bg-gray-100 peer"
+                            class="cursor-not-allowed l-w-612 h-12 pl-2 text-sm text-gray-400 border-2 appearance-none l-bg-gray-100 peer"
                             placeholder=" " />
                         <label for="firstName"
                             class="absolute text-sm l-color-gray-300 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1">
-                            First Name
+                            Name
                         </label>
                     </div>
 
                     <!-- Input - Last name -->
-                    <div class="relative">
+                    <!-- <div class="relative">
                         <input disabled type="text" id="lastName" v-model="currentData.lastName"
                             class="cursor-not-allowed l-w-188 h-12 pl-2 text-sm text-gray-400 border-2 appearance-none l-bg-gray-100 peer"
                             placeholder=" " />
@@ -60,10 +61,10 @@
                             class="absolute text-sm l-color-gray-300 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 left-1">
                             Last Name
                         </label>
-                    </div>
+                    </div> -->
 
                     <!-- Input - Group -->
-                    <div class="relative">
+                    <!-- <div class="relative">
                         <input disabled type="text" id="group" v-model="currentData.group"
                             class="cursor-not-allowed l-w-188 h-12 pl-2 text-sm text-gray-400 border-2 appearance-none l-bg-gray-100 peer"
                             placeholder=" " />
@@ -71,7 +72,7 @@
                             class="absolute text-sm l-color-gray-300 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 left-1">
                             Group
                         </label>
-                    </div>
+                    </div> -->
                 </div>
 
                 <!-- Input - Note -->
@@ -90,11 +91,11 @@
         <div class="l-w-612 h-px bg-black mx-auto"></div>
 
         <!-- Step 3 - Select time period -->
-        <div class="l-w-824 h-96 mx-auto grid justify-center mt-12">
+        <div class="l-w-824 h-full mx-auto grid justify-center mt-12">
             <div class="">
                 <h2 class="text-2xl mb-6"><span class="font-bold"> Step 3 </span>- Select time period</h2>
             </div>
-            <div class="l-w-612 h-12 grid grid-cols-2 gap-6">
+            <div class="l-w-612 h-full grid grid-cols-2 gap-6">
 
                 <!-- Input - Date -->
 
@@ -111,27 +112,38 @@
             </div>
 
             <!-- Button - Time selector -->
-            <div class="l-w-612 grid grid-cols-6 gap-6 my-12">
+            <div class="flex justify-self-end mt-12">
+                <button @click="reset" class="text-blue-500 text-medium flex reset w-18 h-8 justify-self-end hover:border-b hover:border-blue-600 duration-150">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                        aria-hidden="true" role="img" class="iconify iconify--system-uicons mr-1" width="24" height="24"
+                        preserveAspectRatio="xMidYMid meet" viewBox="0 0 21 21">
+                        <g fill="none" fill-rule="evenodd" stroke="currentColor" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <path d="M3.578 6.487A8 8 0 1 1 2.5 10.5"></path>
+                            <path d="M7.5 6.5h-4v-4"></path>
+                        </g>
+                    </svg>Reset</button>
+            </div>
+            <div class="l-w-612 grid grid-cols-6 gap-6 mt-3 mb-12">
                 <button v-for="(time, index) in computeTimePeriod" :key="index" @click="startTime = index"
-                    :class="['h-8 text-sm duration-150 bg-white', startTime == index ? 'bg-blue-500 text-white border-0' : '', isOverlap(index) ? 'bg-slate-200 text-gray-300' : 'hover:bg-blue-500 hover:text-white border border-gray-300 hover:border-none']"
+                    :class="['h-8 text-sm duration-150 bg-white', startTime == index ? 'bg-blue-500 text-white border-0' : '', isOverlap(index) ? ' text-gray-300' : 'hover:bg-blue-500 hover:text-white border border-gray-300 hover:border-none']"
                     :disabled="isOverlap(index)">
                     {{ time.startTime }}
                 </button>
             </div>
 
+            <div class="l-w-612 h-px bg-black mx-auto"></div>
         </div>
-
-        <div class="l-w-612 h-px bg-black mx-auto"></div>
 
         <div class="l-w-612 h-12 mx-auto my-12">
             <button @click="$emit('edit', currentData)"
-                class="w-full h-full text-white  duration-150">Update</button>
+                class="w-full h-full text-white duration-150 bg-emerald-500">Update</button>
         </div>
     </div>
 </template>
  
 <script setup>
-import { computed, onBeforeMount, onBeforeUpdate, ref } from "@vue/runtime-core"
+import { computed, onBeforeMount, onBeforeUnmount, onBeforeUpdate, ref } from "@vue/runtime-core"
 import { useRoute, useRouter } from 'vue-router'
 import { getEventByCatAndDate } from '../services/FetchServices.js';
 const { params } = useRoute()
@@ -157,10 +169,8 @@ const prop = defineProps({
 })
 
 defineEmits(['edit', 'getDate'])
-onBeforeMount(() => {
-    // computeTimePeriod()
-
-
+onBeforeMount(async () => {
+    TimeBooked.value = await getTime.value
 })
 
 const currentData = computed(() => {
@@ -183,7 +193,7 @@ const currentData = computed(() => {
         lastName: lastName.value,
         group: group.value,
         note: note.value,
-        time: new Date(dateTime.value)
+        time: TimePeriodWithDate.value[startTime.value].startTime
     }
 })
 
@@ -207,7 +217,7 @@ const continueDate = computed(() => {
     if (month.value.length === 1) {
         month.value = `0${month.value}`
     }
-    if(day.value.length === 1){
+    if (day.value.length === 1) {
         day.value = `0${day.value}`
     }
 
@@ -230,7 +240,7 @@ const allStartTime = computed(() => {
     return bookedStartTime
 })
 
-const withoutBooked = computed(()=> {
+const withoutBooked = computed(() => {
     return allEventStartTime.value.value.filter(e => {
         return e !== new Date(prop.data.eventStartTime).toLocaleTimeString('th-TH')
     })
@@ -253,53 +263,78 @@ const BREAK = parseInt(5);
 const CATE_DURATION = computed(() => parseInt(prop.duration));
 
 // const TimePeriod = ref([])
-const selectDate =  ref(continueDate.value)
+const selectDate = ref(continueDate.value)
 
 const TimeBooked = ref([])
 
 
-
+const TimeBookedWithDate = computed(() => {
+    const BOOKED_DATE = ref([])
+    for (let i = 0; i < TimeBooked.value.length; i++) {
+        BOOKED_DATE.value.push({
+            startTime: new Date(TimeBooked.value[i].eventStartTime),
+            endTime: new Date(TimeBooked.value[i].eventEndTime)
+        })
+    }
+    return BOOKED_DATE.value
+})
 
 // Check overlap
 const isOverlap = (index) => {
     let start = new Date(new Date(currentDate.value).getFullYear(), new Date(currentDate.value).getMonth(), new Date(currentDate.value).getDate(), computeTimePeriod.value[index].startTime.split(":")[0], computeTimePeriod.value[index].startTime.split(":")[1]).getTime();
     let cur = new Date().getTime()
 
-    // Check if overlap with booked time
-    if (withoutBooked.value.includes(computeTimePeriod.value[index].startTime) ||
-        (start < cur && new Date(selectDate.value).getDate() == new Date(currentDate.value).getDate())
-    ) {
+    let START_TIME = new Date(new Date(selectDate.value).getFullYear(), new Date(selectDate.value).getMonth(), new Date(selectDate.value).getDate(), computeTimePeriod.value[index].startTime.split(":")[0], computeTimePeriod.value[index].startTime.split(":")[1])
+    let END_TIME = new Date(new Date(selectDate.value).getFullYear(), new Date(selectDate.value).getMonth(), new Date(selectDate.value).getDate(), computeTimePeriod.value[index].endTime.split(":")[0], computeTimePeriod.value[index].endTime.split(":")[1])
+
+    // Check if future
+    if (
+        withoutBooked.value.includes(computeTimePeriod.value[index].startTime) ||
+        start < cur && new Date(selectDate.value).getDate() == new Date(currentDate.value).getDate())
         return true
-    } else {
-        return false
-    }
+
+    // CHECK OVERLAP
+    let isOverRapYo = false
+    TimeBookedWithDate.value.forEach(e => {
+
+        //OUTSIDE -> INSIDE -> START_TIME BETWEEN -> END_TIME BETWEEN
+        if (
+            (e.startTime < START_TIME && e.endTime > END_TIME) ||
+            (e.startTime > START_TIME && e.endTime < END_TIME) ||
+            (e.startTime >= START_TIME && e.startTime <= END_TIME) ||
+            (e.endTime >= START_TIME && e.endTime <= END_TIME)
+        ) {
+            isOverRapYo = true
+        }
+    })
+    return isOverRapYo
 }
 
-
 // Create time period
-const dateTime = computed(() => {
-    return `${selectDate.value}T${computeTimePeriod.value[startTime.value].startTime}`
-})
+// const dateTime = computed(() => {
+//     return `${selectDate.value}T${computeTimePeriod.value[startTime.value]}`
+// })
 
-
+const TimePeriodWithDate = ref([])
 const computeTimePeriod = computed(() => {
     console.log("in time method");
-    if (selectDate.value == '' ) { }
+    if (selectDate.value == '') { }
     const TimePeriod = ref([])
-    let init = new Date();
+    TimePeriodWithDate.value = []
+    let init = new Date(selectDate.value);
     init.setHours(8);
     init.setMinutes(0);
     init.setSeconds(0);
 
     let i = 0
-    while (i < MAX) {
+    while (i + CATE_DURATION.value < MAX) {
 
         let start = new Date(init);
         let plusMinutes = start.getMinutes() + CATE_DURATION.value;
         let end = new Date(start);
         end.setMinutes(plusMinutes);
         TimePeriod.value.push({ startTime: start.toLocaleTimeString('th-TH'), endTime: end.toLocaleTimeString('th-TH') })
-
+        TimePeriodWithDate.value.push({ startTime: start, endTime: end })
         init = new Date(end);
         init.setMinutes(end.getMinutes() + BREAK)
         i += parseInt(CATE_DURATION.value + BREAK)
@@ -307,12 +342,25 @@ const computeTimePeriod = computed(() => {
     }
 
     return TimePeriod.value
+})
+
+const h = computed(() => {
+    for (let i = 0; i < TimePeriodWithDate.value.length; i++) {
+        if (TimePeriodWithDate.value[i].startTime > new Date(prop.data.eventStartTime)) {
+            return i
+        }
+    }
 
 })
 const timeContain = computed(() => {
     return allStartTime.value.value.indexOf(new Date(prop.data.eventStartTime).toLocaleTimeString('th-TH'))
 })
-const startTime = ref(timeContain.value == -1 ?  0 : timeContain.value)
+
+const startTime = ref(timeContain.value == -1 ? h.value - 1 : timeContain.value)
+
+const reset = () => {
+    return startTime.value = timeContain.value == -1 ? h.value - 1 : timeContain.value
+}
 </script>
  
 <style>

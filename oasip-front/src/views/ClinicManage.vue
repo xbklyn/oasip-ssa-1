@@ -16,7 +16,7 @@
         </div>
         <div class="l-w-400 grid gap-4">
             <h1 class="font-bold text-4xl l-color-navi ">Clinic manage</h1>
-            <p class="font-light text-sm">A page for editing category information. Can change the name, duration, and description of a category.</p>
+            <p class="font-light text-sm">This page for editing category information. You can change the name, duration, and description of a category.</p>
 
         </div>
 

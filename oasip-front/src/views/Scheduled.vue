@@ -2,7 +2,7 @@
     <div>
         <div class="l-w-400 mx-auto mt-24 grid gap-4 justify-center">
             <h1 class="font-bold text-center text-4xl l-color-navi ">All Schedule Event</h1>
-            <p class="font-light text-sm">The page lists all events from the clinic reservations in each clinic. which
+            <p class="font-light text-sm">This page lists all events from the clinic booking in each clinic. which
                 users can filter events by selecting category or status and can also filter by date.</p>
         </div>
 

@@ -71,7 +71,7 @@
         <EventDetail :data="eventInfoById" v-if="(!modifyMode)" />
 
         <!-- Data - Scheduled Detail Editing mode -->
-        <EventDetailEdit :data="eventInfoById" @edit="editEvent($event)" :duration="eventInfoById.eventCategoryDuration" :MAX="480" :BREAK="5" v-else />
+        <EventDetailEdit :data="eventInfoById" @edit="editEvent($event)" :duration="eventInfoById.eventDuration" :MAX="480" :BREAK="5" v-else />
 
 
         <!-- Modal box - Confirmation -->
