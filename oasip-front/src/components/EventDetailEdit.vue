@@ -13,7 +13,7 @@
                             {{ data.eventCategoryName }}
                         </label>
                     </div>
-                    <p class="justify-self-start l-text-xxs font-semibold ml-3">{{ data.eventDuration }} Mins</p>
+                    <p class="justify-self-start l-text-xxs font-semibold ml-3">{{ data.eventCategoryDuration }} Mins</p>
                 </div>
             </div>
 
@@ -99,7 +99,7 @@
                 <!-- Input - Date -->
 
                 <div class="relative">
-                    <input type="date" id="dateTime" v-model="selectDate" :min="currentDate" @input="computeTimePeriod"
+                    <input type="date" id="dateTime" v-model="selectDate" :min="currentDate"
                         @change="startTime = timeContain"
                         class="block l-w-612 h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                         placeholder=" " />
@@ -124,10 +124,9 @@
         <div class="l-w-612 h-px bg-black mx-auto"></div>
 
         <div class="l-w-612 h-12 mx-auto my-12">
-            <button @click="$emit('edit', currentData)" :disabled="timeNotValid"
-                :class="['w-full h-full text-white  duration-150', timeNotValid ? 'bg-slate-300' : 'bg-green-600  hover:bg-green-700']">Update</button>
+            <button @click="$emit('edit', currentData)"
+                class="w-full h-full text-white  duration-150">Update</button>
         </div>
-        {{ f }}
     </div>
 </template>
  
@@ -201,16 +200,17 @@ const currentDate = computed(() => {
 const continueDate = computed(() => {
     const date = ref(new Date(prop.data.eventStartTime).getFullYear())
     const month = ref((new Date(prop.data.eventStartTime).getMonth() + 1).toString())
-    const day = ref(new Date(prop.data.eventStartTime).getDate())
+    const day = ref(new Date(prop.data.eventStartTime).getDate().toString())
     const hours = ref(new Date(prop.data.eventStartTime).getHours().toString())
     const min = ref(new Date(prop.data.eventStartTime).getMinutes())
 
     if (month.value.length === 1) {
         month.value = `0${month.value}`
     }
-    if (hours.value.length === 1) {
-        hours.value = `0${hours.value}`
+    if(day.value.length === 1){
+        day.value = `0${day.value}`
     }
+
     return `${date.value}-${month.value}-${day.value}`
 })
 
@@ -253,7 +253,8 @@ const BREAK = parseInt(5);
 const CATE_DURATION = computed(() => parseInt(prop.duration));
 
 // const TimePeriod = ref([])
-const selectDate = ref(continueDate.value)
+const selectDate =  ref(continueDate.value)
+
 const TimeBooked = ref([])
 
 
@@ -283,6 +284,7 @@ const dateTime = computed(() => {
 
 const computeTimePeriod = computed(() => {
     console.log("in time method");
+    if (selectDate.value == '' ) { }
     const TimePeriod = ref([])
     let init = new Date();
     init.setHours(8);
