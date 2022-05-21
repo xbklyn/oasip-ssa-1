@@ -123,16 +123,15 @@ const clinic_name = computed(() => ref(CURR_DATA.value.eventCategoryName))
 const clinicData = computed(() => {
     return {
         categoryId: CURR_DATA.value.categoryId,
-        eventCategoryDescription: clinic_desc.value,
-        eventCategoryDuration: clinic_dur.value,
-        eventCategoryName: clinic_name.value
+        eventCategoryDescription: clinic_desc.value.value,
+        eventCategoryDuration: clinic_dur.value.value,
+        eventCategoryName: clinic_name.value.value
     }
 })
 
 
 const durationValidate = () => {
-    console.log(typeof clinicData.value.eventCategoryDuration.value);
-    if (clinicData.value.eventCategoryDuration.value > 0 && clinicData.value.eventCategoryDuration.value < 480) {
+    if (clinicData.value.eventCategoryDuration > 0 && clinicData.value.eventCategoryDuration < 480) {
         isDurationValid.value = false
         return
     } else {
@@ -173,6 +172,7 @@ const reset = () => {
 const updateCategory = (category) => {
     editCategoryById(category)
     location.reload()
+
 }
 </script>
  

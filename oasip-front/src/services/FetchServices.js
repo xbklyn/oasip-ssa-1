@@ -106,14 +106,13 @@ export const editCategoryById = async(category) => {
             'content-type': 'application/json'
         },
         body: JSON.stringify({
-            categoryId:category.categoryId,
             eventCategoryName:category.eventCategoryName,
-            eventCategoryDuration:category.eventCategoryDuration,
+            eventCategoryDuration: category.eventCategoryDuration,
             eventCategoryDescription:category.eventCategoryDescription
         })
     })
     if(res.status === 200){
-        return 
+        return await res.json()
     }else{
         console.log('err');
     }
