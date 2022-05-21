@@ -124,7 +124,7 @@
                   <div class="ml-6">     
                     <p class="text-xs font-semibold">63130500026</p>
                     <h1 class="text-2xl font-semibold">Chotiwit Souyan</h1>
-                    <a href="https://github.com/xbklyn" target="blank" class="flex mt-2"><img src="../assets/component/gitHub.png" width="24"><span class="ml-4">xbklyn</span></a>
+                    <a href="https://github.com/xbklyn" target="_blank" class="flex mt-2"><img src="../assets/component/gitHub.png" width="24"><span class="ml-4">xbklyn</span></a>
                   </div>
               </div>
               <div class="flex mt-24">
@@ -134,7 +134,7 @@
                   <div class="ml-6">
                   <p class="text-xs font-semibold">63130500034</p>
                   <h1 class="text-2xl font-semibold">Nuttida Meeboon</h1>
-                  <a href="https://github.com/NUTTIDA-donut" target="blank" class="flex mt-2"><img src="../assets/component/gitHub.png" width="24"><span class="ml-4">NUTTIDA-donut</span></a>
+                  <a href="https://github.com/NUTTIDA-donut" target="_blank" class="flex mt-2"><img src="../assets/component/gitHub.png" width="24"><span class="ml-4">NUTTIDA-donut</span></a>
                 </div>
               </div>
               <div>
@@ -145,7 +145,7 @@
                   <div class="ml-6">
                   <p class="text-xs font-semibold">63130500065</p>
                   <h1 class="text-2xl font-semibold">Narawich Kumpusa</h1>
-                  <a href="https://github.com/catintheboxx" target="blank" class="flex mt-2"><img src="../assets/component/gitHub.png" width="24"><span class="ml-4">catintheboxx</span></a>
+                  <a href="https://github.com/catintheboxx" target="_blank" class="flex mt-2"><img src="../assets/component/gitHub.png" width="24"><span class="ml-4">catintheboxx</span></a>
                 </div>
               </div>
               </div>
