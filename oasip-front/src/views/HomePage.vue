@@ -140,19 +140,19 @@ const countComplete = computed(() =>
 
 const clinicImages = [
   {
-    img: "/images/clinicImages/pic1.png",
+    img: "/ssa1/images/clinicImages/pic1.png",
   },
   {
-    img: "/images/clinicImages/pic2.png",
+    img: "/ssa1/images/clinicImages/pic2.png",
   },
   {
-    img: "/images/clinicImages/pic3.png",
+    img: "/ssa1/images/clinicImages/pic3.png",
   },
   {
-    img: "/images/clinicImages/pic4.png",
+    img: "/ssa1/images/clinicImages/pic4.png",
   },
   {
-    img: "/images/clinicImages/pic5.png",
+    img: "/ssa1/images/clinicImages/pic5.png",
   },
 ];
 </script>
