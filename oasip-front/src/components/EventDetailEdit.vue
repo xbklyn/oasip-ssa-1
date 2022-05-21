@@ -312,7 +312,7 @@ const computeTimePeriod = computed(() => {
 const timeContain = computed(() => {
     return allStartTime.value.value.indexOf(new Date(prop.data.eventStartTime).toLocaleTimeString('th-TH'))
 })
-const startTime = ref(timeContain.value)
+const startTime = ref(timeContain.value == -1 ?  0 : timeContain.value)
 </script>
  
 <style>
