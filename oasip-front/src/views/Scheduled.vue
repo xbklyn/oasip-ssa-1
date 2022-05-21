@@ -115,9 +115,10 @@ const sortByDate = computed(()=>{
     if(selectDate.value == ''){
         return sortByStatus.value;
         } else {
-        return sortByStatus.value.filter(event =>{
+            let temp = sortByStatus.value.filter(event =>{
             return convert(event.eventStartTime) == selectDate.value
         })
+        return temp.sort(e => -1)
     }
 })
 

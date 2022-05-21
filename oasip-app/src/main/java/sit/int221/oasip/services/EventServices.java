@@ -116,10 +116,12 @@ public class EventServices {
 
 //      Set new details
         event.setEventNotes(editEvent.getEventNotes());
-        event.setEventStartTime(editEvent.getEventStartTime());
-        LocalDateTime endTime = event.getEventStartTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().plus(Duration.of(event.getEventDuration(), ChronoUnit.MINUTES));
-        event.setEventEndTime(Date.from(endTime.atZone(ZoneId.systemDefault()).toInstant()));
-
+        if (editEvent.getEventStartTime().getTime() != event.getEventStartTime().getTime()) {
+            event.setEventStartTime(editEvent.getEventStartTime());
+            LocalDateTime endTime = event.getEventStartTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().plus(Duration.of(event.getEventDuration(), ChronoUnit.MINUTES));
+            event.setEventEndTime(Date.from(endTime.atZone(ZoneId.systemDefault()).toInstant()));
+        }
+        
         check();
         return eventRepository.saveAndFlush(event);
     }
