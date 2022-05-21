@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="header w-srceen h-screen py-24 l-color-navi">
+    <div class="w-srceen h-screen py-24 l-color-navi">
       <p class="text-center font-light">Welcome to</p>
       <h1 class="text-8xl font-medium text-center leading-relaxed mb-6">
         Online Appointment<br>
@@ -103,20 +103,21 @@
         </div>
       </div>
     </div>
+
     <!-- member -->
-    <div class="bg-black w-full ">
-      <div class="grid grid-cols-2 text-white mx-auto max-w-7xl">
-        <div class="grid grid-cols-1">
-          <div>
-            <p class="text-white text-2xl font-light pt-24">“มังค์กี้กระป๋องกระแป๋งหำหดตดไหม้”</p>
+    <div class="bg-black w-full">
+      <div class="grid grid-cols-2 text-white mx-auto">
+        <div class="grid grid-rows-5 mt-24 ml-24">
+          <div class="row-span-4">
+            <p class="text-white text-xl font-light">“มังค์กี้กระป๋องกระแป๋งหำหดตดไหม้”</p>
           </div>
-          <div class="pt-96">
-            <h1 class="text-2xl font-semibold ">SSA-1 Team</h1>
-            <h2 class="text-base font-light bottom-2 pt-2">Adviser: Dr. Sunisa Sathapornvajana</h2>
+          <div class="">
+            <h1 class="text-xl font-light ">SSA-1 Team</h1>
+            <h2 class="text-md font-light">Adviser | Dr. Sunisa Sathapornvajana</h2>
           </div>
         </div>
-        <div>
-          <div class="grid grid-cols-1 mt-64 mb-16 pl-24 ">
+        <div class="justify-self-end mr-24 grid grid-rows-2 mb-24">
+          <div class="grid gap-6 row-start-2">
                 <div class="flex">
                   <div class="w-24 h-24 inline-block">
                     <img class="container h-24 rounded-full" src="../assets/profile/std-026.jpeg" alt="" width="96">
@@ -124,28 +125,28 @@
                   <div class="ml-6">     
                     <p class="text-xs font-semibold">63130500026</p>
                     <h1 class="text-2xl font-semibold">Chotiwit Souyan</h1>
-                    <a href="https://github.com/xbklyn" target="_blank" class="flex mt-2"><img src="../assets/component/gitHub.png" width="24"><span class="ml-4">xbklyn</span></a>
+                    <a href="https://github.com/xbklyn" target="_blank" class="flex mt-2"><img src="../assets/component/gitHub.png" width="24" class="hover:scale-110 duration-150"><span class="grid place-items-center text-sm ml-2">xbklyn</span></a>
                   </div>
               </div>
-              <div class="flex mt-24">
+              <div class="flex">
                   <div class="w-24 h-24 inline-block">
                     <img class="container h-24 rounded-full" src="../assets/profile/std-034.jpeg" alt="" width="96">
                   </div>
                   <div class="ml-6">
                   <p class="text-xs font-semibold">63130500034</p>
                   <h1 class="text-2xl font-semibold">Nuttida Meeboon</h1>
-                  <a href="https://github.com/NUTTIDA-donut" target="_blank" class="flex mt-2"><img src="../assets/component/gitHub.png" width="24"><span class="ml-4">NUTTIDA-donut</span></a>
+                  <a href="https://github.com/NUTTIDA-donut" target="_blank" class="flex mt-2"><img src="../assets/component/gitHub.png" width="24" class="hover:scale-110 duration-150"><span class="grid place-items-center text-sm ml-2">NUTTIDA-donut</span></a>
                 </div>
               </div>
               <div>
-                  <div class="flex mt-24">
+                  <div class="flex">
                   <div class="w-24 h-24 inline-block">
                     <img class="container h-24 rounded-full" src="../assets/profile/std-065.png" alt="" width="96">
                   </div>
                   <div class="ml-6">
                   <p class="text-xs font-semibold">63130500065</p>
                   <h1 class="text-2xl font-semibold">Narawich Kumpusa</h1>
-                  <a href="https://github.com/catintheboxx" target="_blank" class="flex mt-2"><img src="../assets/component/gitHub.png" width="24"><span class="ml-4">catintheboxx</span></a>
+                  <a href="https://github.com/catintheboxx" target="_blank" class="flex mt-2"><img src="../assets/component/gitHub.png" width="24" class="hover:scale-110 duration-150"><span class="grid place-items-center text-sm ml-2">catintheboxx</span></a>
                 </div>
               </div>
               </div>
@@ -208,10 +209,10 @@ const clinicImages = [
 </script>
  
 <style>
-/* .header {
-  background: linear-gradient(45deg, #4848ff,#4848ff,#783eff,#783eff, #a940ff,#a940ff,#783eff,#783eff, #4848ff,#4848ff);
+.header {
+  background: linear-gradient(45deg, #489dff,#489dff,#783eff,#783eff, #c640ff,#c640ff,#783eff,#783eff, #489dff,#489dff);
   background-size: 1000% 1000%;
-  animation: gradient 8s ease infinite;
+  animation: gradient 24s ease infinite;
 }
 
 @keyframes gradient {
@@ -226,7 +227,7 @@ const clinicImages = [
   100% {
     background-position: 0% 50%;
   }
-} */
+}
 
 .box {
   animation: cloudy 30s infinite ease-in-out;

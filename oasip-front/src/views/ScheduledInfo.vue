@@ -50,7 +50,7 @@
             </div>
             <div class="justify-self-end space-x-6 text-sm place-items-center">
                 <button :disabled="eventInfoById.statusId == 1" @click="modifyMode = true"
-                    class="w-20 h-8 border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white duration-150 disabled:border-gray-300 disabled:bg-gray-200 disabled:border disabled:text-gray-400">Edit</button>
+                    class="w-20 h-8 border border-blue-600 text-blue-600 hover:bg-gradient-to-tl to-indigo-600 from-blue-500 hover:text-white hover:border-none duration-150 disabled:border-gray-300 disabled:bg-gray-200 disabled:border disabled:text-gray-400">Edit</button>
                 <button @click="show = true"
                     class="w-20 h-8 bg-red-500 text-white font-medium hover:bg-red-700 hover:text-white duration-150">Delete</button>
             </div>

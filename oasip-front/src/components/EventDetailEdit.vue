@@ -113,16 +113,16 @@
 
             <!-- Button - Time selector -->
             <div class="flex justify-self-end mt-12">
-                <button @click="reset" class="text-blue-500 text-medium flex reset w-18 h-8 justify-self-end hover:border-b hover:border-blue-600 duration-150">
+                <button @click="reset" class="text-blue-500 font-medium flex w-18 h-8 justify-self-end duration-150">
                     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                        aria-hidden="true" role="img" class="iconify iconify--system-uicons mr-1" width="24" height="24"
+                        aria-hidden="true" role="img" class="reset iconify iconify--system-uicons mr-1 stroke-1" width="24" height="24"
                         preserveAspectRatio="xMidYMid meet" viewBox="0 0 21 21">
                         <g fill="none" fill-rule="evenodd" stroke="currentColor" stroke-linecap="round"
                             stroke-linejoin="round">
                             <path d="M3.578 6.487A8 8 0 1 1 2.5 10.5"></path>
                             <path d="M7.5 6.5h-4v-4"></path>
                         </g>
-                    </svg>Reset</button>
+                    </svg></button>
             </div>
             <div class="l-w-612 grid grid-cols-6 gap-6 mt-3 mb-12">
                 <button v-for="(time, index) in computeTimePeriod" :key="index" @click="startTime = index"
@@ -364,4 +364,19 @@ const reset = () => {
 </script>
  
 <style>
+.reset{
+    transition: transform 1s ease-in-out;
+}
+.reset:hover, .reset:focus{
+    animation:rotation 0.9s ease-in-out;
+}
+
+@keyframes rotation {
+    from{
+        transform: rotate(0deg);
+    }
+    to{
+        transform: rotate(-360deg);
+    }
+}
 </style>

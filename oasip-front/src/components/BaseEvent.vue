@@ -9,7 +9,7 @@
                     <div class="l-w-366 h-32">
                         <div class="grid grid-cols-2">
                             <div class="flex place-items-center gap-2 col-span-2 mb-3 l-text-xxs font-light">
-                                <div v-if="value.statusName == 'UPCOMING'" class="w-2 h-2 bg-blue-700">
+                                <div v-if="value.statusName == 'UPCOMING'" class="w-2 h-2 bg-gradient-to-b to-indigo-700 from-blue-600">
                                 </div>
                                 <div v-else-if="value.statusName == 'ONGOING'" class="w-2 h-2 bg-red-600">
                                 <div class="animate-ping w-2- h-2 bg-red-600"></div></div>
@@ -27,7 +27,7 @@
                             </div>
 
                             <div class="col-span-4">
-                                <p class="text-xs">{{ value.categoryName }}</p>
+                                <p class="text-xs truncate">{{ value.categoryName }}</p>
                             </div>
 
                             <div class="col-span-3 mb-1">

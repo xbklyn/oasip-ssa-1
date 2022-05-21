@@ -36,7 +36,7 @@
 
             <router-link :to="{ name: 'Booking' }" class="flex place-items-center">
                 <button
-                    class="w-28 h-10 bg-white font-light grid place-items-center border border-green-600  text-green-600 hover:bg-green-800 hover:border-green-800 hover:text-white hover:border-2 duration-150">
+                    class="w-28 h-10 bg-white font-light grid place-items-center border border-green-600  text-green-600 hover:bg-gradient-to-tl to-emerald-400 from-lime-500 hover:border-none hover:text-white hover:border-2 duration-150">
                     <p>Book now</p>
                 </button>
             </router-link>

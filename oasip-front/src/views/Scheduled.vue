@@ -1,13 +1,13 @@
 <template>
     <div>
-        <div class="l-w-400 mx-auto mt-24 grid gap-4 justify-center">
-            <h1 class="font-bold text-center text-4xl l-color-navi ">All Schedule Event</h1>
-            <p class="font-light text-sm">This page lists all events from the clinic booking in each clinic. which
+        <div class="header w-full text-white mx-auto pt-24 pb-36 grid gap-4 justify-center bg-gradient-to-b to-indigo-700 from-sky-300">
+            <h1 class="font-bold text-center text-4xl">All Schedule Event</h1>
+            <p class="text-center w-96 text-sm">This page lists all events from the clinic booking in each clinic. which
                 users can filter events by selecting category or status and can also filter by date.</p>
         </div>
 
         <!-- Menu - Filter category -->
-        <div class="h-24 bg-white mt-24 mx-auto sticky top-0 z-50 grid place-items-center">
+        <div class="h-24 bg-white mx-auto sticky top-0 z-50 grid place-items-center">
             <div class="l-w-full h-6 grid grid-cols-3 gap-6 mx-auto place-items-center">
 
                 <div class="l-w-188 h-6">

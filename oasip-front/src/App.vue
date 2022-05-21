@@ -7,7 +7,7 @@
       <router-view></router-view>
     </div>
     <div>
-      <!-- <Footer v-show="$route.name == 'NotFound' ? false : true "/> -->
+      <Footer v-show="$route.name == 'NotFound' ? false : true "/>
     </div>
   </div>
 </template>

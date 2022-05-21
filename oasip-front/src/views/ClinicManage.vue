@@ -41,7 +41,7 @@
                 <!-- Input - Clinic name -->
                 <div class="relative">
                     <input type="text" id="name" v-model="clinic_name.value"
-                        @input="clinicNameValidate" maxlength="100"
+                        @input="clinicNameValidate"
                         :class="['l-w-400 h-12 pl-2 text-sm text-black border-2 bg-white peer focus:outline-none focus:ring-0 focus:border-blue-600', isClinicNamevalid || isClinicNameLengthValid ? 'border-2 border-red-600 focus:outline-none focus:ring-0 focus:border-red-600' : '']"
                         placeholder=" " />
                     <label for="name"
@@ -49,7 +49,7 @@
                         Category name
                     </label>
                     <p v-show="isClinicNamevalid" class="text-sm text-red-600 absolute">Clinic name is already used.</p>
-                    <p v-show="isClinicNameLengthValid" class="text-sm text-red-600 absolute">Clinic name must not empty.</p>
+                    <p v-show="isClinicNameLengthValid" class="text-sm text-red-600 absolute">Clinic name must not empty or size are exceeded.</p>
                 </div>
                 <!-- Input - Duration -->
                 <div class="relative">
@@ -160,9 +160,10 @@ const allEventCategoryName = computed(() => {
 const clinicNameValidate = () => {
     if (allEventCategoryName.value.includes(clinicData.value.eventCategoryName.value)) isClinicNamevalid.value = true 
         else isClinicNamevalid.value = false
-    if(clinicData.value.eventCategoryName.value.length == 0) isClinicNameLengthValid.value = true
+    if(clinicData.value.eventCategoryName.length == 0 || clinicData.value.eventCategoryName.length > 100) isClinicNameLengthValid.value = true
         else isClinicNameLengthValid.value = false
 }
+
 const reset = () => {
     isDurationValid.value = false
     isClinicNamevalid.value = false
