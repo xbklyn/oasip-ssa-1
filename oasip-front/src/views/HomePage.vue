@@ -103,6 +103,56 @@
         </div>
       </div>
     </div>
+    <!-- member -->
+    <div class="bg-black w-full ">
+      <div class="grid grid-cols-2 text-white mx-auto max-w-7xl">
+        <div class="grid grid-cols-1">
+          <div>
+            <p class="text-white text-2xl font-light pt-24">“มังค์กี้กระป๋องกระแป๋งหำหดตดไหม้”</p>
+          </div>
+          <div class="pt-96">
+            <h1 class="text-2xl font-semibold ">SSA-1 Team</h1>
+            <h2 class="text-base font-light bottom-2 pt-2">Adviser: Dr. Sunisa Sathapornvajana</h2>
+          </div>
+        </div>
+        <div>
+          <div class="grid grid-cols-1 mt-64 mb-16 pl-24 ">
+                <div class="flex">
+                  <div class="w-24 h-24 inline-block">
+                    <img class="container h-24 rounded-full" src="../assets/profile/std-026.jpeg" alt="" width="96">
+                  </div>
+                  <div class="ml-6">     
+                    <p class="text-xs font-semibold">63130500026</p>
+                    <h1 class="text-2xl font-semibold">Chotiwit Souyan</h1>
+                    <a href="https://github.com/xbklyn" class="flex mt-2"><img src="../assets/component/gitHub.png" width="24"><span class="ml-4">xbklyn</span></a>
+                  </div>
+              </div>
+              <div class="flex mt-24">
+                  <div class="w-24 h-24 inline-block">
+                    <img class="container h-24 rounded-full" src="../assets/profile/std-034.jpeg" alt="" width="96">
+                  </div>
+                  <div class="ml-6">
+                  <p class="text-xs font-semibold">63130500034</p>
+                  <h1 class="text-2xl font-semibold">Nuttida Meeboon</h1>
+                  <a href="https://github.com/NUTTIDA-donut" class="flex mt-2"><img src="../assets/component/gitHub.png" width="24"><span class="ml-4">NUTTIDA-donut</span></a>
+                </div>
+              </div>
+              <div>
+                  <div class="flex mt-24">
+                  <div class="w-24 h-24 inline-block">
+                    <img class="container h-24 rounded-full" src="../assets/profile/std-065.png" alt="" width="96">
+                  </div>
+                  <div class="ml-6">
+                  <p class="text-xs font-semibold">63130500065</p>
+                  <h1 class="text-2xl font-semibold">Narawich Kumpusa</h1>
+                  <a href="https://github.com/catintheboxx" class="flex mt-2"><img src="../assets/component/gitHub.png" width="24"><span class="ml-4">catintheboxx</span></a>
+                </div>
+              </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
  
