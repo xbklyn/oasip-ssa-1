@@ -21,7 +21,7 @@
         </div>
 
         <div class="l-w-824 mx-auto mt-12 grid grid-cols-4 gap-6 mb-16">
-            <a href="#edit" v-for="value, index in CLINICS" :key="index" @click="CURR_CLINIC = value.categoryId"
+            <a href="#edit" v-for="value, index in CLINICS" :key="index" @click="CURR_CLINIC = value.categoryId; reset()"
                 :class="['l-w-188 l-h-188 bg-white grid place-items-center duration-200 drop-shadow-md border hover:bg-gradient-to-b to-indigo-700 from-sky-300 hover:text-white', CURR_CLINIC == value.categoryId ? 'bg-gradient-to-b to-indigo-700 from-sky-300 text-white': '']">
                 <div class="w-32 h-32 grid place-items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -40,15 +40,16 @@
 
                 <!-- Input - Clinic name -->
                 <div class="relative">
-                    <input type="text" id="name" v-model="clinicData.eventCategoryName"
+                    <input type="text" id="name" v-model="clinic_name.value"
                         @input="clinicNameValidate" maxlength="100"
-                        :class="['l-w-400 h-12 pl-2 text-sm text-black border-2 bg-white peer focus:outline-none focus:ring-0 focus:border-blue-600', isClinicNamevalid ? 'border-2 border-red-600 focus:outline-none focus:ring-0 focus:border-red-600' : '']"
+                        :class="['l-w-400 h-12 pl-2 text-sm text-black border-2 bg-white peer focus:outline-none focus:ring-0 focus:border-blue-600', isClinicNamevalid || isClinicNameLengthValid ? 'border-2 border-red-600 focus:outline-none focus:ring-0 focus:border-red-600' : '']"
                         placeholder=" " />
                     <label for="name"
                         class="l-color-gray-300 absolute text-md duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 left-1">
                         Category name
                     </label>
                     <p v-show="isClinicNamevalid" class="text-sm text-red-600 absolute">Clinic name is already used.</p>
+                    <p v-show="isClinicNameLengthValid" class="text-sm text-red-600 absolute">Clinic name must not empty.</p>
                 </div>
                 <!-- Input - Duration -->
                 <div class="relative">
@@ -57,7 +58,7 @@
                             Min
                         </div>
                     </div>
-                    <input type="number" id="duration" v-model="clinicData.eventCategoryDuration" min="0"
+                    <input type="number" id="duration" v-model="clinic_dur.value" min="0"
                         max="480" @input="durationValidate"
                         :class="['l-w-400 h-12 pl-2 text-sm text-black border-2 bg-white peer focus:outline-none focus:ring-0 focus:border-blue-600', isDurationValid ? 'border-2 border-red-600 focus:outline-none focus:ring-0 focus:border-red-600' : '']"
                         placeholder="30" />
@@ -72,7 +73,7 @@
                 <!-- Input - Description -->
                 <div class="relative">
                     <textarea type="text" id="description" maxlength="500"
-                        v-model="clinicData.eventCategoryDescription"
+                        v-model="clinic_desc.value"
                         class="bg-white text-black resize-none l-w-824 h-28 pl-2 pt-2 text-sm border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                         placeholder="Your note..." />
                     <label for="description"
@@ -101,7 +102,9 @@ onBeforeMount(async () => {
     const res = await getAllCategory()
     CLINICS.value = res
 })
-
+const isClinicNamevalid = ref(false)
+const isClinicNameLengthValid = ref(false)
+const isDurationValid = ref(false)
 const CLINICS = ref([])
 const CURR_CLINIC = ref(0)
 const CURR_DATA = computed(() => {
@@ -109,21 +112,27 @@ const CURR_DATA = computed(() => {
     data.value = CLINICS.value.find(c => {
         return c.categoryId == CURR_CLINIC.value
     })
-
     return data.value
 })
+
+
+const clinic_desc = computed(() => ref(CURR_DATA.value.eventCategoryDescription))
+const clinic_dur = computed(() => ref(CURR_DATA.value.eventCategoryDuration))
+const clinic_name = computed(() => ref(CURR_DATA.value.eventCategoryName))
+
 const clinicData = computed(() => {
     return {
         categoryId: CURR_DATA.value.categoryId,
-        eventCategoryDescription: CURR_DATA.value.eventCategoryDescription,
-        eventCategoryDuration: CURR_DATA.value.eventCategoryDuration,
-        eventCategoryName: CURR_DATA.value.eventCategoryName
+        eventCategoryDescription: clinic_desc.value,
+        eventCategoryDuration: clinic_dur.value,
+        eventCategoryName: clinic_name.value
     }
 })
 
-const isDurationValid = ref(false)
+
 const durationValidate = () => {
-    if (clinicData.value.eventCategoryDuration > 0 && clinicData.value.eventCategoryDuration < 480) {
+    console.log(typeof clinicData.value.eventCategoryDuration.value);
+    if (clinicData.value.eventCategoryDuration.value > 0 && clinicData.value.eventCategoryDuration.value < 480) {
         isDurationValid.value = false
         return
     } else {
@@ -148,15 +157,17 @@ const allEventCategoryName = computed(() => {
     return CLINIC_NAME.value
 })
 
-const isClinicNamevalid = ref(false)
+
 const clinicNameValidate = () => {
-    if (allEventCategoryName.value.includes(clinicData.value.eventCategoryName)) {
-        isClinicNamevalid.value = true
-        return
-    } else {
-        isClinicNamevalid.value = false
-        return
-    }
+    if (allEventCategoryName.value.includes(clinicData.value.eventCategoryName.value)) isClinicNamevalid.value = true 
+        else isClinicNamevalid.value = false
+    if(clinicData.value.eventCategoryName.value.length == 0) isClinicNameLengthValid.value = true
+        else isClinicNameLengthValid.value = false
+}
+const reset = () => {
+    isDurationValid.value = false
+    isClinicNamevalid.value = false
+    isClinicNameLengthValid.value = false
 }
 
 const updateCategory = (category) => {
