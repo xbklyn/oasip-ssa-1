@@ -89,8 +89,7 @@
                         <h2 class="font-medium text-2xl">
                             Are you sure delete this event?
                         </h2>
-                        <p class="l-w-400 font-light text-xs l-color-gray-300">Lorem ipsum dolor sit amet, consectetur
-                            adipiscing elit. Lectus amet a lectus aliquam semper mi sem.</p>
+                        <p class="l-w-400 font-light text-xs l-color-gray-300">If you delete this event, it will be gone forever.</p>
                     </div>
                     <div class="grid space-y-3">
                         <button
