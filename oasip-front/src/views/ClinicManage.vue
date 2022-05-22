@@ -131,7 +131,7 @@ const clinicData = computed(() => {
 
 
 const durationValidate = () => {
-    if (clinicData.value.eventCategoryDuration > 0 && clinicData.value.eventCategoryDuration < 480) {
+    if (clinicData.value.eventCategoryDuration > 0 && clinicData.value.eventCategoryDuration =< 480) {
         isDurationValid.value = false
         return
     } else {
