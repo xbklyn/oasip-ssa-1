@@ -165,7 +165,7 @@ onBeforeMount(async () => {
   const res = await getAllEvents();
   const temp = await getAllCategory();
   AllEventsData.value = res;
-  AllCategory.value = temp;
+  AllCategory.value = temp.sort(c => -1);
 });
 
 const AllEventsData = ref([]);
