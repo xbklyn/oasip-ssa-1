@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="w-srceen h-screen py-24 l-color-navi">
+    <div class="w-srceen h-full py-24 l-color-navi">
       <p class="text-center font-light">Welcome to</p>
       <h1 class="text-8xl font-medium text-center leading-relaxed mb-6">
         Online Appointment<br>
