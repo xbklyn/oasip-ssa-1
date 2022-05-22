@@ -4,9 +4,9 @@
             <div class="gap-x-3 place-items-center grid mb-8">
                 <div class="flex place-items-center gap-3">
                     <div>
-                        <img src="../assets/logo.png" alt="">
+                        <img src="../assets/logo.png" alt="" width="">
                     </div>
-                    <h1 class="text-5xl text-center font-semibold">OASIP</h1>
+                    <h1 class="text-3xl text-center font-semibold">OASIP</h1>
                 </div>
             </div>
 

@@ -3,41 +3,41 @@
         <div class="l-h-1248 w-full pb-24 grid grid-cols-3 gap-6 p-12 mb-96">
 
             <!-- Main - Events List -->
-            <div v-for="value, index in data" :key="index" :class="['l-w-400 h-44 duration-150 grid place-items-center', value.statusName == 'COMPLETED' ? 'bg-slate-50 text-gray-500 border': 'bg-white drop-shadow-sm hover:bg-slate-100 hover:text-black']"
+            <div v-for="value, index in data" :key="index" :class="['l-w-400 h-44 duration-150 grid place-items-center', value.statusName == 'COMPLETED' ? 'bg-gray-50 text-slate-300 border': 'bg-white drop-shadow-sm hover:bg-slate-100 hover:text-black']"
                 >
                 <router-link :to="{ name: 'scheduled-info', params: { id: value.bookingId } }" class="sl-w-400 h-44 grid place-items-center">
                     <div class="l-w-366 h-32">
                         <div class="grid grid-cols-2">
-                            <div class="flex place-items-center gap-2 col-span-2 mb-3 l-text-xxs font-light">
+                            <div class="flex place-items-center gap-2 col-span-2 mb-3 text-xs font-normal">
                                 <div v-if="value.statusName == 'UPCOMING'" class="w-2 h-2 bg-gradient-to-b to-indigo-700 from-blue-600">
                                 </div>
                                 <div v-else-if="value.statusName == 'ONGOING'" class="w-2 h-2 bg-red-600">
                                 <div class="animate-ping w-2- h-2 bg-red-600"></div></div>
-                                <div v-else class=" w-2 h-2 bg-green-400">
+                                <div v-else class=" w-2 h-2 bg-emerald-500">
                                 </div>
                                 <p v-if="value.statusName == 'UPCOMING'" class=" text-blue-700">Upcoming
                                 </p>
                                 <p v-else-if="value.statusName == 'ONGOING'" class=" text-red-600">On going
                                 </p>
-                                <p v-else class=" text-green-700">Complete</p>
+                                <p v-else class=" text-emerald-500">Complete</p>
                             </div>
 
                             <div class=" col-span-2 justify-self-end">
-                                <p class="text-xs mt-1 grid justify-end">{{ value.eventDuration }} Min.</p>
+                                <p class="text-xs mt-1 grid justify-end font-normal">{{ value.eventDuration }} Min.</p>
                             </div>
 
                             <div class="col-span-4">
-                                <p class="text-xs truncate">{{ value.categoryName }}</p>
+                                <p class="text-xs truncate font-normal">{{ value.categoryName }}</p>
                             </div>
 
                             <div class="col-span-3 mb-1">
-                                <h2 class="text-xl font-medium truncate">{{ value.bookingName }}</h2>
+                                <h2 class="text-xl font-semibold truncate">{{ value.bookingName }}</h2>
                             </div>
 
                             <div class="col-span-4 mb-3">
                                 <p class="text-xs font-light">
-                                    On {{ new Date(value.eventStartTime).toLocaleDateString('th-TH') }} 
-                                    at {{ new Date(value.eventStartTime).toLocaleTimeString('th-TH') }}
+                                    <span class="font-medium">{{ new Date(value.eventStartTime).toLocaleDateString('th-TH') }}</span> 
+                                    at <span class="font-medium">{{ new Date(value.eventStartTime).toLocaleTimeString('th-TH') }}</span>
                                 </p>
                             </div>
                         </div>

@@ -135,9 +135,9 @@
             <div class="l-w-612 h-px bg-black mx-auto"></div>
         </div>
 
-        <div class="l-w-612 h-12 mx-auto my-12">
+        <div class="l-w-612 h-12 mx-auto my-12 ">
             <button @click="$emit('edit', currentData)"
-                class="w-full h-full text-white duration-150 bg-emerald-500">Update</button>
+                class="w-full h-full text-white duration-150 bg-emerald-400 hover:bg-emerald-600">Update</button>
         </div>
     </div>
 </template>
@@ -365,10 +365,11 @@ const reset = () => {
  
 <style>
 .reset{
-    transition: transform 1s ease-in-out;
+    transition: transform 0.5s ease-in-out;
 }
-.reset:hover, .reset:focus{
-    animation:rotation 0.9s ease-in-out;
+.reset:active{
+    transition: transform 1s ease-in-out;
+    animation:rotation 0.1s ease-in-out;
 }
 
 @keyframes rotation {
