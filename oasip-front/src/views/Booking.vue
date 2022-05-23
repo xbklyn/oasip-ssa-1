@@ -144,7 +144,7 @@
 
         <!-- Alert - If booked error -->
         <div v-if="ERROR"
-            class="alert l-w-824 mx-auto duration-150 mb-12 flex p-4 mt-2 pb-4 text-sm text-red-700 bg-red-100 rounded place-items-center"
+            class="alert l-w-824 mx-auto duration-150 mb-12 flex p-4 mt-2 pb-4 text-sm text-red-700 border place-items-center"
             role="alert">
             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
                 role="img" class="iconify iconify--material-symbols mr-2" width="24" height="24"
