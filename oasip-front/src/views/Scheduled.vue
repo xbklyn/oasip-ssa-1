@@ -118,18 +118,24 @@ const sortByStatus = computed(() => {
 // SORT - By date
 const selectDate = ref('')
 const sortByDate = computed(() => {
+    console.log("status : " + sortByStatus.value.length);
     if (selectDate.value == '') {
+        console.log("not select date");
         return sortByStatus.value;
-    } else {
-
-        let temp = sortByStatus.value.filter(event => {
-            return convert(event.eventStartTime) == selectDate.value
-        })
-        if (sortByStatus.value[0].statusName.toLowerCase() == 'upcoming' || sortByStatus.value[0].statusName.toLowerCase() == 'ongoing')
-            return temp
-
-        return temp.sort(e => -1)
     }
+
+    let temp = sortByStatus.value.filter(event => {
+        return convert(event.eventStartTime) == selectDate.value
+    })
+    console.log("temp : " + temp.length);
+    if (temp.length == 0 || temp.includes(e => e.statusName.toLowerCase() == 'ongoing' || e.statusName.toLowerCase() == 'upcoming')) {
+        console.log("no sort");
+        return temp
+    }
+
+    console.log("sort");
+    return temp.sort(e => -1)
+
 })
 const convert = (time) => {
     let date = new Date(time);
