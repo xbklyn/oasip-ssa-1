@@ -33,7 +33,8 @@ CREATE TABLE IF NOT EXISTS `oasip`.`eventCategories` (
   `eventCategoryName` VARCHAR(100) NOT NULL,
   `eventCategoryDescription` VARCHAR(500) NULL DEFAULT NULL,
   `eventDuration` INT NOT NULL,
-  PRIMARY KEY (`eventCategoryId`))
+  PRIMARY KEY (`eventCategoryId`),
+  UNIQUE INDEX `eventCategoryName_UNIQUE` (`eventCategoryName` ASC) VISIBLE)
 ENGINE = InnoDB
 AUTO_INCREMENT = 6
 DEFAULT CHARACTER SET = utf8mb4
@@ -127,3 +128,9 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 --
 create user root@'172.17.0.1' identified by '123';
 grant all privileges on *.* to 'root'@'172.17.0.1';
+create user 'admin'@'%' identified by '123';
+create user 'dev'@'%' identified by '123';
+create user 'user'@'%' identified by '123';
+grant all privileges on . to 'admin'@'%';
+grant select ,insert ,update , delete on oasip.* to 'user'@'%';
+grant select ,insert ,update , delete on oasip.* to  'dev'@'%' ;
