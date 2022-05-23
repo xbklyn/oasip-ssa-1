@@ -8,6 +8,7 @@ public class PutCategoryDTO {
 
     @NotBlank
     @NotNull
+    @Size(min = 1 , max = 100 , message = "Size must be between 1 and 100")
     private String eventCategoryName;
 
     @NotNull
