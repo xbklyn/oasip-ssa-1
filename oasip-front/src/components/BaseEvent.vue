@@ -46,7 +46,7 @@
                             <p class="l-color-gray overflow-hidden l-w-366 h-8"><span class="font-medium">Note:
                                 </span>{{
                                         value.eventNotes ==
-                                            '' ? 'None' : value.eventNotes
+                                            '' ? 'No description' : value.eventNotes
                                 }}
                             </p>
                         </div>

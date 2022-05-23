@@ -1,5 +1,7 @@
 <template>
+
     <div class="l-w-full l-h-824 my-6 mx-auto flex border">
+        
         <div
             class="l-w-188 l-h-824 justify-self-start l-bg-gray overflow-y-auto border-r">
             <div class="w-40 grid my-12 justify-center gap-3">

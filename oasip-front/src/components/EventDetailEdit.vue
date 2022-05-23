@@ -133,12 +133,48 @@
                     </button>
                 </div>
 
-            <div class="l-w-612 h-px bg-black mx-auto"></div>
+            <div class="l-w-612 h-px bg-black mx-auto mb-6"></div>
+        </div>
+        <div v-if="ERROR" class="alert l-w-612 mx-auto duration-150 mb-12 flex p-4 mt-2 pb-4 text-sm text-red-700 bg-red-100 rounded place-items-center"
+            role="alert">
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
+                role="img" class="iconify iconify--material-symbols mr-2" width="24" height="24"
+                preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
+                <path fill="currentColor"
+                    d="M12 22q-2.075 0-3.9-.788q-1.825-.787-3.175-2.137q-1.35-1.35-2.137-3.175Q2 14.075 2 12t.788-3.9q.787-1.825 2.137-3.175q1.35-1.35 3.175-2.138Q9.925 2 12 2t3.9.787q1.825.788 3.175 2.138q1.35 1.35 2.137 3.175Q22 9.925 22 12t-.788 3.9q-.787 1.825-2.137 3.175q-1.35 1.35-3.175 2.137Q14.075 22 12 22Zm-1-9h2V7h-2Zm1 4q.425 0 .713-.288Q13 16.425 13 16t-.287-.713Q12.425 15 12 15t-.712.287Q11 15.575 11 16t.288.712Q11.575 17 12 17Z">
+                </path>
+            </svg>
+            <div>
+                <span class="font-medium">Error! </span> Somthing want wrong, Please try again.
+            </div>
         </div>
 
         <div class="l-w-612 h-12 mx-auto my-12 ">
             <button @click="$emit('edit', currentData)"
                 class="w-full h-full text-white duration-150 bg-emerald-400 hover:bg-emerald-600">Update</button>
+        </div>
+        <div v-if="SUCCESFUL"
+            class="alert bg-black/30 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full h-full">
+            <div class="relative p-4 w-full h-full grid place-items-center justify-center">
+                <div class="relative bg-white shadow l-w-520 h-72 grid place-items-center">
+                    <div class="grid place-items-center gap-6">
+                        <div class="grid justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                aria-hidden="true" role="img" class="iconify iconify--clarity text-emerald-500"
+                                width="96" height="96" preserveAspectRatio="xMidYMid meet" viewBox="0 0 36 36">
+                                <path fill="currentColor"
+                                    d="M18 2a16 16 0 1 0 16 16A16 16 0 0 0 18 2Zm10.45 10.63L15.31 25.76L7.55 18a1.4 1.4 0 0 1 2-2l5.78 5.78l11.14-11.13a1.4 1.4 0 1 1 2 2Z"
+                                    class="clr-i-solid clr-i-solid-path-1"></path>
+                                <path fill="none" d="M0 0h36v36H0z"></path>
+                            </svg>
+                        </div>
+                        <div class="text-center">
+                            <h2 class="text-xl font-semibold text-emerald-700 mb-2">Update succesful!</h2>
+                            <p class="text-md l-color-gray-300">your information is already updated.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -166,6 +202,14 @@ const prop = defineProps({
     BREAK: {
         type: Number,
         require: false
+    },
+    SUCCESFUL:{
+        type: Boolean,
+        require:false
+    },
+    ERROR:{
+        type: Boolean,
+        require:false
     }
 })
 
@@ -196,6 +240,14 @@ const currentData = computed(() => {
         note: note.value,
         time: TimePeriodWithDate.value[startTime.value].startTime
     }
+})
+
+const SUCCESFUL = computed(()=>{
+    return prop.SUCCESFUL
+})
+
+const ERROR = computed(()=>{
+    return prop.ERROR
 })
 
 const currentDate = computed(() => {

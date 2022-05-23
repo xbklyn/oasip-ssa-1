@@ -85,9 +85,11 @@
 
       </div>
     </div>
+
+
     <!-- clinic -->
     <div>
-      <div class="l-bg-gray w-full">
+      <div class="l-bg-gray w-full pb-24">
         <div class="l-w-full mx-auto px-4">
           <div class="l-w-full mx-auto py-16">
             <h2 class="font-bold text-4xl mt-24">Clinics</h2>
