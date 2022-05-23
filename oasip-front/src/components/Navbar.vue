@@ -12,7 +12,7 @@
         </div>
 
         <!-- Menu - main nav -->
-        <div class="flex justify-center space-x-12 h-24 place-items-center text-xs font-xs l-text-navi drop-shadow-sm">
+        <div class="flex justify-center space-x-12 h-24 place-items-center text-xs font-light l-text-navi drop-shadow-sm">
 
             <!-- Dashboard -->
             <div :class="['grid place-items-center l-color-navi h-24 w-24',

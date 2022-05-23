@@ -15,7 +15,7 @@
                         class="l-w-188 border border-gray-300 text-sm l-color-gray-300 pl-2 py-1 focus:outline-none focus:ring-0 focus:border-blue-500"
                         v-model="filter">
                         <option disabled selected>Category</option>
-                        <option value="0">None</option>
+                        <option value="0">All</option>
                         <option v-for="value, index in allEventCategory" :key="index" :value="value.categoryId">
                             {{ value.eventCategoryName }}</option>
                     </select>
@@ -53,7 +53,7 @@
         </div>
 
         <!-- List - All events -->
-        <div class="l-bg-gray">
+        <div class="bg-slate-50">
             <BaseEvent :data="sortByDate" :status="status" @delete="events($event)" />
         </div>
    

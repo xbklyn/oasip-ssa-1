@@ -50,7 +50,7 @@
             </div>
             <div class="justify-self-end space-x-6 text-sm place-items-center">
                 <button :disabled="eventInfoById.statusId == 1" @click="modifyMode = true"
-                    class="w-20 h-8 border border-blue-600 text-blue-600 hover:bg-gradient-to-tl to-indigo-600 from-blue-500 hover:text-white hover:border-none duration-150 disabled:border-gray-300 disabled:bg-gray-200 disabled:border disabled:text-gray-400">Edit</button>
+                    class="w-20 h-8 border border-blue-600 text-blue-600 hover:bg-blue-700 hover:text-white hover:border duration-150 disabled:border-gray-300 disabled:bg-gray-200 disabled:border disabled:text-gray-400">Edit</button>
                 <button @click="show = true"
                     class="w-20 h-8 bg-red-500 text-white font-medium hover:bg-red-700 hover:text-white duration-150">Delete</button>
             </div>
@@ -79,7 +79,7 @@
             class="grid place-items-center fixed top-0 right-0 left-0 z-50 bg-black/80 w-screen h-screen">
             <div class="bg-white l-w-960 l-h-520 flex">
                 <div>
-                    <img src="../assets/component/confirmation.png" alt="">
+                    <img src="../assets/component/confirmation-2.png" alt="">
                 </div>
                 <div class="l-w-520 l-h-520 grid place-items-center">
                     <div class="grid justify-center">

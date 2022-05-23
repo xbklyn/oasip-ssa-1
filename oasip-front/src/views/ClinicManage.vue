@@ -16,7 +16,7 @@
         </div>
         <div class="l-w-400 grid gap-4">
             <h1 class="font-bold text-4xl l-color-navi ">Clinic manage</h1>
-            <p class="font-light text-sm">This page for editing category information. You can change the name, duration, and description of a category.</p>
+            <p class="font-light text-sm l-color-gray-300">This page for editing category information. You can change the name, duration, and description of a category.</p>
 
         </div>
 
@@ -84,8 +84,8 @@
             </div>
 
             <div class="flex gap-6">
-                <button @click="updateCategory(clinicData)"
-                    class="my-12 bg-emerald-400 text-white l-w-188 h-12 duration-150 hover:bg-emerald-600">Update</button>
+                <button @click="updateCategory(clinicData)" disabled="isAllValid"
+                    :class="['my-12 bg-emerald-400 text-white l-w-188 h-12 duration-150 hover:bg-emerald-600',isAllValid ? 'disabled:bg-gray-200':'']">Update</button>
                 <button @click="CURR_CLINIC = 0"
                     class="my-12 bg-white text-red-600 l-w-188 h-12 border border-red-600 duration-150 hover:bg-red-600 hover:text-white">Discard</button>
             </div>
@@ -158,7 +158,7 @@ const allEventCategoryName = computed(() => {
 
 
 const clinicNameValidate = () => {
-    if (allEventCategoryName.value.includes(clinicData.value.eventCategoryName.value)) isClinicNamevalid.value = true 
+    if (allEventCategoryName.value.includes(clinicData.value.eventCategoryName)) isClinicNamevalid.value = true 
         else isClinicNamevalid.value = false
     if(clinicData.value.eventCategoryName.length == 0 || clinicData.value.eventCategoryName.length > 100) isClinicNameLengthValid.value = true
         else isClinicNameLengthValid.value = false
@@ -175,6 +175,11 @@ const updateCategory = (category) => {
     location.reload()
 
 }
+
+const isAllValid = computed(() =>{
+    if(isClinicNamevalid.value || isClinicNameLengthValid.value || isDurationValid.value) return true
+    else return false
+})
 </script>
  
 <style>

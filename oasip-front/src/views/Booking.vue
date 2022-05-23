@@ -19,7 +19,7 @@
         <div class="l-w-824 mx-auto my-24">
             <div class="l-w-400 mt-24 grid gap-4">
                 <h1 class="font-bold text-4xl l-color-navi ">Booking</h1>
-                <p class="font-light text-sm">Users must follow the following steps<br>
+                <p class="font-light text-sm l-color-gray-300">Users must follow the following steps<br>
                     Step 1 : Select the clinic you want to book.<br>
                     Step 2 : Fill in your information<br>
                     Step 3 : Select the date you wish to book. and select the desired time slot in the available time
@@ -148,11 +148,11 @@
                         Date
                     </label>
                 </div>
-
                 <!-- Button - Time selector -->
                 <div class="l-w-612 grid grid-cols-6 gap-6 mt-6">
+                    
                     <button v-for="(time, index) in TimePeriod" :key="index" @click="startTime = index"
-                        :class="['h-8 text-sm duration-150 bg-white', startTime == index ? 'bg-blue-500 text-white border-0' : '', isOverlap(index) ? 'bg-slate-200 text-gray-300' : 'hover:bg-blue-500 hover:text-white border border-gray-300 hover:border-none']"
+                        :class="['h-8 text-sm duration-150 bg-white', startTime == index ? 'bg-blue-500 text-white border-0' : '', isOverlap(index) ? ' text-gray-300' : 'hover:bg-blue-500 hover:text-white border border-gray-300 hover:border-none']"
                         :disabled="isOverlap(index)">
                         {{ time.startTime }}
                     </button>
