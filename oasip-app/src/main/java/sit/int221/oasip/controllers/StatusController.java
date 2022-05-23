@@ -9,7 +9,7 @@ import sit.int221.oasip.services.StatusService;
 
 import java.util.List;
 
-@CrossOrigin("*")
+
 @RestController
 @RequestMapping("/api/status")
 public class StatusController {

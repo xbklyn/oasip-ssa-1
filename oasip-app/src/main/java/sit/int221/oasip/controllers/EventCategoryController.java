@@ -11,7 +11,6 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@CrossOrigin("*")
 @RequestMapping("/api/category")
 public class EventCategoryController {
 
@@ -23,11 +22,13 @@ public class EventCategoryController {
 
     // GET Method
 
+    // Get all category
     @GetMapping("")
     public List<Eventcategory> getAllCategory() {
         return eventCategoryService.getAllCategory();
     }
 
+    // Get by id
     @GetMapping("/{categoryId}")
     public Eventcategory getCategoryById(
             @PathVariable Integer categoryId
@@ -37,13 +38,13 @@ public class EventCategoryController {
 
     // PUT Method
 
-    // Edit Existing category
-    @PutMapping("/{id}")
+    // Edit category
+    @PutMapping("/{categoryId}")
     public ResponseEntity update(
-            @PathVariable Integer id,
+            @PathVariable Integer categoryId,
             @Valid @RequestBody PutCategoryDTO catDetails,
             HttpServletRequest req
             ){
-        return eventCategoryService.edit(id, catDetails , req);
+        return eventCategoryService.edit(categoryId, catDetails , req);
     }
 }
