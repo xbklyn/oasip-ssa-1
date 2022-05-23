@@ -84,7 +84,7 @@
             </div>
 
             <div class="flex gap-6">
-                <button @click="updateCategory(clinicData)" disabled="isAllValid"
+                <button @click="updateCategory(clinicData)"
                     :class="['my-12 bg-emerald-400 text-white l-w-188 h-12 duration-150 hover:bg-emerald-600',isAllValid ? 'disabled:bg-gray-200':'']">Update</button>
                 <button @click="CURR_CLINIC = 0"
                     class="my-12 bg-white text-red-600 l-w-188 h-12 border border-red-600 duration-150 hover:bg-red-600 hover:text-white">Discard</button>
