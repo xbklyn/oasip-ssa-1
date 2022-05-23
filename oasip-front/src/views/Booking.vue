@@ -149,12 +149,12 @@
                     </label>
                 </div>
                 <!-- Button - Time selector -->
-                <div class="l-w-612 grid grid-cols-6 gap-6 mt-6">
+                <div class=" h-48 l-w-612 grid grid-cols-5 gap-6 mt-6 overflow-y-auto">
                     
                     <button v-for="(time, index) in TimePeriod" :key="index" @click="startTime = index"
                         :class="['h-8 text-sm duration-150 bg-white', startTime == index ? 'bg-blue-500 text-white border-0' : '', isOverlap(index) ? ' text-gray-300' : 'hover:bg-blue-500 hover:text-white border border-gray-300 hover:border-none']"
                         :disabled="isOverlap(index)">
-                        {{ time.startTime }}
+                        {{ `${time.startTime.split(':')[0]}:${time.startTime.split(':')[1]}`}} - {{ `${time.endTime.split(':')[0]}:${time.endTime.split(':')[1]}` }}
                     </button>
                 </div>
 
@@ -241,8 +241,12 @@ const dateTime = computed(() => {
 
 // @@@@@@ FUNCTION @@@@@@
 // Create event
-const submit = (name, mail, start, categoryId, notes) => {
-    createEvent(name, mail, start, categoryId, notes)
+const submit = async(name, mail, start, categoryId, notes) => {
+    let status = await createEvent(name, mail, start, categoryId, notes)
+    if(status == 500 || status == 400)
+        alert("Something is wrong, please try again.")
+    else
+        alert("Booked succesfully.")
     myRouter.push({
         name: 'Home'
     })
@@ -290,18 +294,17 @@ const isOverlap = (index) => {
 }
 
 // Create time period
-const MAX = 480;
+const MAX = 1440;
 const BREAK = 5;
 const CATE_DURATION = computed(() => clinics.value[clinicIndex.value].eventCategoryDuration);
 const computeTimePeriod = async () => {
-    console.log("in time method");
     if (!clinicId.value && selectDate.value == '' || !clinicId.value && selectDate.value !== '' || clinicId.value && selectDate.value == '') { }
     else {
         TimePeriod.value = []
         TimePeriodWithDate.value = []
         // let init = new Date();
         let init = new Date(selectDate.value);
-        init.setHours(8);
+        init.setHours(0);
         init.setMinutes(0);
         init.setSeconds(0);
 
@@ -349,7 +352,6 @@ const isEmailValid = () => {
 const firstNameNotValid = ref(false)
 const isFirstNameValid = () => {
     if (combineName.value.length == 0 || combineName.value.length > 100) {
-        console.log(combineName.value.length);
         firstNameNotValid.value = true
         return false
     } else {

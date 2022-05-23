@@ -136,8 +136,13 @@ const myRouter = useRouter()
 
 // @@@@@@ FUNCTION @@@@@@
 // Delete - Event
-const deleteEvent = (eventId) => {
-    deleteEventById(eventId)
+const deleteEvent = async (eventId) => {
+    let status = await deleteEventById(eventId)
+
+    if(status == 500 || status == 400)
+        alert("Something is wrong, please try again.")
+    else 
+        alert("Delete succesfully.")
     show.value = false
     location.reload()
     myRouter.go(-1)
@@ -145,8 +150,12 @@ const deleteEvent = (eventId) => {
 }
 
 // Edit - Event
-const editEvent = (obj) => {
-    editEventById(obj)
+const editEvent = async (event) => {
+    let status = await editEventById(event)
+    if(status == 500 || status == 400)
+        alert("Something is wrong, please try again.")
+    else 
+        alert("Edit succesfully.")
     location.reload()
     myRouter.go({
         path: `scheduled/scheduled-info/${params.id}`

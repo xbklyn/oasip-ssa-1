@@ -68,7 +68,6 @@ import BaseEvent from '../components/BaseEvent.vue';
 onBeforeMount(async () => {
     const res = await getAllEvents()
     const temp = await getAllCategory()
-    console.log(res)
     AllEventsData.value = res
     allEventCategory.value = temp
 })
@@ -92,9 +91,10 @@ const status = ref('')
 const sortByStatus = computed(() => {
     if (status.value == '') return sortByCategory.value;
     else if (status.value == 'upcoming') {
-        return sortByCategory.value.filter(event => {
+        let temp = sortByCategory.value.filter(event => {
             return event.statusName.toLowerCase() == 'upcoming' || event.statusName.toLowerCase() == 'ongoing'
         })
+        return temp.sort(e => -1)
     }
     else if (status.value == 'ongoing') {
         return sortByCategory.value.filter(event => {
@@ -102,9 +102,10 @@ const sortByStatus = computed(() => {
         })
     }
     else {
-        return sortByCategory.value.filter(event => {
+        let temp = sortByCategory.value.filter(event => {
             return event.statusName.toLowerCase() == 'completed'
         })
+        return temp
     }
 
 })
@@ -115,9 +116,13 @@ const sortByDate = computed(()=>{
     if(selectDate.value == ''){
         return sortByStatus.value;
         } else {
+            
             let temp = sortByStatus.value.filter(event =>{
-            return convert(event.eventStartTime) == selectDate.value
+                return convert(event.eventStartTime) == selectDate.value
         })
+        if(sortByStatus.value[0].statusName.toLowerCase() == 'upcoming' || sortByStatus.value[0].statusName.toLowerCase() == 'ongoing') 
+            return temp
+            
         return temp.sort(e => -1)
     }
 })
@@ -128,22 +133,6 @@ const convert = (time) => {
          + ('0' + (date.getMonth()+1)).slice(-2) + '-'
          + ('0' + date.getDate()).slice(-2);
 }
-
-
-// // Delete - event
-// const events = (eventId) => {
-//     console.log(eventId);
-//     if (eventId.length <= 0) {
-//         deleteEventById(eventId)
-//     } else {
-//         for (let i = 0; i < eventId.length; i++) {
-//             AllEventsData.value = AllEventsData.value.filter(e => {
-//                 return e.id != eventId[i]
-//             })
-//             deleteEventById(eventId[i])
-//         }
-//     }
-// }
 
 </script>
  
