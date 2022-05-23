@@ -12,7 +12,6 @@ import java.util.List;
 
 public interface EventRepository extends JpaRepository<Event, Integer> {
 
-    public List<Event> findAllByEventCategory_CategoryId(Integer id);
     public List<Event> findByEventStartTimeAndEventCategory_CategoryId(Date date , Integer id);
 
     //Check if event is in booked time

@@ -1,10 +1,7 @@
 package sit.int221.oasip.dtos;
 
-import lombok.Getter;
-import lombok.Setter;
 import java.util.Date;
 
-@Getter @Setter
 public class EventDetailDTO {
     private Integer id;
     private String bookingName;

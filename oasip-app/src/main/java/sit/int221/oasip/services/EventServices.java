@@ -47,6 +47,7 @@ public class EventServices {
         this.errorAdvice = errorAdvice;
     }
 
+    // GET
     public List<SimpleEventDTO> getAllEvents() {
        check();
        return listMapper.mapList(eventRepository.findAll(
@@ -66,62 +67,48 @@ public class EventServices {
         return listMapper.mapList(event , TimeDTO.class , modelMapper);
     }
 
-    // POST Method
-    // Save new event
-
+    // POST
     public ResponseEntity save(PostEventDTO newEvent, HttpServletRequest req) throws MethodArgumentNotValidException {
-
         //Check future date
         if(newEvent.getEventStartTime().before(new Date()))
             return ResponseEntity.status(400).body(errorAdvice.getResponseEntity("eventStartTime" , "Time must be in a future" , req));
-
-
         //Check valid Email
         String regex = "^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
         if(!newEvent.getBookingEmail().matches(regex))
             return ResponseEntity.status(400).body(errorAdvice.getResponseEntity("bookingEmail" , "must be a well-formed email address" , req));
 
-
         Event event = modelMapper.map(newEvent, Event.class);
         event.setEventCategory(eventCategoryRepository.findById(newEvent.getCategoryId()).orElseThrow(() ->
             new ResponseStatusException(NOT_FOUND)));
-
         event.setStatus(statusRepository.findById(3).orElseThrow());
         event.setEventDuration(event.getEventCategory().getEventCategoryDuration());
         //Add to end time
         LocalDateTime endTime = newEvent.getEventStartTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().plus(Duration.of(event.getEventDuration(), ChronoUnit.MINUTES));
         event.setEventEndTime(Date.from(endTime.atZone(ZoneId.systemDefault()).toInstant()));
-
         //Check Overlap
         if(checkIsOverlap(event))
             return ResponseEntity.status(400).body(errorAdvice.getResponseEntity("eventStartTime" , "Time is overlapping" , req));
-
         check();
         return ResponseEntity.status(201).body(eventRepository.saveAndFlush(event));
     }
 
-    // DELETE Method
-    // Delete Existing Event
+    // DELETE
     public void delete(Integer id) {
         eventRepository.deleteById(id);
         check();
     }
 
-    // PUT Method
-    // Edit Existing Event
+    // PUT
     public Event update(Integer id , PutEventDTO editEvent){
-        // Find an event to edit
         Event event = eventRepository.findById(id).orElseThrow(() ->
             new ResponseStatusException(NOT_FOUND));
-
-//      Set new details
+        //  Set new details
         event.setEventNotes(editEvent.getEventNotes());
         if (editEvent.getEventStartTime().getTime() != event.getEventStartTime().getTime()) {
             event.setEventStartTime(editEvent.getEventStartTime());
             LocalDateTime endTime = event.getEventStartTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().plus(Duration.of(event.getEventDuration(), ChronoUnit.MINUTES));
             event.setEventEndTime(Date.from(endTime.atZone(ZoneId.systemDefault()).toInstant()));
         }
-        
         check();
         return eventRepository.saveAndFlush(event);
     }
@@ -143,7 +130,7 @@ public class EventServices {
         if(!eventRepository.findByEventStartTimeAndEventCategory_CategoryId(PostEvent.getEventStartTime() , PostEvent.getEventCategory().getCategoryId()).isEmpty()) {
             return true;
         }
-
+        //Check overall
         AtomicBoolean isOverLap = new AtomicBoolean(false);
         allEvent.forEach(e2 -> {
             if (
