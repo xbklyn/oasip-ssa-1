@@ -3,6 +3,10 @@
 -- Model: New Model    Version: 1.0
 -- MySQL Workbench Forward Engineering
 
+SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT ;
+SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS ;
+SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION ;
+SET NAMES utf8mb4 ;
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
@@ -21,6 +25,9 @@ USE `oasip` ;
 -- -----------------------------------------------------
 -- Table `oasip`.`eventCategories`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `eventCategories`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE IF NOT EXISTS `oasip`.`eventCategories` (
   `eventCategoryId` INT NOT NULL AUTO_INCREMENT,
   `eventCategoryName` VARCHAR(100) NOT NULL,
@@ -45,6 +52,9 @@ UNLOCK TABLES;
 -- -----------------------------------------------------
 -- Table `oasip`.`status`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `status`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE IF NOT EXISTS `oasip`.`status` (
   `statusId` INT NOT NULL AUTO_INCREMENT,
   `statusName` VARCHAR(50) NOT NULL,
@@ -69,6 +79,9 @@ UNLOCK TABLES;
 -- -----------------------------------------------------
 -- Table `oasip`.`events`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `events`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE IF NOT EXISTS `oasip`.`events` (
   `bookingId` INT NOT NULL AUTO_INCREMENT,
   `bookingName` VARCHAR(100) NOT NULL,
