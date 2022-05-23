@@ -65,7 +65,7 @@
 </template>
  
 <script setup>
-import { ref, onBeforeMount, computed } from 'vue'
+import { ref, onBeforeMount, computed, onUpdated } from 'vue'
 import { getAllEvents, getAllCategory } from '../services/FetchServices.js'
 import BaseEvent from '../components/BaseEvent.vue';
 

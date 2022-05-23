@@ -193,7 +193,7 @@
  
 <script setup>
 import { ref } from "@vue/reactivity"
-import { computed, onBeforeMount, onBeforeUpdate, registerRuntimeCompiler } from "@vue/runtime-core";
+import { computed, onBeforeMount, onBeforeUpdate } from "@vue/runtime-core";
 import { getAllCategory, createEvent, getEventByCatAndDate } from '../services/FetchServices.js'
 import { useRoute, useRouter } from "vue-router";
 
@@ -317,7 +317,7 @@ const isOverlap = (index) => {
 const MAX = 1440;
 const BREAK = 5;
 const CATE_DURATION = computed(() => clinics.value[clinicIndex.value].eventCategoryDuration);
-const computeTimePeriod = async () => {
+const computeTimePeriod = () => {
     if (!clinicId.value && selectDate.value == '' || !clinicId.value && selectDate.value !== '' || clinicId.value && selectDate.value == '') { }
     else {
         TimePeriod.value = []   //Time period only locale time

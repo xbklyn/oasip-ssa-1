@@ -195,14 +195,14 @@ const clinicWithoutCurrent = computed(() => {
 const allEventCategoryName = computed(() => {
     const CLINIC_NAME = ref([])
     for (let i = 0; i < clinicWithoutCurrent.value.length; i++) {
-        CLINIC_NAME.value.push(clinicWithoutCurrent.value[i].eventCategoryName)
+        CLINIC_NAME.value.push(clinicWithoutCurrent.value[i].eventCategoryName.toLowerCase())
     }
     return CLINIC_NAME.value
 })
 
 // CHECK - Name validation
 const clinicNameValidate = () => {
-    if (allEventCategoryName.value.includes(clinicData.value.eventCategoryName.trim())) isClinicNamevalid.value = true
+    if (allEventCategoryName.value.includes(clinicData.value.eventCategoryName.trim().toLowerCase())) isClinicNamevalid.value = true
     else isClinicNamevalid.value = false
     if (clinicData.value.eventCategoryName.length == 0 || clinicData.value.eventCategoryName.length > 100) isClinicNameLengthValid.value = true
     else isClinicNameLengthValid.value = false
