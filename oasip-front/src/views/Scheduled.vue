@@ -129,7 +129,6 @@ const sortByDate = computed(() => {
         return temp
     }
 
-    console.log("sort");
     return temp.sort(e => -1)
 
 })
