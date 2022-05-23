@@ -24,49 +24,21 @@ myRouter.beforeEach((to, from, next) => {
   next()
 })
 
-// const sortTime = () => {
-//      return AllEventsData.value.sort(function (a, b) {
-//         if (b.eventStartTime < a.eventStartTime) {
-//             return -1
-//         }
-//         if (b.eventStartTime > a.eventStartTime) {
-//             return 1
-//         }
-//         return 0
-//     })
-// }
-
-// const sortDate = () => {
-//     return AllEventsData.value.sort(function (a, b) {
-//         return new Date(a.eventDate) - new Date(b.eventDate);
-//     })
-// }
 </script>
  
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 body {
   font-family: 'Poppins', 'Prompt';
-  /* font-family: 'Nunito Sans', sans-serif; */
-  /* font-family: 'Nunito', sans-serif; */
-  /* font-family: 'Kanit', sans-serif; */
-  /* font-family: 'Prompt', sans-serif; */
-  /* background-color: #F9FAFB; */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #23374D;
   overscroll-behavior: auto;
 }
 
-
 nav {
-  /* font-family: 'Nunito', 'Kanit'; */
-  /* font-family: 'Nunito Sans', sans-serif; */
   font-family: 'Poppins', 'Prompt';
 }
 
@@ -102,10 +74,6 @@ nav {
   background-color: #23374D;
 }
 
-.l-w-106 {
-  width: 106px;
-}
-
 .l-w-188 {
   width: 188px;
 }
@@ -122,18 +90,6 @@ nav {
   width: 400px;
 }
 
-.l-w-408 {
-  width: 408px;
-}
-
-.l-w-344 {
-  width: 344px;
-}
-
-.l-w-506 {
-  width: 506px;
-}
-
 .l-w-520 {
   width: 520px;
 }
@@ -144,10 +100,6 @@ nav {
 
 .l-w-624 {
   width: 624px;
-}
-
-.l-w-632 {
-  width: 632px;
 }
 
 .l-w-720 {
@@ -208,5 +160,20 @@ nav {
 
 .l-text-xxs {
   font-size: 0.5rem;
+}
+
+.alert {
+    opacity: 0;
+    animation: fade 0.5s forwards ease-in-out;
+}
+
+@keyframes fade {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 100;
+    }
 }
 </style>

@@ -1,6 +1,8 @@
 <template>
     <footer class="grid grid-row-2 h-80 bg-white mt-16">
         <div class="grid justify-center">
+
+            <!-- ICON - Header -->
             <div class="gap-x-3 place-items-center grid mb-8">
                 <div class="flex place-items-center gap-3">
                     <div>
@@ -10,23 +12,30 @@
                 </div>
             </div>
 
+            <!-- Navigation - mini Navigation bar -->
             <div class="grid justify-center mb-8">
                 <div class="">
                     <div class="font-light list-none flex space-x-12 text-xs text-slate-400">
-                        <router-link :to="{name:'Home'}" class="hover:text-blue-500 duration-150">Home</router-link>
-                        <router-link :to="{name:'Scheduled'}" class="hover:text-blue-500 duration-150">Scheduled</router-link>
-                        <router-link :to="{name:'Booking'}" class="hover:text-blue-500 duration-150">Booking</router-link>
-                        <router-link :to="{name:'Manage'}" class="hover:text-blue-500 duration-150">Manage</router-link>
+                        <router-link :to="{ name: 'Home' }" class="hover:text-blue-500 duration-150">Home</router-link>
+                        <router-link :to="{ name: 'Scheduled' }" class="hover:text-blue-500 duration-150">Scheduled
+                        </router-link>
+                        <router-link :to="{ name: 'Booking' }" class="hover:text-blue-500 duration-150">Booking
+                        </router-link>
+                        <router-link :to="{ name: 'Manage' }" class="hover:text-blue-500 duration-150">Manage
+                        </router-link>
                     </div>
                 </div>
             </div>
         </div>
+
         <div class="l-w-full h-px bg-slate-200 mx-auto"></div>
+
+        <!-- ICON - Created by -->
         <div class="text-center">
-                <p class="text-xs text-gray-400 mb-2">Created by</p>
-            </div>
+            <p class="text-xs text-gray-400 mb-2">Created by</p>
+        </div>
         <div class="flex space-x-12 justify-center">
-            
+
             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
                 role="img" class="iconify iconify--mdi" width="32" height="32" preserveAspectRatio="xMidYMid meet"
                 viewBox="0 0 24 24">
@@ -288,40 +297,6 @@
                 <path fill="url(#IconifyId180e80eb391359453735)" d="M20.378 14.313h.055h-.055Z"></path>
             </svg>
         </div>
-
-
-        <!-- Person #1 -->
-        <!-- <div class="flex l-w-408 h-32 place-content-center place-items-center space-x-6">
-            <div class="w-24 h-24 l-bg-blue inline-block">
-                <img class="container h-24" src="../assets/profile/std-026.jpeg" alt="" width="96">
-            </div>
-            <div class="inline-block">
-                <p class="text-xs font-semibold">63130500026</p>
-                <p class="text-2xl font-semibold">Chotiwit Souyan</p>
-            </div>
-        </div> -->
-
-        <!-- Person #2 -->
-        <!-- <div class="flex l-w-408 h-32 place-content-center place-items-center space-x-6">
-            <div class="w-24 h-24 l-bg-blue inline-block">
-                <img class="container h-24" src="../assets/profile/std-034.jpeg" alt="" width="96">
-            </div>
-            <div class="inline-block">
-                <p class="text-xs font-semibold">63130500034</p>
-                <p class="text-2xl font-semibold">Nuttida Meeboon</p>
-            </div>
-        </div> -->
-
-        <!-- Person #3 -->
-        <!-- <div class="flex l-w-408 h-32 place-content-center place-items-center space-x-6">
-            <div class="w-24 h-24 l-bg-blue inline-block">
-                <img class="container h-24" src="../assets/profile/std-065.png" alt="" width="96">
-            </div>
-            <div class="inline-block">
-                <p class="text-xs font-semibold">63130500065</p>
-                <p class="text-2xl font-semibold">Narawich Kampusa</p>
-            </div>
-        </div> -->
     </footer>
 </template>
  

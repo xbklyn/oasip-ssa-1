@@ -43,7 +43,7 @@
 
                     <!-- Input - First name -->
                     <div class="relative">
-                        <input disabled type="text" id="firstName" v-model="currentData.firstName"
+                        <input disabled type="text" id="firstName" v-model="currentData.name"
                             class="cursor-not-allowed l-w-612 h-12 pl-2 text-sm text-gray-400 border-2 appearance-none l-bg-gray-100 peer"
                             placeholder=" " />
                         <label for="firstName"
@@ -51,28 +51,6 @@
                             Name
                         </label>
                     </div>
-
-                    <!-- Input - Last name -->
-                    <!-- <div class="relative">
-                        <input disabled type="text" id="lastName" v-model="currentData.lastName"
-                            class="cursor-not-allowed l-w-188 h-12 pl-2 text-sm text-gray-400 border-2 appearance-none l-bg-gray-100 peer"
-                            placeholder=" " />
-                        <label for="lastName"
-                            class="absolute text-sm l-color-gray-300 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 left-1">
-                            Last Name
-                        </label>
-                    </div> -->
-
-                    <!-- Input - Group -->
-                    <!-- <div class="relative">
-                        <input disabled type="text" id="group" v-model="currentData.group"
-                            class="cursor-not-allowed l-w-188 h-12 pl-2 text-sm text-gray-400 border-2 appearance-none l-bg-gray-100 peer"
-                            placeholder=" " />
-                        <label for="group"
-                            class="absolute text-sm l-color-gray-300 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 left-1">
-                            Group
-                        </label>
-                    </div> -->
                 </div>
 
                 <!-- Input - Note -->
@@ -98,7 +76,6 @@
             <div class="l-w-612 h-full grid grid-cols-2 gap-6">
 
                 <!-- Input - Date -->
-
                 <div class="relative">
                     <input type="date" id="dateTime" v-model="selectDate" :min="currentDate"
                         @change="startTime = timeContain"
@@ -115,8 +92,8 @@
             <div class="flex justify-self-end mt-12">
                 <button @click="reset" class="text-blue-500 font-medium flex w-18 h-8 justify-self-end duration-150">
                     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                        aria-hidden="true" role="img" class="reset iconify iconify--system-uicons mr-1 stroke-1" width="24" height="24"
-                        preserveAspectRatio="xMidYMid meet" viewBox="0 0 21 21">
+                        aria-hidden="true" role="img" class="reset iconify iconify--system-uicons mr-1 stroke-1"
+                        width="24" height="24" preserveAspectRatio="xMidYMid meet" viewBox="0 0 21 21">
                         <g fill="none" fill-rule="evenodd" stroke="currentColor" stroke-linecap="round"
                             stroke-linejoin="round">
                             <path d="M3.578 6.487A8 8 0 1 1 2.5 10.5"></path>
@@ -124,28 +101,67 @@
                         </g>
                     </svg></button>
             </div>
-                 <div class="mb-6 h-48 l-w-612 grid grid-cols-5 gap-6 mt-6 overflow-y-auto">
-                    
-                    <button v-for="(time, index) in computeTimePeriod" :key="index" @click="startTime = index"
-                        :class="['h-8 text-sm duration-150 bg-white', startTime == index ? 'bg-blue-500 text-white border-0' : '', isOverlap(index) ? ' text-gray-300' : 'hover:bg-blue-500 hover:text-white border border-gray-300 hover:border-none']"
-                        :disabled="isOverlap(index)">
-                        {{ `${time.startTime.split(':')[0]}:${time.startTime.split(':')[1]}`}} - {{ `${time.endTime.split(':')[0]}:${time.endTime.split(':')[1]}` }}
-                    </button>
-                </div>
+            <div class="mb-6 h-48 l-w-612 grid grid-cols-5 gap-6 mt-6 overflow-y-auto">
 
-            <div class="l-w-612 h-px bg-black mx-auto"></div>
+                <button v-for="(time, index) in computeTimePeriod" :key="index" @click="startTime = index"
+                    :class="['h-8 text-sm duration-150 bg-white', startTime == index ? 'bg-blue-500 text-white border-0' : '', isOverlap(index) ? ' text-gray-300' : 'hover:bg-blue-500 hover:text-white border border-gray-300 hover:border-none']"
+                    :disabled="isOverlap(index)">
+                    {{ `${time.startTime.split(':')[0]}:${time.startTime.split(':')[1]}` }} - {{
+                            `${time.endTime.split(':')[0]}:${time.endTime.split(':')[1]}`
+                    }}
+                </button>
+            </div>
+
+            <div class="l-w-612 h-px bg-black mx-auto mb-6"></div>
+        </div>
+        <div v-if="ERROR"
+            class="alert l-w-612 mx-auto duration-150 mb-12 flex p-4 mt-2 pb-4 text-sm text-red-700 bg-red-100 rounded place-items-center"
+            role="alert">
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
+                role="img" class="iconify iconify--material-symbols mr-2" width="24" height="24"
+                preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
+                <path fill="currentColor"
+                    d="M12 22q-2.075 0-3.9-.788q-1.825-.787-3.175-2.137q-1.35-1.35-2.137-3.175Q2 14.075 2 12t.788-3.9q.787-1.825 2.137-3.175q1.35-1.35 3.175-2.138Q9.925 2 12 2t3.9.787q1.825.788 3.175 2.138q1.35 1.35 2.137 3.175Q22 9.925 22 12t-.788 3.9q-.787 1.825-2.137 3.175q-1.35 1.35-3.175 2.137Q14.075 22 12 22Zm-1-9h2V7h-2Zm1 4q.425 0 .713-.288Q13 16.425 13 16t-.287-.713Q12.425 15 12 15t-.712.287Q11 15.575 11 16t.288.712Q11.575 17 12 17Z">
+                </path>
+            </svg>
+            <div>
+                <span class="font-medium">Error! </span> Somthing want wrong, Please try again.
+            </div>
         </div>
 
         <div class="l-w-612 h-12 mx-auto my-12 ">
             <button @click="$emit('edit', currentData)"
                 class="w-full h-full text-white duration-150 bg-emerald-400 hover:bg-emerald-600">Update</button>
         </div>
+        <div v-if="SUCCESFUL"
+            class="alert bg-black/30 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full h-full">
+            <div class="relative p-4 w-full h-full grid place-items-center justify-center">
+                <div class="relative bg-white shadow l-w-520 h-72 grid place-items-center">
+                    <div class="grid place-items-center gap-6">
+                        <div class="grid justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                aria-hidden="true" role="img" class="iconify iconify--clarity text-emerald-500"
+                                width="96" height="96" preserveAspectRatio="xMidYMid meet" viewBox="0 0 36 36">
+                                <path fill="currentColor"
+                                    d="M18 2a16 16 0 1 0 16 16A16 16 0 0 0 18 2Zm10.45 10.63L15.31 25.76L7.55 18a1.4 1.4 0 0 1 2-2l5.78 5.78l11.14-11.13a1.4 1.4 0 1 1 2 2Z"
+                                    class="clr-i-solid clr-i-solid-path-1"></path>
+                                <path fill="none" d="M0 0h36v36H0z"></path>
+                            </svg>
+                        </div>
+                        <div class="text-center">
+                            <h2 class="text-xl font-semibold text-emerald-700 mb-2">Update succesful!</h2>
+                            <p class="text-md l-color-gray-300">your information is already updated.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
  
 <script setup>
-import { computed, onBeforeMount, onBeforeUnmount, onBeforeUpdate, ref } from "@vue/runtime-core"
-import { useRoute, useRouter } from 'vue-router'
+import { computed, onBeforeMount, onBeforeUpdate, ref } from "@vue/runtime-core"
+import { useRoute } from 'vue-router'
 import { getEventByCatAndDate } from '../services/FetchServices.js';
 const { params } = useRoute()
 
@@ -159,45 +175,41 @@ const prop = defineProps({
         type: Number,
         require: false
     },
-    MAX: {
-        type: Number,
+    SUCCESFUL: {
+        type: Boolean,
         require: false
     },
-    BREAK: {
-        type: Number,
+    ERROR: {
+        type: Boolean,
         require: false
     }
 })
 
 defineEmits(['edit', 'getDate'])
+
 onBeforeMount(async () => {
     TimeBooked.value = await getTime.value
 })
 
+const getTime = computed(async () => {
+    const temp = await getEventByCatAndDate(prop.data.categoryId, selectDate.value)
+    return temp
+})
+
+onBeforeUpdate(async () => {
+    TimeBooked.value = await getTime.value
+})
+
+// DATA - Edited data
 const currentData = computed(() => {
-    const firstName = ref()
-    const lastName = ref()
-    const group = ref()
-
-    const newDate = computed(() => {
-        return new Date(dateTime.value)
-    })
-
-    firstName.value = prop.data.bookingName.split(" ")[0]
-    lastName.value = prop.data.bookingName.split(" ")[1]
-    group.value = prop.data.bookingName.split(" ")[2]
-
     return {
         id: params.id,
         email: prop.data.bookingEmail,
-        firstName: firstName.value,
-        lastName: lastName.value,
-        group: group.value,
+        name: prop.data.bookingName,
         note: note.value,
         time: TimePeriodWithDate.value[startTime.value].startTime
     }
 })
-
 const currentDate = computed(() => {
     const date = ref(new Date().getFullYear())
     const month = ref((new Date().getMonth() + 1).toString())
@@ -205,7 +217,7 @@ const currentDate = computed(() => {
     if (month.value.length === 1) {
         return `${date.value}-0${month.value}-${day.value}`
     }
-    return `${date.value}-${month.value}-${day.value}`
+    return `${date.value}-${month.value}-${day.value}` // Current date time
 })
 
 const continueDate = computed(() => {
@@ -222,9 +234,25 @@ const continueDate = computed(() => {
         day.value = `0${day.value}`
     }
 
-    return `${date.value}-${month.value}-${day.value}`
+    return `${date.value}-${month.value}-${day.value}` // Date time from user selected
+})
+const note = ref(prop.data.eventNotes)
+const selectDate = ref(continueDate.value)
+const TimeBooked = ref([])
+
+// STATUS - Check succesfully
+const SUCCESFUL = computed(() => {
+    return prop.SUCCESFUL
 })
 
+// STATUS - Check error
+const ERROR = computed(() => {
+    return prop.ERROR
+})
+
+
+
+// GET - All only of event start time from time booked
 const allEventStartTime = computed(() => {
     const bookedStartTime = ref([])
     for (let i = 0; i < TimeBooked.value.length; i++) {
@@ -233,6 +261,7 @@ const allEventStartTime = computed(() => {
     return bookedStartTime
 })
 
+// GET - All only start time of computeTimePeriod
 const allStartTime = computed(() => {
     const bookedStartTime = ref([])
     for (let i = 0; i < computeTimePeriod.value.length; i++) {
@@ -241,34 +270,14 @@ const allStartTime = computed(() => {
     return bookedStartTime
 })
 
+// FILTER - All only of event start time from time booked with out user time selected
 const withoutBooked = computed(() => {
     return allEventStartTime.value.value.filter(e => {
         return e !== new Date(prop.data.eventStartTime).toLocaleTimeString('th-TH')
     })
 })
 
-const note = ref(prop.data.eventNotes)
-
-const getTime = computed(async () => {
-    const temp = await getEventByCatAndDate(prop.data.categoryId, selectDate.value)
-    return temp
-})
-
-onBeforeUpdate(async () => {
-    TimeBooked.value = await getTime.value
-})
-
-
-const MAX = 1440;
-const BREAK = 5;
-const CATE_DURATION = computed(() => parseInt(prop.duration));
-
-// const TimePeriod = ref([])
-const selectDate = ref(continueDate.value)
-
-const TimeBooked = ref([])
-
-
+// GET - Booked time with date time
 const TimeBookedWithDate = computed(() => {
     const BOOKED_DATE = ref([])
     for (let i = 0; i < TimeBooked.value.length; i++) {
@@ -280,7 +289,7 @@ const TimeBookedWithDate = computed(() => {
     return BOOKED_DATE.value
 })
 
-// Check overlap
+// CHECK - Overlap validation
 const isOverlap = (index) => {
     let start = new Date(new Date(currentDate.value).getFullYear(), new Date(currentDate.value).getMonth(), new Date(currentDate.value).getDate(), computeTimePeriod.value[index].startTime.split(":")[0], computeTimePeriod.value[index].startTime.split(":")[1]).getTime();
     let cur = new Date().getTime()
@@ -288,34 +297,33 @@ const isOverlap = (index) => {
     let START_TIME = new Date(new Date(selectDate.value).getFullYear(), new Date(selectDate.value).getMonth(), new Date(selectDate.value).getDate(), computeTimePeriod.value[index].startTime.split(":")[0], computeTimePeriod.value[index].startTime.split(":")[1])
     let END_TIME = new Date(new Date(selectDate.value).getFullYear(), new Date(selectDate.value).getMonth(), new Date(selectDate.value).getDate(), computeTimePeriod.value[index].endTime.split(":")[0], computeTimePeriod.value[index].endTime.split(":")[1])
 
-    // Check if future
+
     if (
+        // CHECK - Is FUTURE
         withoutBooked.value.includes(computeTimePeriod.value[index].startTime) ||
         start < cur && new Date(selectDate.value).getDate() == new Date(currentDate.value).getDate())
         return true
 
-    // CHECK OVERLAP
-    let isOverRapYo = false
+    let overLap = false
     TimeBookedWithDate.value.forEach(e => {
 
-        //OUTSIDE -> INSIDE -> START_TIME BETWEEN -> END_TIME BETWEEN
+        // CHECK OVERLAP
         if (
-            (e.startTime < START_TIME && e.endTime > END_TIME) ||
-            (e.startTime > START_TIME && e.endTime < END_TIME) ||
-            (e.startTime >= START_TIME && e.startTime <= END_TIME) ||
-            (e.endTime >= START_TIME && e.endTime <= END_TIME)
+            (e.startTime < START_TIME && e.endTime > END_TIME) || // OUT SIDE
+            (e.startTime > START_TIME && e.endTime < END_TIME) || // IN SIDE
+            (e.startTime >= START_TIME && e.startTime <= END_TIME) || // START_TIME BETWEEN
+            (e.endTime >= START_TIME && e.endTime <= END_TIME) // END_TIME BETWEEN
         ) {
-            isOverRapYo = true
+            overLap = true
         }
     })
-    return isOverRapYo
+    return overLap
 }
 
-// Create time period
-// const dateTime = computed(() => {
-//     return `${selectDate.value}T${computeTimePeriod.value[startTime.value]}`
-// })
-
+// GET - All time period
+const MAX = 1440;
+const BREAK = 5;
+const CATE_DURATION = computed(() => parseInt(prop.duration));
 const TimePeriodWithDate = ref([])
 const computeTimePeriod = computed(() => {
     if (selectDate.value == '') { }
@@ -328,7 +336,6 @@ const computeTimePeriod = computed(() => {
 
     let i = 0
     while (i + CATE_DURATION.value < MAX) {
-
         let start = new Date(init);
         let plusMinutes = start.getMinutes() + CATE_DURATION.value;
         let end = new Date(start);
@@ -339,43 +346,45 @@ const computeTimePeriod = computed(() => {
         init.setMinutes(end.getMinutes() + BREAK)
         i += CATE_DURATION.value + BREAK
     }
-
     return TimePeriod.value
 })
 
-const h = computed(() => {
-    for (let i = 0; i < TimePeriodWithDate.value.length; i++) {
-        if (TimePeriodWithDate.value[i].startTime > new Date(prop.data.eventStartTime)) {
+// GET - Index of booked time between computeTimePeriod
+const indexOfTime = computed(() => {
+    for (let i = 0; i < computeTimePeriod.value.length; i++) {
+        if (computeTimePeriod.value[i].startTime > new Date(prop.data.eventStartTime).toLocaleTimeString('th-TH')) {
             return i
         }
     }
-
 })
 const timeContain = computed(() => {
     return allStartTime.value.value.indexOf(new Date(prop.data.eventStartTime).toLocaleTimeString('th-TH'))
 })
+const startTime = ref(timeContain.value == -1 ? indexOfTime.value - 1 : timeContain.value)
 
-const startTime = ref(timeContain.value == -1 ? h.value - 1 : timeContain.value)
 
+// RESET - Discard all selected
 const reset = () => {
-    return startTime.value = timeContain.value == -1 ? h.value - 1 : timeContain.value
+    return startTime.value = timeContain.value == -1 ? indexOfTime.value - 1 : timeContain.value
 }
 </script>
  
 <style>
-.reset{
+.reset {
     transition: transform 0.5s ease-in-out;
 }
-.reset:active{
+
+.reset:active {
     transition: transform 1s ease-in-out;
-    animation:rotation 0.1s ease-in-out;
+    animation: rotation 0.1s ease-in-out;
 }
 
 @keyframes rotation {
-    from{
+    from {
         transform: rotate(0deg);
     }
-    to{
+
+    to {
         transform: rotate(-360deg);
     }
 }

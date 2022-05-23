@@ -2,10 +2,9 @@
 export const getAllEvents = async () => {
     const res = await fetch(`${import.meta.env.VITE_BASE_URL}/events`)
     if (res.status === 200) {
-        console.log(res.status);
         return await res.json();
     } else {
-        console.log('Cannot fetch from database');
+        return res.status
     }
 }
 
@@ -15,7 +14,7 @@ export const getEventById = async (id) => {
     if (res.status === 200) {
         return await res.json()
     } else {
-        console.log('err');
+        return res.status
     }
 }
 
@@ -25,7 +24,7 @@ export const getAllCategory = async () => {
     if (res.status === 200) {
         return await res.json()
     } else {
-        return console.log('err');
+        return res.status
     }
 }
 
@@ -35,7 +34,7 @@ export const getEventCategoryById = async (id) => {
     if (res.status === 200) {
         return await res.json()
     } else {
-        return console.log('err');
+        return res.status
     }
 }
 
@@ -45,7 +44,7 @@ export const getEventByCatAndDate = async (category, date) => {
     if (res.status === 200) {
         return await res.json()
     } else {
-        return console.log('err');
+        return res.status
     }
 }
 
@@ -66,9 +65,9 @@ export const createEvent = async (
         })
     })
     if (res.status === 201) {
-        console.log('pass');
+        return res.status
     } else {
-        console.log('err');
+        return res.status
     }
 }
 

@@ -1,7 +1,9 @@
 <template>
+
     <div class="l-w-full l-h-824 my-6 mx-auto flex border">
-        <div
-            class="l-w-188 l-h-824 justify-self-start l-bg-gray overflow-y-auto border-r">
+        <div class="l-w-188 l-h-824 justify-self-start l-bg-gray overflow-y-auto border-r">
+
+            <!-- Navigation bar - Left side -->
             <div class="w-40 grid my-12 justify-center gap-3">
                 <h2 class="mb-3 text-slate-200 font-medium">Manage</h2>
                 <router-link :to="{ name: 'clinic-manage' }"
@@ -43,6 +45,8 @@
                 </router-link>
             </div>
         </div>
+
+        <!-- Page - Editing -->
         <div class="l-w-1060 l-h-824 pt-12 overflow-auto scroll-smooth">
             <div class="grid justify-center">
                 <router-view></router-view>
@@ -53,10 +57,6 @@
 </template>
  
 <script setup>
-import { ref } from "@vue/reactivity";
-
-
-
 </script>
  
 <style>
