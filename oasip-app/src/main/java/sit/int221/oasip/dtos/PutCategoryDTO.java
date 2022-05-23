@@ -1,11 +1,12 @@
 package sit.int221.oasip.dtos;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class PutCategoryDTO {
 
-
+    @NotBlank
     @NotNull
     private String eventCategoryName;
 
