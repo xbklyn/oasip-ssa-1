@@ -72,7 +72,7 @@
                         </path>
                     </svg>
                     <div>
-                        <span class="font-medium">Error! </span> Somthing want wrong, Please try again.
+                        <span class="font-medium">ERROR! </span> Something want wrong, Please try again.
                     </div>
                 </div>
             </div>

@@ -182,7 +182,7 @@
                         </div>
                         <div class="text-center">
                             <h2 class="text-xl font-semibold text-emerald-700 mb-2">Booked succesful!</h2>
-                            <p class="text-md l-color-gray-300">your information is already submited.</p>
+                            <p class="text-md l-color-gray-300">Your information is already submited.</p>
                         </div>
                     </div>
                 </div>
@@ -206,6 +206,7 @@ onBeforeMount(async () => {
 })
 
 const getTime = computed(async () => {
+    if(clinicId.value === 0) return 
     const temp = await getEventByCatAndDate(clinicId.value, selectDate.value)
     return temp // All of booked date time in category
 })

@@ -122,7 +122,7 @@
                             </div>
                             <div class="text-center">
                                 <h2 class="text-xl font-semibold text-emerald-700 mb-2">DONE!</h2>
-                                <p class="text-md l-color-gray-300">your scheduled is already deleted.</p>
+                                <p class="text-md l-color-gray-300">Your scheduled is already deleted.</p>
                             </div>
                         </div>
                     </div>
@@ -147,7 +147,7 @@
                             </div>
                             <div class="text-center">
                                 <h2 class="text-xl font-semibold text-orange-400 mb-2">WARNING!</h2>
-                                <p class="text-md l-color-gray-300">Somthing want wrong, Please try again.</p>
+                                <p class="text-md l-color-gray-300">Something want wrong, Please try again.</p>
                             </div>
                         </div>
                     </div>
