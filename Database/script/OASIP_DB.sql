@@ -126,11 +126,10 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 --
 -- create user
 --
-create user root@'172.17.0.1' identified by '123';
-grant all privileges on *.* to 'root'@'172.17.0.1';
-create user 'admin'@'%' identified by '123';
-create user 'dev'@'%' identified by '123';
-create user 'user'@'%' identified by '123';
+
+create user 'admin'@'%' identified by 'oasip_ssa1_admin';
+create user 'dev'@'%' identified by 'oasip_ssa1_dev';
+create user 'user'@'%' identified by 'oasip_ssa1_user';
 grant all privileges on *.* to 'admin'@'%';
 grant select ,insert ,update , delete on oasip.* to 'user'@'%';
 grant select ,insert ,update , delete on oasip.* to  'dev'@'%' ;

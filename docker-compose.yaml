@@ -7,7 +7,7 @@ services:
     ports:
       - "3306:3306"
     environment:
-      - MYSQL_ROOT_PASSWORD=123
+      - MYSQL_ROOT_PASSWORD=oasip_ssa1_root
       - TZ=Asia/Bangkok
     volumes:
       - ./Database/script/:/docker-entrypoint-initdb.d/
