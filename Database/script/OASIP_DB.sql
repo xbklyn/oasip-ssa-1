@@ -131,6 +131,6 @@ grant all privileges on *.* to 'root'@'172.17.0.1';
 create user 'admin'@'%' identified by '123';
 create user 'dev'@'%' identified by '123';
 create user 'user'@'%' identified by '123';
-grant all privileges on . to 'admin'@'%';
+grant all privileges on *.* to 'admin'@'%';
 grant select ,insert ,update , delete on oasip.* to 'user'@'%';
 grant select ,insert ,update , delete on oasip.* to  'dev'@'%' ;
