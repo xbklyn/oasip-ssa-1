@@ -118,9 +118,7 @@ const sortByStatus = computed(() => {
 // SORT - By date
 const selectDate = ref('')
 const sortByDate = computed(() => {
-    console.log("status : " + sortByStatus.value.length);
     if (selectDate.value == '') {
-        console.log("not select date");
         return sortByStatus.value;
     }
 
@@ -129,7 +127,6 @@ const sortByDate = computed(() => {
     })
     console.log("temp : " + temp.length);
     if (temp.length == 0 || temp.includes(e => e.statusName.toLowerCase() == 'ongoing' || e.statusName.toLowerCase() == 'upcoming')) {
-        console.log("no sort");
         return temp
     }
 
