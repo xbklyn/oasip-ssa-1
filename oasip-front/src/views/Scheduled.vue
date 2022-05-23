@@ -92,9 +92,10 @@ const status = ref('')
 const sortByStatus = computed(() => {
     if (status.value == '') return sortByCategory.value;
     else if (status.value == 'upcoming') {
-        return sortByCategory.value.filter(event => {
+        let temp = sortByCategory.value.filter(event => {
             return event.statusName.toLowerCase() == 'upcoming' || event.statusName.toLowerCase() == 'ongoing'
         })
+        return temp.sort(e => -1)
     }
     else if (status.value == 'ongoing') {
         return sortByCategory.value.filter(event => {
@@ -102,9 +103,10 @@ const sortByStatus = computed(() => {
         })
     }
     else {
-        return sortByCategory.value.filter(event => {
+        let temp = sortByCategory.value.filter(event => {
             return event.statusName.toLowerCase() == 'completed'
         })
+        return temp
     }
 
 })
