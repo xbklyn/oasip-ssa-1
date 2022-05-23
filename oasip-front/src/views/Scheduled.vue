@@ -65,7 +65,7 @@
 </template>
  
 <script setup>
-import { ref, onBeforeMount, computed, onUpdated } from 'vue'
+import { ref, onBeforeMount, computed } from 'vue'
 import { getAllEvents, getAllCategory } from '../services/FetchServices.js'
 import BaseEvent from '../components/BaseEvent.vue';
 
@@ -125,7 +125,6 @@ const sortByDate = computed(() => {
     let temp = sortByStatus.value.filter(event => {
         return convert(event.eventStartTime) == selectDate.value
     })
-    console.log("temp : " + temp.length);
     if (temp.length == 0 || temp.includes(e => e.statusName.toLowerCase() == 'ongoing' || e.statusName.toLowerCase() == 'upcoming')) {
         return temp
     }
