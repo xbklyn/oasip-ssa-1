@@ -103,6 +103,8 @@
                     </div>
                 </div>
             </div>
+
+            <!-- ALERT - Succesfully -->
             <div v-if="SUCCESFUL"
                 class="alert bg-black/40 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full h-full">
                 <div class="relative p-4 w-full h-full grid place-items-center justify-center">
@@ -125,8 +127,9 @@
                         </div>
                     </div>
                 </div>
-
             </div>
+
+            <!-- ALERT - Error -->
             <div v-if="ERROR"
                 class="alert bg-black/40 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full h-full">
                 <div class="relative p-4 w-full h-full grid place-items-center justify-center">
@@ -134,8 +137,9 @@
                         <div class="grid place-items-center gap-6">
                             <div class="grid justify-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                    aria-hidden="true" role="img" class="iconify iconify--material-symbols text-orange-400" width="96"
-                                    height="96" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
+                                    aria-hidden="true" role="img"
+                                    class="iconify iconify--material-symbols text-orange-400" width="96" height="96"
+                                    preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
                                     <path fill="currentColor"
                                         d="M12 22q-2.075 0-3.9-.788q-1.825-.787-3.175-2.137q-1.35-1.35-2.137-3.175Q2 14.075 2 12t.788-3.9q.787-1.825 2.137-3.175q1.35-1.35 3.175-2.138Q9.925 2 12 2t3.9.787q1.825.788 3.175 2.138q1.35 1.35 2.137 3.175Q22 9.925 22 12t-.788 3.9q-.787 1.825-2.137 3.175q-1.35 1.35-3.175 2.137Q14.075 22 12 22Zm-1-9h2V7h-2Zm1 4q.425 0 .713-.288Q13 16.425 13 16t-.287-.713Q12.425 15 12 15t-.712.287Q11 15.575 11 16t.288.712Q11.575 17 12 17Z">
                                     </path>
@@ -154,25 +158,23 @@
 </template>
  
 <script setup>
-import { computed, ref } from '@vue/reactivity';
-import { onBeforeMount, onBeforeUpdate } from '@vue/runtime-core';
+import { ref } from '@vue/reactivity';
+import { onBeforeMount } from '@vue/runtime-core';
+import { getEventById, deleteEventById, editEventById } from '../services/FetchServices.js';
+import { useRoute, useRouter } from 'vue-router'
 import EventDetail from '../components/EventDetail.vue';
 import EventDetailEdit from '../components/EventDetailEdit.vue'
-import { getEventById, deleteEventById, editEventById, getEventByCatAndDate } from '../services/FetchServices.js';
-import { useRoute, useRouter } from 'vue-router'
 const { params } = useRoute()
 
 
-
-// @@@@@@ HOOK @@@@@@
+// HOOK
 onBeforeMount(async () => {
     const res = await getEventById(params.id)
     eventInfoById.value = res
-    // const temp = await getEventCategoryById(eventInfoById.value.categoryId)
-    // CATEGORY.value = temp
+
 })
 
-// @@@@@@ ATTIBUTE @@@@@@
+// ATTIBUTE 
 const eventInfoById = ref([])
 const CATEGORY = ref({})
 const show = ref(false)
@@ -180,21 +182,16 @@ const modifyMode = ref(false)
 const myRouter = useRouter()
 
 
-
-
-
-// @@@@@@ FUNCTION @@@@@@
-// Delete - Event
+// FUNCTION
+// DELETE - Event
 const deleteEvent = async (eventId) => {
     let status = await deleteEventById(eventId)
-
     if (status == 500 || status == 400) {
         ERROR.value = true
         setTimeout(function () {
-ERROR.value = false
+            ERROR.value = false
         }, 2000);
     }
-    // alert("Something is wrong, please try again.")
     else {
         SUCCESFUL.value = true
         ERROR.value = false
@@ -203,13 +200,9 @@ ERROR.value = false
             myRouter.go(-1)
         }, 2000);
     }
-    // alert("Delete succesfully.")
-    // show.value = false
-    // location.reload()
-    // myRouter.go(-1)
 }
 
-// Edit - Event
+// EDIT - Event
 const SUCCESFUL = ref(false)
 const ERROR = ref(false)
 const editEvent = async (event) => {
@@ -218,7 +211,6 @@ const editEvent = async (event) => {
         ERROR.value = true
         SUCCESFUL.value = false
     }
-    // alert("Something is wrong, please try again.")
     else {
         SUCCESFUL.value = true
         ERROR.value = false
@@ -227,17 +219,8 @@ const editEvent = async (event) => {
                 path: `scheduled/scheduled-info/${params.id}`
             })
         }, 2000);
-        // modifyMode.value = false
     }
-    // alert("Edit succesfully.")
-    // location.reload()
-    // myRouter.go({
-    //     path: `scheduled/scheduled-info/${params.id}`
-    // })
-
 }
-
-
 
 </script>
  

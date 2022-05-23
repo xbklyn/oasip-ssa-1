@@ -17,7 +17,7 @@
                     <div class="space-y-1 col-span-2">
                         <h4 class="text-base l-color-gray-300">Time</h4>
                         <p class="text-sm font-medium">
-                           On {{new Date(data.eventStartTime).toLocaleDateString('th-TH')}} at {{`${new Date(data.eventStartTime).toLocaleTimeString('th-TH').split(':')[0]}:${new Date(data.eventStartTime).toLocaleTimeString('th-TH').split(':')[1]} `}} - {{`${new Date(data.eventEndTime).toLocaleTimeString('th-TH').split(':')[0]}:${new Date(data.eventEndTime).toLocaleTimeString('th-TH').split(':')[1]} `}}
+                            On {{ new Date(data.eventStartTime).toLocaleDateString('th-TH') }} at {{ `${new Date(data.eventStartTime).toLocaleTimeString('th-TH').split(':')[0]}:${new Date(data.eventStartTime).toLocaleTimeString('th-TH').split(':')[1]} ` }} - {{ `${new Date(data.eventEndTime).toLocaleTimeString('th-TH').split(':')[0]}:${ new Date(data.eventEndTime).toLocaleTimeString('th-TH').split(':')[1]} `}}
                         </p>
                     </div>
                     <div class="space-y-1">
@@ -26,11 +26,13 @@
                     </div>
                     <div class="grid col-span-4 space-y-1">
                         <h4 class="text-base l-color-gray-300">Note</h4>
-                        <p class="text-sm h-20 font-medium">{{ data.eventNotes == '' ? 'No description' : data.eventNotes }}</p>
+                        <p class="text-sm h-20 font-medium">{{ data.eventNotes == '' ? 'No description' :
+                                data.eventNotes
+                        }}</p>
                     </div>
                 </div>
             </div>
-        </div> 
+        </div>
 
         <div class="w-full h-px bg-slate-200"></div>
 
@@ -49,7 +51,7 @@
                     </div>
                     <div class="col-span-4 space-y-1">
                         <h4 class="text-base l-color-gray-300">Description</h4>
-                        <p class="text-sm font-medium h-20 w-full">{{ data.eventCategoryDescription == '' ? 'No description' : data.eventCategoryDescription  }}</p>
+                        <p class="text-sm font-medium h-20 w-full">{{ data.eventCategoryDescription == '' ? 'No description' : data.eventCategoryDescription }}</p>
                     </div>
                 </div>
             </div>

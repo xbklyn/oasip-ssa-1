@@ -22,6 +22,7 @@
 
         </div>
 
+        <!-- Lists - Categories -->
         <div class="l-w-824 mx-auto mt-12 grid grid-cols-4 gap-6 mb-16">
             <a href="#edit" v-for="value, index in CLINICS" :key="index"
                 @click="CURR_CLINIC = value.categoryId; reset()"
@@ -36,6 +37,8 @@
                 </div>
             </a>
         </div>
+
+        <!-- Setting - Any category -->
         <div class="l-w-824 h-96 mx-auto" v-if="CURR_DATA" id="edit">
             <h2 class="text-xl font-medium mb-12 my">Category Setting<br><span class="font-semibold text-3xl ">{{
                     CURR_DATA.eventCategoryName
@@ -88,16 +91,17 @@
                     <p v-show="isClinicNameLengthValid" class="text-sm text-red-600 absolute">Clinic name must not empty
                         or size are exceeded.</p>
                 </div>
+
                 <!-- Input - Duration -->
                 <div class="relative">
-                    <div class="flex absolute inset-y-0 right-5 bottom-1 items-center pl-2 pointer-events-none">
-                        <div class="w-5 h-5 text-gray-500 dark:text-gray-400">
-                            Min
+                    <div class="flex absolute inset-y-0 right-9 bottom-1 items-center pl-2 pointer-events-none">
+                        <div class="w-5 h-5 l-color-gray-300 dark:text-gray-400">
+                            Mins.
                         </div>
                     </div>
                     <input type="number" id="duration" v-model="clinic_dur.value" min="0" max="480"
                         @input="durationValidate"
-                        :class="['l-w-400 h-12 pl-2 text-sm text-black border-2 bg-white peer focus:outline-none focus:ring-0 focus:border-blue-600', isDurationValid ? 'border-2 border-red-600 focus:outline-none focus:ring-0 focus:border-red-600' : '']"
+                        :class="['appearance-none l-w-400 h-12 pl-2 text-sm text-black border-2 bg-white peer focus:outline-none focus:ring-0 focus:border-blue-600', isDurationValid ? 'border-2 border-red-600 focus:outline-none focus:ring-0 focus:border-red-600' : '']"
                         placeholder="30" />
                     <label for="duration"
                         class="l-color-gray-300 absolute text-md duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 left-1">
@@ -119,6 +123,7 @@
                 </div>
             </div>
 
+            <!-- Button - All button -->
             <div class="flex gap-6">
                 <button @click="updateCategory(clinicData)" :disabled="isAllValid"
                     :class="['my-12 bg-emerald-400 text-white l-w-188 h-12 duration-150 hover:bg-emerald-600', isAllValid ? 'disabled:bg-gray-200' : '']">Update</button>
@@ -132,13 +137,13 @@
  
 <script setup>
 import { computed, onBeforeMount, ref } from "@vue/runtime-core";
-import { objectToString } from "@vue/shared";
 import { getAllCategory, editCategoryById } from '../services/FetchServices.js'
 
 onBeforeMount(async () => {
     const res = await getAllCategory()
-    CLINICS.value = res
+    CLINICS.value = res // Get all category
 })
+
 const isClinicNamevalid = ref(false)
 const isClinicNameLengthValid = ref(false)
 const isDurationValid = ref(false)
@@ -149,7 +154,7 @@ const CURR_DATA = computed(() => {
     data.value = CLINICS.value.find(c => {
         return c.categoryId == CURR_CLINIC.value
     })
-    return data.value
+    return data.value // Clinic selected data
 })
 
 
@@ -166,7 +171,7 @@ const clinicData = computed(() => {
     }
 })
 
-
+// CHECK - Category duration validate
 const durationValidate = () => {
     if (clinicData.value.eventCategoryDuration > 0 && clinicData.value.eventCategoryDuration <= 480) {
         isDurationValid.value = false
@@ -177,6 +182,7 @@ const durationValidate = () => {
     }
 }
 
+// GET - Category with out selected
 const clinicWithoutCurrent = computed(() => {
     const CLINIC = ref([])
     CLINIC.value = CLINICS.value.filter(c => {
@@ -185,6 +191,7 @@ const clinicWithoutCurrent = computed(() => {
     return CLINIC.value
 })
 
+// FILTER - Only category name with out selected
 const allEventCategoryName = computed(() => {
     const CLINIC_NAME = ref([])
     for (let i = 0; i < clinicWithoutCurrent.value.length; i++) {
@@ -193,32 +200,31 @@ const allEventCategoryName = computed(() => {
     return CLINIC_NAME.value
 })
 
-
+// CHECK - Name validation
 const clinicNameValidate = () => {
-    if (allEventCategoryName.value.includes(clinicData.value.eventCategoryName)) isClinicNamevalid.value = true
+    if (allEventCategoryName.value.includes(clinicData.value.eventCategoryName.trim())) isClinicNamevalid.value = true
     else isClinicNamevalid.value = false
     if (clinicData.value.eventCategoryName.length == 0 || clinicData.value.eventCategoryName.length > 100) isClinicNameLengthValid.value = true
     else isClinicNameLengthValid.value = false
 }
 
+// RESET - Discard everything
 const reset = () => {
     isDurationValid.value = false
     isClinicNamevalid.value = false
     isClinicNameLengthValid.value = false
 }
 
-
+// ALERT - Succesfull and Error
 const SUCCESFUL = ref(false)
 const ERROR = ref(false)
 const updateCategory = async (category) => {
     let status = await editCategoryById(category)
     if (status == 500 || status == 400) {
-        // alert("Somthing is wrong with a server, Please try again.")
         SUCCESFUL.value = false
         ERROR.value = true
     }
     else {
-        // alert("Edit succesfully")
         ERROR.value = false
         SUCCESFUL.value = true
         setTimeout(function () {
@@ -227,6 +233,7 @@ const updateCategory = async (category) => {
     }
 }
 
+// CHECK - All validation
 const isAllValid = computed(() => {
     if (isClinicNamevalid.value || isClinicNameLengthValid.value || isDurationValid.value) return true
     else return false
@@ -234,18 +241,4 @@ const isAllValid = computed(() => {
 </script>
  
 <style>
-.alert {
-    opacity: 0;
-    animation: fade 0.5s forwards ease-in-out;
-}
-
-@keyframes fade {
-    from {
-        opacity: 0;
-    }
-
-    to {
-        opacity: 100;
-    }
-}
 </style>

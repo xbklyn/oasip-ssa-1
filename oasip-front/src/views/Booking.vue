@@ -76,9 +76,9 @@
                 </div>
                 <div class="grid gap-6">
 
-                    <!-- Input - First name -->
+                    <!-- Input - Full name -->
                     <div class="relative">
-                        <input type="text" id="firstName" v-model="firstName" @change="isFirstNameValid"
+                        <input type="text" id="firstName" v-model="fullName" @change="isFirstNameValid"
                             :class="['l-w-612 h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer', firstNameNotValid ? 'border-red-500 focus:border-red-500' : '']"
                             placeholder=" " />
                         <label for="firstName"
@@ -104,10 +104,10 @@
             </div>
         </div>
 
-        <div class="l-w-824 h-px bg-black mx-auto" v-show="firstName !== '' && email !== ''"></div>
+        <div class="l-w-824 h-px bg-black mx-auto" v-show="fullName !== '' && email !== ''"></div>
 
         <!-- Step 3 - Select time period -->
-        <div class="l-w-824 h-full mx-auto flex m-12 mb-12" v-show="firstName !== '' && email !== ''">
+        <div class="l-w-824 h-full mx-auto flex m-12 mb-12" v-show="fullName !== '' && email !== ''">
             <div class="w-52 h-24 place-items-center">
                 <h2>Step 3<span class="text-red-500">*</span></h2>
                 <p class="l-text-xxs">Select time period.</p>
@@ -126,7 +126,8 @@
                         Date
                     </label>
                 </div>
-                <!-- Button - Time selector -->
+
+                <!-- Box - Time selector -->
                 <div class=" h-48 l-w-612 grid grid-cols-5 gap-6 mt-6 overflow-y-auto">
 
                     <button v-for="(time, index) in TimePeriod" :key="index" @click="startTime = index"
@@ -140,7 +141,10 @@
 
             </div>
         </div>
-        <div v-if="ERROR" class="alert l-w-824 mx-auto duration-150 mb-12 flex p-4 mt-2 pb-4 text-sm text-red-700 bg-red-100 rounded place-items-center"
+
+        <!-- Alert - If booked error -->
+        <div v-if="ERROR"
+            class="alert l-w-824 mx-auto duration-150 mb-12 flex p-4 mt-2 pb-4 text-sm text-red-700 bg-red-100 rounded place-items-center"
             role="alert">
             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
                 role="img" class="iconify iconify--material-symbols mr-2" width="24" height="24"
@@ -157,9 +161,10 @@
         <div class="l-w-824 h-12 mx-auto">
             <button
                 :class="['w-full h-full text-white duration-150', isAllvalid ? 'bg-slate-200' : 'l-bg-navi hover:bg-slate-800']"
-                :disabled="isAllvalid" @click="submit(combineName, email, dateTime, clinicId, note)">Submit</button>
+                :disabled="isAllvalid" @click="submit(name, email, dateTime, clinicId, note)">Submit</button>
         </div>
 
+        <!-- Alert - If booked succesfully -->
         <div v-if="SUCCESFUL"
             class="alert bg-black/30 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full h-full">
             <div class="relative p-4 w-full h-full grid place-items-center justify-center">
@@ -194,35 +199,27 @@ import { useRoute, useRouter } from "vue-router";
 
 
 
-// @@@@@@ HOOK @@@@@@
+// HOOK
 onBeforeMount(async () => {
     const res = await getAllCategory()
-    clinics.value = res
+    clinics.value = res // All category
 })
 
 const getTime = computed(async () => {
     const temp = await getEventByCatAndDate(clinicId.value, selectDate.value)
-    return temp
+    return temp // All of booked date time in category
 })
 
 onBeforeUpdate(async () => {
     TimeBooked.value = await getTime.value
 })
 
-
-
-// @@@@@@ ATTIBUTE @@@@@@
+// ATTIBUTE 
 const myRouter = useRouter()
 const clinics = ref([])
 const clinicId = ref(0)
 const clinicIndex = ref()
-const firstName = ref('')
-const lastName = ref('')
-const group = ref('')
-const combineName = computed(() => {
-    // return `${firstName.value} ${lastName.value} ${group.value.length != 0 ? '(' + group.value + ')' : ''}`
-    return `${firstName.value}`
-})
+const fullName = ref('')
 const email = ref('')
 const note = ref('')
 const currentDate = computed(() => {
@@ -232,7 +229,7 @@ const currentDate = computed(() => {
     if (month.value.length === 1) {
         return `${date.value}-0${month.value}-${day.value}`
     }
-    return `${date.value}-${month.value}-${day.value}`
+    return `${date.value}-${month.value}-${day.value}` // Today date time
 })
 const selectDate = ref('')
 const TimePeriod = ref([])
@@ -246,7 +243,7 @@ const TimeBookedWithDate = computed(() => {
             endTime: new Date(TimeBooked.value[i].eventEndTime)
         })
     }
-    return BOOKED_DATE.value
+    return BOOKED_DATE.value // All of booked time with Date time 
 })
 const startTime = ref(-1)
 const dateTime = computed(() => {
@@ -255,13 +252,13 @@ const dateTime = computed(() => {
 
 
 
-// @@@@@@ FUNCTION @@@@@@
-// Create event
+// FUNCTION 
+// CREATE - Event
 const SUCCESFUL = ref(false)
 const ERROR = ref(false)
 const submit = async (name, mail, start, categoryId, notes) => {
     let status = await createEvent(name, mail, start, categoryId, notes)
-    if (status == 500 || status == 400){
+    if (status == 500 || status == 400) {
         ERROR.value = true
         SUCCESFUL.value = true
         setTimeout(function () {
@@ -276,11 +273,9 @@ const submit = async (name, mail, start, categoryId, notes) => {
             })
         }, 2000);
     }
-    // alert("Booked succesfully.")
-
 }
 
-// Get All start time
+// GET - All TimeBooked start time
 const allEventStartTime = computed(() => {
     const bookedStartTime = ref([])
     for (let i = 0; i < TimeBooked.value.length; i++) {
@@ -289,7 +284,7 @@ const allEventStartTime = computed(() => {
     return bookedStartTime
 })
 
-// Check overlap
+// CHECK - Overlap validation
 const isOverlap = (index) => {
     let start = new Date(new Date(currentDate.value).getFullYear(), new Date(currentDate.value).getMonth(), new Date(currentDate.value).getDate(), TimePeriod.value[index].startTime.split(":")[0], TimePeriod.value[index].startTime.split(":")[1]).getTime();
     let cur = new Date().getTime()
@@ -297,40 +292,36 @@ const isOverlap = (index) => {
     let START_TIME = new Date(new Date(selectDate.value).getFullYear(), new Date(selectDate.value).getMonth(), new Date(selectDate.value).getDate(), TimePeriod.value[index].startTime.split(":")[0], TimePeriod.value[index].startTime.split(":")[1])
     let END_TIME = new Date(new Date(selectDate.value).getFullYear(), new Date(selectDate.value).getMonth(), new Date(selectDate.value).getDate(), TimePeriod.value[index].endTime.split(":")[0], TimePeriod.value[index].endTime.split(":")[1])
 
-    // Check if future
+    // CHECK - Is FUTURE
     if (
-        allEventStartTime.value.value.includes(TimePeriod.value[index].startTime) ||
-        start < cur && new Date(selectDate.value).getDate() == new Date(currentDate.value).getDate())
+        allEventStartTime.value.value.includes(TimePeriod.value[index].startTime) || // Is all events start time contain a time period
+        start < cur && new Date(selectDate.value).getDate() == new Date(currentDate.value).getDate()) // Is time period is not a future
         return true
 
-    // CHECK OVERLAP
-    let isOverRapYo = false
+    // CHECK - Is OVERLAP
+    let overLap = false
     TimeBookedWithDate.value.forEach(e => {
-
-        //OUTSIDE -> INSIDE -> START_TIME BETWEEN -> END_TIME BETWEEN
         if (
-            (e.startTime < START_TIME && e.endTime > END_TIME) ||
-            (e.startTime > START_TIME && e.endTime < END_TIME) ||
-            (e.startTime > START_TIME && e.startTime < END_TIME) ||
-            (e.endTime > START_TIME && e.endTime < END_TIME)
+            (e.startTime < START_TIME && e.endTime > END_TIME) || // OUT SIDE
+            (e.startTime > START_TIME && e.endTime < END_TIME) || // IN SIDE
+            (e.startTime > START_TIME && e.startTime < END_TIME) || // START_TIME BETWEEN
+            (e.endTime > START_TIME && e.endTime < END_TIME) // END_TIME BETWEEN
         ) {
-            isOverRapYo = true
+            overLap = true
         }
     })
-    return isOverRapYo
-
+    return overLap
 }
 
-// Create time period
+// CREATE - Time period
 const MAX = 1440;
 const BREAK = 5;
 const CATE_DURATION = computed(() => clinics.value[clinicIndex.value].eventCategoryDuration);
 const computeTimePeriod = async () => {
     if (!clinicId.value && selectDate.value == '' || !clinicId.value && selectDate.value !== '' || clinicId.value && selectDate.value == '') { }
     else {
-        TimePeriod.value = []
-        TimePeriodWithDate.value = []
-        // let init = new Date();
+        TimePeriod.value = []   //Time period only locale time
+        TimePeriodWithDate.value = []   //Time period with date time
         let init = new Date(selectDate.value);
         init.setHours(0);
         init.setMinutes(0);
@@ -351,18 +342,18 @@ const computeTimePeriod = async () => {
     }
 }
 
-// Check all validate
+// CHECK - Is all validation
 const isAllvalid = computed(() => {
     if (wrongEmail.value || firstNameNotValid.value) {
         return true
     }
-    if (email.value.length === 0 || firstName.value.length === 0 || selectDate.value.length === 0 || startTime.value == -1) {
+    if (email.value.length === 0 || fullName.value.length === 0 || selectDate.value.length === 0 || startTime.value == -1) {
         return true
     }
     return false
 })
 
-// Email validation
+// CHECK - Email validation
 const checkEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z\-0-9]{2,}))$/;
 const wrongEmail = ref(false)
 const isEmailValid = () => {
@@ -376,10 +367,10 @@ const isEmailValid = () => {
     }
 }
 
-// Name validation
+// CHECK - Name validation
 const firstNameNotValid = ref(false)
 const isFirstNameValid = () => {
-    if (combineName.value.length == 0 || combineName.value.length > 100) {
+    if (fullName.value.length == 0 || fullName.value.length > 100) {
         firstNameNotValid.value = true
         return false
     } else {
@@ -387,7 +378,6 @@ const isFirstNameValid = () => {
         return true
     }
 }
-
 
 </script>
  

@@ -1,6 +1,7 @@
 <template>
     <div>
-        <div class="header w-full text-white mx-auto pt-24 pb-36 grid gap-4 justify-center bg-gradient-to-b to-indigo-700 from-sky-300">
+        <div
+            class="header w-full text-white mx-auto pt-24 pb-36 grid gap-4 justify-center bg-gradient-to-b to-indigo-700 from-sky-300">
             <h1 class="font-bold text-center text-4xl">All Schedule Event</h1>
             <p class="text-center w-96 text-sm">This page lists all events from the clinic booking in each clinic. which
                 users can filter events by selecting category or status and can also filter by date.</p>
@@ -10,6 +11,7 @@
         <div class="h-24 bg-white mx-auto sticky top-0 z-50 grid place-items-center">
             <div class="l-w-full h-6 grid grid-cols-3 gap-6 mx-auto place-items-center">
 
+                <!-- FILTER - Categories -->
                 <div class="l-w-188 h-6">
                     <select
                         class="l-w-188 border border-gray-300 text-sm l-color-gray-300 pl-2 py-1 focus:outline-none focus:ring-0 focus:border-blue-500"
@@ -21,6 +23,7 @@
                     </select>
                 </div>
 
+                <!-- FILTER - Status -->
                 <div class="flex gap-6">
                     <button @click="status = ''"
                         :class="['grid justify-center place-items-center w-12 h-8 text-sm font-light l-color-navi duration-75',
@@ -44,25 +47,26 @@
                     </button>
                 </div>
 
+                <!-- FILTER - Date time -->
                 <div class="l-w-188 h-6">
-                    <input type="date" v-model="selectDate" 
+                    <input type="date" v-model="selectDate"
                         class="pl-2 py-1 l-w-188 border l-color-gray-300 text-sm l-color-gray-300 focus:outline-none focus:ring-0 focus:border-blue-500" />
                 </div>
-   
+
             </div>
         </div>
 
-        <!-- List - All events -->
+        <!-- LIST - All events scheduled -->
         <div class="bg-slate-50">
             <BaseEvent :data="sortByDate" :status="status" @delete="events($event)" />
         </div>
-   
+
     </div>
 </template>
  
 <script setup>
-import { ref, onBeforeMount, computed, onUpdated } from 'vue'
-import { getAllEvents, deleteEventById, getAllCategory } from '../services/FetchServices.js'
+import { ref, onBeforeMount, computed } from 'vue'
+import { getAllEvents, getAllCategory } from '../services/FetchServices.js'
 import BaseEvent from '../components/BaseEvent.vue';
 
 onBeforeMount(async () => {
@@ -76,9 +80,9 @@ const AllEventsData = ref([])
 const allEventCategory = ref([])
 
 // Filter - event category
-
 const filter = ref('Category')
 
+// SORT - By category
 const sortByCategory = computed(() => {
     if (filter.value == 0 || filter.value == 'Category') {
         return AllEventsData.value
@@ -87,6 +91,7 @@ const sortByCategory = computed(() => {
     }
 })
 
+// SORT - By status
 const status = ref('')
 const sortByStatus = computed(() => {
     if (status.value == '') return sortByCategory.value;
@@ -110,28 +115,27 @@ const sortByStatus = computed(() => {
 
 })
 
-
+// SORT - By date
 const selectDate = ref('')
-const sortByDate = computed(()=>{
-    if(selectDate.value == ''){
+const sortByDate = computed(() => {
+    if (selectDate.value == '') {
         return sortByStatus.value;
-        } else {
-            
-            let temp = sortByStatus.value.filter(event =>{
-                return convert(event.eventStartTime) == selectDate.value
+    } else {
+
+        let temp = sortByStatus.value.filter(event => {
+            return convert(event.eventStartTime) == selectDate.value
         })
-        if(sortByStatus.value[0].statusName.toLowerCase() == 'upcoming' || sortByStatus.value[0].statusName.toLowerCase() == 'ongoing') 
+        if (sortByStatus.value[0].statusName.toLowerCase() == 'upcoming' || sortByStatus.value[0].statusName.toLowerCase() == 'ongoing')
             return temp
-            
+
         return temp.sort(e => -1)
     }
 })
-
 const convert = (time) => {
-    let date = new Date(time) ;
+    let date = new Date(time);
     return date.getFullYear() + '-'
-         + ('0' + (date.getMonth()+1)).slice(-2) + '-'
-         + ('0' + date.getDate()).slice(-2);
+        + ('0' + (date.getMonth() + 1)).slice(-2) + '-'
+        + ('0' + date.getDate()).slice(-2);
 }
 
 </script>

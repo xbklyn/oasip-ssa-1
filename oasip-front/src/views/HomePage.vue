@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- HEADER -->
     <div class="w-srceen h-full py-24 l-color-navi">
       <p class="text-center font-light">Welcome to</p>
       <h1 class="text-8xl font-medium text-center leading-relaxed mb-6">
@@ -22,6 +23,8 @@
             d="M12 13L6 7l1.4-1.4l4.6 4.575L16.6 5.6L18 7Zm0 6l-6-6l1.4-1.4l4.6 4.575l4.6-4.575L18 13Z"></path>
         </svg>
       </div>
+
+      <!-- ELEMENT - Flying -->
       <div class="box6 absolute w-1 h-5 bg-yellow-400"></div>
       <div class="box2 absolute w-2 h-8 bg-red-400"></div>
       <div class="box absolute w-5 h-5 bg-purple-400"></div>
@@ -32,10 +35,6 @@
       <div class="box8 absolute w-2 h-2 font-bold text-2xl">1</div>
       <div class="box9 absolute w-8 h-2 bg-violet-800"></div>
       <div class="box10 absolute w-2 h-2 rounded-full bg-blue-800"></div>
-
-      <!-- <div class="box absolute w-5 h-5 bg-blue-400 top-76 left-36"></div> -->
-      <!-- <div class="box absolute w-8 h-8 text-black text-3xl top-76 left-48">X</div> -->
-      <!-- <div class="box absolute w-1 h-5 bg-green-400 top-76 left-60"></div> -->
 
       <!-- Dash board -->
       <div class="grid grid-cols-4 l-w-full gap-x-12 mt-24 mx-auto">
@@ -87,7 +86,7 @@
     </div>
 
 
-    <!-- clinic -->
+    <!-- Clinics -->
     <div>
       <div class="l-bg-gray w-full pb-24">
         <div class="l-w-full mx-auto px-4">
@@ -104,7 +103,8 @@
                     {{ clinic.eventCategoryName }}
                   </h3>
                   <p class="text-base font-medium text-gray-900">
-                    {{ clinic.eventCategoryDescription.length == 0 ? 'No description' : clinic.eventCategoryDescription }}
+                    {{ clinic.eventCategoryDescription.length == 0 ? 'No description' : clinic.eventCategoryDescription
+                    }}
                   </p>
                 </div>
               </div>
@@ -114,7 +114,7 @@
       </div>
     </div>
 
-    <!-- member -->
+    <!-- Team member -->
     <div class="bg-black w-full">
       <div class="grid grid-cols-2 text-white mx-auto">
         <div class="grid grid-rows-5 mt-24 ml-24">
