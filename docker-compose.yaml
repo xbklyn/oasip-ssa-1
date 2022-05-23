@@ -35,6 +35,7 @@ services:
       - oasipbe
   
   nginx_proxy:
+    image: nginx
     container_name: nginx_proxy
     restart: always
     ports:
