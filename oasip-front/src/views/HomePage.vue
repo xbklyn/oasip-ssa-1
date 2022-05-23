@@ -75,7 +75,7 @@
         <div class="bg-white drop-shadow-md flex hover:scale-105 duration-150 ease-in-out">
           <div class="absolute w-2 h-full bg-lime-500"></div>
           <div class="ml-6 my-4">
-            <p class="text-base font-medium text-lime-500 mb-4">Already ended</p>
+            <p class="text-base font-medium text-lime-500 mb-4">Completed</p>
             <p class="font-bold text-4xl text-lime-500">
               {{ countComplete.length }} <span class="text-xl font-semibold">Event<span
                   class="text-xs">(s)</span></span>
@@ -102,7 +102,7 @@
                     {{ clinic.eventCategoryName }}
                   </h3>
                   <p class="text-base font-medium text-gray-900">
-                    {{ clinic.eventCategoryDescription.length == 0 ? 'None' : clinic.eventCategoryDescription }}
+                    {{ clinic.eventCategoryDescription.length == 0 ? 'No description' : clinic.eventCategoryDescription }}
                   </p>
                 </div>
               </div>
