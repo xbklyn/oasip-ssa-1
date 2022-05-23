@@ -13,7 +13,7 @@ public class StatusService {
     public StatusService(StatusRepository statusRepository) {
         this.statusRepository = statusRepository;
     }
-    
+
     public List<Status> getAllStatus(){
         return statusRepository.findAll();
     }
