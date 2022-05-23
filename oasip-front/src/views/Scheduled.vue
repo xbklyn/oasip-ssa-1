@@ -116,9 +116,13 @@ const sortByDate = computed(()=>{
     if(selectDate.value == ''){
         return sortByStatus.value;
         } else {
+            
             let temp = sortByStatus.value.filter(event =>{
-            return convert(event.eventStartTime) == selectDate.value
+                return convert(event.eventStartTime) == selectDate.value
         })
+        if(sortByStatus.value[0].statusName.toLowerCase() == 'upcoming' || sortByStatus.value[0].statusName.toLowerCase() == 'ongoing') 
+            return temp
+            
         return temp.sort(e => -1)
     }
 })
