@@ -18,14 +18,13 @@ import java.util.Map;
 @Service
 public class EventCategoryService {
     private final EventCategoryRepository eventCategoryRepository;
-    private final ErrorAdvice errorAdvice;
 
-    public EventCategoryService(EventCategoryRepository eventCategoryRepository, ErrorAdvice errorAdvice) {
+    public EventCategoryService(EventCategoryRepository eventCategoryRepository) {
         this.eventCategoryRepository = eventCategoryRepository;
-        this.errorAdvice = errorAdvice;
     }
 
     // GET
+
     public List<Eventcategory> getAllCategory() {
         return eventCategoryRepository.findAll();
     }
@@ -36,6 +35,7 @@ public class EventCategoryService {
     }
 
     // PUT
+
     public ResponseEntity edit(Integer id , PutCategoryDTO categoryDTO , HttpServletRequest req){
         ApiError hasError = validate(id , categoryDTO, req);
         if (!hasError.getDetails().isEmpty())
@@ -43,7 +43,7 @@ public class EventCategoryService {
 
         Eventcategory category = eventCategoryRepository.findById(id).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND));
-        //Set details
+        // Set details
         category.setEventCategoryName(categoryDTO.getEventCategoryName());
         category.setEventCategoryDuration(categoryDTO.getEventCategoryDuration());
         category.setEventCategoryDescription(categoryDTO.getEventCategoryDescription());
@@ -51,6 +51,7 @@ public class EventCategoryService {
         return ResponseEntity.status(200).body(eventCategoryRepository.saveAndFlush(category));
     }
 
+    // Validation
     private ApiError validate(Integer id, PutCategoryDTO categoryDTO, HttpServletRequest req) {
         ApiError error = new ApiError(400 , "Validation Failed" , req.getServletPath());
 
@@ -58,13 +59,13 @@ public class EventCategoryService {
         //Check if name is not the same
         if(!eventCategoryRepository.checkUniqueName(categoryDTO.getEventCategoryName(), id).isEmpty())
             details.put("eventCategoryName" , "Name is not unique");
-
+        // Check duration
         if( categoryDTO.getEventCategoryDuration() <= 0 || categoryDTO.getEventCategoryDuration() > 480)
             details.put("eventCategoryDuration" , "Duration must be between 1 and 480");
-
+        // Check desc
         if (categoryDTO.getEventCategoryDescription().length() > 500)
             details.put("eventCategoryDescription", "Description must be less than 500 letter.");
-
+        // Add error to response
         error.setDetails(details);
         return error;
     }

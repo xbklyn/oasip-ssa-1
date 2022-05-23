@@ -3,10 +3,8 @@ package sit.int221.oasip.entities;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 import java.util.Date;
 
-@Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
 @Entity
 @Table(name = "events")

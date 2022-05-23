@@ -1,6 +1,5 @@
 package sit.int221.oasip.errors;
 
-import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
