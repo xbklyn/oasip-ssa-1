@@ -26,7 +26,7 @@
         <div class="l-w-824 mx-auto mt-12 grid grid-cols-4 gap-6 mb-16">
             <a href="#edit" v-for="value, index in CLINICS" :key="index"
                 @click="CURR_CLINIC = value.categoryId; reset()"
-                :class="['l-w-188 l-h-188 bg-white grid place-items-center duration-200 drop-shadow-sm border hover:border-none hover:bg-gradient-to-b to-indigo-700 from-sky-300 hover:text-white', CURR_CLINIC == value.categoryId ? 'bg-gradient-to-b to-indigo-700 from-sky-300 text-white border-none' : '']">
+                :class="['l-w-188 l-h-188 bg-white grid place-items-center duration-150 drop-shadow-sm border hover:border-none hover:bg-gradient-to-br to-indigo-800 from-blue-500 hover:text-white', CURR_CLINIC == value.categoryId ? 'bg-gradient-to-br to-indigo-800 from-blue-500 text-white border-none' : '']">
                 <div class="w-32 h-32 grid place-items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                         aria-hidden="true" role="img" class="iconify iconify--dashicons" width="72" height="72"
@@ -118,7 +118,7 @@
                         placeholder="Your note..." />
                     <label for="description"
                         class="l-color-gray-300 absolute text-md duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 left-1">
-                        Description
+                        Description {{clinic_desc.value.toString().length}} /500
                     </label>
                 </div>
             </div>

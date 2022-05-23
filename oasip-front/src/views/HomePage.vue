@@ -10,7 +10,7 @@
 
       <p class="l-w-824 text-center mx-auto">
         Website for booking a teacher's consultation.</p>
-      <router-link :to="{ name: 'Booking' }" class="flex place-items-center justify-center m-12">
+      <router-link :to="{ name: 'Booking' }" class="flex place-items-center justify-center m-12 w-36 h-12 mx-auto">
         <button
           class="hover:scale-110 hover:border-none transition duration-1000 booking w-36 h-12 bg-white font-light grid place-items-center border border-green-400  text-green-600 hover:border-green-200 hover:text-white hover:border duration-50">
           <p>Book now</p>
@@ -207,19 +207,19 @@ const countComplete = computed(() =>
 
 const clinicImages = [
   {
-    img: "/ssa1/images/clinicImages/pic-1.png",
-  },
-  {
-    img: "/ssa1/images/clinicImages/pic-2.png",
-  },
-  {
-    img: "/ssa1/images/clinicImages/pic-3.png",
+    img: "/ssa1/images/clinicImages/pic-5.png",
   },
   {
     img: "/ssa1/images/clinicImages/pic-4.png",
   },
   {
-    img: "/ssa1/images/clinicImages/pic-5.png",
+    img: "/ssa1/images/clinicImages/pic-3.png",
+  },
+  {
+    img: "/ssa1/images/clinicImages/pic-2.png",
+  },
+  {
+    img: "/ssa1/images/clinicImages/pic-1.png",
   },
 ];
 </script>
