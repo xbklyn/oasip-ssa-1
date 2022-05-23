@@ -161,7 +161,7 @@
         <div class="l-w-824 h-12 mx-auto">
             <button
                 :class="['w-full h-full text-white duration-150', isAllvalid ? 'bg-slate-200' : 'l-bg-navi hover:bg-slate-800']"
-                :disabled="isAllvalid" @click="submit(name, email, dateTime, clinicId, note)">Submit</button>
+                :disabled="isAllvalid" @click="submit(fullName, email, dateTime, clinicId, note)">Submit</button>
         </div>
 
         <!-- Alert - If booked succesfully -->
@@ -260,12 +260,11 @@ const submit = async (name, mail, start, categoryId, notes) => {
     let status = await createEvent(name, mail, start, categoryId, notes)
     if (status == 500 || status == 400) {
         ERROR.value = true
-        SUCCESFUL.value = true
+        SUCCESFUL.value = false
         setTimeout(function () {
-            SUCCESFUL.value = false
+            ERROR.value = false
         }, 4000);
-    }
-    else {
+    } else {
         SUCCESFUL.value = true
         setTimeout(function () {
             myRouter.push({
