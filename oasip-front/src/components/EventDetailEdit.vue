@@ -124,13 +124,14 @@
                         </g>
                     </svg></button>
             </div>
-            <div class="l-w-612 grid grid-cols-6 gap-6 mt-3 mb-12">
-                <button v-for="(time, index) in computeTimePeriod" :key="index" @click="startTime = index"
-                    :class="['h-8 text-sm duration-150 bg-white', startTime == index ? 'bg-blue-500 text-white border-0' : '', isOverlap(index) ? ' text-gray-300' : 'hover:bg-blue-500 hover:text-white border border-gray-300 hover:border-none']"
-                    :disabled="isOverlap(index)">
-                    {{ time.startTime }}
-                </button>
-            </div>
+                 <div class="mb-6 h-48 l-w-612 grid grid-cols-5 gap-6 mt-6 overflow-y-auto">
+                    
+                    <button v-for="(time, index) in computeTimePeriod" :key="index" @click="startTime = index"
+                        :class="['h-8 text-sm duration-150 bg-white', startTime == index ? 'bg-blue-500 text-white border-0' : '', isOverlap(index) ? ' text-gray-300' : 'hover:bg-blue-500 hover:text-white border border-gray-300 hover:border-none']"
+                        :disabled="isOverlap(index)">
+                        {{ `${time.startTime.split(':')[0]}:${time.startTime.split(':')[1]}`}} - {{ `${time.endTime.split(':')[0]}:${time.endTime.split(':')[1]}` }}
+                    </button>
+                </div>
 
             <div class="l-w-612 h-px bg-black mx-auto"></div>
         </div>
@@ -258,8 +259,8 @@ onBeforeUpdate(async () => {
 })
 
 
-const MAX = parseInt(480);
-const BREAK = parseInt(5);
+const MAX = 1440;
+const BREAK = 5;
 const CATE_DURATION = computed(() => parseInt(prop.duration));
 
 // const TimePeriod = ref([])
@@ -317,12 +318,11 @@ const isOverlap = (index) => {
 
 const TimePeriodWithDate = ref([])
 const computeTimePeriod = computed(() => {
-    console.log("in time method");
     if (selectDate.value == '') { }
     const TimePeriod = ref([])
     TimePeriodWithDate.value = []
     let init = new Date(selectDate.value);
-    init.setHours(8);
+    init.setHours(0);
     init.setMinutes(0);
     init.setSeconds(0);
 
@@ -337,8 +337,7 @@ const computeTimePeriod = computed(() => {
         TimePeriodWithDate.value.push({ startTime: start, endTime: end })
         init = new Date(end);
         init.setMinutes(end.getMinutes() + BREAK)
-        i += parseInt(CATE_DURATION.value + BREAK)
-        console.log(i);
+        i += CATE_DURATION.value + BREAK
     }
 
     return TimePeriod.value

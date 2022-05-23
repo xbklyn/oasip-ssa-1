@@ -37,7 +37,7 @@
                             <div class="col-span-4 mb-3">
                                 <p class="text-xs font-light">
                                     <span class="font-medium">{{ new Date(value.eventStartTime).toLocaleDateString('th-TH') }}</span> 
-                                    at <span class="font-medium">{{ new Date(value.eventStartTime).toLocaleTimeString('th-TH') }}</span>
+                                    at <span class="font-medium">{{ `${new Date(value.eventStartTime).toLocaleTimeString('th-TH').split(':')[0]}:${new Date(value.eventStartTime).toLocaleTimeString('th-TH').split(':')[1]} `}}</span>
                                 </p>
                             </div>
                         </div>

@@ -68,7 +68,6 @@ import BaseEvent from '../components/BaseEvent.vue';
 onBeforeMount(async () => {
     const res = await getAllEvents()
     const temp = await getAllCategory()
-    console.log(res)
     AllEventsData.value = res
     allEventCategory.value = temp
 })
@@ -130,22 +129,6 @@ const convert = (time) => {
          + ('0' + (date.getMonth()+1)).slice(-2) + '-'
          + ('0' + date.getDate()).slice(-2);
 }
-
-
-// // Delete - event
-// const events = (eventId) => {
-//     console.log(eventId);
-//     if (eventId.length <= 0) {
-//         deleteEventById(eventId)
-//     } else {
-//         for (let i = 0; i < eventId.length; i++) {
-//             AllEventsData.value = AllEventsData.value.filter(e => {
-//                 return e.id != eventId[i]
-//             })
-//             deleteEventById(eventId[i])
-//         }
-//     }
-// }
 
 </script>
  
