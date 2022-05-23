@@ -74,9 +74,10 @@ export const createEvent = async (
 
 // DELETE METHOD - Delete event by id
 export const deleteEventById = async (id) => {
-    await fetch(`${import.meta.env.VITE_BASE_URL}/events/${id}`, {
+    const res = await fetch(`${import.meta.env.VITE_BASE_URL}/events/${id}`, {
         method: 'DELETE'
     })
+    return res.status
 }
 
 // PUT METHOD - Edit event by id
@@ -91,11 +92,7 @@ export const editEventById = async (replace) => {
             eventStartTime:replace.time
         })
     })
-    if(res.status === 200){
-        return await res.json()
-    }else{
-        console.log('err');
-    }
+    return res.status
 }
 
 //PUT METHOD - Edit category by id
@@ -111,9 +108,5 @@ export const editCategoryById = async(category) => {
             eventCategoryDescription:category.eventCategoryDescription
         })
     })
-    if(res.status === 200){
-        return await res.json()
-    }else{
-        console.log('err');
-    }
+    return res.status
 }

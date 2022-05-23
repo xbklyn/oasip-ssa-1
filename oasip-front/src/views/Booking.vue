@@ -241,8 +241,12 @@ const dateTime = computed(() => {
 
 // @@@@@@ FUNCTION @@@@@@
 // Create event
-const submit = (name, mail, start, categoryId, notes) => {
-    createEvent(name, mail, start, categoryId, notes)
+const submit = async(name, mail, start, categoryId, notes) => {
+    let status = await createEvent(name, mail, start, categoryId, notes)
+    if(status == 500 || status == 400)
+        alert("Something is wrong, please try again.")
+    else
+        alert("Booked succesfully.")
     myRouter.push({
         name: 'Home'
     })

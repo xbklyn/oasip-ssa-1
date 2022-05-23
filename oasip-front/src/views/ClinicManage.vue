@@ -170,8 +170,12 @@ const reset = () => {
     isClinicNameLengthValid.value = false
 }
 
-const updateCategory = (category) => {
-    editCategoryById(category)
+const updateCategory = async (category) => {
+    let status = await editCategoryById(category)
+    if(status == 500 || status == 400) 
+        alert("Somthing is wrong with a server, Please try again.")
+    else 
+        alert("Edit succesfully")
     location.reload()
 
 }
