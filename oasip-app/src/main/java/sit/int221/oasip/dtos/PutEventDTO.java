@@ -1,11 +1,12 @@
 package sit.int221.oasip.dtos;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 public class PutEventDTO {
 
-    @NotNull
+    @Size(max = 500 , message = "Size must be less than 500")
     private String eventNotes;
 
     @NotNull
