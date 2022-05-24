@@ -207,7 +207,7 @@ const currentData = computed(() => {
         email: prop.data.bookingEmail,
         name: prop.data.bookingName,
         note: note.value,
-        time: TimePeriodWithDate.value[startTime.value].startTime
+        time: TimePeriodWithDate.value[startTime.value == -1 ? indexOfTime.value - 1: startTime.value].startTime
     }
 })
 const currentDate = computed(() => {
@@ -238,6 +238,9 @@ const continueDate = computed(() => {
 })
 const note = ref(prop.data.eventNotes)
 const selectDate = ref(continueDate.value)
+
+
+
 const TimeBooked = ref([])
 
 // STATUS - Check succesfully

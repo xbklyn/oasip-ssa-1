@@ -165,7 +165,7 @@ const clinic_name = computed(() => ref(CURR_DATA.value.eventCategoryName))
 const clinicData = computed(() => {
     return {
         categoryId: CURR_DATA.value.categoryId,
-        eventCategoryDescription: clinic_desc.value.value,
+        eventCategoryDescription: clinic_desc.value.value.trim(),
         eventCategoryDuration: clinic_dur.value.value,
         eventCategoryName: clinic_name.value.value
     }

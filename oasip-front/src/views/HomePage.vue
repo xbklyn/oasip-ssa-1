@@ -98,9 +98,9 @@
                   <div class="w-96 h-80 bg-white overflow-hidden duration-150">
                     <img :src="clinicImages[index].img" class="w-full h-full object-center object-cover" />
                   </div>
-                  <h3 class="mt-6 text-sm text-gray-500 mb-2">
-                    <span class="" />
-                    {{ clinic.eventCategoryName }}
+                  <h3 class="grid grid-cols-2 mt-6 text-sm text-gray-500 mb-2">
+                    
+                    {{ clinic.eventCategoryName }}<span class="justify-self-end font-medium text-xs">Duration {{clinic.eventCategoryDuration}} Mins.</span>
                   </h3>
                   <p class="text-base font-medium text-gray-900">
                     {{ clinic.eventCategoryDescription.length == 0 ? 'No description' : clinic.eventCategoryDescription
