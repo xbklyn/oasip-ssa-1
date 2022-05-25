@@ -46,7 +46,7 @@ public class EventCategoryService {
         // Set details
         category.setEventCategoryName(categoryDTO.getEventCategoryName());
         category.setEventCategoryDuration(categoryDTO.getEventCategoryDuration());
-        category.setEventCategoryDescription(categoryDTO.getEventCategoryDescription());
+        category.setEventCategoryDescription(categoryDTO.getEventCategoryDescription() == null ? "" : categoryDTO.getEventCategoryDescription());
 
         return ResponseEntity.status(200).body(eventCategoryRepository.saveAndFlush(category));
     }
@@ -57,7 +57,7 @@ public class EventCategoryService {
 
         Map<String, String> details = new HashMap<>();
         //Check if name is not the same
-        if(!eventCategoryRepository.checkUniqueName(categoryDTO.getEventCategoryName(), id).isEmpty())
+        if(!eventCategoryRepository.checkUniqueName(categoryDTO.getEventCategoryName().trim(), id).isEmpty())
             details.put("eventCategoryName" , "Name is not unique");
         // Check duration
         if( categoryDTO.getEventCategoryDuration() <= 0 || categoryDTO.getEventCategoryDuration() > 480)
