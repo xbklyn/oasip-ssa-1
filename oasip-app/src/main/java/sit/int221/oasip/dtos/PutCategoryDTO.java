@@ -14,6 +14,7 @@ public class PutCategoryDTO {
     @NotNull
     private Integer eventCategoryDuration;
 
+    @NotNull
     private String eventCategoryDescription;
 
     public String getEventCategoryName() {
