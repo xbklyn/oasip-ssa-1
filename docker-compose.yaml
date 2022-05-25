@@ -7,6 +7,8 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=oasip_ssa1_root
       - TZ=Asia/Bangkok
+    ports:
+      - "3306:3306"
     volumes:
       - ./Database/script/:/docker-entrypoint-initdb.d/
 
@@ -17,6 +19,8 @@ services:
     depends_on:
       - oasipdb
     restart: always
+    ports:
+      - "8080:8080"
     links:
       - oasipdb
   
