@@ -167,7 +167,7 @@ const clinicData = computed(() => {
         categoryId: CURR_DATA.value.categoryId,
         eventCategoryDescription: clinic_desc.value.value.trim(),
         eventCategoryDuration: clinic_dur.value.value,
-        eventCategoryName: clinic_name.value.value
+        eventCategoryName: clinic_name.value.value.trim()
     }
 })
 
