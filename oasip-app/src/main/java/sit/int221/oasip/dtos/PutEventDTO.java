@@ -1,19 +1,17 @@
 package sit.int221.oasip.dtos;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
-@Getter @Setter
 public class PutEventDTO {
 
-    @NotNull
+    @Size(max = 500 , message = "Size must be less than 500")
     private String eventNotes;
 
     @NotNull
     private Date eventStartTime;
+
 
     public String getEventNotes() {
         return eventNotes;

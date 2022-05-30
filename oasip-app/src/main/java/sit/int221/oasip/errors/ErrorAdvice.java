@@ -1,6 +1,5 @@
 package sit.int221.oasip.errors;
 
-import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -24,6 +23,17 @@ public class ErrorAdvice {
         Map<String , String> details = new HashMap<>();
         bindingResult.getFieldErrors().forEach(err ->
                 details.put(err.getField(), err.getDefaultMessage()));
+        error.setDetails(details);
+        return error;
+    }
+
+    //Manually create ResponseEntity returning 400 Bad Request
+    public ApiError getResponseEntity(String field , String errorMes , HttpServletRequest req){
+        ApiError error = new ApiError(400, "Validation Failed", req.getServletPath());
+
+        Map<String , String> details = new HashMap<>();
+        details.put( field, errorMes);
+
         error.setDetails(details);
         return error;
     }

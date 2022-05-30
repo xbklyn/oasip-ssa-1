@@ -3,41 +3,49 @@
         <div class="l-h-1248 w-full pb-24 grid grid-cols-3 gap-6 p-12 mb-96">
 
             <!-- Main - Events List -->
-            <div v-for="value, index in data" :key="index" :class="['l-w-400 h-44 duration-150 grid place-items-center', value.statusName == 'COMPLETED' ? 'bg-slate-100 text-gray-500': 'bg-white drop-shadow-sm hover:bg-slate-100 hover:text-black']"
-                >
-                <router-link :to="{ name: 'scheduled-info', params: { id: value.bookingId } }" class="sl-w-400 h-44 grid place-items-center">
+            <div v-for="value, index in data" :key="index"
+                :class="['l-w-400 h-44 duration-150 grid place-items-center', value.statusName == 'COMPLETED' ? 'bg-gray-50 text-slate-300 border' : 'bg-white drop-shadow-sm hover:bg-slate-100 hover:text-black']">
+                <router-link :to="{ name: 'scheduled-info', params: { id: value.bookingId } }"
+                    class="sl-w-400 h-44 grid place-items-center">
                     <div class="l-w-366 h-32">
                         <div class="grid grid-cols-2">
-                            <div class="flex place-items-center gap-2 col-span-2 mb-3 l-text-xxs font-light">
-                                <div v-if="value.statusName == 'UPCOMING'" class="w-2 h-2 bg-blue-700">
+                            <div class="flex place-items-center gap-2 col-span-2 mb-3 text-xs font-normal">
+                                <div v-if="value.statusName == 'UPCOMING'"
+                                    class="w-2 h-2 bg-gradient-to-b to-indigo-700 from-blue-600">
                                 </div>
                                 <div v-else-if="value.statusName == 'ONGOING'" class="w-2 h-2 bg-red-600">
-                                <div class="animate-ping w-2- h-2 bg-red-600"></div></div>
-                                <div v-else class=" w-2 h-2 bg-green-400">
+                                    <div class="animate-ping w-2- h-2 bg-red-600"></div>
+                                </div>
+                                <div v-else class=" w-2 h-2 bg-emerald-500">
                                 </div>
                                 <p v-if="value.statusName == 'UPCOMING'" class=" text-blue-700">Upcoming
                                 </p>
                                 <p v-else-if="value.statusName == 'ONGOING'" class=" text-red-600">On going
                                 </p>
-                                <p v-else class=" text-green-700">Complete</p>
+                                <p v-else class=" text-emerald-500">Complete</p>
                             </div>
 
                             <div class=" col-span-2 justify-self-end">
-                                <p class="text-xs mt-1 grid justify-end">{{ value.eventDuration }} Min.</p>
+                                <p class="text-xs mt-1 grid justify-end font-normal">{{ value.eventDuration }} Min.</p>
                             </div>
 
                             <div class="col-span-4">
-                                <p class="text-xs">{{ value.categoryName }}</p>
+                                <p class="text-xs truncate font-normal">{{ value.categoryName }}</p>
                             </div>
 
                             <div class="col-span-3 mb-1">
-                                <h2 class="text-xl font-normal truncate">{{ value.bookingName }}</h2>
+                                <h2 class="text-xl font-semibold truncate">{{ value.bookingName }}</h2>
                             </div>
 
                             <div class="col-span-4 mb-3">
                                 <p class="text-xs font-light">
-                                    On {{ new Date(value.eventStartTime).toLocaleDateString('th-TH') }} 
-                                    at {{ new Date(value.eventStartTime).toLocaleTimeString('th-TH') }}
+                                    <span class="font-medium">{{ new
+                                            Date(value.eventStartTime).toLocaleDateString('th-TH')
+                                    }}</span>
+                                    at <span class="font-medium">{{ `${new
+                                            Date(value.eventStartTime).toLocaleTimeString('th-TH').split(':')[0]}:${new
+                                                Date(value.eventStartTime).toLocaleTimeString('th-TH').split(':')[1]} `
+                                    }}</span>
                                 </p>
                             </div>
                         </div>
@@ -46,12 +54,11 @@
                             <p class="l-color-gray overflow-hidden l-w-366 h-8"><span class="font-medium">Note:
                                 </span>{{
                                         value.eventNotes ==
-                                            '' ? 'None' : value.eventNotes
+                                            '' ? 'No description' : value.eventNotes
                                 }}
                             </p>
                         </div>
                     </div>
-
                 </router-link>
             </div>
         </div>
@@ -67,19 +74,19 @@
                 this moment</h1>
         </div>
         <div v-else-if="prop.status == 'ongoing'" class="grid justify-cente h-96 my-24">
-            <h1 class="text-7xl l-color-gray text-center select-none leading-normal">No Ongoing event 
-                <br>at this moment</h1>
+            <h1 class="text-7xl l-color-gray text-center select-none leading-normal">No Ongoing event
+                <br>at this moment
+            </h1>
         </div>
         <div v-else class="grid justify-cente h-96 my-24">
-            <h1 class="text-7xl l-color-gray text-center select-none leading-normal">No Completed event 
-                <br>at this moment</h1>
+            <h1 class="text-7xl l-color-gray text-center select-none leading-normal">No Completed event
+                <br>at this moment
+            </h1>
         </div>
     </div>
 </template>
  
 <script setup>
-import { computed, ref } from "@vue/runtime-core"
-
 const prop = defineProps({
     data: {
         type: Array,
@@ -91,16 +98,6 @@ const prop = defineProps({
     }
 })
 defineEmits(['delete'])
-const eventId = ref([])
-const show = ref(false)
-const allEventId = () => {
-    for (let i = 0; i < prop.data.length; i++) {
-        if (!(eventId.value.includes(prop.data[i].id))) {
-            eventId.value.push(prop.data[i].id)
-        }
-    }
-    return eventId.value
-}
 
 </script>
  

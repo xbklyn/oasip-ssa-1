@@ -3,6 +3,8 @@ import HomePage from '../views/HomePage.vue'
 import Booking from '../views/Booking.vue'
 import Scheduled from '../views/Scheduled.vue'
 import ScheduledInfo from '../views/ScheduledInfo.vue'
+import Manage from '../views/Manage.vue'
+import ClinicManage from '../views/ClinicManage.vue'
 import NotFound from '../views/NotFound.vue'
 
 
@@ -38,7 +40,19 @@ const router = createRouter({
             name: 'scheduled-info',
             component: ScheduledInfo,
             meta: { title: 'OASIP - Scheduled Infomation.' }
+        },
+        {
+            path: '/manage',
+            name: 'Manage',
+            component: Manage,
+            meta: { title: 'OASIP - Manage your setting.' },
+            children:[{
+                path:'clinic',
+                name: 'clinic-manage',
+                component: ClinicManage
+            }]
         }
+        
     ],
     scrollBehavior (to, from, savedPosition) {
         return { top: 0 }

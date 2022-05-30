@@ -49,8 +49,9 @@
                 <h1 class="font-semibold text-4xl l-color-navi ">Scheduled Infomation</h1>
             </div>
             <div class="justify-self-end space-x-6 text-sm place-items-center">
-                <button :disabled="eventInfoById.statusId == 1" @click="modifyMode = true"
-                    class="w-20 h-8 border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white duration-150 disabled:border-gray-300 disabled:bg-gray-200 disabled:border disabled:text-gray-400">Edit</button>
+                <button :disabled="eventInfoById.statusId == 1 || eventInfoById.statusId == 2"
+                    @click="modifyMode = true"
+                    class="w-20 h-8 border border-blue-600 text-blue-600 hover:bg-blue-700 hover:text-white hover:border duration-150 disabled:border-gray-300 disabled:bg-gray-200 disabled:border disabled:text-gray-400">Edit</button>
                 <button @click="show = true"
                     class="w-20 h-8 bg-red-500 text-white font-medium hover:bg-red-700 hover:text-white duration-150">Delete</button>
             </div>
@@ -71,7 +72,8 @@
         <EventDetail :data="eventInfoById" v-if="(!modifyMode)" />
 
         <!-- Data - Scheduled Detail Editing mode -->
-        <EventDetailEdit :data="eventInfoById" @edit="editEvent($event)" :duration="eventInfoById.eventCategoryDuration" :MAX="480" :BREAK="5" v-else />
+        <EventDetailEdit :data="eventInfoById" @edit="editEvent($event)" :duration="eventInfoById.eventDuration"
+            :MAX="480" :BREAK="5" :SUCCESFUL="SUCCESFUL" :ERROR="ERROR" v-else />
 
 
         <!-- Modal box - Confirmation -->
@@ -79,7 +81,7 @@
             class="grid place-items-center fixed top-0 right-0 left-0 z-50 bg-black/80 w-screen h-screen">
             <div class="bg-white l-w-960 l-h-520 flex">
                 <div>
-                    <img src="../assets/component/confirmation.png" alt="">
+                    <img src="../assets/component/confirmation-2.png" alt="">
                 </div>
                 <div class="l-w-520 l-h-520 grid place-items-center">
                     <div class="grid justify-center">
@@ -89,8 +91,8 @@
                         <h2 class="font-medium text-2xl">
                             Are you sure delete this event?
                         </h2>
-                        <p class="l-w-400 font-light text-xs l-color-gray-300">Lorem ipsum dolor sit amet, consectetur
-                            adipiscing elit. Lectus amet a lectus aliquam semper mi sem.</p>
+                        <p class="l-w-400 font-light text-xs l-color-gray-300">If you delete this event, it will be gone
+                            forever.</p>
                     </div>
                     <div class="grid space-y-3">
                         <button
@@ -101,30 +103,78 @@
                     </div>
                 </div>
             </div>
+
+            <!-- ALERT - Succesfully -->
+            <div v-if="SUCCESFUL"
+                class="alert bg-black/40 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full h-full">
+                <div class="relative p-4 w-full h-full grid place-items-center justify-center">
+                    <div class="relative bg-white shadow l-w-520 h-72 grid place-items-center">
+                        <div class="grid place-items-center gap-6">
+                            <div class="grid justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                    aria-hidden="true" role="img" class="iconify iconify--clarity text-emerald-500"
+                                    width="96" height="96" preserveAspectRatio="xMidYMid meet" viewBox="0 0 36 36">
+                                    <path fill="currentColor"
+                                        d="M18 2a16 16 0 1 0 16 16A16 16 0 0 0 18 2Zm10.45 10.63L15.31 25.76L7.55 18a1.4 1.4 0 0 1 2-2l5.78 5.78l11.14-11.13a1.4 1.4 0 1 1 2 2Z"
+                                        class="clr-i-solid clr-i-solid-path-1"></path>
+                                    <path fill="none" d="M0 0h36v36H0z"></path>
+                                </svg>
+                            </div>
+                            <div class="text-center">
+                                <h2 class="text-xl font-semibold text-emerald-700 mb-2">DONE!</h2>
+                                <p class="text-md l-color-gray-300">Your scheduled is already deleted.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ALERT - Error -->
+            <div v-if="ERROR"
+                class="alert bg-black/40 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full h-full">
+                <div class="relative p-4 w-full h-full grid place-items-center justify-center">
+                    <div class="relative bg-white shadow l-w-520 h-72 grid place-items-center">
+                        <div class="grid place-items-center gap-6">
+                            <div class="grid justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                    aria-hidden="true" role="img"
+                                    class="iconify iconify--material-symbols text-orange-400" width="96" height="96"
+                                    preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
+                                    <path fill="currentColor"
+                                        d="M12 22q-2.075 0-3.9-.788q-1.825-.787-3.175-2.137q-1.35-1.35-2.137-3.175Q2 14.075 2 12t.788-3.9q.787-1.825 2.137-3.175q1.35-1.35 3.175-2.138Q9.925 2 12 2t3.9.787q1.825.788 3.175 2.138q1.35 1.35 2.137 3.175Q22 9.925 22 12t-.788 3.9q-.787 1.825-2.137 3.175q-1.35 1.35-3.175 2.137Q14.075 22 12 22Zm-1-9h2V7h-2Zm1 4q.425 0 .713-.288Q13 16.425 13 16t-.287-.713Q12.425 15 12 15t-.712.287Q11 15.575 11 16t.288.712Q11.575 17 12 17Z">
+                                    </path>
+                                </svg>
+                            </div>
+                            <div class="text-center">
+                                <h2 class="text-xl font-semibold text-orange-400 mb-2">WARNING!</h2>
+                                <p class="text-md l-color-gray-300">Something want wrong, Please try again.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
  
 <script setup>
-import { computed ,ref } from '@vue/reactivity';
-import { onBeforeMount, onBeforeUpdate } from '@vue/runtime-core';
+import { ref } from '@vue/reactivity';
+import { onBeforeMount } from '@vue/runtime-core';
+import { getEventById, deleteEventById, editEventById } from '../services/FetchServices.js';
+import { useRoute, useRouter } from 'vue-router'
 import EventDetail from '../components/EventDetail.vue';
 import EventDetailEdit from '../components/EventDetailEdit.vue'
-import { getEventById, deleteEventById, editEventById, getEventByCatAndDate } from '../services/FetchServices.js';
-import { useRoute, useRouter } from 'vue-router'
 const { params } = useRoute()
 
 
-
-// @@@@@@ HOOK @@@@@@
+// HOOK
 onBeforeMount(async () => {
     const res = await getEventById(params.id)
     eventInfoById.value = res
-    // const temp = await getEventCategoryById(eventInfoById.value.categoryId)
-    // CATEGORY.value = temp
+
 })
 
-// @@@@@@ ATTIBUTE @@@@@@
+// ATTIBUTE 
 const eventInfoById = ref([])
 const CATEGORY = ref({})
 const show = ref(false)
@@ -132,30 +182,45 @@ const modifyMode = ref(false)
 const myRouter = useRouter()
 
 
-
-
-
-// @@@@@@ FUNCTION @@@@@@
-// Delete - Event
-const deleteEvent = (eventId) => {
-    deleteEventById(eventId)
-    show.value = false
-    location.reload()
-    myRouter.go(-1)
-    
+// FUNCTION
+// DELETE - Event
+const deleteEvent = async (eventId) => {
+    let status = await deleteEventById(eventId)
+    if (status == 500 || status == 400) {
+        ERROR.value = true
+        setTimeout(function () {
+            ERROR.value = false
+        }, 2000);
+    }
+    else {
+        SUCCESFUL.value = true
+        ERROR.value = false
+        setTimeout(function () {
+            location.reload(1)
+            myRouter.go(-1)
+        }, 2000);
+    }
 }
 
-// Edit - Event
-const editEvent = (obj) => {
-    editEventById(obj)
-    location.reload()
-    myRouter.go({
-        path: `scheduled/scheduled-info/${params.id}`
-    })
-    modifyMode.value = false
+// EDIT - Event
+const SUCCESFUL = ref(false)
+const ERROR = ref(false)
+const editEvent = async (event) => {
+    let status = await editEventById(event)
+    if (status == 500 || status == 400) {
+        ERROR.value = true
+        SUCCESFUL.value = false
+    }
+    else {
+        SUCCESFUL.value = true
+        ERROR.value = false
+        setTimeout(function () {
+            myRouter.go({
+                path: `scheduled/scheduled-info/${params.id}`
+            })
+        }, 2000);
+    }
 }
-
-
 
 </script>
  

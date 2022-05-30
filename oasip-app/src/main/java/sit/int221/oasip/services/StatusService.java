@@ -14,7 +14,6 @@ public class StatusService {
         this.statusRepository = statusRepository;
     }
 
-
     public List<Status> getAllStatus(){
         return statusRepository.findAll();
     }
