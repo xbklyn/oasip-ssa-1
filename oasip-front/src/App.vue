@@ -1,31 +1,30 @@
 <template>
   <div class="scroll-smooth">
     <div>
-      <Navbar v-show="$route.name == 'NotFound' ? false : true " />
+      <Navbar v-show="$route.name == 'NotFound' ? false : true" />
     </div>
     <div class="mx-auto">
       <router-view></router-view>
     </div>
     <div>
-      <Footer v-show="$route.name == 'NotFound' ? false : true "/>
+      <Footer v-show="$route.name == 'NotFound' ? false : true" />
     </div>
   </div>
 </template>
- 
+
 <script setup>
 import Navbar from './components/Navbar.vue';
 import Footer from './components/Footer.vue';
 
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router';
 const myRouter = useRouter();
 
 myRouter.beforeEach((to, from, next) => {
-  document.title = to.meta.title
-  next()
-})
-
+  document.title = to.meta.title;
+  next();
+});
 </script>
- 
+
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
@@ -34,7 +33,7 @@ body {
   font-family: 'Poppins', 'Prompt';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: #23374D;
+  color: #23374d;
   overscroll-behavior: auto;
 }
 
@@ -43,11 +42,11 @@ nav {
 }
 
 .l-color-navi {
-  color: #23374D;
+  color: #23374d;
 }
 
 .l-color-gray {
-  color: #D4DAEF;
+  color: #d4daef;
 }
 
 .l-color-gray-300 {
@@ -55,15 +54,15 @@ nav {
 }
 
 .l-color-blue {
-  color: #1089FF;
+  color: #1089ff;
 }
 
 .l-border-b-blue {
-  border-bottom: 4px solid #1089FF;
+  border-bottom: 4px solid #1089ff;
 }
 
 .l-bg-blue {
-  background-color: #1089FF;
+  background-color: #1089ff;
 }
 
 .l-bg-gray-100 {
@@ -71,7 +70,7 @@ nav {
 }
 
 .l-bg-navi {
-  background-color: #23374D;
+  background-color: #23374d;
 }
 
 .l-w-188 {
@@ -82,8 +81,8 @@ nav {
   width: 294px;
 }
 
-.l-w-366{
-  width: 366px
+.l-w-366 {
+  width: 366px;
 }
 
 .l-w-400 {
@@ -119,11 +118,11 @@ nav {
 }
 
 .l-bg-gray {
-  background-color: #F9FAFB;
+  background-color: #f9fafb;
 }
 
 .l-w-10-12 {
-  width: 1036px
+  width: 1036px;
 }
 
 .l-w-1060 {
@@ -134,7 +133,7 @@ nav {
   width: 1248px;
 }
 
-.l-h-188{
+.l-h-188 {
   height: 188px;
 }
 
@@ -163,17 +162,17 @@ nav {
 }
 
 .alert {
-    opacity: 0;
-    animation: fade 0.5s forwards ease-in-out;
+  opacity: 0;
+  animation: fade 0.5s forwards ease-in-out;
 }
 
 @keyframes fade {
-    from {
-        opacity: 0;
-    }
+  from {
+    opacity: 0;
+  }
 
-    to {
-        opacity: 100;
-    }
+  to {
+    opacity: 100;
+  }
 }
 </style>
