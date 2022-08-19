@@ -12,6 +12,8 @@ import java.time.Instant;
 import java.util.Date;
 
 public class SimpleUserDTO {
+    private Integer userId;
+
     @NotNull
     @Size(min = 1 , max = 100 , message = "Size must be between 1 and 100")
     private String userName;
@@ -21,6 +23,14 @@ public class SimpleUserDTO {
     private String userEmail;
 
     private String role;
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
 
     public String getUserName() {
         return userName;
@@ -45,4 +55,6 @@ public class SimpleUserDTO {
     public void setRole(String role) {
         this.role = role;
     }
+
+
 }
