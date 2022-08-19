@@ -3,6 +3,7 @@ package sit.int221.oasip.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import sit.int221.oasip.dtos.SimpleUserDTO;
+import sit.int221.oasip.dtos.UserDetailDTO;
 import sit.int221.oasip.entities.User;
 import sit.int221.oasip.services.UserService;
 
@@ -21,13 +22,13 @@ public class UserController {
 
     //GET all
     @GetMapping("")
-    public List<User> getAllUser() {
+    public List<SimpleUserDTO> getAllUser() {
         return userService.getAll();
     }
 
     //GET by ID
     @GetMapping("/{id}")
-    public User getUserById(@PathVariable Integer id)
+    public UserDetailDTO getUserById(@PathVariable Integer id)
     {return userService.getById(id);}
 
     //GET by role
