@@ -3,6 +3,7 @@ package sit.int221.oasip.controllers;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import sit.int221.oasip.dtos.PostUserDTO;
 import sit.int221.oasip.dtos.SimpleUserDTO;
 import sit.int221.oasip.dtos.UserDetailDTO;
 import sit.int221.oasip.services.UserService;
@@ -51,7 +52,7 @@ public class UserController {
     //POST
     @PostMapping("")
     public ResponseEntity createUser(
-            @Valid @RequestBody SimpleUserDTO user,
+            @Valid @RequestBody PostUserDTO user,
             HttpServletRequest req
     )throws MethodArgumentNotValidException {
         return userService.create(user, req);
