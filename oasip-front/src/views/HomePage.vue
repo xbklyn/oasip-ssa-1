@@ -9,7 +9,7 @@
         Online Appointment<br />
         Sevice for Integrated<br />
         Project Clinic
-        <p>{{ formatDate(time) }}</p>
+        <!-- <p>{{ formatDate(time) }}</p> -->
       </h1>
 
       <p class="text-center mx-auto text-xs md:text-base">

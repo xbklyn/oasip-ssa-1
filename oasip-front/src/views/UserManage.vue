@@ -33,8 +33,9 @@
         Add user
       </button>
     </div>
-    <div class="w-[824px] mx-auto grid grid-cols-2 gap-6 mb-16">
-      <router-link :to="{ name: 'users-info', params: { id: '1' } }">
+    <div class="w-[824px] mx-auto mb-16">
+      <UserList :data="getUsers" />
+      <!-- <router-link :to="{ name: 'users-info', params: { id: '1' } }">
         <div
           class="w-full h-40 bg-white duration-150 px-12 py-10 drop-shadow-sm border hover:border-none hover:bg-gradient-to-br to-indigo-800 from-blue-500 hover:text-white"
         >
@@ -44,11 +45,30 @@
             <h3 class="text-xs">fukdesign@worstdesign.co.th</h3>
           </div>
         </div>
-      </router-link>
+      </router-link> -->
     </div>
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { computed, onBeforeMount, ref } from '@vue/runtime-core';
+import UserList from '../components/commons/users/UserList.vue';
+import { getAllUsers } from '../services/FetchServices.js';
+
+onBeforeMount(async () => {
+  const res = await getAllUsers();
+  users.value = res;
+});
+
+const users = ref({});
+
+const getUsers = computed(() => {
+  try {
+    return users.value;
+  } catch (error) {
+    return [];
+  }
+});
+</script>
 
 <style></style>
