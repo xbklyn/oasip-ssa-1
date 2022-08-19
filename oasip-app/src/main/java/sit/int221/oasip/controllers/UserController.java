@@ -1,13 +1,14 @@
 package sit.int221.oasip.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import sit.int221.oasip.dtos.SimpleUserDTO;
 import sit.int221.oasip.dtos.UserDetailDTO;
-import sit.int221.oasip.entities.User;
 import sit.int221.oasip.services.UserService;
 
-import java.time.Instant;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -46,4 +47,13 @@ public class UserController {
     public List<SimpleUserDTO> getUserByUpdateOn(@PathVariable String date)
     {return userService.getByUpdate(date);}
 
+
+    //POST
+    @PostMapping("")
+    public ResponseEntity createUser(
+            @Valid @RequestBody SimpleUserDTO user,
+            HttpServletRequest req
+    )throws MethodArgumentNotValidException {
+        return userService.create(user, req);
+    }
 }

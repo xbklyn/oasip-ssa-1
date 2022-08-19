@@ -1,8 +1,10 @@
 package sit.int221.oasip.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 import sit.int221.oasip.entities.Role;
 import sit.int221.oasip.entities.User;
 
@@ -19,4 +21,17 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     @Query(value = "select * from users where date(updatedOn) = :updatedOn" , nativeQuery = true)
     public List<User> findByUpdatedOn(@Param("updatedOn") String date);
+
+    public List<User> findByUserName(String name);
+    public List<User> findByUserEmail(String email);
+
+    @Transactional
+    @Modifying
+    @Query(value = "insert into users values(null,:name,:email, current_timestamp, current_timestamp, :roleId)" , nativeQuery = true)
+    public Integer create(
+            @Param("name") String name,
+            @Param("email") String email,
+            @Param("roleId") Integer id
+    );
+
 }
