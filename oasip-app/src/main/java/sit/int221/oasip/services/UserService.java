@@ -1,6 +1,7 @@
 package sit.int221.oasip.services;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -34,7 +35,7 @@ public class UserService {
 
     //GET all
     public List<SimpleUserDTO> getAll(){
-        return listMapper.mapList(userRepository.findAll() , SimpleUserDTO.class , modelMapper);
+        return listMapper.mapList(userRepository.findAll(Sort.by("userName").ascending()) , SimpleUserDTO.class , modelMapper);
     }
 
     //GET by ID
