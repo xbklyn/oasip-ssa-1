@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import sit.int221.oasip.dtos.PostUserDTO;
 import sit.int221.oasip.dtos.SimpleUserDTO;
 import sit.int221.oasip.dtos.UserDetailDTO;
 import sit.int221.oasip.entities.Role;
@@ -68,7 +69,7 @@ public class UserService {
     }
 
     //POST
-    public ResponseEntity create(SimpleUserDTO user , HttpServletRequest req){
+    public ResponseEntity create(PostUserDTO user , HttpServletRequest req){
         Map<String,String> errors = new HashMap<>();
         //Check Unique name
         if(!userRepository.findByUserName(user.getUserName().trim()).isEmpty())
