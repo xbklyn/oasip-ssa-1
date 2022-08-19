@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import sit.int221.oasip.dtos.SimpleUserDTO;
+import sit.int221.oasip.dtos.UserDetailDTO;
 import sit.int221.oasip.entities.Role;
 import sit.int221.oasip.entities.User;
 import sit.int221.oasip.repositories.RoleRepository;
@@ -32,14 +33,16 @@ public class UserService {
     }
 
     //GET all
-    public List<User> getAll(){
-        return userRepository.findAll();
+    public List<SimpleUserDTO> getAll(){
+        return listMapper.mapList(userRepository.findAll() , SimpleUserDTO.class , modelMapper);
     }
 
     //GET by ID
-    public User getById(Integer id) {
-        return userRepository.findById(id).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "User with id" + id + " does not exist!" ));
+    public UserDetailDTO getById(Integer id) {
+        User user = userRepository.findById(id).orElseThrow(() ->
+            new ResponseStatusException(HttpStatus.NOT_FOUND, "User with " + id + " does not exist!")
+        );
+        return modelMapper.map(user, UserDetailDTO.class);
     }
 
     //GET by role
