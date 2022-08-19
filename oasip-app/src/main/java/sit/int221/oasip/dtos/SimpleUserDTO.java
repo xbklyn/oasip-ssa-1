@@ -12,11 +12,19 @@ import java.time.Instant;
 import java.util.Date;
 
 public class SimpleUserDTO {
-    @NotNull
-    @Size(min = 1 , max = 100 , message = "Size must be between 1 and 100")
+
+    private Integer id;
     private String userName;
     private String userEmail;
     private String role;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getUserName() {
         return userName;
