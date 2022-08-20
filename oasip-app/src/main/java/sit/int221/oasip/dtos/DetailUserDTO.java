@@ -2,7 +2,7 @@ package sit.int221.oasip.dtos;
 
 import java.time.Instant;
 
-public class UserDetailDTO {
+public class DetailUserDTO {
 
     private String userName;
     private String userEmail;

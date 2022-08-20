@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import sit.int221.oasip.dtos.PostUserDTO;
 import sit.int221.oasip.dtos.SimpleUserDTO;
-import sit.int221.oasip.dtos.UserDetailDTO;
+import sit.int221.oasip.dtos.DetailUserDTO;
 import sit.int221.oasip.entities.Role;
 import sit.int221.oasip.entities.User;
 import sit.int221.oasip.errors.ErrorAdvice;
@@ -44,11 +44,11 @@ public class UserService {
     }
 
     //GET by ID
-    public UserDetailDTO getById(Integer id) {
+    public DetailUserDTO getById(Integer id) {
         User user = userRepository.findById(id).orElseThrow(() ->
             new ResponseStatusException(HttpStatus.NOT_FOUND, "User with " + id + " does not exist!")
         );
-        return modelMapper.map(user, UserDetailDTO.class);
+        return modelMapper.map(user, DetailUserDTO.class);
     }
 
     //GET by role
@@ -92,5 +92,11 @@ public class UserService {
         return errors.isEmpty()
                 ? ResponseEntity.status(201).body(userRepository.create(user.getUserName(), user.getUserEmail(), roleId))
                 : ResponseEntity.status(400).body(errorAdvice.getAllErrors(errors,req)) ;
+    }
+
+
+    //DELETE
+    public void delete(Integer id) {
+        userRepository.deleteById(id);
     }
 }

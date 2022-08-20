@@ -4,7 +4,11 @@
     <div class="w-srceen h-full py-24 l-color-navi">
       <p class="text-center font-light">Welcome to</p>
       <h1
+<<<<<<< HEAD
         class="text-4xl xl:text-8xl font-medium text-center leading-relaxed xl:leading-relaxed mb-6"
+=======
+        class="text-3xl md:text-5xl lg:text-6xl xl:text-8xl font-medium text-center leading-relaxed mb-6"
+>>>>>>> ad6f7dc12603333384df9ed91287aba6790995a8
       >
         Online Appointment<br />
         Sevice for Integrated<br />
