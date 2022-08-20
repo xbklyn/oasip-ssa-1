@@ -57,4 +57,14 @@ public class UserController {
     )throws MethodArgumentNotValidException {
         return userService.create(user, req);
     }
+
+
+    //DELETE
+    @DeleteMapping("/{id}")
+    public void delete(
+            @PathVariable Integer id
+    ){
+        userService.delete(id);
+    }
+
 }

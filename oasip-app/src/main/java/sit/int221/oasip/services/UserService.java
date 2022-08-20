@@ -93,4 +93,10 @@ public class UserService {
                 ? ResponseEntity.status(201).body(userRepository.create(user.getUserName(), user.getUserEmail(), roleId))
                 : ResponseEntity.status(400).body(errorAdvice.getAllErrors(errors,req)) ;
     }
+
+
+    //DELETE
+    public void delete(Integer id) {
+        userRepository.deleteById(id);
+    }
 }
