@@ -26,6 +26,8 @@
 </template>
 
 <script setup>
+import { computed } from '@vue/runtime-core';
+
 const prop = defineProps({
   data: {
     type: Array,

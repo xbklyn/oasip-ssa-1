@@ -22,7 +22,7 @@
         <h1 class="font-bold text-4xl l-color-navi">User Detail</h1>
         <p class="font-light text-sm l-color-gray-300">
           Lasted upedate:
-          {{ moment(user.updatedOn).format('DD-MM-YYYY HH:mm:ss') }}
+          {{ moment(user.updatedOn).format('LLL') }}
         </p>
       </div>
       <div class="justify-self-end space-x-6 text-sm place-items-center">
@@ -33,6 +33,7 @@
         </button>
         <button
           class="w-20 h-8 bg-red-500 text-white font-medium hover:bg-red-700 hover:text-white duration-150"
+          @click="confirmBox = true"
         >
           Delete
         </button>
@@ -46,8 +47,133 @@
       <Description :title="'Role'" :text="user.role" />
       <Description
         :title="'Create at'"
-        :text="moment(user.createdOn).format('DD-MM-YYYY HH:mm:ss')"
+        :text="moment(user.createdOn).format('LLL')"
       />
+    </div>
+
+    <!-- Modal box - Confirmation -->
+    <div
+      v-if="confirmBox"
+      class="grid place-items-center fixed top-0 right-0 left-0 z-50 bg-black/80 w-screen h-screen"
+    >
+      <div class="bg-white l-w-960 l-h-520 flex">
+        <div>
+          <img src="../assets/component/confirmation-2.png" alt="" />
+        </div>
+        <div class="l-w-520 l-h-520 grid place-items-center">
+          <div class="grid justify-center">
+            <img src="../assets/component/warning.png" alt="" />
+          </div>
+          <div class="text-center space-y-3">
+            <h2 class="font-medium text-2xl">
+              Are you sure delete this event?
+            </h2>
+            <p class="l-w-400 font-light text-xs l-color-gray-300">
+              If you delete this event, it will be gone forever.
+            </p>
+          </div>
+          <div class="grid space-y-3">
+            <button
+              class="w-80 h-12 bg-white text-green-700 duration-150 border border-green-700 hover:bg-green-700 hover:text-white"
+              @click="deleteUserById"
+            >
+              Confirm
+            </button>
+            <button
+              class="w-80 h-12 bg-red-600 text-white hover:bg-red-800 duration-150"
+              @click="confirmBox = false"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ALERT - Succesfully -->
+    <div
+      v-if="SUCCESFUL"
+      class="alert bg-black/40 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full h-full"
+    >
+      <div
+        class="relative p-4 w-full h-full grid place-items-center justify-center"
+      >
+        <div
+          class="relative bg-white shadow l-w-520 h-72 grid place-items-center"
+        >
+          <div class="grid place-items-center gap-6">
+            <div class="grid justify-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                aria-hidden="true"
+                role="img"
+                class="iconify iconify--clarity text-emerald-500"
+                width="96"
+                height="96"
+                preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 36 36"
+              >
+                <path
+                  fill="currentColor"
+                  d="M18 2a16 16 0 1 0 16 16A16 16 0 0 0 18 2Zm10.45 10.63L15.31 25.76L7.55 18a1.4 1.4 0 0 1 2-2l5.78 5.78l11.14-11.13a1.4 1.4 0 1 1 2 2Z"
+                  class="clr-i-solid clr-i-solid-path-1"
+                ></path>
+                <path fill="none" d="M0 0h36v36H0z"></path>
+              </svg>
+            </div>
+            <div class="text-center">
+              <h2 class="text-xl font-semibold text-emerald-700 mb-2">DONE!</h2>
+              <p class="text-md l-color-gray-300">
+                Your scheduled is already deleted.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ALERT - Error -->
+    <div
+      v-if="ERROR"
+      class="alert bg-black/40 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full h-full"
+    >
+      <div
+        class="relative p-4 w-full h-full grid place-items-center justify-center"
+      >
+        <div
+          class="relative bg-white shadow l-w-520 h-72 grid place-items-center"
+        >
+          <div class="grid place-items-center gap-6">
+            <div class="grid justify-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                aria-hidden="true"
+                role="img"
+                class="iconify iconify--material-symbols text-orange-400"
+                width="96"
+                height="96"
+                preserveAspectRatio="xMidYMid meet"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  fill="currentColor"
+                  d="M12 22q-2.075 0-3.9-.788q-1.825-.787-3.175-2.137q-1.35-1.35-2.137-3.175Q2 14.075 2 12t.788-3.9q.787-1.825 2.137-3.175q1.35-1.35 3.175-2.138Q9.925 2 12 2t3.9.787q1.825.788 3.175 2.138q1.35 1.35 2.137 3.175Q22 9.925 22 12t-.788 3.9q-.787 1.825-2.137 3.175q-1.35 1.35-3.175 2.137Q14.075 22 12 22Zm-1-9h2V7h-2Zm1 4q.425 0 .713-.288Q13 16.425 13 16t-.287-.713Q12.425 15 12 15t-.712.287Q11 15.575 11 16t.288.712Q11.575 17 12 17Z"
+                ></path>
+              </svg>
+            </div>
+            <div class="text-center">
+              <h2 class="text-xl font-semibold text-orange-400 mb-2">
+                WARNING!
+              </h2>
+              <p class="text-md l-color-gray-300">
+                Something want wrong, Please try again.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -55,18 +181,59 @@
 <script setup>
 import { ref } from '@vue/reactivity';
 import { onBeforeMount } from '@vue/runtime-core';
-import { getUserById } from '../services/FetchServices.js';
 import { useRoute, useRouter } from 'vue-router';
 import moment from 'moment';
 import Description from '../components/commons/lists/Description.vue';
 const { params } = useRoute();
 
 onBeforeMount(async () => {
-  const res = await getUserById(params.id);
-  user.value = res;
+  await getUserById(params.id);
 });
 
+const myRouter = useRouter();
 const user = ref({});
+const confirmBox = ref(false);
+const SUCCESFUL = ref(false);
+const ERROR = ref(false);
+
+// Fetch service
+// GET METHOD - Get user by Id
+const getUserById = async (id) => {
+  await fetch(`${import.meta.env.VITE_BASE_URL}/users/${id}`)
+    .then(async (res) => {
+      if (res.status === 200) return (user.value = await res.json());
+      throw new Error();
+    })
+    .catch((e) => {
+      return e.message;
+    });
+};
+
+// DELETE METHOD - Delete user
+const deleteUserById = async () => {
+  await fetch(`${import.meta.env.VITE_BASE_URL}/users/${params.id}`, {
+    method: 'DELETE',
+  }).then(async (res) => {
+    if (res.status === 200) {
+      SUCCESFUL.value = true;
+      ERROR.value = false;
+      setTimeout(() => {
+        SUCCESFUL.value = false;
+      }, 1500);
+      myRouter.go({
+        path: `/users`,
+      });
+      return;
+    } else {
+      SUCCESFUL.value = false;
+      ERROR.value = true;
+      setTimeout(() => {
+        ERROR.value = false;
+      }, 1500);
+      return;
+    }
+  });
+};
 </script>
 
 <style></style>

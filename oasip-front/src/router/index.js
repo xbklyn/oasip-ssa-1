@@ -62,7 +62,7 @@ const router = createRouter({
           component: UserManage,
         },
         {
-          path: '/user/:id',
+          path: '/users/user/:id',
           name: 'user-info',
           component: UserInfo,
         },

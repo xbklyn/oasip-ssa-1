@@ -123,22 +123,59 @@ export const editCategoryById = async (category) => {
   return res.status;
 };
 
-// GET METHOD - Get all users
-export const getAllUsers = async () => {
-  try {
-    const res = await fetch(`${import.meta.env.VITE_BASE_URL}/users`);
-    return await res.json();
-  } catch (error) {
-    return console.log(error);
-  }
-};
+// // GET METHOD - Get all users
+// export const getAllUsers = async () => {
+//   let user;
+//   await fetch(`${import.meta.env.VITE_BASE_URL}/users`)
+//     .then(async (res) => {
+//       if (res.status === 200) return (user = await res.json());
+//       throw new Error(res.status);
+//     })
+//     .catch((e) => {
+//       return e.message;
+//     });
+// };
 
-// GET METHOD - Get user by Id
-export const getUserById = async (id) => {
-  try {
-    const res = await fetch(`${import.meta.env.VITE_BASE_URL}/users/${id}`);
-    return await res.json();
-  } catch (error) {
-    return console.log(error);
-  }
-};
+// // GET METHOD - Get user by Id
+// export const getUserById = async (id) => {
+//   await fetch(`${import.meta.env.VITE_BASE_URL}/users/${id}`)
+//     .then((res) => {
+//       if (res.status === 200) return res.json();
+//       throw new Error(res.status);
+//     })
+//     .catch((e) => {
+//       return e.message;
+//     });
+// };
+
+// // POST METHOD - Create new user
+// export const postNewUser = async (user) => {
+//   await fetch(`${import.meta.env.VITE_BASE_URL}/users`, {
+//     method: 'POST',
+//     headers: {
+//       'content-type': 'application/json',
+//     },
+//     body: JSON.stringify(user),
+//   })
+//     .then((res) => {
+//       if (res.ok) return res.status;
+//       throw new Error(res.status);
+//     })
+//     .catch((e) => {
+//       return e.message;
+//     });
+// };
+
+// // DELETE METHOD - Delete user
+// export const deleteUserById = async (userId) => {
+//   await fetch(`${import.meta.env.VITE_BASE_URL}/users/${userId}`, {
+//     method: 'DELETE',
+//   })
+//     .then((res) => {
+//       if (res.ok) return res.status;
+//       throw new Error(res.status);
+//     })
+//     .catch((e) => {
+//       return e.message;
+//     });
+// };

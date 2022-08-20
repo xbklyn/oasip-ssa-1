@@ -4,12 +4,11 @@
     <div class="w-srceen h-full py-24 l-color-navi">
       <p class="text-center font-light">Welcome to</p>
       <h1
-        class="text-3xl xl:text-8xl font-medium text-center leading-relaxed mb-6"
+        class="text-4xl xl:text-8xl font-medium text-center leading-relaxed xl:leading-relaxed mb-6"
       >
         Online Appointment<br />
         Sevice for Integrated<br />
         Project Clinic
-        <!-- <p>{{ formatDate(time) }}</p> -->
       </h1>
 
       <p class="text-center mx-auto text-xs md:text-base">
@@ -60,7 +59,7 @@
 
       <!-- Dash board -->
       <div
-        class="grid px-12 md:grid-cols-2 xl:grid-cols-4 xl:l-w-full gap-12 mt-24 mx-auto"
+        class="grid px-12 md:grid-cols-2 xl:grid-cols-4 md:l-w-full gap-12 mt-24 mx-auto"
       >
         <div
           class="bg-white drop-shadow-md flex hover:scale-105 duration-150 ease-in-out"
