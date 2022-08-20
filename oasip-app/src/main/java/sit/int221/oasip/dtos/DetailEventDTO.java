@@ -2,7 +2,7 @@ package sit.int221.oasip.dtos;
 
 import java.util.Date;
 
-public class EventDetailDTO {
+public class DetailEventDTO {
     private Integer id;
     private String bookingName;
     private String bookingEmail;

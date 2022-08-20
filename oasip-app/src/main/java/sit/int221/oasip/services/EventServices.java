@@ -55,11 +55,11 @@ public class EventServices {
         ), SimpleEventDTO.class, modelMapper);
     }
 
-    public EventDetailDTO getEventById(Integer id ){
+    public DetailEventDTO getEventById(Integer id ){
         Event event = eventRepository.findById(id).orElseThrow(() ->
             new ResponseStatusException(NOT_FOUND, id + "does not exist."));
         check();
-        return modelMapper.map(event, EventDetailDTO.class);
+        return modelMapper.map(event, DetailEventDTO.class);
     }
 
     public List<TimeDTO> getEventByCatIdAndDate(Integer catId , String date){

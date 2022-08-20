@@ -35,7 +35,7 @@ public class EventsController {
 
     //GET by id
     @GetMapping("/{id}")
-    public EventDetailDTO getEventById(
+    public DetailEventDTO getEventById(
             @PathVariable Integer id
     ) {
         return eventServices.getEventById(id);

@@ -5,7 +5,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import sit.int221.oasip.dtos.PostUserDTO;
 import sit.int221.oasip.dtos.SimpleUserDTO;
-import sit.int221.oasip.dtos.UserDetailDTO;
+import sit.int221.oasip.dtos.DetailUserDTO;
 import sit.int221.oasip.services.UserService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,7 +30,7 @@ public class UserController {
 
     //GET by ID
     @GetMapping("/{id}")
-    public UserDetailDTO getUserById(@PathVariable Integer id)
+    public DetailUserDTO getUserById(@PathVariable Integer id)
     {return userService.getById(id);}
 
     //GET by role
