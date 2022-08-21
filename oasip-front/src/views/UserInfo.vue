@@ -42,9 +42,9 @@
     </div>
 
     <!-- header when edit mode -->
-    <div  class="w-[824px] grid grid-cols-2 gap-6 mb-16" v-else>
+    <div class="w-[824px] grid grid-cols-2 gap-6 mb-16" v-else>
       <div>
-        <h1 class="font-bold text-4xl l-color-navi">Edit User</h1> 
+        <h1 class="font-bold text-4xl l-color-navi">Edit User</h1>
         <p class="font-light text-sm l-color-gray-300">
           Lasted upedate:
           {{ moment(user.updatedOn).format('LLL') }}
@@ -54,15 +54,14 @@
         <button
           @click="editMode = false"
           class="w-20 h-8 border border-red-500 text-red-500 hover:bg-red-500 hover:text-white duration-150"
-          >
+        >
           Close
         </button>
       </div>
     </div>
 
-
     <!-- Info - User -->
-    <div class="w-[824px] grid grid-cols-2 gap-12">
+    <div class="w-[824px] grid grid-cols-2 gap-12" v-if="!editMode">
       <Description :title="'Name'" :text="user.userName" />
       <Description :title="'Email'" :text="user.userEmail" />
       <Description :title="'Role'" :text="user.role" />
@@ -70,6 +69,90 @@
         :title="'Create at'"
         :text="moment(user.createdOn).format('LLL')"
       />
+    </div>
+
+    <!-- Edit User -->
+    <div class="w-[824px]" v-else>
+      <div>
+        <input
+          :checked="user.role === 'student'"
+          class=""
+          type="radio"
+          name="role"
+          :value="'3'"
+          v-model="editUser"
+        />
+        <label for=""> Student </label>
+        <input
+          :checked="user.role === 'lecturer'"
+          type="radio"
+          name="role"
+          :value="'2'"
+          v-model="editUser"
+        />
+        <label for="">Lecturer</label>
+        <input
+          :checked="user.role === 'admin'"
+          type="radio"
+          name="role"
+          :value="'1'"
+          v-model="editUser"
+        />
+        <label for="">Admin</label>
+      </div>
+      <div class="grid gap-12 mt-8">
+        <div class="relative">
+          <input
+            type="text"
+            v-model="user.userName"
+            :class="[
+              'w-full h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer',
+              responeError?.details?.userName
+                ? 'border-red-500 focus:border-red-500'
+                : '',
+            ]"
+            placeholder=" "
+          />
+          <label
+            class="absolute text-sm l-color-gray-300 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
+          >
+            Name<span class="text-red-500">*</span>
+          </label>
+          <p class="absolute text-sm text-red-500 ml-2">
+            {{ responeError?.details?.userName }}
+          </p>
+        </div>
+        <div class="relative">
+          <input
+            type="text"
+            v-model="user.userEmail"
+            :class="[
+              'w-full h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer',
+              responeError?.details?.userEmail
+                ? 'border-red-500 focus:border-red-500'
+                : '',
+            ]"
+            placeholder=" "
+          />
+          <label
+            class="absolute text-sm l-color-gray-300 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
+          >
+            Email<span class="text-red-500">*</span>
+          </label>
+        </div>
+        <div class="w-full h-12 mt-12 space-x-6">
+          <button
+            :class="['w-24 h-full text-white duration-150 bg-emerald-500']"
+          >
+            Update
+          </button>
+          <button
+            :class="['text-slate-500 h-full hover:text-slate-300 duration-150']"
+          >
+            Discard
+          </button>
+        </div>
+      </div>
     </div>
 
     <!-- Modal box - Confirmation -->
@@ -200,7 +283,7 @@
 </template>
 
 <script setup>
-import { ref } from '@vue/reactivity';
+import { computed, ref } from '@vue/reactivity';
 import { onBeforeMount } from '@vue/runtime-core';
 import { useRoute, useRouter } from 'vue-router';
 import moment from 'moment';
@@ -216,7 +299,7 @@ const user = ref({});
 const confirmBox = ref(false);
 const SUCCESFUL = ref(false);
 const ERROR = ref(false);
-const editMode =ref(false)
+const editMode = ref(false);
 
 // Fetch service
 // GET METHOD - Get user by Id
