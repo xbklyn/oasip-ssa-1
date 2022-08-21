@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import sit.int221.oasip.dtos.PostUserDTO;
+import sit.int221.oasip.dtos.PutUserDTO;
 import sit.int221.oasip.dtos.SimpleUserDTO;
 import sit.int221.oasip.dtos.DetailUserDTO;
 import sit.int221.oasip.services.UserService;
@@ -54,10 +55,19 @@ public class UserController {
     public ResponseEntity createUser(
             @Valid @RequestBody PostUserDTO user,
             HttpServletRequest req
-    )throws MethodArgumentNotValidException {
+    ) throws MethodArgumentNotValidException {
         return userService.create(user, req);
     }
 
+//    //PUT
+    @PutMapping("/{id}")
+    public ResponseEntity updateUser(
+            @PathVariable Integer id,
+            @Valid @RequestBody PutUserDTO user,
+            HttpServletRequest req
+    ) throws MethodArgumentNotValidException{
+        return userService.update(id, user, req);
+    }
 
     //DELETE
     @DeleteMapping("/{id}")

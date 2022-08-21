@@ -7,10 +7,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import sit.int221.oasip.dtos.PostUserDTO;
+import sit.int221.oasip.dtos.PutUserDTO;
 import sit.int221.oasip.dtos.SimpleUserDTO;
 import sit.int221.oasip.dtos.DetailUserDTO;
 import sit.int221.oasip.entities.Role;
 import sit.int221.oasip.entities.User;
+import sit.int221.oasip.errors.ApiError;
 import sit.int221.oasip.errors.ErrorAdvice;
 import sit.int221.oasip.repositories.RoleRepository;
 import sit.int221.oasip.repositories.UserRepository;
@@ -70,19 +72,12 @@ public class UserService {
 
     //POST
     public ResponseEntity create(PostUserDTO user , HttpServletRequest req){
-        Map<String,String> errors = new HashMap<>();
-        //Check Unique name
-        if(!userRepository.findByUserName(user.getUserName().trim()).isEmpty())
-            errors.put("userName" , "must be unique.");
+        //Validate name and email
+        Map<String , String > errors = validate(user.getUserName() , user.getUserEmail());
 
-        //Check emails
-        String regex = "^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
-        if(!user.getUserEmail().matches(regex))
-            errors.put("userEmail" , "must be an well-formed email");
         //Check Unique email
         if(!userRepository.findByUserEmail(user.getUserEmail().trim()).isEmpty())
-            if(errors.containsKey("userEmail")) errors.replace("userEmail" , errors.get("userEmail") + "and must be unique");
-            else errors.put("userEmail", "must be unique");
+            errors.put("userEmail", "must be unique");
 
         //Check role
         Integer roleId = user.getRole().isEmpty()
@@ -90,13 +85,40 @@ public class UserService {
                 : roleRepository.findByRoleName(user.getRole()).getId();
 
         return errors.isEmpty()
-                ? ResponseEntity.status(201).body(userRepository.create(user.getUserName(), user.getUserEmail(), roleId))
+                ? ResponseEntity.status(201).body(userRepository.create(user.getUserName().trim(), user.getUserEmail(), roleId))
                 : ResponseEntity.status(400).body(errorAdvice.getAllErrors(errors,req)) ;
     }
 
+    //PUT
+    public ResponseEntity update(Integer id, PutUserDTO user , HttpServletRequest req){
+        Map<String , String > errors = validate(user.getUserName() , user.getUserEmail());
+
+        //Check role
+        Integer roleId = user.getRole().isEmpty()
+                ? roleRepository.findByRoleName("student").getId()
+                : roleRepository.findByRoleName(user.getRole()).getId();
+
+        return errors.isEmpty()
+                ? ResponseEntity.status(201).body(userRepository.update(id , user.getUserName().trim(), user.getUserEmail(), roleId))
+                : ResponseEntity.status(400).body(errorAdvice.getAllErrors(errors,req));
+    }
 
     //DELETE
     public void delete(Integer id) {
         userRepository.deleteById(id);
+    }
+
+    public Map<String, String> validate(String name, String email){
+        Map<String,String> errors = new HashMap<>();
+        //Check Unique name
+        if(!userRepository.findByUserName(name.trim()).isEmpty())
+            errors.put("userName" , "must be unique.");
+
+        //Check emails
+        String regex = "^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
+        if(!email.trim().matches(regex))
+            errors.put("userEmail" , "must be an well-formed email");
+
+            return errors;
     }
 }

@@ -34,4 +34,17 @@ public interface UserRepository extends JpaRepository<User, Integer> {
             @Param("roleId") Integer id
     );
 
+    @Transactional
+    @Modifying
+    @Query(value = "update users set userName = :name " +
+            ", userEmail = :email " +
+            ", roleId = :roleId " +
+            "where userId = :userId", nativeQuery = true)
+    public Integer update(
+            @Param("userId") Integer id,
+            @Param("name") String name,
+            @Param("email") String email,
+            @Param("roleId") Integer roleId
+    );
+
 }
