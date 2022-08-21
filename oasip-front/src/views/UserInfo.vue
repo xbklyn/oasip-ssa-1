@@ -17,7 +17,7 @@
         </router-link>
       </div>
     </div>
-    <div class="w-[824px] grid grid-cols-2 gap-6 mb-16">
+    <div class="w-[824px] grid grid-cols-2 gap-6 mb-16" v-if="!editMode">
       <div>
         <h1 class="font-bold text-4xl l-color-navi">User Detail</h1>
         <p class="font-light text-sm l-color-gray-300">
@@ -27,6 +27,7 @@
       </div>
       <div class="justify-self-end space-x-6 text-sm place-items-center">
         <button
+          @click="editMode = true"
           class="w-20 h-8 border border-blue-600 text-blue-600 hover:bg-blue-700 hover:text-white hover:border duration-150 disabled:border-gray-300 disabled:bg-gray-200 disabled:border disabled:text-gray-400"
         >
           Edit
@@ -39,6 +40,26 @@
         </button>
       </div>
     </div>
+
+    <!-- header when edit mode -->
+    <div  class="w-[824px] grid grid-cols-2 gap-6 mb-16" v-else>
+      <div>
+        <h1 class="font-bold text-4xl l-color-navi">Edit User</h1> 
+        <p class="font-light text-sm l-color-gray-300">
+          Lasted upedate:
+          {{ moment(user.updatedOn).format('LLL') }}
+        </p>
+      </div>
+      <div class="justify-self-end space-x-6 text-sm place-items-center">
+        <button
+          @click="editMode = false"
+          class="w-20 h-8 border border-red-500 text-red-500 hover:bg-red-500 hover:text-white duration-150"
+          >
+          Close
+        </button>
+      </div>
+    </div>
+
 
     <!-- Info - User -->
     <div class="w-[824px] grid grid-cols-2 gap-12">
@@ -195,6 +216,7 @@ const user = ref({});
 const confirmBox = ref(false);
 const SUCCESFUL = ref(false);
 const ERROR = ref(false);
+const editMode =ref(false)
 
 // Fetch service
 // GET METHOD - Get user by Id
