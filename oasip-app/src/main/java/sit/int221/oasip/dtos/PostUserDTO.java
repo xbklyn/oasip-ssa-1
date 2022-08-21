@@ -12,6 +12,7 @@ public class PostUserDTO {
     @Size(min = 1 , max = 50 , message = "Size must be between 1 and 50")
     private String userEmail;
 
+    @NotNull
     private String role;
 
     public String getUserName() {
