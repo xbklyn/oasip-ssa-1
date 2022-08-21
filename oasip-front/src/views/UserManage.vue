@@ -35,7 +35,7 @@
       </button>
     </div>
     <div class="w-[824px] mx-auto mb-16">
-      <UserList :data="users" />
+      <UserList :data="getUser" />
     </div>
 
     <!-- Dialog - Add new user -->
@@ -201,7 +201,7 @@ onBeforeMount(async () => {
   await getAllUsers();
 });
 
-const users = ref({});
+const users = ref([]);
 const addNewUser = ref({
   role: '',
   userName: '',
@@ -225,6 +225,15 @@ const addDialogClosed = () => {
     responeError.value = Object.assign({}, defaultResponeError.value);
   });
 };
+
+// Computed
+const getUser = computed(() => {
+  try {
+    return users.value;
+  } catch (error) {
+    return [];
+  }
+});
 
 // Fetch service
 // GET METHOD - Get all users
