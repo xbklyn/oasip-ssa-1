@@ -27,7 +27,7 @@
       </div>
       <div class="justify-self-end space-x-6 text-sm place-items-center">
         <button
-          @click="editMode = true"
+          @click="clickEdit"
           class="w-20 h-8 border border-blue-600 text-blue-600 hover:bg-blue-700 hover:text-white hover:border duration-150 disabled:border-gray-300 disabled:bg-gray-200 disabled:border disabled:text-gray-400"
         >
           Edit
@@ -79,24 +79,24 @@
           class=""
           type="radio"
           name="role"
-          :value="'3'"
-          v-model="userEdit.role"
+          :value="'student'"
+          v-model="role"
         />
         <label for=""> Student </label>
         <input
           :checked="user.role === 'lecturer'"
           type="radio"
           name="role"
-          :value="'2'"
-          v-model="userEdit.role"
+          :value="'lecturer'"
+          v-model="role"
         />
         <label for="">Lecturer</label>
         <input
           :checked="user.role === 'admin'"
           type="radio"
           name="role"
-          :value="'1'"
-          v-model="userEdit.role"
+          :value="'admin'"
+          v-model="role"
         />
         <label for="">Admin</label>
       </div>
@@ -104,7 +104,7 @@
         <div class="relative">
           <input
             type="text"
-            v-model="user.userName"
+            v-model="name"
             :class="[
               'w-full h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer',
               responeError?.details?.userName
@@ -125,7 +125,7 @@
         <div class="relative">
           <input
             type="text"
-            v-model="user.userEmail"
+            v-model="email"
             :class="[
               'w-full h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer',
               responeError?.details?.userEmail
@@ -142,6 +142,7 @@
         </div>
         <div class="w-full h-12 mt-12 space-x-6">
           <button
+            @click="putUser"
             :class="['w-24 h-full text-white duration-150 bg-emerald-500']"
           >
             Update
@@ -236,11 +237,7 @@
         </div>
       </div>
     </div>
-    {{ user }}
-    <br />
-    {{ userData }}
-    <br />
-    role:{{ userRole }}
+
     <!-- ALERT - Error -->
     <div
       v-if="ERROR"
@@ -304,22 +301,32 @@ const confirmBox = ref(false);
 const SUCCESFUL = ref(false);
 const ERROR = ref(false);
 const editMode = ref(false);
-// const userData = computed(() => {
-//   return user.value;
-// });
-// const userRole = ref(user.role);
-// const userName = ref();
-// const userEmail = ref();
-
-const userEdit = ref({
-  role: '',
-  userName: '',
-  userEmail: '',
+const clickEdit = () => {
+  editMode.value = true;
+  role.value = userRole.value;
+  name.value = userName.value;
+  email.value = userEmail.value;
+};
+const userRole = computed(() => {
+  return user.value.role;
 });
+const userName = computed(() => {
+  return user.value.userName;
+});
+const userEmail = computed(() => {
+  return user.value.userEmail;
+});
+const role = ref('');
+const name = ref('');
+const email = ref('');
+
 const userDetail = ref({
   role: '',
   userName: '',
   userEmail: '',
+});
+const userEdit = computed(() => {
+  return { role: role, userName: name, userEmail: email };
 });
 
 // Fetch service
@@ -357,6 +364,35 @@ const deleteUserById = async () => {
         ERROR.value = false;
       }, 1500);
       return;
+    }
+  });
+};
+
+// PUT METHOD - Edit user
+const putUser = async () => {
+  await fetch(`${import.meta.env.VITE_BASE_URL}/users/${params.id}`, {
+    method: 'PUT',
+    headers: {
+      'content-type': 'application/json',
+    },
+    body: JSON.stringify(userEdit.value),
+  }).then(async (res) => {
+    if (res.status === 200) {
+      SUCCESFUL.value = true;
+      ERROR.value = false;
+      setTimeout(function () {
+        SUCCESFUL.value = false;
+      }, 1500);
+      editMode.value = false;
+      await getUserById(params.id);
+      return;
+    } else {
+      SUCCESFUL.value = false;
+      ERROR.value = true;
+      setTimeout(function () {
+        ERROR.value = false;
+      }, 1500);
+      // return (responeError.value = await res.json());
     }
   });
 };
