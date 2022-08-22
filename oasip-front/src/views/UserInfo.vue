@@ -80,7 +80,7 @@
           type="radio"
           name="role"
           :value="'3'"
-          v-model="editUser"
+          v-model="userEdit.role"
         />
         <label for=""> Student </label>
         <input
@@ -88,7 +88,7 @@
           type="radio"
           name="role"
           :value="'2'"
-          v-model="editUser"
+          v-model="userEdit.role"
         />
         <label for="">Lecturer</label>
         <input
@@ -96,7 +96,7 @@
           type="radio"
           name="role"
           :value="'1'"
-          v-model="editUser"
+          v-model="userEdit.role"
         />
         <label for="">Admin</label>
       </div>
@@ -236,7 +236,11 @@
         </div>
       </div>
     </div>
-
+    {{ user }}
+    <br />
+    {{ userData }}
+    <br />
+    role:{{ userRole }}
     <!-- ALERT - Error -->
     <div
       v-if="ERROR"
@@ -300,6 +304,23 @@ const confirmBox = ref(false);
 const SUCCESFUL = ref(false);
 const ERROR = ref(false);
 const editMode = ref(false);
+// const userData = computed(() => {
+//   return user.value;
+// });
+// const userRole = ref(user.role);
+// const userName = ref();
+// const userEmail = ref();
+
+const userEdit = ref({
+  role: '',
+  userName: '',
+  userEmail: '',
+});
+const userDetail = ref({
+  role: '',
+  userName: '',
+  userEmail: '',
+});
 
 // Fetch service
 // GET METHOD - Get user by Id
