@@ -320,13 +320,8 @@ const role = ref('');
 const name = ref('');
 const email = ref('');
 
-const userDetail = ref({
-  role: '',
-  userName: '',
-  userEmail: '',
-});
 const userEdit = computed(() => {
-  return { role: role, userName: name, userEmail: email };
+  return { role: role.value, userName: name.value, userEmail: email.value };
 });
 
 // Fetch service
@@ -377,7 +372,7 @@ const putUser = async () => {
     },
     body: JSON.stringify(userEdit.value),
   }).then(async (res) => {
-    if (res.status === 200) {
+    if (res.ok) {
       SUCCESFUL.value = true;
       ERROR.value = false;
       setTimeout(function () {
