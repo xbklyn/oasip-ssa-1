@@ -52,14 +52,13 @@
       </div>
       <div class="justify-self-end space-x-6 text-sm place-items-center">
         <button
-          @click="editMode = false"
+          @click="closedEditMode"
           class="w-20 h-8 border border-red-500 text-red-500 hover:bg-red-500 hover:text-white duration-150"
         >
           Close
         </button>
       </div>
     </div>
-
     <!-- Info - User -->
     <div class="w-[824px] grid grid-cols-2 gap-12" v-if="!editMode">
       <Description :title="'Name'" :text="user.userName" />
@@ -143,7 +142,9 @@
         <div class="w-full h-12 mt-12 space-x-6">
           <button
             @click="putUser"
-            :class="['w-24 h-full text-white duration-150 bg-emerald-500']"
+            :class="[
+              'w-24 h-full text-white duration-150 bg-emerald-500 disabled:bg-gray-300',
+            ]"
           >
             Update
           </button>
@@ -152,6 +153,63 @@
           >
             Discard
           </button>
+        </div>
+      </div>
+
+      <!-- ALERT - Succesfully -->
+      <div
+        v-if="SUCCESFUL"
+        class="alert duration-150 flex p-4 text-sm text-emerald-600 bg-white border place-items-center mt-6"
+        role="alert"
+      >
+        <div>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            aria-hidden="true"
+            role="img"
+            class="iconify iconify--clarity mr-2"
+            width="24"
+            height="24"
+            preserveAspectRatio="xMidYMid meet"
+            viewBox="0 0 36 36"
+          >
+            <path
+              fill="currentColor"
+              d="M18 2a16 16 0 1 0 16 16A16 16 0 0 0 18 2Zm10.45 10.63L15.31 25.76L7.55 18a1.4 1.4 0 0 1 2-2l5.78 5.78l11.14-11.13a1.4 1.4 0 1 1 2 2Z"
+              class="clr-i-solid clr-i-solid-path-1"
+            ></path>
+            <path fill="none" d="M0 0h36v36H0z"></path>
+          </svg>
+        </div>
+        <div><span class="font-medium">DONE!</span> Update succesfully.</div>
+      </div>
+
+      <!-- ALERT - Error -->
+      <div
+        v-if="ERROR"
+        class="alert duration-150 flex p-4 mt-2 pb-4 text-sm text-red-500 border place-items-center"
+        role="alert"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          aria-hidden="true"
+          role="img"
+          class="iconify iconify--material-symbols mr-2"
+          width="24"
+          height="24"
+          preserveAspectRatio="xMidYMid meet"
+          viewBox="0 0 24 24"
+        >
+          <path
+            fill="currentColor"
+            d="M12 22q-2.075 0-3.9-.788q-1.825-.787-3.175-2.137q-1.35-1.35-2.137-3.175Q2 14.075 2 12t.788-3.9q.787-1.825 2.137-3.175q1.35-1.35 3.175-2.138Q9.925 2 12 2t3.9.787q1.825.788 3.175 2.138q1.35 1.35 2.137 3.175Q22 9.925 22 12t-.788 3.9q-.787 1.825-2.137 3.175q-1.35 1.35-3.175 2.137Q14.075 22 12 22Zm-1-9h2V7h-2Zm1 4q.425 0 .713-.288Q13 16.425 13 16t-.287-.713Q12.425 15 12 15t-.712.287Q11 15.575 11 16t.288.712Q11.575 17 12 17Z"
+          ></path>
+        </svg>
+        <div>
+          <span class="font-medium">ERROR! </span>
+          Username {{ responeError.details.userName }}
         </div>
       </div>
     </div>
@@ -194,92 +252,6 @@
         </div>
       </div>
     </div>
-
-    <!-- ALERT - Succesfully -->
-    <div
-      v-if="SUCCESFUL"
-      class="alert bg-black/40 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full h-full"
-    >
-      <div
-        class="relative p-4 w-full h-full grid place-items-center justify-center"
-      >
-        <div
-          class="relative bg-white shadow l-w-520 h-72 grid place-items-center"
-        >
-          <div class="grid place-items-center gap-6">
-            <div class="grid justify-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                xmlns:xlink="http://www.w3.org/1999/xlink"
-                aria-hidden="true"
-                role="img"
-                class="iconify iconify--clarity text-emerald-500"
-                width="96"
-                height="96"
-                preserveAspectRatio="xMidYMid meet"
-                viewBox="0 0 36 36"
-              >
-                <path
-                  fill="currentColor"
-                  d="M18 2a16 16 0 1 0 16 16A16 16 0 0 0 18 2Zm10.45 10.63L15.31 25.76L7.55 18a1.4 1.4 0 0 1 2-2l5.78 5.78l11.14-11.13a1.4 1.4 0 1 1 2 2Z"
-                  class="clr-i-solid clr-i-solid-path-1"
-                ></path>
-                <path fill="none" d="M0 0h36v36H0z"></path>
-              </svg>
-            </div>
-            <div class="text-center">
-              <h2 class="text-xl font-semibold text-emerald-700 mb-2">DONE!</h2>
-              <p class="text-md l-color-gray-300">
-                Your scheduled is already deleted.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ALERT - Error -->
-    <div
-      v-if="ERROR"
-      class="alert bg-black/40 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full h-full"
-    >
-      <div
-        class="relative p-4 w-full h-full grid place-items-center justify-center"
-      >
-        <div
-          class="relative bg-white shadow l-w-520 h-72 grid place-items-center"
-        >
-          <div class="grid place-items-center gap-6">
-            <div class="grid justify-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                xmlns:xlink="http://www.w3.org/1999/xlink"
-                aria-hidden="true"
-                role="img"
-                class="iconify iconify--material-symbols text-orange-400"
-                width="96"
-                height="96"
-                preserveAspectRatio="xMidYMid meet"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  fill="currentColor"
-                  d="M12 22q-2.075 0-3.9-.788q-1.825-.787-3.175-2.137q-1.35-1.35-2.137-3.175Q2 14.075 2 12t.788-3.9q.787-1.825 2.137-3.175q1.35-1.35 3.175-2.138Q9.925 2 12 2t3.9.787q1.825.788 3.175 2.138q1.35 1.35 2.137 3.175Q22 9.925 22 12t-.788 3.9q-.787 1.825-2.137 3.175q-1.35 1.35-3.175 2.137Q14.075 22 12 22Zm-1-9h2V7h-2Zm1 4q.425 0 .713-.288Q13 16.425 13 16t-.287-.713Q12.425 15 12 15t-.712.287Q11 15.575 11 16t.288.712Q11.575 17 12 17Z"
-                ></path>
-              </svg>
-            </div>
-            <div class="text-center">
-              <h2 class="text-xl font-semibold text-orange-400 mb-2">
-                WARNING!
-              </h2>
-              <p class="text-md l-color-gray-300">
-                Something want wrong, Please try again.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -301,6 +273,8 @@ const confirmBox = ref(false);
 const SUCCESFUL = ref(false);
 const ERROR = ref(false);
 const editMode = ref(false);
+const responeError = ref({});
+
 const clickEdit = () => {
   editMode.value = true;
   role.value = userRole.value;
@@ -320,9 +294,58 @@ const role = ref('');
 const name = ref('');
 const email = ref('');
 
-const userEdit = computed(() => {
-  return { role: role.value, userName: name.value, userEmail: email.value };
+const closedEditMode = () => {
+  editMode.value = false;
+  responeError.value = {};
+};
+
+const uniqueUserName = computed(() => {
+  return validSameData.value === userEdit.value.userName;
 });
+
+const userEdit = computed(() => {
+  return {
+    role: role.value,
+    userName: name.value.trim(),
+    userEmail: email.value.trim(),
+  };
+});
+
+const checkSameUserData = computed(() => {
+  return {
+    role: user.value?.role,
+    userName: user.value?.userName,
+    userEmail: user.value?.userEmail,
+  };
+});
+
+const validSameData = computed(() => {
+  if (
+    JSON.stringify(checkSameUserData.value) === JSON.stringify(userEdit.value)
+  )
+    return true;
+});
+
+const validUserName = computed(() => {
+  return user.value?.userName;
+});
+
+const successAlert = () => {
+  responeError.value = {};
+  SUCCESFUL.value = true;
+  ERROR.value = false;
+  setTimeout(() => {
+    SUCCESFUL.value = false;
+  }, 1500);
+};
+
+const errorAlert = () => {
+  SUCCESFUL.value = false;
+  ERROR.value = true;
+  setTimeout(() => {
+    ERROR.value = false;
+  }, 1500);
+};
 
 // Fetch service
 // GET METHOD - Get user by Id
@@ -342,29 +365,28 @@ const deleteUserById = async () => {
   await fetch(`${import.meta.env.VITE_BASE_URL}/users/${params.id}`, {
     method: 'DELETE',
   }).then(async (res) => {
-    if (res.status === 200) {
-      SUCCESFUL.value = true;
-      ERROR.value = false;
-      setTimeout(() => {
-        SUCCESFUL.value = false;
-      }, 1500);
+    if (res.ok) {
+      successAlert();
       myRouter.go({
         path: `/users`,
       });
       return;
     } else {
-      SUCCESFUL.value = false;
-      ERROR.value = true;
-      setTimeout(() => {
-        ERROR.value = false;
-      }, 1500);
-      return;
+      errorAlert();
+      return (responeError.value = await res.json());
     }
   });
 };
 
 // PUT METHOD - Edit user
 const putUser = async () => {
+  if (validSameData.value) {
+    successAlert();
+    setTimeout(() => {
+      editMode.value = false;
+    }, 1500);
+    return;
+  }
   await fetch(`${import.meta.env.VITE_BASE_URL}/users/${params.id}`, {
     method: 'PUT',
     headers: {
@@ -373,21 +395,14 @@ const putUser = async () => {
     body: JSON.stringify(userEdit.value),
   }).then(async (res) => {
     if (res.ok) {
-      SUCCESFUL.value = true;
-      ERROR.value = false;
-      setTimeout(function () {
-        SUCCESFUL.value = false;
-      }, 1500);
+      successAlert();
       editMode.value = false;
+      responeError.value = {};
       await getUserById(params.id);
       return;
     } else {
-      SUCCESFUL.value = false;
-      ERROR.value = true;
-      setTimeout(function () {
-        ERROR.value = false;
-      }, 1500);
-      // return (responeError.value = await res.json());
+      errorAlert();
+      return (responeError.value = await res.json());
     }
   });
 };
