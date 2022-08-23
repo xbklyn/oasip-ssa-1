@@ -54,7 +54,7 @@
               class="mr-1"
               type="radio"
               name="role"
-              :value="'3'"
+              :value="'student'"
               v-model="addNewUser.role"
             />
             <label for="" class="mr-3">Student</label>
@@ -64,7 +64,7 @@
               class="mr-1"
               type="radio"
               name="role"
-              :value="'2'"
+              :value="'lecturer'"
               v-model="addNewUser.role"
             />
             <label for="" class="mr-1">Lecturer</label>
@@ -74,7 +74,7 @@
               class="mr-1"
               type="radio"
               name="role"
-              :value="'1'"
+              :value="'admin'"
               v-model="addNewUser.role"
             />
             <label for="" class="mr-1">Admin</label>
