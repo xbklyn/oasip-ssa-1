@@ -76,7 +76,7 @@ public class UserService {
         Map<String , String > errors = validate(user.getUserName() , user.getUserEmail());
 
         //Check role
-        Integer roleId = user.getRole().isEmpty()
+        Integer roleId = user.getRole().isEmpty() || user.getRole().equals("")
                 ? roleRepository.findByRoleName("student").getId()
                 : roleRepository.findByRoleName(user.getRole()).getId();
 
@@ -117,7 +117,7 @@ public class UserService {
             user.setUserEmail(putUser.getUserEmail());
         }
         //Check role
-        Integer roleId = putUser.getRole().isEmpty()
+        Integer roleId = putUser.getRole().isEmpty() || putUser.getRole().equals("")
                 ? roleRepository.findByRoleName("student").getId()
                 : roleRepository.findByRoleName(putUser.getRole()).getId();
 
