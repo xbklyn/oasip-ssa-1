@@ -39,6 +39,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query(value = "update users set userName = :name " +
             ", userEmail = :email " +
             ", roleId = :roleId " +
+            ", updatedOn = current_timestamp " +
             "where userId = :userId", nativeQuery = true)
     public Integer update(
             @Param("userId") Integer id,

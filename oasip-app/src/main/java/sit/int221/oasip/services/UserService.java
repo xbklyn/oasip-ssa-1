@@ -98,7 +98,7 @@ public class UserService {
 
         //Check same name
         if(!user.getUserName().matches(putUser.getUserName())){
-            if(userRepository.findByUserName(putUser.getUserName().trim()).size() > 1) {
+            if(userRepository.findByUserName(putUser.getUserName().trim()).size() > 0) {
                 errors.put("userName", "must be unique.");
             }
             user.setUserName(putUser.getUserName());
@@ -113,7 +113,7 @@ public class UserService {
             }
 
             //Check Unique email
-            if(userRepository.findByUserEmail(putUser.getUserEmail().trim()).size() > 1) {
+            if(userRepository.findByUserEmail(putUser.getUserEmail().trim()).size() > 0) {
                 errors.put("userEmail", "this email is already used");
             }
 
@@ -124,9 +124,11 @@ public class UserService {
                 ? roleRepository.findByRoleName("student")
                 : roleRepository.findByRoleName(putUser.getRole());
         user.setRole(role);
-
+        
         return errors.isEmpty()
-                ? ResponseEntity.status(200).body(userRepository.saveAndFlush(user))
+                ? ResponseEntity.status(200).body(
+                        userRepository.update(id , user.getUserName() , user.getUserEmail() , user.getRole().getId())
+        )
                 : ResponseEntity.status(400).body(errorAdvice.getAllErrors(errors,req));
     }
 
