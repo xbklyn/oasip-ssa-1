@@ -50,14 +50,6 @@
           {{ moment(user.updatedOn).format('LLL') }}
         </p>
       </div>
-      <div class="justify-self-end space-x-6 text-sm place-items-center">
-        <button
-          @click="closedEditMode"
-          class="w-20 h-8 border border-red-500 text-red-500 hover:bg-red-500 hover:text-white duration-150"
-        >
-          Close
-        </button>
-      </div>
     </div>
     <!-- Info - User -->
     <div class="w-[824px] grid grid-cols-2 gap-12" v-if="!editMode">
@@ -152,6 +144,7 @@
             Update
           </button>
           <button
+            @click="closedEditMode"
             :class="['text-slate-500 h-full hover:text-slate-300 duration-150']"
           >
             Discard
