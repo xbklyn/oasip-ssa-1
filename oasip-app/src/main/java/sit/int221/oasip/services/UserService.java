@@ -136,7 +136,7 @@ public class UserService {
         }
         
         return errors.isEmpty()
-                ? edited.get() == true
+                ? edited.get()
                     ? ResponseEntity.status(200).body(userRepository.update(id , user.getUserName() , user.getUserEmail() , user.getRole().getId()))
                     : ResponseEntity.status(200).body("We did not send a request to DB!")
                 : ResponseEntity.status(400).body(errorAdvice.getAllErrors(errors,req));
