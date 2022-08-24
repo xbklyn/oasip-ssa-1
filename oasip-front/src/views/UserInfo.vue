@@ -138,6 +138,9 @@
           >
             Email<span class="text-red-500">*</span>
           </label>
+          <p class="absolute text-sm text-red-500 ml-2">
+            {{ responeError?.details?.userEmail }}
+          </p>
         </div>
         <div class="w-full h-12 mt-12 space-x-6">
           <button
@@ -209,7 +212,7 @@
         </svg>
         <div>
           <span class="font-medium">ERROR! </span>
-          Username {{ responeError.details.userName }}
+          Username {{ responeError?.message }}
         </div>
       </div>
     </div>
@@ -396,7 +399,9 @@ const putUser = async () => {
   }).then(async (res) => {
     if (res.ok) {
       successAlert();
-      editMode.value = false;
+      setTimeout(() => {
+        editMode.value = false;
+      }, 1500);
       responeError.value = {};
       await getUserById(params.id);
       return;
