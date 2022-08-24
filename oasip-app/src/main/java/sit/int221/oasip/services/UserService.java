@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Service
 public class UserService {
@@ -91,7 +92,7 @@ public class UserService {
     //PUT
     public ResponseEntity update(Integer id, PutUserDTO putUser , HttpServletRequest req){
         Map<String, String> errors = new HashMap<>();
-
+        AtomicBoolean edited = new AtomicBoolean(false);
         //Get User
         User user = userRepository.findById(id).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "User with " + id + " does not exist."));
@@ -101,7 +102,10 @@ public class UserService {
             if(userRepository.findByUserName(putUser.getUserName().trim()).size() > 0) {
                 errors.put("userName", "must be unique.");
             }
-            user.setUserName(putUser.getUserName());
+            else{
+                user.setUserName(putUser.getUserName());
+                edited.set(true);
+            }
         }
 
         //Check email
@@ -113,22 +117,28 @@ public class UserService {
             }
 
             //Check Unique email
-            if(userRepository.findByUserEmail(putUser.getUserEmail().trim()).size() > 0) {
+            else if(userRepository.findByUserEmail(putUser.getUserEmail().trim()).size() > 0) {
                 errors.put("userEmail", "this email is already used");
             }
+            else {
+                user.setUserEmail(putUser.getUserEmail());
+                edited.set(true);
+            }
 
-            user.setUserEmail(putUser.getUserEmail());
         }
         //Check role
+        if(!user.getRole().getRoleName().matches(putUser.getRole())){
         Role role = putUser.getRole().isEmpty() || putUser.getRole().equals("")
                 ? roleRepository.findByRoleName("student")
                 : roleRepository.findByRoleName(putUser.getRole());
         user.setRole(role);
+        edited.set(true);
+        }
         
         return errors.isEmpty()
-                ? ResponseEntity.status(200).body(
-                        userRepository.update(id , user.getUserName() , user.getUserEmail() , user.getRole().getId())
-        )
+                ? edited.get() == true
+                    ? ResponseEntity.status(200).body(userRepository.update(id , user.getUserName() , user.getUserEmail() , user.getRole().getId()))
+                    : ResponseEntity.status(200).body("We did not send a request to DB!")
                 : ResponseEntity.status(400).body(errorAdvice.getAllErrors(errors,req));
     }
 
