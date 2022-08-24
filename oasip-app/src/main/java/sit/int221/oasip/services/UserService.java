@@ -78,7 +78,10 @@ public class UserService {
         //Check role
         Integer roleId = user.getRole().isEmpty() || user.getRole().equals("")
                 ? roleRepository.findByRoleName("student").getId()
-                : roleRepository.findByRoleName(user.getRole()).getId();
+                : roleRepository.findByRoleName(user.getRole()).getId() == null
+                    ? 0
+                    : roleRepository.findByRoleName(user.getRole()).getId();
+        if(roleId == 0 ) errors.put("role" , "must be student, lecturer or admin");
 
         return errors.isEmpty()
                 ? ResponseEntity.status(201).body(userRepository.create(user.getUserName().trim(), user.getUserEmail(), roleId))
