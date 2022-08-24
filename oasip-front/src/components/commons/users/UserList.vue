@@ -10,7 +10,7 @@
       >
         <div class="w-full h-full">
           <h2 class="text-sm">{{ value.role }}</h2>
-          <h1 class="text-2xl font-semibold">{{ value.userName }}</h1>
+          <h1 class="text-2xl font-semibold truncate">{{ value.userName }}</h1>
           <h3 class="text-xs">{{ value.userEmail }}</h3>
         </div>
       </div>
