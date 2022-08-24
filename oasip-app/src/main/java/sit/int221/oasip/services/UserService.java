@@ -75,14 +75,13 @@ public class UserService {
         //Validate name and email
         Map<String , String > errors = validate(user.getUserName() , user.getUserEmail());
 
-        //Check Unique email
-        if(!userRepository.findByUserEmail(user.getUserEmail().trim()).isEmpty())
-            errors.put("userEmail", "must be unique");
-
         //Check role
-        Integer roleId = user.getRole().isEmpty()
+        Integer roleId = user.getRole().isEmpty() || user.getRole().equals("")
                 ? roleRepository.findByRoleName("student").getId()
-                : roleRepository.findByRoleName(user.getRole()).getId();
+                : roleRepository.findByRoleName(user.getRole()) == null
+                    ? 0
+                    : roleRepository.findByRoleName(user.getRole()).getId();
+        if(roleId == 0 ) errors.put("role" , "must be student, lecturer or admin");
 
         return errors.isEmpty()
                 ? ResponseEntity.status(201).body(userRepository.create(user.getUserName().trim(), user.getUserEmail(), roleId))
@@ -90,16 +89,44 @@ public class UserService {
     }
 
     //PUT
-    public ResponseEntity update(Integer id, PutUserDTO user , HttpServletRequest req){
-        Map<String , String > errors = validate(user.getUserName() , user.getUserEmail());
+    public ResponseEntity update(Integer id, PutUserDTO putUser , HttpServletRequest req){
+        Map<String, String> errors = new HashMap<>();
 
+        //Get User
+        User user = userRepository.findById(id).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "User with " + id + " does not exist."));
+
+        //Check same name
+        if(!user.getUserName().matches(putUser.getUserName())){
+            if(userRepository.findByUserName(putUser.getUserName().trim()).size() > 1) {
+                errors.put("userName", "must be unique.");
+            }
+            user.setUserName(putUser.getUserName());
+        }
+
+        //Check email
+        if(!user.getUserEmail().matches(putUser.getUserEmail())){
+            //Check regex
+            String regex = "^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
+            if(!putUser.getUserEmail().trim().matches(regex)) {
+                errors.put("userEmail", "must be an well-formed email");
+            }
+
+            //Check Unique email
+            if(userRepository.findByUserEmail(putUser.getUserEmail().trim()).size() > 1) {
+                errors.put("userEmail", "this email is already used");
+            }
+
+            user.setUserEmail(putUser.getUserEmail());
+        }
         //Check role
-        Integer roleId = user.getRole().isEmpty()
-                ? roleRepository.findByRoleName("student").getId()
-                : roleRepository.findByRoleName(user.getRole()).getId();
+        Role role = putUser.getRole().isEmpty() || putUser.getRole().equals("")
+                ? roleRepository.findByRoleName("student")
+                : roleRepository.findByRoleName(putUser.getRole());
+        user.setRole(role);
 
         return errors.isEmpty()
-                ? ResponseEntity.status(201).body(userRepository.update(id , user.getUserName().trim(), user.getUserEmail(), roleId))
+                ? ResponseEntity.status(200).body(userRepository.saveAndFlush(user))
                 : ResponseEntity.status(400).body(errorAdvice.getAllErrors(errors,req));
     }
 
@@ -119,6 +146,10 @@ public class UserService {
         if(!email.trim().matches(regex))
             errors.put("userEmail" , "must be an well-formed email");
 
-            return errors;
+        //Check Unique email
+        if(!userRepository.findByUserEmail(email.trim()).isEmpty())
+            errors.put("userEmail", "this email is already used");
+
+        return errors;
     }
 }

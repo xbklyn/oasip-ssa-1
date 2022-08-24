@@ -47,30 +47,38 @@
         <div class="text-center text-2xl font-semibold">
           <h2 class="text-center">Add new user</h2>
         </div>
-        <div>
-          <input
-            checked
-            class=""
-            type="radio"
-            name="role"
-            :value="'3'"
-            v-model="addNewUser.role"
-          />
-          <label for=""> Student </label>
-          <input
-            type="radio"
-            name="role"
-            :value="'2'"
-            v-model="addNewUser.role"
-          />
-          <label for="">Lecturer</label>
-          <input
-            type="radio"
-            name="role"
-            :value="'1'"
-            v-model="addNewUser.role"
-          />
-          <label for="">Admin</label>
+        <div class="mb-3 flex">
+          <div class="">
+            <input
+              checked
+              class="mr-1"
+              type="radio"
+              name="role"
+              :value="'student'"
+              v-model="addNewUser.role"
+            />
+            <label for="" class="mr-3">Student</label>
+          </div>
+          <div class="mx-2">
+            <input
+              class="mr-1"
+              type="radio"
+              name="role"
+              :value="'lecturer'"
+              v-model="addNewUser.role"
+            />
+            <label for="" class="mr-1">Lecturer</label>
+          </div>
+          <div class="mx-2">
+            <input
+              class="mr-1"
+              type="radio"
+              name="role"
+              :value="'admin'"
+              v-model="addNewUser.role"
+            />
+            <label for="" class="mr-1">Admin</label>
+          </div>
         </div>
         <div class="grid gap-12">
           <div class="relative">
@@ -194,8 +202,8 @@ import {
   onMounted,
   ref,
   watch,
-} from '@vue/runtime-core';
-import UserList from '../components/commons/users/UserList.vue';
+} from "@vue/runtime-core";
+import UserList from "../components/commons/users/UserList.vue";
 
 onBeforeMount(async () => {
   await getAllUsers();
@@ -203,14 +211,14 @@ onBeforeMount(async () => {
 
 const users = ref([]);
 const addNewUser = ref({
-  role: '',
-  userName: '',
-  userEmail: '',
+  role: "",
+  userName: "",
+  userEmail: "",
 });
 const defaultUser = ref({
-  role: '',
-  userName: '',
-  userEmail: '',
+  role: "",
+  userName: "",
+  userEmail: "",
 });
 const responeError = ref({});
 const defaultResponeError = ref({});
@@ -251,9 +259,9 @@ const getAllUsers = async () => {
 // POST METHOD - Create new user
 const postNewUser = async () => {
   await fetch(`${import.meta.env.VITE_BASE_URL}/users`, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'content-type': 'application/json',
+      "content-type": "application/json",
     },
     body: JSON.stringify(addNewUser.value),
   }).then(async (res) => {
