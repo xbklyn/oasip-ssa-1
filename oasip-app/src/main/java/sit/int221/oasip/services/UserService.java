@@ -117,9 +117,10 @@ public class UserService {
             user.setUserEmail(putUser.getUserEmail());
         }
         //Check role
-        Integer roleId = putUser.getRole().isEmpty() || putUser.getRole().equals("")
-                ? roleRepository.findByRoleName("student").getId()
-                : roleRepository.findByRoleName(putUser.getRole()).getId();
+        Role role = putUser.getRole().isEmpty() || putUser.getRole().equals("")
+                ? roleRepository.findByRoleName("student")
+                : roleRepository.findByRoleName(putUser.getRole());
+        user.setRole(role);
 
         return errors.isEmpty()
                 ? ResponseEntity.status(200).body(userRepository.saveAndFlush(user))
