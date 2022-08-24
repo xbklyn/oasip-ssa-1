@@ -176,7 +176,7 @@
             <div class="text-center">
               <h2 class="text-xl font-semibold text-emerald-700 mb-2">DONE!</h2>
               <p class="text-md l-color-gray-300">
-                Your scheduled is already deleted.
+                Your user is already created.
               </p>
             </div>
           </div>

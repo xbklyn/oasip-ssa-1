@@ -232,7 +232,7 @@
               Are you sure delete this event?
             </h2>
             <p class="l-w-400 font-light text-xs l-color-gray-300">
-              If you delete this event, it will be gone forever.
+              If you delete this user, it will be gone forever.
             </p>
           </div>
           <div class="grid space-y-3">
@@ -367,8 +367,8 @@ const deleteUserById = async () => {
   }).then(async (res) => {
     if (res.ok) {
       successAlert();
-      myRouter.go({
-        path: `/users`,
+      myRouter.push({
+        name: `users-manage`,
       });
       return;
     } else {
