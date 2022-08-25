@@ -1,13 +1,21 @@
 <template>
   <div class="scroll-smooth">
     <div>
-      <Navbar v-show="$route.name == 'NotFound' ? false : true" />
+      <Navbar
+        v-show="
+          $route.name == 'NotFound' || $route.name == 'Login' ? false : true
+        "
+      />
     </div>
     <div class="mx-auto">
       <router-view></router-view>
     </div>
     <div>
-      <Footer v-show="$route.name == 'NotFound' ? false : true" />
+      <Footer
+        v-show="
+          $route.name == 'NotFound' || $route.name == 'Login' ? false : true
+        "
+      />
     </div>
   </div>
 </template>
