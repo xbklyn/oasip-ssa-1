@@ -55,6 +55,15 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
+--
+-- Dumping data for table `roles`
+--
+
+LOCK TABLES `roles` WRITE;
+/*!40000 ALTER TABLE `roles` DISABLE KEYS */;
+INSERT INTO `roles` VALUES (1,'admin'),(2,'lecturer'),(3,'student');
+/*!40000 ALTER TABLE `roles` ENABLE KEYS */;
+UNLOCK TABLES;
 
 -- -----------------------------------------------------
 -- Table `oasip`.`users`
@@ -63,6 +72,7 @@ CREATE TABLE IF NOT EXISTS `oasip`.`users` (
   `userId` INT NOT NULL AUTO_INCREMENT,
   `userName` VARCHAR(100) NOT NULL,
   `userEmail` VARCHAR(50) NOT NULL,
+  `password` VARCHAR(90) NULL,
   `createdOn` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updatedOn` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `roleId` INT NOT NULL DEFAULT 3,
