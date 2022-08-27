@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import sit.int221.oasip.dtos.PostUserDTO;
@@ -12,7 +13,6 @@ import sit.int221.oasip.dtos.SimpleUserDTO;
 import sit.int221.oasip.dtos.DetailUserDTO;
 import sit.int221.oasip.entities.Role;
 import sit.int221.oasip.entities.User;
-import sit.int221.oasip.errors.ApiError;
 import sit.int221.oasip.errors.ErrorAdvice;
 import sit.int221.oasip.repositories.RoleRepository;
 import sit.int221.oasip.repositories.UserRepository;
@@ -32,13 +32,15 @@ public class UserService {
     private final ListMapper listMapper;
     private final ModelMapper modelMapper;
     private final ErrorAdvice errorAdvice;
+    private final Argon2PasswordEncoder argon2;
 
-    public UserService(RoleRepository roleRepository, UserRepository userRepository, ListMapper listMapper, ModelMapper modelMapper, ErrorAdvice errorAdvice) {
+    public UserService(RoleRepository roleRepository, UserRepository userRepository, ListMapper listMapper, ModelMapper modelMapper, ErrorAdvice errorAdvice, Argon2PasswordEncoder argon2) {
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
         this.listMapper = listMapper;
         this.modelMapper = modelMapper;
         this.errorAdvice = errorAdvice;
+        this.argon2 = argon2;
     }
 
     //GET all
