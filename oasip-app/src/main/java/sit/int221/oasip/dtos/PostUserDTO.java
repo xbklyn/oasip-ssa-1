@@ -13,6 +13,9 @@ public class PostUserDTO {
     private String userEmail;
 
     @NotNull
+    @Size(min = 8 , max = 14 , message = "Size must be between 8 and 14 characters.")
+    private String passWord;
+    @NotNull
     private String role;
 
     public String getUserName() {
