@@ -17,6 +17,9 @@ public class PostUserDTO {
     private String password;
 
     @NotNull
+    private String confirmPassword;
+
+    @NotNull
     private String role;
 
     public String getUserName() {
@@ -41,6 +44,14 @@ public class PostUserDTO {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 
     public String getRole() {
