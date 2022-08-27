@@ -17,6 +17,9 @@ public class User {
     @Column(name = "userEmail", nullable = false, length = 50)
     private String userEmail;
 
+    @Column(name = "password" , nullable = false, length = 90)
+    private String password;
+
     @Column(name = "createdOn", nullable = false)
     private Instant createdOn;
 

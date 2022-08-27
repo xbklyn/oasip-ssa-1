@@ -14,7 +14,8 @@ public class PostUserDTO {
 
     @NotNull
     @Size(min = 8 , max = 14 , message = "Size must be between 8 and 14 characters.")
-    private String passWord;
+    private String password;
+
     @NotNull
     private String role;
 
@@ -32,6 +33,14 @@ public class PostUserDTO {
 
     public void setUserEmail(String userEmail) {
         this.userEmail = userEmail;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getRole() {

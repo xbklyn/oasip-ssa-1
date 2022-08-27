@@ -85,9 +85,12 @@ public class UserService {
                     ? 0
                     : roleRepository.findByRoleName(user.getRole()).getId();
         if(roleId == 0 ) errors.put("role" , "must be student, lecturer or admin");
+        
+        //Encode password
+        String password = argon2.encode(user.getPassword());
 
         return errors.isEmpty()
-                ? ResponseEntity.status(201).body(userRepository.create(user.getUserName().trim(), user.getUserEmail(), roleId))
+                ? ResponseEntity.status(201).body(userRepository.create(user.getUserName().trim(), user.getUserEmail(),password , roleId))
                 : ResponseEntity.status(400).body(errorAdvice.getAllErrors(errors,req)) ;
     }
 

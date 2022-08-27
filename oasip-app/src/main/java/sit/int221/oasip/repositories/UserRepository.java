@@ -27,10 +27,11 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     @Transactional
     @Modifying
-    @Query(value = "insert into users values(null,:name,:email, current_timestamp, current_timestamp, :roleId)" , nativeQuery = true)
+    @Query(value = "insert into users values(null,:name,:email,:password, current_timestamp, current_timestamp, :roleId)" , nativeQuery = true)
     public Integer create(
             @Param("name") String name,
             @Param("email") String email,
+            @Param("password") String password,
             @Param("roleId") Integer id
     );
 
