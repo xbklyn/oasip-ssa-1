@@ -43,10 +43,12 @@
       v-if="addDialog"
       class="grid place-items-center fixed top-0 right-0 left-0 z-50 bg-black/80 w-screen h-screen"
     >
-      <div class="bg-white w-[960px] h-[520px] p-12">
+      <div class="bg-white w-[960px] h-[520px] p-12 overflow-y-auto">
         <div class="text-center text-2xl font-semibold">
           <h2 class="text-center">Add new user</h2>
         </div>
+
+        <!-- User role -->
         <div class="mb-3 flex">
           <div class="">
             <input
@@ -80,31 +82,8 @@
             <label for="" class="mr-1">Admin</label>
           </div>
         </div>
-        <div class="grid gap-12">
-          <div class="relative">
-            <input
-              v-model="addNewUser.userName"
-              type="text"
-              :class="[
-                'w-full h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer',
-                responeError?.details?.userName
-                  ? 'border-red-500 focus:border-red-500'
-                  : '',
-              ]"
-              placeholder=" "
-            />
-            <label
-              class="absolute text-sm l-color-gray-300 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
-            >
-              Name<span class="text-red-500">*</span>
-            </label>
-            <p
-              v-if="responeError?.details?.userName"
-              class="absolute text-sm text-red-500 ml-2"
-            >
-              {{ responeError?.details?.userName }}
-            </p>
-          </div>
+        <div class="grid gap-6">
+          <!-- User email -->
           <div class="relative">
             <input
               v-model="addNewUser.userEmail"
@@ -127,6 +106,88 @@
               class="absolute text-sm text-red-500 ml-2"
             >
               {{ responeError.details.userEmail }}
+            </p>
+          </div>
+
+          <!-- User password -->
+          <div class="relative">
+            <input
+              v-model="addNewUser.password"
+              type="password"
+              :class="[
+                'w-full h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer',
+                responeError?.details?.password
+                  ? 'border-red-500 focus:border-red-500'
+                  : '',
+              ]"
+              placeholder=" "
+            />
+            <label
+              class="absolute text-sm l-color-gray-300 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
+            >
+              Password<span class="text-red-500">*</span>
+            </label>
+            <p
+              v-if="responeError?.details?.password"
+              class="absolute text-sm text-red-500 ml-2"
+            >
+              {{ responeError.details.password }}
+            </p>
+            <p v-if="isSamePassword" class="absolute text-sm text-red-500 ml-2">
+              Password not match
+            </p>
+          </div>
+
+          <!-- User confirm password -->
+          <div class="relative">
+            <input
+              v-model="addNewUser.confirmPassword"
+              type="password"
+              :class="[
+                'w-full h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer',
+                responeError?.details?.confirmPassword
+                  ? 'border-red-500 focus:border-red-500'
+                  : '',
+              ]"
+              placeholder=" "
+            />
+            <label
+              class="absolute text-sm l-color-gray-300 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
+            >
+              Confirm password<span class="text-red-500">*</span>
+            </label>
+            <p
+              v-if="responeError?.details?.confirmPassword"
+              class="absolute text-sm text-red-500 ml-2"
+            >
+              {{ responeError.details.confirmPassword }}
+            </p>
+            <p v-if="isSamePassword" class="absolute text-sm text-red-500 ml-2">
+              Password not match
+            </p>
+          </div>
+          <div class="relative">
+            <input
+              v-model="addNewUser.userName"
+              type="text"
+              :class="[
+                'w-full h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer',
+                responeError?.details?.userName
+                  ? 'border-red-500 focus:border-red-500'
+                  : '',
+              ]"
+              placeholder=" "
+            />
+            <label
+              class="absolute text-sm l-color-gray-300 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
+            >
+              Name<span class="text-red-500">*</span>
+            </label>
+            <p
+              v-if="responeError?.details?.userName"
+              class="absolute text-sm text-red-500 ml-2"
+            >
+              {{ responeError?.details?.userName }}
             </p>
           </div>
           <div class="w-full h-12 mt-12 space-x-6">
@@ -202,8 +263,8 @@ import {
   onMounted,
   ref,
   watch,
-} from "@vue/runtime-core";
-import UserList from "../components/commons/users/UserList.vue";
+} from '@vue/runtime-core';
+import UserList from '../components/commons/users/UserList.vue';
 
 onBeforeMount(async () => {
   await getAllUsers();
@@ -211,14 +272,16 @@ onBeforeMount(async () => {
 
 const users = ref([]);
 const addNewUser = ref({
-  role: "",
-  userName: "",
-  userEmail: "",
+  role: '',
+  userName: '',
+  userEmail: '',
 });
 const defaultUser = ref({
-  role: "",
-  userName: "",
-  userEmail: "",
+  role: '',
+  userName: '',
+  userEmail: '',
+  password: '',
+  confirmPassword: '',
 });
 const responeError = ref({});
 const defaultResponeError = ref({});
@@ -243,6 +306,17 @@ const getUser = computed(() => {
   }
 });
 
+const isSamePassword = computed(() => {
+  if (
+    addNewUser.value.password !== addNewUser.value.confirmPassword &&
+    addNewUser.value.password &&
+    addNewUser.value.confirmPassword
+  ) {
+    return true;
+  }
+  return false;
+});
+
 // Fetch service
 // GET METHOD - Get all users
 const getAllUsers = async () => {
@@ -259,9 +333,9 @@ const getAllUsers = async () => {
 // POST METHOD - Create new user
 const postNewUser = async () => {
   await fetch(`${import.meta.env.VITE_BASE_URL}/users`, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "content-type": "application/json",
+      'content-type': 'application/json',
     },
     body: JSON.stringify(addNewUser.value),
   }).then(async (res) => {
