@@ -192,8 +192,11 @@
           </div>
           <div class="w-full h-12 mt-12 space-x-6">
             <button
-              :class="['w-24 h-full text-white duration-150 bg-emerald-500']"
+              :class="[
+                'w-24 h-full text-white duration-150 bg-emerald-500 disabled:bg-gray-200 disabled:text-gray-400',
+              ]"
               @click="postNewUser"
+              :disabled="isSamePassword"
             >
               Add
             </button>
