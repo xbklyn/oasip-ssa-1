@@ -117,7 +117,8 @@ public class UserService {
         //Check email
         if(!user.getUserEmail().matches(putUser.getUserEmail())){
             //Check regex
-            String regex = "^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
+            // String regex = "^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
+            String regex = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^-]+(?:\\.[a-zA-Z0-9_!#$%&'*+/=?`{|}~^-]+)*@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$";
             if(!putUser.getUserEmail().trim().matches(regex)) {
                 errors.put("userEmail", "must be an well-formed email");
             }
