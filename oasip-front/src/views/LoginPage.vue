@@ -66,7 +66,7 @@ const responeError = ref({});
 
 const userLogin = async () => {
   responeError.value = {};
-  await fetch(`${import.meta.env.VITE_BASE_URL}/match/authenticate`, {
+  await fetch(`${import.meta.env.VITE_BASE_URL}/authenticate/match/`, {
     method: 'POST',
     headers: {
       'content-type': 'application/json',
@@ -74,7 +74,19 @@ const userLogin = async () => {
     body: JSON.stringify(login.value),
   }).then(async (res) => {
     if (res.ok) {
-      return alert('ควย login ได้แล้วไอเหี้ยยยย');
+      await fetch(`${import.meta.env.VITE_BASE_URL}/authenticate/auth/`, {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify(login.value),
+      }).then(async (res) => {
+        if (res.ok) {
+          alert('Login ได้แล้วควย');
+        } else {
+          alert('ควายโง่ใส่รหัสผิด');
+        }
+      });
     } else {
       return (responeError.value = await res.json());
     }
