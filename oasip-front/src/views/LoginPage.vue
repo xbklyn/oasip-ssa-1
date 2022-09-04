@@ -66,7 +66,7 @@ const responeError = ref({});
 
 const userLogin = async () => {
   responeError.value = {};
-  await fetch(`${import.meta.env.VITE_BASE_URL}/authenticate/match/`, {
+  await fetch(`${import.meta.env.VITE_BASE_URL}/authenticate/match`, {
     method: 'POST',
     headers: {
       'content-type': 'application/json',
@@ -74,7 +74,7 @@ const userLogin = async () => {
     body: JSON.stringify(login.value),
   }).then(async (res) => {
     if (res.ok) {
-      await fetch(`${import.meta.env.VITE_BASE_URL}/authenticate/auth/`, {
+      await fetch(`${import.meta.env.VITE_BASE_URL}/authenticate/auth`, {
         method: 'POST',
         headers: {
           'content-type': 'application/json',
