@@ -3,10 +3,10 @@ package sit.int221.oasip.controllers;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
-import sit.int221.oasip.dtos.PostUserDTO;
-import sit.int221.oasip.dtos.PutUserDTO;
-import sit.int221.oasip.dtos.SimpleUserDTO;
-import sit.int221.oasip.dtos.DetailUserDTO;
+import sit.int221.oasip.dtos.user.PostUserDTO;
+import sit.int221.oasip.dtos.user.PutUserDTO;
+import sit.int221.oasip.dtos.user.SimpleUserDTO;
+import sit.int221.oasip.dtos.user.DetailUserDTO;
 import sit.int221.oasip.services.UserService;
 
 import javax.servlet.http.HttpServletRequest;
