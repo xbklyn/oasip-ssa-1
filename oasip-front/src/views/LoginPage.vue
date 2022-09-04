@@ -66,7 +66,7 @@ const responeError = ref({});
 
 const userLogin = async () => {
   responeError.value = {};
-  await fetch(`${import.meta.env.VITE_BASE_URL}/match`, {
+  await fetch(`${import.meta.env.VITE_BASE_URL}/match/authenticate`, {
     method: 'POST',
     headers: {
       'content-type': 'application/json',
@@ -74,9 +74,7 @@ const userLogin = async () => {
     body: JSON.stringify(login.value),
   }).then(async (res) => {
     if (res.ok) {
-      myRouter.push({
-        name: 'Home',
-      });
+      return alert('ควย login ได้แล้วไอเหี้ยยยย');
     } else {
       return (responeError.value = await res.json());
     }
