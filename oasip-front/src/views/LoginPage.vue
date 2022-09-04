@@ -71,7 +71,7 @@ const userLogin = async () => {
     headers: {
       'content-type': 'application/json',
     },
-    body: JSON.stringify(login.value),
+    body: login.value,
   }).then(async (res) => {
     if (res.ok) {
       await fetch(`${import.meta.env.VITE_BASE_URL}/authenticate/auth`, {
@@ -79,15 +79,15 @@ const userLogin = async () => {
         headers: {
           'content-type': 'application/json',
         },
-        body: JSON.stringify(login.value),
+        body: login.value,
       }).then(async (res) => {
         if (res.ok) {
           alert('Login ได้แล้วควย');
         } else {
-          alert('ควายโง่ใส่รหัสผิด');
         }
       });
     } else {
+      alert('ควายโง่');
       return (responeError.value = await res.json());
     }
   });
