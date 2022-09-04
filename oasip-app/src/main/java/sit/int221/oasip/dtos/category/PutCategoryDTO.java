@@ -1,4 +1,4 @@
-package sit.int221.oasip.dtos;
+package sit.int221.oasip.dtos.category;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;

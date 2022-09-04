@@ -1,10 +1,14 @@
-package sit.int221.oasip.dtos;
+package sit.int221.oasip.dtos.security;
 
+
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
-public class AuthDTO {
+@NoArgsConstructor
+@AllArgsConstructor
+public class JwtReq {
     @NotNull
     @Size(min = 8 , max = 14 , message = "Size must be between 8 and 14 characters.")
     private String email;

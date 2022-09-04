@@ -4,10 +4,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-import sit.int221.oasip.dtos.PutCategoryDTO;
+import sit.int221.oasip.dtos.category.PutCategoryDTO;
 import sit.int221.oasip.entities.Eventcategory;
 import sit.int221.oasip.errors.ApiError;
-import sit.int221.oasip.errors.ErrorAdvice;
 import sit.int221.oasip.repositories.EventCategoryRepository;
 
 import javax.servlet.http.HttpServletRequest;

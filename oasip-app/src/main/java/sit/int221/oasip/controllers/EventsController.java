@@ -5,7 +5,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
-import sit.int221.oasip.dtos.*;
+import sit.int221.oasip.dtos.event.DetailEventDTO;
+import sit.int221.oasip.dtos.event.PostEventDTO;
+import sit.int221.oasip.dtos.event.PutEventDTO;
+import sit.int221.oasip.dtos.event.SimpleEventDTO;
+import sit.int221.oasip.dtos.time.TimeDTO;
 import sit.int221.oasip.entities.Event;
 import sit.int221.oasip.repositories.EventRepository;
 import sit.int221.oasip.services.EventServices;

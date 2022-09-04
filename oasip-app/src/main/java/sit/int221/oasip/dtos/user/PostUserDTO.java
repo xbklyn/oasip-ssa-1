@@ -1,4 +1,4 @@
-package sit.int221.oasip.dtos;
+package sit.int221.oasip.dtos.user;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
