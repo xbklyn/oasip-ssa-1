@@ -51,7 +51,7 @@ public class AuthController {
     }
 
     @PostMapping("/auth")
-    public JwtRes authenticate(@RequestBody JwtReq jwtReq) throws Exception {
+    public ResponseEntity authenticate(@RequestBody JwtReq jwtReq) throws Exception {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -66,7 +66,7 @@ public class AuthController {
         final UserDetails userDetails = jwtService.loadUserByUsername(jwtReq.getEmail());
 
         final String token = jwtUtils.generateToken(userDetails);
-
-        return new JwtRes(token);
+        System.out.println(token);
+        return ResponseEntity.status(200).body(new JwtRes(token));
     }
 }
