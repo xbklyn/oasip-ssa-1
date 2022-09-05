@@ -83,6 +83,7 @@ const userLogin = async () => {
       }).then(async (res) => {
         if (res.ok) {
           alert('Login ได้แล้วควย');
+          console.log(await res.json());
         } else {
         }
       });
