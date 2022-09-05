@@ -42,7 +42,7 @@ services:
       - "443:443"
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
-      - /home/spadmin/certs
+      - /home/spadmin/certs:/etc/nginx/certs
     links:
       - oasipfe
       - oasipbe
