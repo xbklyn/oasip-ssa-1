@@ -17,7 +17,7 @@ import sit.int221.oasip.utils.JWTUtils;
 
 import javax.servlet.http.HttpServletRequest;
 
-//@CrossOrigin("*")
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/api/authenticate")
 public class AuthController {
