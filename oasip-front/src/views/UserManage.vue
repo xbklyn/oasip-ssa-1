@@ -325,7 +325,7 @@ const isSamePassword = computed(() => {
 // GET METHOD - Get all users
 const getAllUsers = async () => {
   // console.log('Bearer', useToken.accessToken.token);
-  const cat = localStorage.getItem('token');
+  const cat = localStorage.getItem('access_token');
   // console.log(cat);
   // console.log(useToken.getAccessToken);
   await fetch(`${import.meta.env.VITE_BASE_URL}/users`, {
