@@ -8,7 +8,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://intproj21.sit.kmutt.ac.th/ssa1',
+        target: 'https://intproj21.sit.kmutt.ac.th/ssa1',
         // target: 'http://ip21ssa1.sit.kmutt.ac.th/',
         changeOrigin: true,
         secure: false,

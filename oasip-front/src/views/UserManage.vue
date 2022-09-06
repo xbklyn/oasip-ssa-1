@@ -268,11 +268,12 @@ import {
   watch,
 } from '@vue/runtime-core';
 import UserList from '../components/commons/users/UserList.vue';
+import { useStoreToken } from '../stores/token';
 
 onBeforeMount(async () => {
   await getAllUsers();
 });
-
+const useToken = useStoreToken();
 const users = ref([]);
 const addNewUser = ref({
   role: '',
@@ -323,9 +324,22 @@ const isSamePassword = computed(() => {
 // Fetch service
 // GET METHOD - Get all users
 const getAllUsers = async () => {
-  await fetch(`${import.meta.env.VITE_BASE_URL}/users`)
+  // console.log('Bearer', useToken.accessToken.token);
+  const cat = localStorage.getItem('token');
+  // console.log(cat);
+  // console.log(useToken.getAccessToken);
+  await fetch(`${import.meta.env.VITE_BASE_URL}/users`, {
+    method: 'GET',
+    // mode: 'no-cors',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + cat,
+      // Authorization: 'Bearer ' + useToken.getAccessToken,
+    },
+  })
     .then(async (res) => {
-      if (res.status === 200) return (users.value = await res.json());
+      if (res.ok) return (users.value = await res.json());
       throw new Error();
     })
     .catch((e) => {

@@ -56,8 +56,10 @@
 <script setup>
 import { ref } from '@vue/reactivity';
 import { useRouter } from 'vue-router';
+import { useStoreToken } from '../stores/token';
 
 const myRouter = useRouter();
+const useToken = useStoreToken();
 const login = ref({
   email: '',
   rawPassword: '',
@@ -82,13 +84,20 @@ const userLogin = async () => {
         body: JSON.stringify(login.value),
       }).then(async (res) => {
         if (res.ok) {
-          alert('Login ได้แล้วควย');
-          console.log(await res.json());
+          alert('Login ได้แล้วเย้ เหนื่อยดีจัง');
+
+          // useToken.storeToken(await res.json());
+          let token = await res.json();
+          localStorage.setItem('access_token', token.token);
+          // const cat = localStorage.getItem('access_token');
+          // console.log(useToken.getAccessToken);
+          // console.log(cat);
+          // console.log(useToken.accessToken.token);
         } else {
         }
       });
     } else {
-      alert('ควายโง่');
+      alert('ว้ายๆๆๆ ไม่รู้รหัส');
       return (responeError.value = await res.json());
     }
   });
