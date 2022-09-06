@@ -93,6 +93,7 @@ const userLogin = async () => {
           // console.log(useToken.getAccessToken);
           // console.log(cat);
           // console.log(useToken.accessToken.token);
+          myRouter.push("/")
         } else {
         }
       });

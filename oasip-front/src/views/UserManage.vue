@@ -269,10 +269,13 @@ import {
 } from '@vue/runtime-core';
 import UserList from '../components/commons/users/UserList.vue';
 import { useStoreToken } from '../stores/token';
+import {useRouter} from 'vue-router'
 
 onBeforeMount(async () => {
   await getAllUsers();
 });
+
+const myRouter = useRouter();
 const useToken = useStoreToken();
 const users = ref([]);
 const addNewUser = ref({
@@ -343,7 +346,10 @@ const getAllUsers = async () => {
       throw new Error();
     })
     .catch((e) => {
-      return e.message;
+      alert("คุณมีสิทธิที่จะไม่พูดอะไร")
+      myRouter.push({
+        name: "Login"
+      })
     });
 };
 
