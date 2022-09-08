@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/api/authenticate")
+@RequestMapping("/api/auth")
 public class AuthController {
 
     private final UserRepository userRepository;
@@ -50,7 +50,7 @@ public class AuthController {
         return ResponseEntity.status(200).body("matched!");
     }
 
-    @PostMapping("/auth")
+    @PostMapping("/login")
     public ResponseEntity authenticate(@RequestBody JwtReq jwtReq) throws Exception {
         try {
             authenticationManager.authenticate(
