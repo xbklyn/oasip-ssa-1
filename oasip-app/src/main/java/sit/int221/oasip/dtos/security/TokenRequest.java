@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 @NoArgsConstructor
 @AllArgsConstructor
-public class JwtReq {
+public class TokenRequest {
     @NotNull
     @Size(min = 8 , max = 14 , message = "Size must be between 8 and 14 characters.")
     private String email;

@@ -5,9 +5,10 @@ import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 @NoArgsConstructor
-public class JwtRes {
+public class TokenResponse {
 
     private String token;
+    private String refresh_token;
 
     public String getToken() {
         return token;
@@ -15,5 +16,13 @@ public class JwtRes {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public String getRefresh_token() {
+        return refresh_token;
+    }
+
+    public void setRefresh_token(String refresh_token) {
+        this.refresh_token = refresh_token;
     }
 }
