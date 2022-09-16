@@ -25,7 +25,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
         if(authException.getCause() != null ){
             message = authException.getCause().toString() + " " + authException.getMessage();
         } else {
-            message = "Something went wrong, please try again.";
+            message = "Something went wrong, please try again. "  + authException.getMessage();
         }
 
         byte[] body = new ObjectMapper().writeValueAsBytes(Collections.singletonMap("error", message));

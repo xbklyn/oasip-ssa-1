@@ -16,7 +16,8 @@ import java.util.function.Function;
 public class JWTUtils implements Serializable {
     private static final long serialVersionUID = 234234523523L;
 
-    public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
+    public static final long JWT_TOKEN_VALIDITY = 30;
+    public static final long JWT_REFRESH_TOKEN_VALIDITY = 60 * 60;
 
     private final String secretKey = "oasip-ssa1";
 
@@ -55,6 +56,9 @@ public class JWTUtils implements Serializable {
         Map<String, Object> claims = new HashMap<>();
         return doGenerateToken(claims, userDetails.getUsername());
     }
+    public String generateRefreshToken(UserDetails userDetails) {
+        return doGenerateRefreshToken(userDetails.getUsername());
+    }
 
 
     //while creating the token -
@@ -63,6 +67,12 @@ public class JWTUtils implements Serializable {
     private String doGenerateToken(Map<String, Object> claims, String subject) {
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000))
+                .signWith(SignatureAlgorithm.HS512, secretKey).compact();
+    }
+
+    private String doGenerateRefreshToken(String subject) {
+        return Jwts.builder().setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + JWT_REFRESH_TOKEN_VALIDITY * 1000))
                 .signWith(SignatureAlgorithm.HS512, secretKey).compact();
     }
 
