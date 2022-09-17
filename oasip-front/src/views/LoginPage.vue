@@ -68,7 +68,7 @@ const responeError = ref({});
 
 const userLogin = async () => {
   responeError.value = {};
-  await fetch(`${import.meta.env.VITE_BASE_URL}/authenticate/match`, {
+  await fetch(`${import.meta.env.VITE_BASE_URL}/auth/match`, {
     method: 'POST',
     headers: {
       'content-type': 'application/json',
@@ -76,7 +76,7 @@ const userLogin = async () => {
     body: JSON.stringify(login.value),
   }).then(async (res) => {
     if (res.ok) {
-      await fetch(`${import.meta.env.VITE_BASE_URL}/authenticate/auth`, {
+      await fetch(`${import.meta.env.VITE_BASE_URL}/auth/login`, {
         method: 'POST',
         headers: {
           'content-type': 'application/json',
@@ -88,12 +88,17 @@ const userLogin = async () => {
 
           // useToken.storeToken(await res.json());
           let token = await res.json();
-          localStorage.setItem('access_token', token.token);
+          localStorage.setItem('access_token', token.access_token);
+          localStorage.setItem('refresh_token', token.refresh_token);
           // const cat = localStorage.getItem('access_token');
           // console.log(useToken.getAccessToken);
           // console.log(cat);
           // console.log(useToken.accessToken.token);
-          myRouter.push("/")
+
+          setTimeout(function () {
+            location.reload(1);
+          }, 1);
+          myRouter.push('/');
         } else {
         }
       });
