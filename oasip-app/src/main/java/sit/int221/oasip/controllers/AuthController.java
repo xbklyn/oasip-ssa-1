@@ -14,7 +14,6 @@ import sit.int221.oasip.dtos.security.TokenResponse;
 import sit.int221.oasip.errors.ErrorAdvice;
 import sit.int221.oasip.repositories.UserRepository;
 import sit.int221.oasip.services.JwtService;
-import sit.int221.oasip.utils.JWTUtils;
 
 import javax.servlet.http.HttpServletRequest;
 

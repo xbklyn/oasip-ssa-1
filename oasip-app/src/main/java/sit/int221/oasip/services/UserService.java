@@ -17,12 +17,9 @@ import sit.int221.oasip.entities.User;
 import sit.int221.oasip.errors.ErrorAdvice;
 import sit.int221.oasip.repositories.RoleRepository;
 import sit.int221.oasip.repositories.UserRepository;
-import sit.int221.oasip.utils.JWTUtils;
 import sit.int221.oasip.utils.ListMapper;
 
-import org.springframework.security.core.userdetails.*;
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,18 +34,13 @@ public class UserService {
     private final ModelMapper modelMapper;
     private final ErrorAdvice errorAdvice;
     private final Argon2PasswordEncoder argon2;
-    private final JWTUtils jwtUtils;
-    private final AuthenticationManager authenticationManager;
-
-    public UserService(RoleRepository roleRepository, UserRepository userRepository, ListMapper listMapper, ModelMapper modelMapper, ErrorAdvice errorAdvice, Argon2PasswordEncoder argon2, JWTUtils jwtUtils, AuthenticationManager authenticationManager) {
+    public UserService(RoleRepository roleRepository, UserRepository userRepository, ListMapper listMapper, ModelMapper modelMapper, ErrorAdvice errorAdvice, Argon2PasswordEncoder argon2) {
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
         this.listMapper = listMapper;
         this.modelMapper = modelMapper;
         this.errorAdvice = errorAdvice;
         this.argon2 = argon2;
-        this.jwtUtils = jwtUtils;
-        this.authenticationManager = authenticationManager;
     }
 
     //GET all
