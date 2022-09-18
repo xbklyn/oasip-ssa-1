@@ -224,9 +224,7 @@
             <img src="../assets/component/warning.png" alt="" />
           </div>
           <div class="text-center space-y-3">
-            <h2 class="font-medium text-2xl">
-              Are you sure delete this event?
-            </h2>
+            <h2 class="font-medium text-2xl">Are you sure delete this user?</h2>
             <p class="l-w-400 font-light text-xs l-color-gray-300">
               If you delete this user, it will be gone forever.
             </p>
