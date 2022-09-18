@@ -28,16 +28,17 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
         if(request.getServletPath().equals("/api/auth/login" )|| request.getServletPath().equals("/api/auth/refresh_token")){
             filterChain.doFilter(request,response);
         } else {
-            String authorizationHeader = request.getHeader(AUTHORIZATION);
+            String authorizationHeader = request.getHeader("access_token");
             if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")){
                 try{
-                    String token = authorizationHeader.substring("Bearer ".length());
+                    String access_token = authorizationHeader.substring("Bearer ".length());
                     Algorithm algorithm = Algorithm.HMAC256("oasip-ssa1".getBytes());
                     JWTVerifier verifier = JWT.require(algorithm).build();
-                    DecodedJWT decodedJWT = verifier.verify(token);
+                    DecodedJWT decodedJWT = verifier.verify(access_token);
 
                     String email = decodedJWT.getSubject();
                     String[] role = decodedJWT.getClaim("role").asArray(String.class);
+                    System.out.println("In authorization : " + role.length);
 
                     Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
                     stream(role).forEach(r -> {

@@ -66,29 +66,29 @@ public class AuthController {
 
     @GetMapping("/refresh_token")
     public ResponseEntity refreshToken(HttpServletRequest request) {
-        String authorizationHeader = request.getHeader(AUTHORIZATION);
+        String authorizationHeader = request.getHeader("refresh_token");
         if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")){
             try{
                 String refresh_token = authorizationHeader.substring("Bearer ".length());
                 Algorithm algorithm = Algorithm.HMAC256("oasip-ssa1".getBytes());
                 JWTVerifier verifier = JWT.require(algorithm).build();
                 DecodedJWT decodedJWT = verifier.verify(refresh_token);
-                System.out.println(decodedJWT.getClaim("role"));
+
                 String email = decodedJWT.getSubject();
                 User user = userRepository.findByUserEmail(email).get(0);
                 String role = user.getRole().getRoleName();
+
+                Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+                authorities.add(new SimpleGrantedAuthority(role));
 
                 String access_token = JWT.create()
                         .withSubject(user.getUserEmail())
                         .withExpiresAt(new Date(System.currentTimeMillis() + 30*1000))
                         .withIssuer(request.getRequestURI().toString())
-                        .withClaim("role", new ArrayList<>().add(new SimpleGrantedAuthority(role)))
+                        .withClaim("role", authorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                         .sign(algorithm);
 
-                Map<String, String> tokens = new HashMap<>();
-                tokens.put("access_token", access_token);
-                tokens.put("refresh_token", refresh_token);
-                return ResponseEntity.status(200).body(tokens);
+                return ResponseEntity.status(200).body(new TokenResponse(access_token, refresh_token));
             }catch (Exception e){
 
                 Map<String, String> errors = new HashMap<>();
