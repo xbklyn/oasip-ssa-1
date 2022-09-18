@@ -23,6 +23,7 @@
         This page for listing and editing users. You can change the user
         information.
       </p>
+      <!-- <button @click="getRT()">ควย</button> -->
     </div>
 
     <!-- Lists - Users -->
@@ -269,7 +270,7 @@ import {
 } from '@vue/runtime-core';
 import UserList from '../components/commons/users/UserList.vue';
 import { useStoreToken } from '../stores/token';
-import {useRouter} from 'vue-router'
+import { useRouter } from 'vue-router';
 
 onBeforeMount(async () => {
   await getAllUsers();
@@ -324,32 +325,76 @@ const isSamePassword = computed(() => {
   return false;
 });
 
+// TEST
+// const getRT = async () => {
+//   const refresh_token = localStorage.getItem('refresh_token');
+//   let res = await fetch(`${import.meta.env.VITE_BASE_URL}/auth/refresh_token`, {
+//     method: 'GET',
+//     headers: {
+//       Accept: 'application/json',
+//       'Content-Type': 'application/json',
+//       Authorization: 'Bearer ' + refresh_token,
+//     },
+//   });
+//   console.log(await res.json());
+// };
+
 // Fetch service
+
+//GET METHOD - Get refresh token
+const getRefreshToken = async () => {
+  const refresh_token = localStorage.getItem('refresh_token');
+  let res = await fetch(`${import.meta.env.VITE_BASE_URL}/auth/refresh_token`, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + refresh_token,
+    },
+  }).then(async (res) => {
+    let token = await res.json();
+    localStorage.setItem('access_token', token.access_token);
+    localStorage.setItem('refresh_token', token.refresh_token);
+  });
+};
+
 // GET METHOD - Get all users
 const getAllUsers = async () => {
-  // console.log('Bearer', useToken.accessToken.token);
   const cat = localStorage.getItem('access_token');
-  // console.log(cat);
-  // console.log(useToken.getAccessToken);
+  const refresh_token = localStorage.getItem('refresh_token');
   await fetch(`${import.meta.env.VITE_BASE_URL}/users`, {
     method: 'GET',
-    // mode: 'no-cors',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + cat,
-      // Authorization: 'Bearer ' + useToken.getAccessToken,
     },
   })
     .then(async (res) => {
+      if (!res.ok) {
+        getRefreshToken();
+        return Promise.reject();
+      }
       if (res.ok) return (users.value = await res.json());
-      throw new Error();
     })
-    .catch((e) => {
-      alert("คุณมีสิทธิที่จะไม่พูดอะไร")
-      myRouter.push({
-        name: "Login"
-      })
+    .catch(async (e) => {
+      // console.log(localStorage.getItem('access_token'));
+      alert('คิดไม่ออกเอารีเฟรชไปกินก่อน');
+      setTimeout(function () {
+        location.reload(1);
+      }, 1);
+      // myRouter.go(1);
+
+      // await fetch(`${import.meta.env.VITE_BASE_URL}/users`, {
+      //   method: 'GET',
+      //   headers: {
+      //     Accept: 'application/json',
+      //     'Content-Type': 'application/json',
+      //     Authorization: 'Bearer ' + localStorage.getItem('access_token'),
+      //   },
+      // }).then(async (res) => {
+      //   if (res.ok) return (users.value = await res.json());
+      // });
     });
 };
 
