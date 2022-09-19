@@ -271,6 +271,7 @@ import {
 import UserList from '../components/commons/users/UserList.vue';
 import { useStoreToken } from '../stores/token';
 import { useRouter } from 'vue-router';
+import axios from 'axios';
 
 onBeforeMount(async () => {
   await getAllUsers();
@@ -325,43 +326,35 @@ const isSamePassword = computed(() => {
   return false;
 });
 
-// TEST
-// const getRT = async () => {
-//   const refresh_token = localStorage.getItem('refresh_token');
-//   let res = await fetch(`${import.meta.env.VITE_BASE_URL}/auth/refresh_token`, {
-//     method: 'GET',
-//     headers: {
-//       Accept: 'application/json',
-//       'Content-Type': 'application/json',
-//       Authorization: 'Bearer ' + refresh_token,
-//     },
-//   });
-//   console.log(await res.json());
-// };
-
 // Fetch service
 
 //GET METHOD - Get refresh token
 const getRefreshToken = async () => {
-  const refresh_token = localStorage.getItem('refresh_token');
+  // const refresh_token = localStorage.getItem('refresh_token');
   let res = await fetch(`${import.meta.env.VITE_BASE_URL}/auth/refresh_token`, {
     method: 'GET',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + refresh_token,
+      refresh_token: 'Bearer ' + localStorage.getItem('refresh_token'),
     },
   }).then(async (res) => {
-    // return await Promise.resolve(res.json());
-    let token = await res.json();
-    localStorage.setItem('access_token', token.access_token);
-    localStorage.setItem('refresh_token', token.refresh_token);
+    if (!res.ok) {
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('refresh_token');
+      alert('เวลาของคุณได้หมดลงแล้วกรุณาเติมเงินด้วยค่ะ');
+      setTimeout(() => {
+        location.reload(1);
+      }, 1);
+      myRouter.push('/');
+    }
+    if (res.ok) {
+      let token = await res.json();
+      localStorage.setItem('access_token', token.access_token);
+      localStorage.setItem('refresh_token', token.refresh_token);
+    }
   });
 };
-
-const getAccessToken = computed(() => {
-  return localStorage.getItem('access_token');
-});
 
 // GET METHOD - Get all users
 const getAllUsers = async () => {
@@ -372,28 +365,29 @@ const getAllUsers = async () => {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + cat,
+      access_token: 'Bearer ' + cat,
     },
   })
     .then(async (res) => {
       if (!res.ok) {
-        getRefreshToken();
+        await getRefreshToken();
         return await fetch(`${import.meta.env.VITE_BASE_URL}/users`, {
           method: 'GET',
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
-            Authorization: 'Bearer ' + getAccessToken.value,
+            access_token: 'Bearer ' + localStorage.getItem('access_token'),
           },
         });
       }
-      if (res.ok) return (users.value = await res.json());
+      return (users.value = await res.json());
     })
     .then(async (res) => {
-      console.log(await res.json());
       if (res.ok) return (users.value = await res.json());
     })
-    .catch(async (e) => {});
+    .catch(async (e) => {
+      // myRouter.push('/');
+    });
 };
 
 // POST METHOD - Create new user

@@ -125,10 +125,22 @@
 <script setup>
 import { ref, computed, onBeforeMount, onMounted } from '@vue/runtime-core';
 
-const access_token = ref(localStorage.getItem('access_token'));
-const refresh_token = ref(localStorage.getItem('refresh_token'));
+const access_token = computed(() => {
+  try {
+    return localStorage.getItem('access_token');
+  } catch (error) {
+    return null;
+  }
+});
+const refresh_token = computed(() => {
+  try {
+    return localStorage.getItem('refresh_token');
+  } catch (error) {
+    return null;
+  }
+});
 const checkToken = computed(() => {
-  if (access_token.value == null && refresh_token.value == null) {
+  if (!access_token.value || !refresh_token.value) {
     return true;
   }
   return false;
