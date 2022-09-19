@@ -16,7 +16,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import sit.int221.oasip.filter.CustomAuthenticationFilter;
 import sit.int221.oasip.filter.CustomAuthorizationFilter;
 
-import static java.lang.invoke.VarHandle.AccessMode.GET;
 
 @Configuration @EnableWebSecurity @RequiredArgsConstructor
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
