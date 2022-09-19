@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import sit.int221.oasip.entities.Role;
 import sit.int221.oasip.entities.User;
 
-import java.time.Instant;
 import java.util.List;
 
 public interface UserRepository extends JpaRepository<User, Integer> {

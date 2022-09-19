@@ -1,22 +1,26 @@
 package sit.int221.oasip.controllers;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import sit.int221.oasip.dtos.security.TokenRequest;
 import sit.int221.oasip.dtos.security.TokenResponse;
+import sit.int221.oasip.entities.User;
 import sit.int221.oasip.errors.ErrorAdvice;
 import sit.int221.oasip.repositories.UserRepository;
 import sit.int221.oasip.services.JwtService;
-import sit.int221.oasip.utils.JWTUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.*;
+import java.util.stream.Collectors;
+
 
 @CrossOrigin("*")
 @RestController
@@ -24,17 +28,15 @@ import javax.servlet.http.HttpServletRequest;
 public class AuthController {
 
     private final UserRepository userRepository;
-    private final Argon2PasswordEncoder argon2;
+    private final PasswordEncoder argon2;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
-    private final JWTUtils jwtUtils;
 
-    public AuthController(UserRepository userRepository, Argon2PasswordEncoder argon2, JwtService jwtService, AuthenticationManager authenticationManager, JWTUtils jwtUtils) {
+    public AuthController(UserRepository userRepository, PasswordEncoder argon2, JwtService jwtService, AuthenticationManager authenticationManager) {
         this.userRepository = userRepository;
         this.argon2 = argon2;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
-        this.jwtUtils = jwtUtils;
     }
 
     @PostMapping("/match")
@@ -51,60 +53,40 @@ public class AuthController {
         return ResponseEntity.status(200).body("matched!");
     }
 
-    @PostMapping("/login")
-    public ResponseEntity authenticate(@RequestBody TokenRequest jwtReq) throws Exception {
-        try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            jwtReq.getEmail(),
-                            jwtReq.getRawPassword()
-                    )
-            );
-        } catch (BadCredentialsException e) {
-            throw new Exception("INVALID CREDENTIALS.", e);
-        }
-
-        final UserDetails userDetails = jwtService.loadUserByUsername(jwtReq.getEmail());
-
-        final String access_token = jwtUtils.generateToken(userDetails);
-        final String refresh_token = jwtUtils.generateRefreshToken(userDetails);
-        System.out.println("access_token : " + access_token);
-        System.out.println("refresh_token : " + refresh_token);
-
-        return ResponseEntity.status(200).body(new TokenResponse(access_token, refresh_token));
-    }
-
     @GetMapping("/refresh_token")
     public ResponseEntity refreshToken(HttpServletRequest request) {
-        String authorization = request.getHeader("Authorization");
-        String refresh_token = null;
-        String email = null;
-        String  access_token = null;
+        String authorizationHeader = request.getHeader("refresh_token");
+        if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")){
+            try{
+                String refresh_token = authorizationHeader.substring("Bearer ".length());
+                Algorithm algorithm = Algorithm.HMAC256("oasip-ssa1".getBytes());
+                JWTVerifier verifier = JWT.require(algorithm).build();
+                DecodedJWT decodedJWT = verifier.verify(refresh_token);
 
-        if (null != authorization && authorization.startsWith("Bearer ")) {
-            refresh_token = authorization.substring(7);
-            email = jwtUtils.getUsernameFromToken(refresh_token);
+                String email = decodedJWT.getSubject();
+                User user = userRepository.findByUserEmail(email).get(0);
+                String role = user.getRole().getRoleName();
 
-        }
-        if (null != email) {
-            UserDetails userDetails = jwtService.loadUserByUsername(email);
-            access_token = jwtUtils.generateToken(userDetails);
+                Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+                authorities.add(new SimpleGrantedAuthority(role));
 
-            if (jwtUtils.validateToken(refresh_token, userDetails)) {
-                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken
-                        = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                String access_token = JWT.create()
+                        .withSubject(user.getUserEmail())
+                        .withExpiresAt(new Date(System.currentTimeMillis() + 30*1000))
+                        .withIssuer(request.getRequestURI().toString())
+                        .withClaim("role", authorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
+                        .sign(algorithm);
 
-                usernamePasswordAuthenticationToken.setDetails(
-                        new WebAuthenticationDetailsSource().buildDetails(request)
-                );
+                return ResponseEntity.status(200).body(new TokenResponse(access_token, refresh_token));
+            }catch (Exception e){
 
-                SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+                Map<String, String> errors = new HashMap<>();
+                errors.put("error" , e.getMessage());
+                return ResponseEntity.status(401).body(errors);
             }
 
         }else {
-            throw new RuntimeException("Refresh Token is missing.");
+            return ResponseEntity.status(401).body("Refresh token is expired!");
         }
-
-        return ResponseEntity.status(400).body(new TokenResponse(access_token , refresh_token));
     }
 }
