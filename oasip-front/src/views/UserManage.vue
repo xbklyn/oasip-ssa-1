@@ -352,11 +352,16 @@ const getRefreshToken = async () => {
       Authorization: 'Bearer ' + refresh_token,
     },
   }).then(async (res) => {
+    // return await Promise.resolve(res.json());
     let token = await res.json();
     localStorage.setItem('access_token', token.access_token);
     localStorage.setItem('refresh_token', token.refresh_token);
   });
 };
+
+const getAccessToken = computed(() => {
+  return localStorage.getItem('access_token');
+});
 
 // GET METHOD - Get all users
 const getAllUsers = async () => {
@@ -373,29 +378,22 @@ const getAllUsers = async () => {
     .then(async (res) => {
       if (!res.ok) {
         getRefreshToken();
-        return Promise.reject();
+        return await fetch(`${import.meta.env.VITE_BASE_URL}/users`, {
+          method: 'GET',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + getAccessToken.value,
+          },
+        });
       }
       if (res.ok) return (users.value = await res.json());
     })
-    .catch(async (e) => {
-      // console.log(localStorage.getItem('access_token'));
-      alert('คิดไม่ออกเอารีเฟรชไปกินก่อน');
-      setTimeout(function () {
-        location.reload(1);
-      }, 1);
-      // myRouter.go(1);
-
-      // await fetch(`${import.meta.env.VITE_BASE_URL}/users`, {
-      //   method: 'GET',
-      //   headers: {
-      //     Accept: 'application/json',
-      //     'Content-Type': 'application/json',
-      //     Authorization: 'Bearer ' + localStorage.getItem('access_token'),
-      //   },
-      // }).then(async (res) => {
-      //   if (res.ok) return (users.value = await res.json());
-      // });
-    });
+    .then(async (res) => {
+      console.log(await res.json());
+      if (res.ok) return (users.value = await res.json());
+    })
+    .catch(async (e) => {});
 };
 
 // POST METHOD - Create new user
