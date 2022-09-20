@@ -344,9 +344,9 @@ const getRefreshToken = async () => {
       localStorage.removeItem('refresh_token');
       alert('เวลาของคุณได้หมดลงแล้วกรุณาเติมเงินด้วยค่ะ');
       setTimeout(() => {
-        location.reload(1);
+        // location.reload(1);
       }, 1);
-      myRouter.push('/');
+      // myRouter.push('/');
     }
     if (res.ok) {
       let token = await res.json();
