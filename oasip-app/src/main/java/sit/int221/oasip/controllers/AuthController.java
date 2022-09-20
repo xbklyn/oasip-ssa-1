@@ -3,6 +3,7 @@ package sit.int221.oasip.controllers;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,6 +19,7 @@ import sit.int221.oasip.repositories.UserRepository;
 import sit.int221.oasip.services.JwtService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -56,6 +58,7 @@ public class AuthController {
     @GetMapping("/refresh_token")
     public ResponseEntity refreshToken(HttpServletRequest request) {
         String authorizationHeader = request.getHeader("refresh_token");
+        System.out.println(authorizationHeader);
         if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")){
             try{
                 String refresh_token = authorizationHeader.substring("Bearer ".length());
@@ -86,7 +89,7 @@ public class AuthController {
             }
 
         }else {
-            return ResponseEntity.status(401).body("Refresh token is expired!");
+           throw new RuntimeException("Something wrong.");
         }
     }
 }

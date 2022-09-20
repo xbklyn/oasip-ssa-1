@@ -38,9 +38,10 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         try {
             TokenRequest tokenRequest = new Gson().fromJson(request.getReader(), TokenRequest.class);
             authenticationToken = new UsernamePasswordAuthenticationToken(tokenRequest.getEmail(), tokenRequest.getRawPassword());
-
-        } catch (IOException e) {
+            System.out.println(authenticationToken.getPrincipal().toString());
+        } catch (Exception e) {
             e.printStackTrace();
+            System.out.println(e.getMessage());
         }
         return authenticationManager.authenticate(authenticationToken);
     }
