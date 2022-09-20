@@ -26,8 +26,9 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
         if(request.getServletPath().equals("/api/auth/login" )|| request.getServletPath().equals("/api/auth/refresh_token")){
             filterChain.doFilter(request,response);
         } else {
+            System.out.println("Request => " + request.toString());
             String authorizationHeader = request.getHeader("access_token");
-            System.out.println(authorizationHeader);
+            System.out.println("access_token => " + authorizationHeader);
             if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")){
                 try{
                     String access_token = authorizationHeader.substring("Bearer ".length());
@@ -59,6 +60,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                 }
 
             }else {
+                System.out.println("Authorization Header = null");
                 filterChain.doFilter(request, response);
             }
         }

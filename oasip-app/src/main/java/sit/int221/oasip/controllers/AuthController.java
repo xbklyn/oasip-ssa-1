@@ -57,8 +57,9 @@ public class AuthController {
 
     @GetMapping("/refresh_token")
     public ResponseEntity refreshToken(HttpServletRequest request) {
+        System.out.println("Refresh request => " + request.toString());
         String authorizationHeader = request.getHeader("refresh_token");
-        System.out.println(authorizationHeader);
+        System.out.println("refresh_token => " + authorizationHeader);
         if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")){
             try{
                 String refresh_token = authorizationHeader.substring("Bearer ".length());
@@ -89,7 +90,7 @@ public class AuthController {
             }
 
         }else {
-           throw new RuntimeException("Something wrong.");
+           return ResponseEntity.status(400).body("Something wrong");
         }
     }
 }
