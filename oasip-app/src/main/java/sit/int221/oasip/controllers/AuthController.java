@@ -18,7 +18,9 @@ import sit.int221.oasip.errors.ErrorAdvice;
 import sit.int221.oasip.repositories.UserRepository;
 import sit.int221.oasip.services.JwtService;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -56,8 +58,7 @@ public class AuthController {
     }
 
     @GetMapping("/refresh_token")
-    public ResponseEntity refreshToken(HttpServletRequest request) {
-        System.out.println("Refresh request => " + request.toString());
+    public ResponseEntity refreshToken(HttpServletRequest request) throws ServletException, IOException {
         String authorizationHeader = request.getHeader("refresh_token");
         System.out.println("refresh_token => " + authorizationHeader);
         if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")){
