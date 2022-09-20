@@ -36,7 +36,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
                     String email = decodedJWT.getSubject();
                     String[] role = decodedJWT.getClaim("role").asArray(String.class);
-                    System.out.println("In authorization : " + role.length);
+                    System.out.println("In authorization : " + role[0]);
 
                     Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
                     stream(role).forEach(r -> {

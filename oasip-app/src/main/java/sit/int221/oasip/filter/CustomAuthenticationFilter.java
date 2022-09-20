@@ -41,9 +41,8 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            return authenticationManager.authenticate(authenticationToken);
         }
+        return authenticationManager.authenticate(authenticationToken);
     }
 
     @Override
