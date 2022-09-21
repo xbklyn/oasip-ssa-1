@@ -25,6 +25,8 @@ import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+
 
 @CrossOrigin("*")
 @RestController
@@ -59,7 +61,7 @@ public class AuthController {
 
     @GetMapping("/refresh_token")
     public ResponseEntity refreshToken(HttpServletRequest request) throws ServletException, IOException {
-        String authorizationHeader = request.getHeader("refresh_token");
+        String authorizationHeader = request.getHeader(AUTHORIZATION);
         System.out.println("refresh_token => " + authorizationHeader);
         if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")){
             try{
