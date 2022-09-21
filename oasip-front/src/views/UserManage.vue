@@ -376,7 +376,7 @@ const getAllUsers = async () => {
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
-            'access_token': 'Bearer ' + localStorage.getItem('access_token'),
+            Authorization: 'Bearer ' + localStorage.getItem('access_token'),
           },
         });
       }
