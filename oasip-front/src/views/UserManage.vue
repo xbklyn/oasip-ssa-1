@@ -336,7 +336,7 @@ const getRefreshToken = async () => {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      'refresh_token': 'Bearer ' + localStorage.getItem('refresh_token'),
+      Authorization: 'Bearer ' + localStorage.getItem('refresh_token'),
     },
   }).then(async (res) => {
     if (!res.ok) {
@@ -365,7 +365,7 @@ const getAllUsers = async () => {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      access_token: 'Bearer ' + cat,
+      Authorization: 'Bearer ' + cat,
     },
   })
     .then(async (res) => {
