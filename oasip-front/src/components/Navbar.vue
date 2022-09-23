@@ -88,12 +88,26 @@
           class="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
         >
           <div class="py-1" role="none">
-            <button class="text-gray-700 block px-4 py-2 text-sm">
-              Account settings
-            </button>
+            <router-link
+              :to="{ name: 'account' }"
+              class="flex place-items-center hover:bg-gray-100"
+            >
+              <button
+                @click="showUserMenu = false"
+                class="flex gap-x-1 px-4 py-2 text-sm font-light place-items-center text-gray-700"
+              >
+                <svg width="1em" height="1em" viewBox="0 0 24 24">
+                  <path
+                    fill="currentColor"
+                    d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                  ></path>
+                </svg>
+                <p>Account</p>
+              </button>
+            </router-link>
             <router-link
               :to="{ name: 'clinic-manage' }"
-              class="flex place-items-center"
+              class="flex place-items-center hover:bg-gray-100"
             >
               <button
                 @click="showUserMenu = false"
@@ -110,7 +124,7 @@
             </router-link>
             <button
               type="submit"
-              class="text-gray-700 block w-full px-4 py-2 text-left text-sm"
+              class="text-gray-700 block w-full px-4 py-2 text-left text-sm hover:bg-gray-100"
               @click="sign_out"
             >
               Sign out
