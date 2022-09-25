@@ -3,8 +3,8 @@ package sit.int221.oasip.entities;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "clinicsRegistration")
-public class ClinicsRegistration {
+@Table(name = "eventCategoryOwner")
+public class eventCategoryOwner {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "clinicRegistrationId", nullable = false)
