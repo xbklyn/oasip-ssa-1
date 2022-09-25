@@ -1,5 +1,7 @@
 package sit.int221.oasip.dtos.event;
 
+import sit.int221.oasip.entities.User;
+
 import java.util.Date;
 
 public class DetailEventDTO {
@@ -15,7 +17,15 @@ public class DetailEventDTO {
     private String eventCategoryDuration;
     private String eventNotes;
     private Integer statusId;
+    private User user;
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public Integer getId() {
         return id;
