@@ -1,7 +1,10 @@
 package sit.int221.oasip.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -30,6 +33,14 @@ public class User {
     @JoinColumn(name = "roleId", nullable = false)
     private Role role;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private List<Event> events;
+
+    public List<Event> getEvents() {return events;}
+
+    public void setEvents(List<Event> events) {this.events = events;}
+
     public Role getRole() {
         return role;
     }
@@ -46,9 +57,7 @@ public class User {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    public void setPassword(String password) {this.password = password;}
 
     public void setUpdatedOn(Instant updatedOn) {
         this.updatedOn = updatedOn;

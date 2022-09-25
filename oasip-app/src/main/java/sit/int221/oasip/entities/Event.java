@@ -41,6 +41,10 @@ public class Event {
     @JoinColumn(name = "eventCategoryId", nullable = false)
     private Eventcategory eventCategory;
 
+    @ManyToOne
+    @JoinColumn(name = "userId" , nullable = true)
+    private User user;
+
 
     public Integer getBookingId() {
         return bookingId;
@@ -113,4 +117,8 @@ public class Event {
     public void setEventCategory(Eventcategory eventCategory) {
         this.eventCategory = eventCategory;
     }
+
+    public User getUser() {return user;}
+
+    public void setUser(User user) {this.user = user;}
 }
