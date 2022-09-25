@@ -1,6 +1,7 @@
 package sit.int221.oasip.controllers;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import sit.int221.oasip.dtos.user.PostUserDTO;
@@ -31,8 +32,8 @@ public class UserController {
 
     //GET by ID
     @GetMapping("/{id}")
-    public DetailUserDTO getUserById(@PathVariable Integer id)
-    {return userService.getById(id);}
+    public ResponseEntity getUserById(@PathVariable Integer id , Authentication auth)
+    {return userService.getById(id, auth);}
 
     //GET by role
     @GetMapping("/role/{role}")

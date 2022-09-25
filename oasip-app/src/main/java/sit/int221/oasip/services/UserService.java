@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -13,6 +14,7 @@ import sit.int221.oasip.dtos.user.SimpleUserDTO;
 import sit.int221.oasip.dtos.user.DetailUserDTO;
 import sit.int221.oasip.entities.Role;
 import sit.int221.oasip.entities.User;
+import sit.int221.oasip.errors.ApiError;
 import sit.int221.oasip.errors.ErrorAdvice;
 import sit.int221.oasip.repositories.RoleRepository;
 import sit.int221.oasip.repositories.UserRepository;
@@ -48,11 +50,21 @@ public class UserService {
     }
 
     //GET by ID
-    public DetailUserDTO getById(Integer id) {
-        User user = userRepository.findById(id).orElseThrow(() ->
-            new ResponseStatusException(HttpStatus.NOT_FOUND, "User with " + id + " does not exist!")
-        );
-        return modelMapper.map(user, DetailUserDTO.class);
+    public ResponseEntity getById(Integer id , Authentication auth) {
+        //Check if role is admin
+        if(String.valueOf(auth.getAuthorities().toArray()[0]).equals("admin")){
+            User user = userRepository.findById(id).orElseThrow(() ->
+                    new ResponseStatusException(HttpStatus.NOT_FOUND, "User with " + id + " does not exist!")
+            );
+            return ResponseEntity.status(200).body(modelMapper.map(user, DetailUserDTO.class));
+        }
+        //Check if email not equals to getting user
+        if(!auth.getPrincipal().equals(userRepository.findById(id).get().getUserEmail())){
+            Map<String , String > error = new HashMap<>();
+            error.put("Unauthorized" , "Access Denied.");
+            return ResponseEntity.status(403).body(error);
+        }
+        return ResponseEntity.status(200).body(modelMapper.map(userRepository.findById(id).get(), DetailUserDTO.class));
     }
 
     //GET by role
