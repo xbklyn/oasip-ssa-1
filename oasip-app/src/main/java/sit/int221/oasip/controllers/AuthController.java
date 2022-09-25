@@ -46,7 +46,14 @@ public class AuthController {
     }
 
     @PostMapping("/match")
-    public ResponseEntity match(@RequestBody TokenRequest information, HttpServletRequest req) {
+    public ResponseEntity match(@RequestBody TokenRequest information, HttpServletRequest req){
+        if (!argon2.matches(information.getRawPassword(), userRepository.findByUserEmail(information.getEmail()).get(0).getPassword())) {
+            return ResponseEntity.status(401).body(new ErrorAdvice().getResponseEntity("password", "Password isn't matched, please try again.", req));
+        }
+        return ResponseEntity.status(200).body("matched!");
+    }
+    @PostMapping("/check")
+    public ResponseEntity check(@RequestBody TokenRequest information, HttpServletRequest req) {
 
         // Check existed email
         if (userRepository.findByUserEmail(information.getEmail()).isEmpty()) {
