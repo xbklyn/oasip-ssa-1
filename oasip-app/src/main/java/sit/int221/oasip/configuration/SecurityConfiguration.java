@@ -12,9 +12,15 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import sit.int221.oasip.entities.User;
+import sit.int221.oasip.filter.CustomAccessDeniedHandler;
 import sit.int221.oasip.filter.CustomAuthenticationFilter;
 import sit.int221.oasip.filter.CustomAuthorizationFilter;
+import sit.int221.oasip.repositories.UserRepository;
+
+import java.util.List;
 
 
 @Configuration @EnableWebSecurity @RequiredArgsConstructor
@@ -39,14 +45,23 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         customAuthenticationFilter.setFilterProcessesUrl("/api/auth/login");
         http.csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and().authorizeHttpRequests().antMatchers("/api/auth/refresh_token" ,"/api/auth/login","/api/auth/match" , "/api/events" , "/api/category").permitAll()
+                .and().authorizeHttpRequests().antMatchers("/api/auth/refresh_token" ,"/api/auth/login","/api/auth/check" , "/api/events" , "/api/category").permitAll()
                 .and().cors()
+                .and().authorizeHttpRequests().antMatchers("/api/users").hasAuthority("admin")
+                .and().authorizeHttpRequests().antMatchers("/api/events").hasAnyAuthority("admin" , "student")
                 .and().authorizeHttpRequests().anyRequest().authenticated()
                 .and().addFilter(customAuthenticationFilter)
-                .addFilterBefore(new CustomAuthorizationFilter() , UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new CustomAuthorizationFilter() , UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling().accessDeniedHandler(accessDeniedHandler());
+
     }
 
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {return super.authenticationManagerBean();}
+
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler(){
+        return new CustomAccessDeniedHandler();
+    }
 }
