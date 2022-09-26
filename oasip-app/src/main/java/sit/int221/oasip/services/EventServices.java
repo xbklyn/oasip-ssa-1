@@ -79,6 +79,8 @@ public class EventServices {
         if(String.valueOf(auth.getAuthorities().toArray()[0]).equals("admin")){
             Event event = eventRepository.findById(id).orElseThrow(() ->
                     new ResponseStatusException(NOT_FOUND, id + "does not exist."));
+
+            if(event.getUser() == null) event.setUser(new User());
             check();
             return ResponseEntity.status(200).body(modelMapper.map(event, DetailEventDTO.class));
         }
