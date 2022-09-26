@@ -122,7 +122,7 @@ public class EventServices {
             LocalDateTime endTime = newEvent.getEventStartTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().plus(Duration.of(event.getEventDuration(), ChronoUnit.MINUTES));
             event.setEventEndTime(Date.from(endTime.atZone(ZoneId.systemDefault()).toInstant()));
 
-            User user = userRepository.findByUserEmail(String.valueOf(auth.getPrincipal())).get(0);
+            User user = userRepository.findByUserEmail(String.valueOf(newEvent.getBookingEmail())).get(0) == null ? userRepository.findByUserEmail(String.valueOf(auth.getPrincipal())).get(0) : userRepository.findByUserEmail(String.valueOf(newEvent.getBookingEmail())).get(0);
             event.setUser(user);
             //Check Overlap
             if(checkIsOverlap(event))
