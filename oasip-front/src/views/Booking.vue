@@ -82,7 +82,7 @@
       </div>
       <div class="space-y-6">
         <!-- Input - Email -->
-        <div class="relative">
+        <div class="relative" v-if="userRole === 'admin'">
           <input
             type="text"
             id="email"
@@ -333,12 +333,13 @@ onBeforeUpdate(async () => {
 });
 
 // ATTIBUTE
+let userRole = localStorage.getItem('userRole');
 const myRouter = useRouter();
 const clinics = ref([]);
 const clinicId = ref(0);
 const clinicIndex = ref();
 const fullName = ref('');
-const email = ref('');
+const email = ref(localStorage.getItem('userEmail'));
 const note = ref('');
 const currentDate = computed(() => {
   const date = ref(new Date().getFullYear());
@@ -375,21 +376,91 @@ const dateTime = computed(() => {
 const SUCCESFUL = ref(false);
 const ERROR = ref(false);
 const submit = async (name, mail, start, categoryId, notes) => {
-  let status = await createEvent(name, mail, start, categoryId, notes);
-  if (status == 500 || status == 400) {
-    ERROR.value = true;
-    SUCCESFUL.value = false;
-    setTimeout(function () {
-      ERROR.value = false;
-    }, 4000);
-  } else {
-    SUCCESFUL.value = true;
-    setTimeout(function () {
-      myRouter.push({
-        name: 'Home',
-      });
-    }, 2000);
-  }
+  // let status = await createEvent(name, mail, start, categoryId, notes);
+  await fetch(`${import.meta.env.VITE_BASE_URL}/events`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + localStorage.getItem('access_token'),
+    },
+    body: JSON.stringify({
+      bookingName: name,
+      bookingEmail:
+        userRole === 'admin' ? mail : localStorage.getItem('userEmail'),
+      eventStartTime: start,
+      categoryId: categoryId,
+      eventNotes: notes,
+    }),
+  })
+    .then(async (res) => {
+      if (res.status === 401) {
+        await getRefreshToken();
+        return fetch(`${import.meta.env.VITE_BASE_URL}/events}`, {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + localStorage.getItem('access_token'),
+          },
+          body: JSON.stringify({
+            bookingName: name,
+            bookingEmail: mail,
+            eventStartTime: start,
+            categoryId: categoryId,
+            eventNotes: notes,
+          }),
+        });
+      }
+      if (res.status === 403) {
+        ERROR.value = true;
+        SUCCESFUL.value = false;
+        setTimeout(function () {
+          ERROR.value = false;
+        }, 4000);
+        return;
+      }
+      if (res.ok) {
+        SUCCESFUL.value = true;
+        setTimeout(function () {
+          myRouter.push({
+            name: 'Home',
+          });
+        }, 2000);
+        return;
+      }
+    })
+    .then((res) => {
+      if (res.ok) {
+        SUCCESFUL.value = true;
+        setTimeout(function () {
+          myRouter.push({
+            name: 'Home',
+          });
+        }, 2000);
+      } else {
+        ERROR.value = true;
+        SUCCESFUL.value = false;
+        setTimeout(function () {
+          ERROR.value = false;
+        }, 4000);
+      }
+    });
+
+  // if (status == 500 || status == 400) {
+  //   ERROR.value = true;
+  //   SUCCESFUL.value = false;
+  //   setTimeout(function () {
+  //     ERROR.value = false;
+  //   }, 4000);
+  // } else {
+  //   SUCCESFUL.value = true;
+  //   setTimeout(function () {
+  //     myRouter.push({
+  //       name: 'Home',
+  //     });
+  //   }, 2000);
+  // }
 };
 
 // GET - All TimeBooked start time

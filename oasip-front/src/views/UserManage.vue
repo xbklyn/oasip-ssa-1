@@ -342,6 +342,7 @@ const getRefreshToken = async () => {
     if (!res.ok) {
       localStorage.removeItem('access_token');
       localStorage.removeItem('refresh_token');
+      localStorage.removeItem('userRole');
       alert('เวลาของคุณได้หมดลงแล้วกรุณาเติมเงินด้วยค่ะ');
       setTimeout(() => {
         location.reload(1);
@@ -395,28 +396,61 @@ const postNewUser = async () => {
   await fetch(`${import.meta.env.VITE_BASE_URL}/users`, {
     method: 'POST',
     headers: {
-      'content-type': 'application/json',
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + localStorage.getItem('access_token'),
     },
     body: JSON.stringify(addNewUser.value),
-  }).then(async (res) => {
-    if (res.ok) {
-      SUCCESFUL.value = true;
-      ERROR.value = false;
-      setTimeout(function () {
-        SUCCESFUL.value = false;
-      }, 1500);
-      await getAllUsers();
-      addDialogClosed();
-      return;
-    } else {
-      SUCCESFUL.value = false;
-      ERROR.value = true;
-      setTimeout(function () {
+  })
+    .then(async (res) => {
+      if (res.status === 401) {
+        await getRefreshToken();
+        return await fetch(`${import.meta.env.VITE_BASE_URL}/users`, {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + localStorage.getItem('access_token'),
+          },
+        });
+      }
+      if (res.ok) {
+        SUCCESFUL.value = true;
         ERROR.value = false;
-      }, 1500);
-      return (responeError.value = await res.json());
-    }
-  });
+        setTimeout(function () {
+          SUCCESFUL.value = false;
+        }, 1500);
+        await getAllUsers();
+        addDialogClosed();
+        return;
+      } else {
+        SUCCESFUL.value = false;
+        ERROR.value = true;
+        setTimeout(function () {
+          ERROR.value = false;
+        }, 1500);
+        return (responeError.value = await res.json());
+      }
+    })
+    .then(async (res) => {
+      if (res.ok) {
+        SUCCESFUL.value = true;
+        ERROR.value = false;
+        setTimeout(function () {
+          SUCCESFUL.value = false;
+        }, 1500);
+        await getAllUsers();
+        addDialogClosed();
+        return;
+      } else {
+        SUCCESFUL.value = false;
+        ERROR.value = true;
+        setTimeout(function () {
+          ERROR.value = false;
+        }, 1500);
+        return (responeError.value = await res.json());
+      }
+    });
 };
 </script>
 

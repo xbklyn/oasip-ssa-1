@@ -31,6 +31,7 @@
           </p>
         </router-link>
         <router-link
+          v-if="role === 'admin'"
           :to="{ name: 'users-manage' }"
           class="font-normal c flex gap-2 hover:text-blue-300 duration-150"
         >
@@ -110,6 +111,8 @@
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+const role = localStorage.getItem('userRole');
+</script>
 
 <style></style>
