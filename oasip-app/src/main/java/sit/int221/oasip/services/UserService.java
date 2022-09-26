@@ -46,11 +46,6 @@ public class UserService {
         return listMapper.mapList(userRepository.findAll(Sort.by("userName").ascending()) , SimpleUserDTO.class , modelMapper);
     }
 
-    //GET for state
-    public ResponseEntity getByToken(Authentication auth){
-        User user = userRepository.findByUserEmail(String.valueOf(auth.getPrincipal())).get(0);
-        return ResponseEntity.status(200).body(modelMapper.map(user, AccountDTO.class));
-    }
     //GET by ID
     public ResponseEntity getById(Integer id , Authentication auth) {
         //Check if role is admin
