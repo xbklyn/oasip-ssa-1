@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -47,8 +48,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().authorizeHttpRequests().antMatchers("/api/auth/refresh_token" ,"/api/auth/login","/api/auth/check" , "/api/events" , "/api/category").permitAll()
                 .and().cors()
-                .and().authorizeHttpRequests().antMatchers("/api/users").hasAuthority("admin")
-                .and().authorizeHttpRequests().antMatchers("/api/events").hasAnyAuthority("admin" , "student")
+                .and().authorizeHttpRequests().antMatchers(HttpMethod.GET, "/api/users").hasAuthority("admin")
+                .and().authorizeHttpRequests().antMatchers(HttpMethod.POST, "/api/users").hasAuthority("admin")
+                .and().authorizeHttpRequests().antMatchers(HttpMethod.DELETE, "/api/users/{id}").hasAuthority("admin")
+                .and().authorizeHttpRequests().antMatchers(HttpMethod.PUT, "/api/users").hasAuthority("admin")
+                .and().authorizeHttpRequests().antMatchers("/api/events" , "/api/users/{id}").hasAnyAuthority("admin" , "student")
                 .and().authorizeHttpRequests().anyRequest().authenticated()
                 .and().addFilter(customAuthenticationFilter)
                 .addFilterBefore(new CustomAuthorizationFilter() , UsernamePasswordAuthenticationFilter.class)
