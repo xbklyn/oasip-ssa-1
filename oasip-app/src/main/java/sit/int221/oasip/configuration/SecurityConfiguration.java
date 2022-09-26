@@ -52,6 +52,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and().authorizeHttpRequests().antMatchers(HttpMethod.POST, "/api/users").hasAuthority("admin")
                 .and().authorizeHttpRequests().antMatchers(HttpMethod.DELETE, "/api/users/{id}").hasAuthority("admin")
                 .and().authorizeHttpRequests().antMatchers(HttpMethod.PUT, "/api/users").hasAuthority("admin")
+                .and().authorizeHttpRequests().antMatchers("/api/auth/match").hasAuthority("admin")
                 .and().authorizeHttpRequests().antMatchers("/api/events" , "/api/users/{id}").hasAnyAuthority("admin" , "student")
                 .and().authorizeHttpRequests().anyRequest().authenticated()
                 .and().addFilter(customAuthenticationFilter)

@@ -66,8 +66,7 @@ public class EventServices {
                     Sort.by("eventStartTime").descending()
             ), SimpleEventDTO.class, modelMapper);
         }
-        Integer userId = userRepository.findByUserEmail(auth.getPrincipal().toString()).get(0).getId();
-        List<Event> events = eventRepository.getByUser(userId);
+        List<Event> events = eventRepository.getByUserEmail(String.valueOf(auth.getPrincipal()));
        return listMapper.mapList(events, SimpleEventDTO.class , modelMapper);
     }
 
@@ -140,7 +139,9 @@ public class EventServices {
             check();
             return ResponseEntity.status(200).body("Delete sucessfully!");
         }
-        return ResponseEntity.status(400).body("email must be the same as the student's email");
+        Map<String, String> error = new HashMap<>();
+        error.put("Unauthorized","Access Denied.");
+        return ResponseEntity.status(403).body(error);
     }
 
     // PUT
@@ -156,10 +157,13 @@ public class EventServices {
                 LocalDateTime endTime = event.getEventStartTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().plus(Duration.of(event.getEventDuration(), ChronoUnit.MINUTES));
                 event.setEventEndTime(Date.from(endTime.atZone(ZoneId.systemDefault()).toInstant()));
             }
+
             check();
             return ResponseEntity.status(200).body(eventRepository.saveAndFlush(event));
         }
-        return ResponseEntity.status(400).body("email must be the same as the student's email");
+        Map<String, String> error = new HashMap<>();
+        error.put("Unauthorized","Access Denied.");
+        return ResponseEntity.status(403).body(error);
     }
 
     public void check(){

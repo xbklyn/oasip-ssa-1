@@ -29,8 +29,8 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
             @Param("cat_id") Integer id,
             @Param("input_date") String date);
 
-    @Query(value ="SELECT * FROM events WHERE userId = :user_id" , nativeQuery = true)
-    public List<Event> getByUser(
-            @Param("user_id") Integer id
+    @Query(value ="SELECT * FROM events WHERE bookingEmail = :email" , nativeQuery = true)
+    public List<Event> getByUserEmail(
+            @Param("email") String email
     );
 }
