@@ -30,6 +30,10 @@ public class UserController {
         return userService.getAll();
     }
 
+    @GetMapping("/home")
+    public ResponseEntity getUserbyToken(Authentication auth)
+    {return userService.getByToken(auth);}
+
     //GET by ID
     @GetMapping("/{id}")
     public ResponseEntity getUserById(@PathVariable Integer id , Authentication auth)

@@ -8,10 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-import sit.int221.oasip.dtos.user.PostUserDTO;
-import sit.int221.oasip.dtos.user.PutUserDTO;
-import sit.int221.oasip.dtos.user.SimpleUserDTO;
-import sit.int221.oasip.dtos.user.DetailUserDTO;
+import sit.int221.oasip.dtos.user.*;
 import sit.int221.oasip.entities.Role;
 import sit.int221.oasip.entities.User;
 import sit.int221.oasip.errors.ApiError;
@@ -49,6 +46,11 @@ public class UserService {
         return listMapper.mapList(userRepository.findAll(Sort.by("userName").ascending()) , SimpleUserDTO.class , modelMapper);
     }
 
+    //GET for state
+    public ResponseEntity getByToken(Authentication auth){
+        User user = userRepository.findByUserEmail(String.valueOf(auth.getPrincipal())).get(0);
+        return ResponseEntity.status(200).body(modelMapper.map(user, AccountDTO.class));
+    }
     //GET by ID
     public ResponseEntity getById(Integer id , Authentication auth) {
         //Check if role is admin
