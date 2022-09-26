@@ -17,15 +17,11 @@ public class DetailEventDTO {
     private String eventCategoryDuration;
     private String eventNotes;
     private Integer statusId;
-    private User user;
+    private Integer userId;
 
-    public User getUser() {
-        return user;
-    }
+    public Integer getUserId() {return userId;}
 
-    public void setUser(User user) {
-        this.user = user;
-    }
+    public void setUserId(Integer userId) {this.userId = userId;}
 
     public Integer getId() {
         return id;
