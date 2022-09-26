@@ -14,6 +14,7 @@ import sit.int221.oasip.dtos.event.PutEventDTO;
 import sit.int221.oasip.dtos.event.SimpleEventDTO;
 import sit.int221.oasip.dtos.time.TimeDTO;
 import sit.int221.oasip.entities.Event;
+import sit.int221.oasip.entities.User;
 import sit.int221.oasip.errors.ErrorAdvice;
 import sit.int221.oasip.repositories.EventCategoryRepository;
 import sit.int221.oasip.repositories.EventRepository;
@@ -118,6 +119,9 @@ public class EventServices {
             //Add to end time
             LocalDateTime endTime = newEvent.getEventStartTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().plus(Duration.of(event.getEventDuration(), ChronoUnit.MINUTES));
             event.setEventEndTime(Date.from(endTime.atZone(ZoneId.systemDefault()).toInstant()));
+
+            User user = userRepository.findByUserEmail(String.valueOf(auth.getPrincipal())).get(0);
+            event.setUser(user);
             //Check Overlap
             if(checkIsOverlap(event))
                 return ResponseEntity.status(400).body(errorAdvice.getResponseEntity("eventStartTime" , "Time is overlapping" , req));
