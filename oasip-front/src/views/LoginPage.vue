@@ -68,7 +68,7 @@ const responeError = ref({});
 
 const userLogin = async () => {
   responeError.value = {};
-  await fetch(`${import.meta.env.VITE_BASE_URL}/auth/match`, {
+  await fetch(`${import.meta.env.VITE_BASE_URL}/auth/check`, {
     method: 'POST',
     headers: {
       'content-type': 'application/json',
@@ -86,15 +86,16 @@ const userLogin = async () => {
         if (res.ok) {
           alert('Login ได้แล้วเย้ เหนื่อยดีจัง');
 
-          // useToken.storeToken(await res.json());
           let token = await res.json();
           localStorage.setItem('access_token', token.access_token);
           localStorage.setItem('refresh_token', token.refresh_token);
-          // const cat = localStorage.getItem('access_token');
-          // console.log(useToken.getAccessToken);
-          // console.log(cat);
-          // console.log(useToken.accessToken.token);
-
+          let tokenSplit = token.access_token.split('.');
+          let tokenPayload = tokenSplit[1];
+          let tokenDecode = atob(tokenPayload).split(',');
+          let userRole = JSON.parse(`{${tokenDecode[1]}}`);
+          let userEmail = JSON.parse(`${tokenDecode[0]}}`);
+          localStorage.setItem('userEmail', userEmail.sub);
+          localStorage.setItem('userRole', userRole.role[0]);
           setTimeout(function () {
             location.reload(1);
           }, 1);

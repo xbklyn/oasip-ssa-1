@@ -35,6 +35,7 @@
 
       <!-- Scheduled -->
       <div
+        v-if="userRole"
         :class="[
           'grid place-items-center l-color-navi h-24 w-24',
           $route.name == 'Scheduled'
@@ -138,12 +139,21 @@
 
 <script setup>
 import { ref, computed, onBeforeMount, onMounted } from '@vue/runtime-core';
+import { useRouter } from 'vue-router';
+const myRouter = useRouter();
 
 const access_token = computed(() => {
   try {
     return localStorage.getItem('access_token');
   } catch (error) {
     return null;
+  }
+});
+const userRole = computed(() => {
+  try {
+    return localStorage.getItem('userRole');
+  } catch (error) {
+    return false;
   }
 });
 const refresh_token = computed(() => {
@@ -160,9 +170,14 @@ const checkToken = computed(() => {
   return false;
 });
 const sign_out = () => {
-  localStorage.removeItem('access_token');
-  localStorage.removeItem('refresh_token');
-  location.reload(1);
+  // localStorage.removeItem('access_token');
+  // localStorage.removeItem('refresh_token');
+  // localStorage.removeItem('userRole');
+  localStorage.clear();
+  setTimeout(() => {
+    location.reload(1);
+  });
+  myRouter.push('/');
 };
 const showUserMenu = ref(false);
 const opencloseMenu = () => {

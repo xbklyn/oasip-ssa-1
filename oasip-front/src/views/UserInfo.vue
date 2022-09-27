@@ -60,6 +60,35 @@
         :title="'Create at'"
         :text="moment(user.createdOn).format('LLL')"
       />
+      <div class="relative col-span-2">
+        <input
+          type="text"
+          v-model="rawPassword"
+          :class="[
+            'w-full h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer',
+            responeError?.details?.userEmail
+              ? 'border-red-500 focus:border-red-500'
+              : '',
+          ]"
+          placeholder=" "
+        />
+        <label
+          class="absolute text-sm l-color-gray-300 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
+        >
+          Password<span class="text-red-500">*</span>
+        </label>
+        <p class="absolute text-sm text-red-500 ml-2">
+          {{ responeError?.details?.password }}
+        </p>
+      </div>
+      <button
+        @click="checkedPassword"
+        :class="[
+          'w-24 h-full text-white duration-150 bg-emerald-500 disabled:bg-gray-300',
+        ]"
+      >
+        Check
+      </button>
     </div>
 
     <!-- Edit User -->
@@ -268,6 +297,7 @@ const SUCCESFUL = ref(false);
 const ERROR = ref(false);
 const editMode = ref(false);
 const responeError = ref({});
+const rawPassword = ref('');
 
 const clickEdit = () => {
   editMode.value = true;
@@ -324,6 +354,27 @@ const validUserName = computed(() => {
   return user.value?.userName;
 });
 
+// Check Password
+const checkedPassword = async () => {
+  let res = await fetch(`${import.meta.env.VITE_BASE_URL}/auth/match`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + localStorage.getItem('access_token'),
+    },
+    body: JSON.stringify({
+      email: user.value?.userEmail,
+      rawPassword: rawPassword.value,
+    }),
+  });
+  if (res.ok) {
+    alert('ทำได้ดี');
+  } else {
+    alert('ยังไม่เนียนไปเรียนมาใหม่');
+  }
+};
+
 const successAlert = () => {
   responeError.value = {};
   SUCCESFUL.value = true;
@@ -342,15 +393,64 @@ const errorAlert = () => {
 };
 
 // Fetch service
+
+const getRefreshToken = async () => {
+  // const refresh_token = localStorage.getItem('refresh_token');
+  let res = await fetch(`${import.meta.env.VITE_BASE_URL}/auth/refresh_token`, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + localStorage.getItem('refresh_token'),
+    },
+  }).then(async (res) => {
+    if (!res.ok) {
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('refresh_token');
+      localStorage.removeItem('userRole');
+      alert('เวลาของคุณได้หมดลงแล้วกรุณาเติมเงินด้วยค่ะ');
+      setTimeout(() => {
+        location.reload(1);
+      }, 1);
+      myRouter.push('/');
+    }
+    if (res.ok) {
+      let token = await res.json();
+      localStorage.setItem('access_token', token.access_token);
+      localStorage.setItem('refresh_token', token.refresh_token);
+    }
+  });
+};
+
 // GET METHOD - Get user by Id
 const getUserById = async (id) => {
-  await fetch(`${import.meta.env.VITE_BASE_URL}/users/${id}`)
+  await fetch(`${import.meta.env.VITE_BASE_URL}/users/${id}`, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + localStorage.getItem('access_token'),
+    },
+  })
     .then(async (res) => {
-      if (res.status === 200) return (user.value = await res.json());
-      throw new Error();
+      if (!res.ok) {
+        await getRefreshToken();
+        return await fetch(`${import.meta.env.VITE_BASE_URL}/users/${id}`, {
+          method: 'GET',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + localStorage.getItem('access_token'),
+          },
+        });
+      }
+      return (user.value = await res.json());
     })
-    .catch((e) => {
-      return e.message;
+    .then(async (res) => {
+      if (res.ok) return (user.value = await res.json());
+    })
+    .catch(async (e) => {
+      myRouter.push('/');
     });
 };
 
@@ -358,18 +458,45 @@ const getUserById = async (id) => {
 const deleteUserById = async () => {
   await fetch(`${import.meta.env.VITE_BASE_URL}/users/${params.id}`, {
     method: 'DELETE',
-  }).then(async (res) => {
-    if (res.ok) {
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + localStorage.getItem('access_token'),
+    },
+  })
+    .then(async (res) => {
+      if (!res.ok) {
+        await getRefreshToken();
+        return await fetch(
+          `${import.meta.env.VITE_BASE_URL}/users/${params.id}`,
+          {
+            method: 'DELETE',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+              Authorization: 'Bearer ' + localStorage.getItem('access_token'),
+            },
+          },
+        );
+      }
+      if (res.ok) {
+        successAlert();
+        myRouter.push({
+          name: `users-manage`,
+        });
+        return;
+      } else {
+        errorAlert();
+        return (responeError.value = await res.json());
+      }
+    })
+    .then((res) => {
       successAlert();
       myRouter.push({
         name: `users-manage`,
       });
       return;
-    } else {
-      errorAlert();
-      return (responeError.value = await res.json());
-    }
-  });
+    });
 };
 
 // PUT METHOD - Edit user
@@ -384,11 +511,41 @@ const putUser = async () => {
   await fetch(`${import.meta.env.VITE_BASE_URL}/users/${params.id}`, {
     method: 'PUT',
     headers: {
-      'content-type': 'application/json',
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + localStorage.getItem('access_token'),
     },
     body: JSON.stringify(userEdit.value),
-  }).then(async (res) => {
-    if (res.ok) {
+  })
+    .then(async (res) => {
+      if (!res.ok) {
+        await getRefreshToken();
+        return await fetch(
+          `${import.meta.env.VITE_BASE_URL}/users/${params.id}`,
+          {
+            method: 'PUT',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+              Authorization: 'Bearer ' + localStorage.getItem('access_token'),
+            },
+          },
+        );
+      }
+      if (res.ok) {
+        successAlert();
+        setTimeout(() => {
+          editMode.value = false;
+        }, 1500);
+        responeError.value = {};
+        await getUserById(params.id);
+        return;
+      } else {
+        errorAlert();
+        return (responeError.value = await res.json());
+      }
+    })
+    .then(async (res) => {
       successAlert();
       setTimeout(() => {
         editMode.value = false;
@@ -396,11 +553,7 @@ const putUser = async () => {
       responeError.value = {};
       await getUserById(params.id);
       return;
-    } else {
-      errorAlert();
-      return (responeError.value = await res.json());
-    }
-  });
+    });
 };
 </script>
 

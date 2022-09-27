@@ -289,16 +289,16 @@
 import { ref } from '@vue/reactivity';
 import { computed, onBeforeMount, onMounted } from '@vue/runtime-core';
 import moment from 'moment';
-import { getAllEvents, getAllCategory } from '../services/FetchServices.js';
+import { getAllCategory } from '../services/FetchServices.js';
 import { formatDate } from '../services/moment';
 // import moment from 'moment';
 // import 'moment/locale/th';
 
 onBeforeMount(async () => {
-  const res = await getAllEvents();
-  const temp = await getAllCategory();
-  AllEventsData.value = res;
-  AllCategory.value = temp.sort((c) => -1);
+  // const res = await getAllEvents();
+  // const temp = await getAllCategory();
+  // AllEventsData.value = res;
+  // AllCategory.value = temp.sort((c) => -1);
 });
 
 onMounted(() => {
