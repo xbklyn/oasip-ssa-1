@@ -1,17 +1,16 @@
 package sit.int221.oasip.services;
 
+import org.bouncycastle.tsp.TSPUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.server.ResponseStatusException;
-import sit.int221.oasip.dtos.event.DetailEventDTO;
-import sit.int221.oasip.dtos.event.PostEventDTO;
-import sit.int221.oasip.dtos.event.PutEventDTO;
-import sit.int221.oasip.dtos.event.SimpleEventDTO;
+import sit.int221.oasip.dtos.event.*;
 import sit.int221.oasip.dtos.time.TimeDTO;
 import sit.int221.oasip.entities.Event;
 import sit.int221.oasip.entities.User;
@@ -71,15 +70,17 @@ public class EventServices {
     }
 
     public ResponseEntity getEventById(Integer id, Authentication auth ){
-        System.out.println(userRepository.findByUserEmail(String.valueOf(auth.getPrincipal())).get(0).getId());
-        Event event_test = eventRepository.findById(id).orElseThrow();
-        System.out.println(event_test.getUser().getId());
+//        Event event_test = eventRepository.findById(id).orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "not found"));
+//        System.out.println(event_test.getUser().getUserName());
         //Check role if admin
         if(String.valueOf(auth.getAuthorities().toArray()[0]).equals("admin")){
             Event event = eventRepository.findById(id).orElseThrow(() ->
                     new ResponseStatusException(NOT_FOUND, id + "does not exist."));
 
-            if(event.getUser() == null) event.setUser(new User());
+            System.out.println(event.getUser());
+            if(event.getUser() == null){
+                return ResponseEntity.status(200).body(modelMapper.map(event, GuestEventDTO.class));
+            }
             check();
             return ResponseEntity.status(200).body(modelMapper.map(event, DetailEventDTO.class));
         }
