@@ -3,11 +3,11 @@ package sit.int221.oasip.entities;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "eventCategoryOwner")
-public class eventCategoryOwner {
+@Table(name = "eventCategoryOwners")
+public class EventOwner {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "clinicRegistrationId", nullable = false)
+    @Column(name = "categoryOwnerId", nullable = false)
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -18,27 +18,6 @@ public class eventCategoryOwner {
     @JoinColumn(name = "userId", nullable = false)
     private User user;
 
-    @Column(name = "eventCategoryName", nullable = false, length = 100)
-    private String eventCategoryName;
-
-    @Column(name = "userName", nullable = false, length = 100)
-    private String userName;
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getEventCategoryName() {
-        return eventCategoryName;
-    }
-
-    public void setEventCategoryName(String eventCategoryName) {
-        this.eventCategoryName = eventCategoryName;
-    }
 
     public User getUser() {
         return user;

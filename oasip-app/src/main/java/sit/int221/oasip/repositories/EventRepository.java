@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import sit.int221.oasip.entities.Event;
+import sit.int221.oasip.entities.Eventcategory;
 
 import java.util.Date;
 import java.util.List;
@@ -22,6 +23,8 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
     @Modifying(flushAutomatically = true)
     @Query(value = "UPDATE Event e SET e.status = 1 WHERE e.eventEndTime < current_timestamp")
     public void checkStatusComplete();
+
+    public List<Event> findByEventCategory(Eventcategory eventcategory);
 
     // Get Start time for front-end to check overlap
     @Query(value = "SELECT * FROM events WHERE eventCategoryId = :cat_id and date(eventStartTime) = :input_date" , nativeQuery = true)

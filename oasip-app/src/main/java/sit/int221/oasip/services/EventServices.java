@@ -1,9 +1,7 @@
 package sit.int221.oasip.services;
 
-import org.bouncycastle.tsp.TSPUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -13,12 +11,10 @@ import org.springframework.web.server.ResponseStatusException;
 import sit.int221.oasip.dtos.event.*;
 import sit.int221.oasip.dtos.time.TimeDTO;
 import sit.int221.oasip.entities.Event;
+import sit.int221.oasip.entities.EventOwner;
 import sit.int221.oasip.entities.User;
 import sit.int221.oasip.errors.ErrorAdvice;
-import sit.int221.oasip.repositories.EventCategoryRepository;
-import sit.int221.oasip.repositories.EventRepository;
-import sit.int221.oasip.repositories.StatusRepository;
-import sit.int221.oasip.repositories.UserRepository;
+import sit.int221.oasip.repositories.*;
 import sit.int221.oasip.utils.ListMapper;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,10 +23,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.springframework.http.HttpStatus.*;
@@ -46,8 +39,9 @@ public class EventServices {
     private final StatusRepository statusRepository;
     private final ErrorAdvice errorAdvice;
     private final UserRepository userRepository;
+    private final EventOwnerRepository eventOwnerRepository;
 
-    public EventServices(EventRepository eventRepository, ModelMapper modelMapper, ListMapper listMapper, EventCategoryRepository eventCategoryRepository, StatusRepository statusRepository, ErrorAdvice errorAdvice, UserRepository userRepository) {
+    public EventServices(EventRepository eventRepository, ModelMapper modelMapper, ListMapper listMapper, EventCategoryRepository eventCategoryRepository, StatusRepository statusRepository, ErrorAdvice errorAdvice, UserRepository userRepository, EventOwnerRepository eventOwnerRepository) {
         this.eventRepository = eventRepository;
         this.modelMapper = modelMapper;
         this.listMapper = listMapper;
@@ -55,29 +49,51 @@ public class EventServices {
         this.statusRepository = statusRepository;
         this.errorAdvice = errorAdvice;
         this.userRepository = userRepository;
+        this.eventOwnerRepository = eventOwnerRepository;
     }
 
     // GET
     public List<SimpleEventDTO> getAllEvents(Authentication auth) {
         check();
+        if(String.valueOf(auth.getAuthorities().toArray()[0]).equals("lecturer")){
+            User user = userRepository.findByUserEmail(String.valueOf(auth.getPrincipal())).get(0);
+            List<EventOwner> eventOwner = eventOwnerRepository.findByUser(user);
+            List<Event> events = new ArrayList<>();
+            eventOwner.forEach(e -> {
+                List<Event> eventList = eventRepository.findByEventCategory(e.getEventCategory());
+                events.addAll(eventList);
+            });
+            return listMapper.mapList(events , SimpleEventDTO.class , modelMapper);
+        }
         if(String.valueOf(auth.getAuthorities().toArray()[0]).equals("admin")) {
             return listMapper.mapList(eventRepository.findAll(
                     Sort.by("eventStartTime").descending()
             ), SimpleEventDTO.class, modelMapper);
         }
+
         List<Event> events = eventRepository.getByUserEmail(String.valueOf(auth.getPrincipal()));
-       return listMapper.mapList(events, SimpleEventDTO.class , modelMapper);
+        return listMapper.mapList(events, SimpleEventDTO.class , modelMapper);
     }
 
     public ResponseEntity getEventById(Integer id, Authentication auth ){
 //        Event event_test = eventRepository.findById(id).orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "not found"));
 //        System.out.println(event_test.getUser().getUserName());
+        String role = String.valueOf(auth.getAuthorities().toArray()[0]);
+        String email = String.valueOf(auth.getPrincipal());
         //Check role if admin
-        if(String.valueOf(auth.getAuthorities().toArray()[0]).equals("admin")){
+        if(role.equals("admin") || role.equals("lecturer")){
             Event event = eventRepository.findById(id).orElseThrow(() ->
                     new ResponseStatusException(NOT_FOUND, id + "does not exist."));
 
-            System.out.println(event.getUser());
+            if(role.equals("lecturer")){
+                User user = userRepository.findByUserEmail(email).get(0);
+                EventOwner eventOwners = eventOwnerRepository.findByEventCategoryAndUser(event.getEventCategory() , user);
+                return eventOwners == null
+                        ? ResponseEntity.status(403).body("Access Denied")
+                        : Objects.equals(eventOwners.getUser().getId(), user.getId()) && Objects.equals(eventOwners.getEventCategory().getCategoryId(), event.getEventCategory().getCategoryId())
+                            ? ResponseEntity.status(200).body(modelMapper.map(event, DetailEventDTO.class))
+                            : ResponseEntity.status(403).body("Access Denied!");
+            }
             if(event.getUser() == null){
                 return ResponseEntity.status(200).body(modelMapper.map(event, GuestEventDTO.class));
             }
@@ -86,7 +102,7 @@ public class EventServices {
         }
 
         //Check user id is equals to user id in event
-        if(!eventRepository.findById(id).orElseThrow().getUser().getId().equals(userRepository.findByUserEmail(String.valueOf(auth.getPrincipal())).get(0).getId())){
+        if(!eventRepository.findById(id).orElseThrow().getUser().getId().equals(userRepository.findByUserEmail(email).get(0).getId())){
             Map<String , String > error = new HashMap<>();
             error.put("Unauthorized" , "Access Denied.");
             return ResponseEntity.status(403).body(error);
