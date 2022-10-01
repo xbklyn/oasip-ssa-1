@@ -8,20 +8,25 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.server.ResponseStatusException;
+import sit.int221.oasip.dtos.Email.EmailDTO;
 import sit.int221.oasip.dtos.event.*;
 import sit.int221.oasip.dtos.time.TimeDTO;
 import sit.int221.oasip.entities.Event;
 import sit.int221.oasip.entities.EventOwner;
+import sit.int221.oasip.entities.Eventcategory;
 import sit.int221.oasip.entities.User;
 import sit.int221.oasip.errors.ErrorAdvice;
 import sit.int221.oasip.repositories.*;
 import sit.int221.oasip.utils.ListMapper;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -40,8 +45,9 @@ public class EventServices {
     private final ErrorAdvice errorAdvice;
     private final UserRepository userRepository;
     private final EventOwnerRepository eventOwnerRepository;
+    private final EmailService emailService;
 
-    public EventServices(EventRepository eventRepository, ModelMapper modelMapper, ListMapper listMapper, EventCategoryRepository eventCategoryRepository, StatusRepository statusRepository, ErrorAdvice errorAdvice, UserRepository userRepository, EventOwnerRepository eventOwnerRepository) {
+    public EventServices(EventRepository eventRepository, ModelMapper modelMapper, ListMapper listMapper, EventCategoryRepository eventCategoryRepository, StatusRepository statusRepository, ErrorAdvice errorAdvice, UserRepository userRepository, EventOwnerRepository eventOwnerRepository, EmailService emailService) {
         this.eventRepository = eventRepository;
         this.modelMapper = modelMapper;
         this.listMapper = listMapper;
@@ -50,6 +56,7 @@ public class EventServices {
         this.errorAdvice = errorAdvice;
         this.userRepository = userRepository;
         this.eventOwnerRepository = eventOwnerRepository;
+        this.emailService = emailService;
     }
 
     // GET
@@ -118,7 +125,7 @@ public class EventServices {
     }
 
     // POST
-    public ResponseEntity save(PostEventDTO newEvent, HttpServletRequest req, Authentication auth) throws MethodArgumentNotValidException {
+    public ResponseEntity save(PostEventDTO newEvent, HttpServletRequest req, Authentication auth) throws MethodArgumentNotValidException, ParseException {
         if(String.valueOf(auth.getAuthorities().toArray()[0]).equals("lecturer")) return ResponseEntity.status(403).body("Access Denied");
         if(String.valueOf(auth.getAuthorities().toArray()[0]).equals("admin") || newEvent.getBookingEmail().equals(String.valueOf(auth.getPrincipal()))) {
             //Check future date
@@ -128,7 +135,6 @@ public class EventServices {
             String regex = "^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
             if(!newEvent.getBookingEmail().matches(regex))
                 return ResponseEntity.status(400).body(errorAdvice.getResponseEntity("bookingEmail" , "must be a well-formed email address" , req));
-
             Event event = modelMapper.map(newEvent, Event.class);
             event.setEventCategory(eventCategoryRepository.findById(newEvent.getCategoryId()).orElseThrow(() ->
                     new ResponseStatusException(NOT_FOUND)));
@@ -138,15 +144,36 @@ public class EventServices {
             LocalDateTime endTime = newEvent.getEventStartTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().plus(Duration.of(event.getEventDuration(), ChronoUnit.MINUTES));
             event.setEventEndTime(Date.from(endTime.atZone(ZoneId.systemDefault()).toInstant()));
 
-            User user = userRepository.findByUserEmail(String.valueOf(newEvent.getBookingEmail())).get(0) == null ? userRepository.findByUserEmail(String.valueOf(auth.getPrincipal())).get(0) : userRepository.findByUserEmail(String.valueOf(newEvent.getBookingEmail())).get(0);
-            event.setUser(user);
+            User user = userRepository.findByUserEmail(String.valueOf(newEvent.getBookingEmail())).size() == 0
+                    ? userRepository.findByUserEmail(String.valueOf(auth.getPrincipal())).get(0)
+                    : userRepository.findByUserEmail(String.valueOf(newEvent.getBookingEmail())).get(0);
+            System.out.println(user);
+
+            System.out.println("Add everything");
             //Check Overlap
             if(checkIsOverlap(event))
                 return ResponseEntity.status(400).body(errorAdvice.getResponseEntity("eventStartTime" , "Time is overlapping" , req));
             check();
+            sendEmail(event);
             return ResponseEntity.status(201).body(eventRepository.saveAndFlush(event));
         }
         return ResponseEntity.status(400).body("booking email must be the same as the student's email");
+    }
+
+    private void sendEmail(Event newEvent) throws ParseException {
+        System.out.println("In sending email");
+        EmailDTO details = new EmailDTO();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM-dd-yy");
+
+
+        details.setSubject("[OASIP] " + newEvent.getEventCategory().getEventCategoryName() + " @ " + newEvent.getEventStartTime() );
+        details.setRecipient(newEvent.getBookingEmail());
+        details.setMsgBody("Booking name :: " + newEvent.getBookingName() +
+                           "\nClinic :: " + newEvent.getEventCategory().getEventCategoryName() +
+                           "\nWhen :: " + newEvent.getEventStartTime() + " - " + newEvent.getEventEndTime() +
+                           "\nNotes :: " + newEvent.getEventNotes());
+
+        emailService.sendSimpleMail(details);
     }
 
     // DELETE

@@ -18,6 +18,7 @@ import sit.int221.oasip.services.EventServices;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.text.ParseException;
 import java.util.List;
 
 @CrossOrigin("*")
@@ -68,7 +69,7 @@ public class EventsController {
            @Valid @RequestBody PostEventDTO newEvent,
            HttpServletRequest req,
            Authentication auth
-    ) throws MethodArgumentNotValidException {
+    ) throws MethodArgumentNotValidException, ParseException {
         return eventServices.save(newEvent , req , auth);
     }
 
