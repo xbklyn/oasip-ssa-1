@@ -119,7 +119,7 @@ public class EventServices {
 
     // POST
     public ResponseEntity save(PostEventDTO newEvent, HttpServletRequest req, Authentication auth) throws MethodArgumentNotValidException {
-
+        if(String.valueOf(auth.getAuthorities().toArray()[0]).equals("lecturer")) return ResponseEntity.status(403).body("Access Denied");
         if(String.valueOf(auth.getAuthorities().toArray()[0]).equals("admin") || newEvent.getBookingEmail().equals(String.valueOf(auth.getPrincipal()))) {
             //Check future date
             if(newEvent.getEventStartTime().before(new Date()))
@@ -151,6 +151,7 @@ public class EventServices {
 
     // DELETE
     public ResponseEntity delete(Integer id, Authentication auth) {
+        if(String.valueOf(auth.getAuthorities().toArray()[0]).equals("lecturer")) return ResponseEntity.status(403).body("Access Denied");
         if(String.valueOf(auth.getAuthorities().toArray()[0]).equals("admin") || eventRepository.findById(id).orElseThrow().getUser().getUserEmail().equals(String.valueOf(auth.getPrincipal()))){
             eventRepository.deleteById(id);
             check();
@@ -163,6 +164,8 @@ public class EventServices {
 
     // PUT
     public ResponseEntity update(Integer id , PutEventDTO editEvent , Authentication auth){
+        if(String.valueOf(auth.getAuthorities().toArray()[0]).equals("lecturer")) return ResponseEntity.status(403).body("Access Denied");
+
         Event event = eventRepository.findById(id).orElseThrow(() ->
             new ResponseStatusException(NOT_FOUND));
 
