@@ -95,7 +95,7 @@ COLLATE = utf8mb4_0900_ai_ci;
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'OASIP ADMIN','oasip.admin@kmutt.ac.th','$argon2id$v=19$m=4096,t=3,p=1$sYXzbUOqBoHY1NfhJ8cjnw$H6+adWySiFPgcUogJK3hEhcF6Y4fusy7tcXYEL+f0cQ','2022-07-31 17:00:00','2022-07-31 17:00:00',1),(2,'Somchai Jaidee','somchai.jai@kmutt.ac.th','$argon2id$v=19$m=4096,t=3,p=1$dmsOy7LPTjmooPu+P2oTZA$NZFTFd3f0K1Sp19aaUwyn3jgiy15yFcXhp8E4/1yXoI','2022-08-08 08:00:00','2022-08-08 08:00:00',2),(3,'Komkrid Rakdee','komkrid.rak@mail.kmutt.ac.th','$argon2id$v=19$m=4096,t=3,p=1$8W61ZOC5RU7sJP5kKRbSqg$OLwZNPeMqxp+g0Vbn+odcA47XMClFN+IswTueVah7F0','2022-08-08 08:00:01','2022-08-08 08:00:01',3),(4,'สมเกียรติ ขยันเรียน','somkiat.kay@kmutt.ac.th','$argon2id$v=19$m=4096,t=3,p=1$gBqgjspF45FcIKQEw8GmaQ$alrOCZ0YrDqOu8/aZiLDMGZo4vFkSEAXA0YoHhY0BDQ','2022-08-16 02:00:00','2022-08-16 02:00:00',3);
+INSERT INTO `users` VALUES (1,'OASIP ADMIN','oasip.admin@kmutt.ac.th','$argon2id$v=19$m=4096,t=3,p=1$sYXzbUOqBoHY1NfhJ8cjnw$H6+adWySiFPgcUogJK3hEhcF6Y4fusy7tcXYEL+f0cQ','2022-07-31 17:00:00','2022-07-31 17:00:00',1),(2,'Olarn Rojanapornpun','olarn.roj@kmutt.ac.th','$argon2id$v=19$m=4096,t=3,p=1$Sx7y2jxKZSjpWUV4srd8eg$AMH09iFiPQgAZ00cAdN3Gucqfhx2kRo3tQbHeLSR0RE','2022-08-08 08:00:00','2022-08-08 08:00:00',2),(3,'Pichet Limvachiranan','pichet.limv@kmutt.ac.th','$argon2id$v=19$m=4096,t=3,p=1$46EB43gQ46Z1/EmdqxtKNA$7m6cWGO2iDlFl/ETDYuYf+ArnSjRnsNwXLIP18DTYQY','2022-08-08 08:00:01','2022-08-08 08:00:01',2),(4,'Umaporn Supasitthimethee','umaporn.sup@kmutt.ac.th','$argon2id$v=19$m=4096,t=3,p=1$1Z2UK1zC76FIQeLH54GVAQ$qfXcHF31LnuWpt37QAcWyNp8PdbOQ+jjaV1xWXixS0M','2022-08-08 08:00:02','2022-08-08 08:00:02',2),(5,'Siam Yamsaengsung','siam.yam@kmutt.ac.th','$argon2id$v=19$m=4096,t=3,p=1$wTQSpCANrDkwNngTIuy6Tw$MbNNuhG/wYxqkBi4mET2AT6hyEDSHs7pnhfaZeXE4Qs','2022-08-08 08:00:03','2022-08-08 08:00:03',2),(6,'Sunisa Sathapornvajana','sunisa.sat@kmutt.ac.th','$argon2id$v=19$m=4096,t=3,p=1$29/ffaszvjvi3CZO45bSCg$kKpfq5WEswoqa/LfyIZzQaQ6AFdjhyiYjXRCfMiTnwg','2022-08-08 08:00:04','2022-08-08 08:00:04',2),(7,'Somchai Jaidee','somchai.jai@kmutt.ac.th','$argon2id$v=19$m=4096,t=3,p=1$dmsOy7LPTjmooPu+P2oTZA$NZFTFd3f0K1Sp19aaUwyn3jgiy15yFcXhp8E4/1yXoI','2022-08-08 08:00:00','2022-08-08 08:00:00',2),(8,'Komkrid Rakdee','komkrid.rak@mail.kmutt.ac.th','$argon2id$v=19$m=4096,t=3,p=1$8W61ZOC5RU7sJP5kKRbSqg$OLwZNPeMqxp+g0Vbn+odcA47XMClFN+IswTueVah7F0','2022-08-08 08:00:01','2022-08-08 08:00:01',3),(9,'สมเกียรติ ขยันเรียน','somkiat.kay@kmutt.ac.th','$argon2id$v=19$m=4096,t=3,p=1$gBqgjspF45FcIKQEw8GmaQ$alrOCZ0YrDqOu8/aZiLDMGZo4vFkSEAXA0YoHhY0BDQ','2022-08-16 02:00:00','2022-08-16 02:00:00',3);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -119,6 +119,15 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
+--
+-- Dumping data for table `eventCategoryOwners`
+--
+
+LOCK TABLES `eventCategoryOwners` WRITE;
+/*!40000 ALTER TABLE `eventCategoryOwners` DISABLE KEYS */;
+INSERT INTO `eventCategoryOwners` VALUES (1,1,2),(2,2,5),(3,2,2),(4,3,6),(5,4,4),(6,5,3),(7,5,2);
+/*!40000 ALTER TABLE `eventCategoryOwners` ENABLE KEYS */;
+UNLOCK TABLES;
 
 -- -----------------------------------------------------
 -- Table `oasip`.`status`
@@ -177,11 +186,15 @@ AUTO_INCREMENT = 85
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
--- value in events
-INSERT INTO events
-VALUES (1,'Somchai Jaidee (OR-7)','somchai.jai@mail.kmutt.ac.th','2022-05-23 13:30:00','2022-05-23 14:00:00',30,'',2,1,2),
-(2,'Somsri Rakdee (SJ-3)','somsri.rak@mail.kmutt.ac.th','2022-04-27 09:30:00','2022-04-27 10:00:00',30,'ขอปรึกษาปัญหาเพื่อนไม่ช่วยงาน',1,1,null),
-(3, 'สมเกียรติ ขยันเรียน  (TT-4)','somkiat.kay@kmutt.ac.th','2022-05-23 16:30:00','2022-05-23 17:00:00',15,'',3,1,4);
+--
+-- Dumping data for table `events`
+--
+
+LOCK TABLES `events` WRITE;
+/*!40000 ALTER TABLE `events` DISABLE KEYS */;
+INSERT INTO `events` VALUES (1,'Somchai Jaidee (OR-7)','somchai.jai@mail.kmutt.ac.th','2022-05-23 13:30:00','2022-05-23 14:00:00',30,'',2,1,7),(2,'Somsri Rakdee (SJ-3)','somsri.rak@mail.kmutt.ac.th','2022-04-27 09:30:00','2022-04-27 10:00:00',30,'ขอปรึกษาปัญหาเพื่อนไม่ช่วยงาน',1,1,NULL),(3,'สมเกียรติ ขยันเรียน  (TT-4)','somkiat.kay@kmutt.ac.th','2022-05-23 16:30:00','2022-05-23 17:00:00',15,'',3,1,9);
+/*!40000 ALTER TABLE `events` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
 SET SQL_MODE=@OLD_SQL_MODE;
