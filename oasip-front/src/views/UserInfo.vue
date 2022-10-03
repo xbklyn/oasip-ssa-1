@@ -369,9 +369,9 @@ const checkedPassword = async () => {
     }),
   });
   if (res.ok) {
-    alert('ทำได้ดี');
+    alert('Match');
   } else {
-    alert('ยังไม่เนียนไปเรียนมาใหม่');
+    alert('Not Match');
   }
 };
 
@@ -408,7 +408,7 @@ const getRefreshToken = async () => {
       localStorage.removeItem('access_token');
       localStorage.removeItem('refresh_token');
       localStorage.removeItem('userRole');
-      alert('เวลาของคุณได้หมดลงแล้วกรุณาเติมเงินด้วยค่ะ');
+      alert('Your session has expired. Please log in again.');
       setTimeout(() => {
         location.reload(1);
       }, 1);

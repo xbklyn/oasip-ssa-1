@@ -24,7 +24,7 @@
       <div class="flex justify-items-center items-center">
         <img
           class="h-36 w-36 rounded-full"
-          src="../assets/profile/std-065.jpeg"
+          src="../assets/profile.png"
           alt=""
         />
         <div class="ml-8">

@@ -281,7 +281,7 @@ const getEventById = async (id) => {
   if (res.ok) {
     return (eventInfoById.value = await res.json());
   } else {
-    alert('สวัสดีครับผมไม่รู้จะใส่อะไร');
+    alert(`You don't have permissions`);
     return myRouter.push('/scheduled');
   }
 };

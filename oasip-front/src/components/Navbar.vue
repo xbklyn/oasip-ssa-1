@@ -79,7 +79,7 @@
         <div class="flex-shrink-0" @click="opencloseMenu">
           <img
             class="h-12 w-12 rounded-full"
-            src="../assets/profile/std-065.jpeg"
+            src="../assets/profile.png"
             alt=""
           />
         </div>
@@ -89,7 +89,7 @@
           class="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
         >
           <div class="py-1" role="none">
-            <router-link
+            <router-lin
               :to="{ name: 'account' }"
               class="flex place-items-center hover:bg-gray-100"
             >
@@ -105,7 +105,7 @@
                 </svg>
                 <p>Account</p>
               </button>
-            </router-link>
+            </router-lin>
             <router-link
               :to="{ name: 'clinic-manage' }"
               class="flex place-items-center hover:bg-gray-100"

@@ -84,7 +84,7 @@ const userLogin = async () => {
         body: JSON.stringify(login.value),
       }).then(async (res) => {
         if (res.ok) {
-          alert('Login ได้แล้วเย้ เหนื่อยดีจัง');
+          alert('Login Successfully');
 
           let token = await res.json();
           localStorage.setItem('access_token', token.access_token);
@@ -104,7 +104,7 @@ const userLogin = async () => {
         }
       });
     } else {
-      alert('ว้ายๆๆๆ ไม่รู้รหัส');
+      alert('Invalid email or password, please try again.');
       return (responeError.value = await res.json());
     }
   });
