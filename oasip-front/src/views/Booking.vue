@@ -82,14 +82,15 @@
       </div>
       <div class="space-y-6">
         <!-- Input - Email -->
-        <div class="relative" v-if="userRole === 'admin'">
+        <div class="relative" >
           <input
+          :disabled="userRole !== 'admin'"
             type="text"
             id="email"
             v-model="email"
             @change="isEmailValid"
             :class="[
-              'l-w-612 h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer',
+              'l-w-612 h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer disabled:bg-gray-50 disabled:text-gray-400',
               wrongEmail || email.length > 100
                 ? 'border-red-500 focus:border-red-500'
                 : '',

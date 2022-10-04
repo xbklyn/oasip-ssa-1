@@ -81,8 +81,9 @@
           Edit
         </button>
         <button
+        :disabled="userRole === 'lecturer'"
           @click="show = true"
-          class="w-20 h-8 bg-red-500 text-white font-medium hover:bg-red-700 hover:text-white duration-150"
+          class="w-20 h-8 bg-red-500 text-white font-medium hover:bg-red-700 hover:text-white duration-150 disabled:border-gray-300 disabled:bg-gray-200 disabled:border disabled:text-gray-400"
         >
           Delete
         </button>
@@ -264,6 +265,14 @@ onBeforeMount(async () => {
   // const res = await getEventById(params.id)
   // eventInfoById.value = res
   await getEventById();
+});
+
+const userRole = computed(() => {
+  try {
+    return localStorage.getItem("userRole");
+  } catch (error) {
+    return false;
+  }
 });
 
 const getEventById = async (id) => {

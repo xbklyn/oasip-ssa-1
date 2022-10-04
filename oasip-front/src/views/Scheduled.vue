@@ -106,6 +106,8 @@
 import { ref, onBeforeMount, computed } from 'vue';
 import { getRefreshToken, getAllCategory } from '../services/FetchServices.js';
 import BaseEvent from '../components/BaseEvent.vue';
+import { useRouter } from 'vue-router';
+const myRouter = useRouter();
 
 onBeforeMount(async () => {
   //   const res = await getAllEvents();
@@ -146,7 +148,9 @@ const getEvents = async () => {
       console.log(data);
       return (AllEventsData.value = data);
       // return await res.json();
-    });
+    }).catch((err) => {
+      myRouter.push('/')
+    })
 };
 
 // Filter - event category

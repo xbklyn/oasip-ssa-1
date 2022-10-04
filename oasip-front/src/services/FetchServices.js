@@ -1,3 +1,4 @@
+
 import { useRouter } from 'vue-router';
 const myRouter = useRouter();
 
@@ -179,31 +180,30 @@ export const editCategoryById = async (category) => {
 };
 
 export const getRefreshToken = async () => {
-  let res = await fetch(`${import.meta.env.VITE_BASE_URL}/auth/refresh_token`, {
-    method: 'GET',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + localStorage.getItem('refresh_token'),
-    },
-  }).then(async (res) => {
-    if (!res.ok) {
-      // localStorage.removeItem('access_token');
-      // localStorage.removeItem('refresh_token');
-      // localStorage.removeItem('userRole');
-      localStorage.clear();
-      alert('เวลาของคุณได้หมดลงแล้วกรุณาเติมเงินด้วยค่ะ');
-      setTimeout(() => {
-        location.reload(1);
-      }, 1);
-      myRouter.push({ name: 'Home' });
-    }
-    if (res.ok) {
-      let token = await res.json();
-      localStorage.setItem('access_token', token.access_token);
-      localStorage.setItem('refresh_token', token.refresh_token);
-    }
-  });
+  if (!(localStorage.getItem('refresh_token'))) {
+    alert('You session is ended, Please login')
+     myRouter.push('/')
+  }
+  else {
+    await fetch(`${import.meta.env.VITE_BASE_URL}/auth/refresh_token`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + localStorage.getItem('refresh_token'),
+      },
+    }).then(async (res) => {
+      if (!res.ok) {
+        localStorage.clear();
+        alert('You session is ended, Please login');
+      }
+      if (res.ok) {
+        let token = await res.json();
+        localStorage.setItem('access_token', token.access_token);
+        localStorage.setItem('refresh_token', token.refresh_token);
+      }
+    });
+  }
 };
 
 // // GET METHOD - Get all users

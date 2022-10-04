@@ -49,7 +49,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and().authorizeHttpRequests().antMatchers("/api/auth/refresh_token" ,"/api/auth/login","/api/auth/check" , "/api/home/events" , "/api/home/category").permitAll()
                 .and().cors()
                 .and().authorizeHttpRequests().antMatchers( "/api/users/**" , "/api/auth/match").hasAuthority("admin")
-                .and().authorizeHttpRequests().antMatchers("/api/category/**").hasAnyAuthority("lecturer" , "admin")
+//                .and().authorizeHttpRequests().antMatchers("/api/category/**").hasAnyAuthority("lecturer" , "admin")
                 .and().authorizeHttpRequests().anyRequest().authenticated()
                 .and().addFilter(customAuthenticationFilter)
                 .addFilterBefore(new CustomAuthorizationFilter() , UsernamePasswordAuthenticationFilter.class)

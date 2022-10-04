@@ -27,7 +27,7 @@
               class="hover:text-blue-500 duration-150"
               >Scheduled
             </router-link>
-            <router-link
+            <router-link v-if="userRole && userRole !== 'lecturer'"
               :to="{ name: 'Booking' }"
               class="hover:text-blue-500 duration-150"
               >Booking
@@ -591,6 +591,15 @@
   </footer>
 </template>
 
-<script setup></script>
+<script setup>
+  import {  computed } from '@vue/runtime-core';
+  const userRole = computed(() => {
+  try {
+    return localStorage.getItem('userRole');
+  } catch (error) {
+    return false;
+  }
+});
+</script>
 
 <style></style>

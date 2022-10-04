@@ -54,7 +54,11 @@
 
     <!-- Booking && Manage -->
     <div class="grid grid-cols-2 justify-self-end gap-x-6 mr-4">
-      <router-link :to="{ name: 'Booking' }" class="flex place-items-center">
+      <router-link
+        :to="{ name: 'Booking' }"
+        class="flex place-items-center"
+        v-if="userRole && userRole !== 'lecturer'"
+      >
         <button
           class="w-28 h-10 bg-white font-light text-sm grid place-items-center border border-green-600 text-green-600 hover:bg-gradient-to-tl to-emerald-400 from-lime-500 hover:border-none hover:text-white hover:border-2 duration-150"
         >
@@ -89,7 +93,11 @@
           class="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
         >
           <div class="py-1" role="none">
-            <router-lin
+            <div class="px-4 py-2">
+              <p class="text-xs l-color-gray-300 truncate">Login as <span>{{ userEmail }}</span></p>
+              <p class="l-text-xxs l-color-gray-300" >Role: {{ userRole }}</p>
+            </div>
+            <router-link
               :to="{ name: 'account' }"
               class="flex place-items-center hover:bg-gray-100"
             >
@@ -105,7 +113,7 @@
                 </svg>
                 <p>Account</p>
               </button>
-            </router-lin>
+            </router-link>
             <router-link
               :to="{ name: 'clinic-manage' }"
               class="flex place-items-center hover:bg-gray-100"
@@ -138,27 +146,34 @@
 </template>
 
 <script setup>
-import { ref, computed, onBeforeMount, onMounted } from '@vue/runtime-core';
-import { useRouter } from 'vue-router';
+import { ref, computed, onBeforeMount, onMounted } from "@vue/runtime-core";
+import { useRouter } from "vue-router";
 const myRouter = useRouter();
 
 const access_token = computed(() => {
   try {
-    return localStorage.getItem('access_token');
+    return localStorage.getItem("access_token");
   } catch (error) {
     return null;
   }
 });
 const userRole = computed(() => {
   try {
-    return localStorage.getItem('userRole');
+    return localStorage.getItem("userRole");
+  } catch (error) {
+    return false;
+  }
+});
+const userEmail = computed(() => {
+  try {
+    return localStorage.getItem("userEmail");
   } catch (error) {
     return false;
   }
 });
 const refresh_token = computed(() => {
   try {
-    return localStorage.getItem('refresh_token');
+    return localStorage.getItem("refresh_token");
   } catch (error) {
     return null;
   }
@@ -177,7 +192,7 @@ const sign_out = () => {
   setTimeout(() => {
     location.reload(1);
   });
-  myRouter.push('/');
+  myRouter.push("/");
 };
 const showUserMenu = ref(false);
 const opencloseMenu = () => {
