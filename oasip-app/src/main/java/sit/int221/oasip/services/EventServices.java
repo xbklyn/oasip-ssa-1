@@ -2,7 +2,9 @@ package sit.int221.oasip.services;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -62,61 +64,59 @@ public class EventServices {
     // GET
     public List<SimpleEventDTO> getAllEvents(Authentication auth) {
         check();
-        if(String.valueOf(auth.getAuthorities().toArray()[0]).equals("lecturer")){
-            User user = userRepository.findByUserEmail(String.valueOf(auth.getPrincipal())).get(0);
-            List<EventOwner> eventOwner = eventOwnerRepository.findByUser(user);
-            List<Event> events = new ArrayList<>();
-            eventOwner.forEach(e -> {
-                List<Event> eventList = eventRepository.findByEventCategory(e.getEventCategory());
-                events.addAll(eventList);
-            });
-            return listMapper.mapList(events , SimpleEventDTO.class , modelMapper);
-        }
-        if(String.valueOf(auth.getAuthorities().toArray()[0]).equals("admin")) {
-            return listMapper.mapList(eventRepository.findAll(
-                    Sort.by("eventStartTime").descending()
-            ), SimpleEventDTO.class, modelMapper);
-        }
 
-        List<Event> events = eventRepository.getByUserEmail(String.valueOf(auth.getPrincipal()));
-        return listMapper.mapList(events, SimpleEventDTO.class , modelMapper);
+        String role = String.valueOf(auth.getAuthorities().toArray()[0]);
+        String email = auth.getPrincipal().toString();
+
+        switch (role) {
+            case "lecturer": {
+                System.out.println("In lecturer case");
+                User user = userRepository.findByUserEmail(String.valueOf(auth.getPrincipal())).get(0);
+                List<EventOwner> eventOwner = eventOwnerRepository.findByUser(user);
+                List<Event> events = new ArrayList<>();
+                eventOwner.forEach(e -> {
+                    List<Event> eventList = eventRepository.findByEventCategory(e.getEventCategory());
+                    events.addAll(eventList);
+                });
+                return listMapper.mapList(events, SimpleEventDTO.class, modelMapper);
+            }
+            case "admin": {
+                return listMapper.mapList(eventRepository.findAll(
+                        Sort.by("eventStartTime").descending()
+                ), SimpleEventDTO.class, modelMapper);
+            }
+            case "student" : {
+                List<Event> events = eventRepository.getByUserEmail(String.valueOf(auth.getPrincipal()));
+                return listMapper.mapList(events, SimpleEventDTO.class , modelMapper);
+            }
+        }
+        throw new ResponseStatusException(INTERNAL_SERVER_ERROR, "Something went wrong.");
     }
 
     public ResponseEntity getEventById(Integer id, Authentication auth ){
-//        Event event_test = eventRepository.findById(id).orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "not found"));
-//        System.out.println(event_test.getUser().getUserName());
         String role = String.valueOf(auth.getAuthorities().toArray()[0]);
         String email = String.valueOf(auth.getPrincipal());
         //Check role if admin
-        if(role.equals("admin") || role.equals("lecturer")){
-            Event event = eventRepository.findById(id).orElseThrow(() ->
-                    new ResponseStatusException(NOT_FOUND, id + "does not exist."));
+        Event event = eventRepository.findById(id).orElseThrow(() ->
+                new ResponseStatusException(NOT_FOUND, id + "does not exist."));
 
-            if(role.equals("lecturer")){
-                User user = userRepository.findByUserEmail(email).get(0);
-                EventOwner eventOwners = eventOwnerRepository.findByEventCategoryAndUser(event.getEventCategory() , user);
-                return eventOwners == null
-                        ? ResponseEntity.status(403).body("Access Denied")
-                        : Objects.equals(eventOwners.getUser().getId(), user.getId()) && Objects.equals(eventOwners.getEventCategory().getCategoryId(), event.getEventCategory().getCategoryId())
+        switch (role) {
+            case "admin" : {
+                return ResponseEntity.status(200).body(modelMapper.map(event , DetailEventDTO.class));
+            }
+            case "lecturer" : {
+                return eventOwnerRepository.findByEventCategoryAndUser(event.getEventCategory() , userRepository.findByUserEmail(email).get(0)) != null
                             ? ResponseEntity.status(200).body(modelMapper.map(event, DetailEventDTO.class))
-                            : ResponseEntity.status(403).body("Access Denied!");
+                            : ResponseEntity.status(403).body("Access Denied");
             }
-            if(event.getUser() == null){
-                return ResponseEntity.status(200).body(modelMapper.map(event, GuestEventDTO.class));
+            case "student" : {
+                return eventRepository.findById(id).orElseThrow().getBookingEmail().equals(userRepository.findByUserEmail(email).get(0).getUserEmail())
+                            ? ResponseEntity.status(200).body(modelMapper.map(event, DetailEventDTO.class))
+                            : ResponseEntity.status(403).body("Access Denied");
             }
-            check();
-            return ResponseEntity.status(200).body(modelMapper.map(event, DetailEventDTO.class));
         }
 
-        //Check user id is equals to user id in event
-        if(!eventRepository.findById(id).orElseThrow().getUser().getId().equals(userRepository.findByUserEmail(email).get(0).getId())){
-            Map<String , String > error = new HashMap<>();
-            error.put("Unauthorized" , "Access Denied.");
-            return ResponseEntity.status(403).body(error);
-        }
-
-        return ResponseEntity.status(200).body(modelMapper.map(eventRepository.findById(id).get(), DetailEventDTO.class));
-
+        throw new ResponseStatusException(INTERNAL_SERVER_ERROR , "Something went wrong.");
     }
 
     public List<TimeDTO> getEventByCatIdAndDate(Integer catId , String date){
@@ -126,38 +126,56 @@ public class EventServices {
 
     // POST
     public ResponseEntity save(PostEventDTO newEvent, HttpServletRequest req, Authentication auth) throws MethodArgumentNotValidException, ParseException {
-        if(String.valueOf(auth.getAuthorities().toArray()[0]).equals("lecturer")) return ResponseEntity.status(403).body("Access Denied");
-        if(String.valueOf(auth.getAuthorities().toArray()[0]).equals("admin") || newEvent.getBookingEmail().equals(String.valueOf(auth.getPrincipal()))) {
-            //Check future date
-            if(newEvent.getEventStartTime().before(new Date()))
-                return ResponseEntity.status(400).body(errorAdvice.getResponseEntity("eventStartTime" , "Time must be in a future" , req));
-            //Check valid Email
-            String regex = "^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
-            if(!newEvent.getBookingEmail().matches(regex))
-                return ResponseEntity.status(400).body(errorAdvice.getResponseEntity("bookingEmail" , "must be a well-formed email address" , req));
-            Event event = modelMapper.map(newEvent, Event.class);
-            event.setEventCategory(eventCategoryRepository.findById(newEvent.getCategoryId()).orElseThrow(() ->
-                    new ResponseStatusException(NOT_FOUND)));
-            event.setStatus(statusRepository.findById(3).orElseThrow());
-            event.setEventDuration(event.getEventCategory().getEventCategoryDuration());
-            //Add to end time
-            LocalDateTime endTime = newEvent.getEventStartTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().plus(Duration.of(event.getEventDuration(), ChronoUnit.MINUTES));
-            event.setEventEndTime(Date.from(endTime.atZone(ZoneId.systemDefault()).toInstant()));
 
-            User user = userRepository.findByUserEmail(String.valueOf(newEvent.getBookingEmail())).size() == 0
-                    ? userRepository.findByUserEmail(String.valueOf(auth.getPrincipal())).get(0)
-                    : userRepository.findByUserEmail(String.valueOf(newEvent.getBookingEmail())).get(0);
-            System.out.println(user);
+        String role = String.valueOf(auth.getAuthorities().toArray()[0]);
+        String email = auth.getPrincipal().toString();
 
-            System.out.println("Add everything");
-            //Check Overlap
-            if(checkIsOverlap(event))
-                return ResponseEntity.status(400).body(errorAdvice.getResponseEntity("eventStartTime" , "Time is overlapping" , req));
-            check();
-            sendEmail(event);
-            return ResponseEntity.status(201).body(eventRepository.saveAndFlush(event));
+        switch (role) {
+            case "lecturer":
+                return ResponseEntity.status(403).body("Access Denied");
+            case "student": {
+                if (!newEvent.getBookingEmail().equals(email))
+                    return ResponseEntity.status(400).body("Booking email must be the same as the student's email!");
+
+                Event created_event = createEvent(newEvent);
+                sendEmail(created_event);
+                return ResponseEntity.status(201).body("Sucessfully Created!");
+            }
+            default: {
+                Event created_event = createEvent(newEvent);
+                sendEmail(created_event);
+                return ResponseEntity.status(201).body("Sucessfully Created!");
+            }
         }
-        return ResponseEntity.status(400).body("booking email must be the same as the student's email");
+    }
+
+    private Event createEvent(PostEventDTO newEvent){
+        //Check future date
+        if(newEvent.getEventStartTime().before(new Date()))
+            throw new ResponseStatusException(BAD_REQUEST, "Time must be in a future");
+
+        //Check valid Email
+        String regex = "^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
+        if(!newEvent.getBookingEmail().matches(regex))
+            throw new ResponseStatusException(BAD_REQUEST, "Email must be a well-formed email address");
+
+        Event event = modelMapper.map(newEvent, Event.class);
+
+        event.setEventCategory(eventCategoryRepository.findById(newEvent.getCategoryId()).orElseThrow(() ->
+                new ResponseStatusException(NOT_FOUND)));
+        event.setStatus(statusRepository.findById(3).orElseThrow());
+        event.setEventDuration(event.getEventCategory().getEventCategoryDuration());
+
+        //Add to end time
+        LocalDateTime endTime = newEvent.getEventStartTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().plus(Duration.of(event.getEventDuration(), ChronoUnit.MINUTES));
+        event.setEventEndTime(Date.from(endTime.atZone(ZoneId.systemDefault()).toInstant()));
+
+        User user = userRepository.findByUserEmail(newEvent.getBookingEmail()).size() != 0
+                ? userRepository.findByUserEmail(newEvent.getBookingEmail()).get(0)
+                : null;
+
+        event.setUser(user);
+        return eventRepository.saveAndFlush(event);
     }
 
     private void sendEmail(Event newEvent) throws ParseException {
@@ -178,39 +196,51 @@ public class EventServices {
 
     // DELETE
     public ResponseEntity delete(Integer id, Authentication auth) {
-        if(String.valueOf(auth.getAuthorities().toArray()[0]).equals("lecturer")) return ResponseEntity.status(403).body("Access Denied");
-        if(String.valueOf(auth.getAuthorities().toArray()[0]).equals("admin") || eventRepository.findById(id).orElseThrow().getUser().getUserEmail().equals(String.valueOf(auth.getPrincipal()))){
-            eventRepository.deleteById(id);
-            check();
-            return ResponseEntity.status(200).body("Delete sucessfully!");
+
+        String role = String.valueOf(auth.getAuthorities().toArray()[0]);
+        String email = auth.getPrincipal().toString();
+
+        switch (role) {
+            case "lecturer" :
+                return ResponseEntity.status(403).body("Access Denied");
+            case "admin" : {
+                eventRepository.deleteById(id);
+                check();
+                return ResponseEntity.status(200).body("Successfully deleted!");
+            }
+            case "student" : {
+                if(!email.equals(eventRepository.findById(id).orElseThrow().getUser().getUserEmail())) return ResponseEntity.status(403).body("Access Denied");
+                eventRepository.deleteById(id);
+                check();
+                return ResponseEntity.status(200).body("Successfully deleted!");
+            }
         }
-        Map<String, String> error = new HashMap<>();
-        error.put("Unauthorized","Access Denied.");
-        return ResponseEntity.status(403).body(error);
+        throw new ResponseStatusException(INTERNAL_SERVER_ERROR, "Something went wrong");
     }
 
     // PUT
     public ResponseEntity update(Integer id , PutEventDTO editEvent , Authentication auth){
-        if(String.valueOf(auth.getAuthorities().toArray()[0]).equals("lecturer")) return ResponseEntity.status(403).body("Access Denied");
+
+        String role = String.valueOf(auth.getAuthorities().toArray()[0]);
+        String email = auth.getPrincipal().toString();
 
         Event event = eventRepository.findById(id).orElseThrow(() ->
-            new ResponseStatusException(NOT_FOUND));
+                new ResponseStatusException(NOT_FOUND));
 
-        if(String.valueOf(auth.getAuthorities().toArray()[0]).equals("admin") || event.getUser().getUserEmail().equals(String.valueOf(auth.getPrincipal()))){
-            //  Set new details
-            event.setEventNotes(editEvent.getEventNotes());
-            if (editEvent.getEventStartTime().getTime() != event.getEventStartTime().getTime()) {
-                event.setEventStartTime(editEvent.getEventStartTime());
-                LocalDateTime endTime = event.getEventStartTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().plus(Duration.of(event.getEventDuration(), ChronoUnit.MINUTES));
-                event.setEventEndTime(Date.from(endTime.atZone(ZoneId.systemDefault()).toInstant()));
+        switch (role) {
+            case "lecturer" :
+                return ResponseEntity.status(403).body("Access Denied");
+            case "admin" : {
+
+                return ResponseEntity.status(200).body(updateEvent(id,editEvent,event));
             }
-
-            check();
-            return ResponseEntity.status(200).body(eventRepository.saveAndFlush(event));
+            case "student" : {
+                if(!email.equals(event.getUser().getUserEmail())) return ResponseEntity.status(403).body("Access Denied");
+                return ResponseEntity.status(200).body(updateEvent(id,editEvent,event));
+            }
         }
-        Map<String, String> error = new HashMap<>();
-        error.put("Unauthorized","Access Denied.");
-        return ResponseEntity.status(403).body(error);
+
+        throw new ResponseStatusException(INTERNAL_SERVER_ERROR, "Something went wrong");
     }
 
     public void check(){
@@ -218,6 +248,19 @@ public class EventServices {
         eventRepository.checkStatusComplete();
     }
 
+    private Event updateEvent(Integer id , PutEventDTO detail , Event event){
+
+        event.setEventNotes(detail.getEventNotes());
+
+        if (detail.getEventStartTime().getTime() != event.getEventStartTime().getTime()) {
+            event.setEventStartTime(detail.getEventStartTime());
+            LocalDateTime endTime = event.getEventStartTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().plus(Duration.of(event.getEventDuration(), ChronoUnit.MINUTES));
+            event.setEventEndTime(Date.from(endTime.atZone(ZoneId.systemDefault()).toInstant()));
+        }
+
+        check();
+        return eventRepository.saveAndFlush(event);
+    }
     // CHECK OVERLAP
     private boolean checkIsOverlap(Event PostEvent) {
         List<Event> allEvent = eventRepository.getByCategoryAndDate(

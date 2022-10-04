@@ -49,14 +49,16 @@ public class UserService {
     //GET by ID
     public ResponseEntity getById(Integer id , Authentication auth) {
         //Check if role is admin
-        if(String.valueOf(auth.getAuthorities().toArray()[0]).equals("admin")){
+        String role = String.valueOf(auth.getAuthorities().toArray()[0]);
+        String email = auth.getPrincipal().toString();
+        if(role.equals("admin")){
             User user = userRepository.findById(id).orElseThrow(() ->
                     new ResponseStatusException(HttpStatus.NOT_FOUND, "User with " + id + " does not exist!")
             );
             return ResponseEntity.status(200).body(modelMapper.map(user, DetailUserDTO.class));
         }
         //Check if email not equals to getting user
-        if(!auth.getPrincipal().equals(userRepository.findById(id).get().getUserEmail())){
+        if(!email.equals(userRepository.findById(id).get().getUserEmail())){
             Map<String , String > error = new HashMap<>();
             error.put("Unauthorized" , "Access Denied.");
             return ResponseEntity.status(403).body(error);
