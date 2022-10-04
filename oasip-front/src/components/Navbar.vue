@@ -57,7 +57,7 @@
       <router-link
         :to="{ name: 'Booking' }"
         class="flex place-items-center"
-        v-if="userRole && userRole !== 'lecturer'"
+        v-if="userRole == null || userRole !== 'lecturer'"
       >
         <button
           class="w-28 h-10 bg-white font-light text-sm grid place-items-center border border-green-600 text-green-600 hover:bg-gradient-to-tl to-emerald-400 from-lime-500 hover:border-none hover:text-white hover:border-2 duration-150"
@@ -161,7 +161,7 @@ const userRole = computed(() => {
   try {
     return localStorage.getItem("userRole");
   } catch (error) {
-    return false;
+    return null;
   }
 });
 const userEmail = computed(() => {
