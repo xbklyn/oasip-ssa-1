@@ -26,6 +26,7 @@ jobs:
       # Runs a single command using the runners shell
       - name: compose-down & delete images
         run: |
+          docker-compose down
           docker-compose rm -svf oasipfe oasipbe oasipdb nginx_proxy 
 
       # Runs a set of commands using the runners shell
