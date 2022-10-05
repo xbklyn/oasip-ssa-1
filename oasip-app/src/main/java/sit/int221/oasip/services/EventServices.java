@@ -142,6 +142,7 @@ public class EventServices {
                 return ResponseEntity.status(201).body("Sucessfully Created!");
             }
             default: {
+                System.out.println("In default case");
                 Event created_event = createEvent(newEvent);
                 sendEmail(created_event);
                 return ResponseEntity.status(201).body("Sucessfully Created!");
