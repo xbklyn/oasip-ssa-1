@@ -59,7 +59,7 @@ export const getAllCategory = async () => {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + localStorage.getItem('access_token'),
+      // Authorization: 'Bearer ' + localStorage.getItem('access_token'),
     },
   });
   if (res.status === 200) {
