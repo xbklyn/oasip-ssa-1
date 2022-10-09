@@ -49,7 +49,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and().authorizeHttpRequests().antMatchers("/api/auth/refresh_token" ,"/api/auth/login","/api/auth/check").permitAll()
                 .and().authorizeHttpRequests().antMatchers(HttpMethod.GET , "/api/category").permitAll()
                 .and().authorizeHttpRequests().antMatchers(HttpMethod.POST , "/api/events").permitAll()
-                .and().authorizeHttpRequests().antMatchers("/api/events/{categoryId}/{date}").permitAll()
+                .and().authorizeHttpRequests().antMatchers("/api/events/{categoryId}","/api/events/{categoryId}/{date}").permitAll()
                 .and().cors()
                 .and().authorizeHttpRequests().antMatchers( "/api/users/**" , "/api/auth/match").hasAuthority("admin")
                 .and().authorizeHttpRequests().anyRequest().authenticated()
