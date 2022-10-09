@@ -127,8 +127,8 @@ public class EventServices {
     // POST
     public ResponseEntity save(PostEventDTO newEvent, HttpServletRequest req, Authentication auth) throws MethodArgumentNotValidException, ParseException {
 
-        String role = String.valueOf(auth.getAuthorities().toArray()[0]);
-        String email = auth.getPrincipal().toString();
+        String role =  auth == null ? "" : String.valueOf(auth.getAuthorities().toArray()[0]);
+        String email = auth == null ? "" : auth.getPrincipal().toString();
 
         switch (role) {
             case "lecturer":
