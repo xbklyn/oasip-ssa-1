@@ -1,4 +1,3 @@
-
 import { useRouter } from 'vue-router';
 const myRouter = useRouter();
 
@@ -95,7 +94,9 @@ export const getEventByCatAndDate = async (category, date) => {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + localStorage.getItem('access_token'),
+        Authorization: localStorage.getItem('access_token')
+          ? 'Bearer ' + localStorage.getItem('access_token')
+          : '',
       },
     },
   );
@@ -180,11 +181,10 @@ export const editCategoryById = async (category) => {
 };
 
 export const getRefreshToken = async () => {
-  if (!(localStorage.getItem('refresh_token'))) {
-    alert('You session is ended, Please login')
-     myRouter.push('/')
-  }
-  else {
+  if (!localStorage.getItem('refresh_token')) {
+    alert('You session is ended, Please login');
+    myRouter.push('/');
+  } else {
     await fetch(`${import.meta.env.VITE_BASE_URL}/auth/refresh_token`, {
       method: 'GET',
       headers: {
