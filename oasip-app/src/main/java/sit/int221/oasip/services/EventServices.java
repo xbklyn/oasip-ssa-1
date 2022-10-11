@@ -186,14 +186,14 @@ public class EventServices {
         System.out.println("In sending email");
         EmailDTO details = new EmailDTO();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM-dd-yy");
+        Date date = Date.from(newEvent.getEventStartTime().toInstant().atZone(ZoneId.systemDefault()).toInstant());
 
-
-        details.setSubject("[OASIP] " + newEvent.getEventCategory().getEventCategoryName() + " @ " + newEvent.getEventStartTime() );
+        details.setSubject("[OASIP] " + newEvent.getEventCategory().getEventCategoryName() + " @ " + date);
         details.setRecipient(newEvent.getBookingEmail());
         details.setMsgBody("Booking name :: " + newEvent.getBookingName() +
-                           "\nClinic :: " + newEvent.getEventCategory().getEventCategoryName() +
-                           "\nWhen :: " + newEvent.getEventStartTime() + " - " + newEvent.getEventEndTime() +
-                           "\nNotes :: " + newEvent.getEventNotes());
+                        "\nClinic :: " + newEvent.getEventCategory().getEventCategoryName() +
+                        "\nWhen :: " + newEvent.getEventStartTime() + " - " + newEvent.getEventEndTime() +
+                        "\nNotes :: " + newEvent.getEventNotes());
 
         emailService.sendSimpleMail(details);
     }
