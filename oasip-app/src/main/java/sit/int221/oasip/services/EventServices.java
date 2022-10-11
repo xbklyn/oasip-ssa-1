@@ -182,16 +182,17 @@ public class EventServices {
     private void sendEmail(Event newEvent) throws ParseException {
         System.out.println("In sending email");
         EmailDTO details = new EmailDTO();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM-dd-yy");
-        System.out.println("Old date :: " + newEvent.getEventStartTime());
-//        Instant date = newEvent.getEventStartTime().toInstant();
-//        System.out.println(Date.from(Instant.from(date.atZone(ZoneId.of("UTC-11")))));
-        Date date = Date.from(newEvent.getEventStartTime().toInstant().atZone(ZoneId.of("Asia/Bangkok")).toInstant());
-        details.setSubject("[OASIP] " + newEvent.getEventCategory().getEventCategoryName() + " @ " + date);
+        String start = DateTimeFormatter.ofPattern("E MMM dd, yyyy HH:mm").withZone(ZoneId.of("Asia/Bangkok")).format(newEvent.getEventStartTime().toInstant());
+        String end = DateTimeFormatter.ofPattern("HH:mm").withZone(ZoneId.of("Asia/Bangkok")).format(newEvent.getEventEndTime().toInstant());
+//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM-dd-yy");
+//        System.out.println("Old date :: " + newEvent.getEventStartTime());
+//        Date date = Date.from(newEvent.getEventStartTime().toInstant().atZone(ZoneId.systemDefault()).toInstant());
+//        System.out.println(simpleDateFormat.format(date));
+        details.setSubject("[OASIP] " + newEvent.getEventCategory().getEventCategoryName() + " @ " + start + " - " + end + " (ICT)");
         details.setRecipient(newEvent.getBookingEmail());
         details.setMsgBody("Booking name :: " + newEvent.getBookingName() +
                         "\nClinic :: " + newEvent.getEventCategory().getEventCategoryName() +
-                        "\nWhen :: " + newEvent.getEventStartTime() + " - " + newEvent.getEventEndTime() +
+                        "\nWhen :: " + start + " - " + end + " (ICT)" +
                         "\nNotes :: " + newEvent.getEventNotes());
 
         emailService.sendSimpleMail(details);
