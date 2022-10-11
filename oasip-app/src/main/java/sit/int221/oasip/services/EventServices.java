@@ -24,10 +24,7 @@ import sit.int221.oasip.utils.ListMapper;
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -186,8 +183,10 @@ public class EventServices {
         System.out.println("In sending email");
         EmailDTO details = new EmailDTO();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM-dd-yy");
+        System.out.println("Old date :: " + newEvent.getEventStartTime());
+//        Instant date = newEvent.getEventStartTime().toInstant();
+//        System.out.println(Date.from(Instant.from(date.atZone(ZoneId.of("UTC-11")))));
         Date date = Date.from(newEvent.getEventStartTime().toInstant().atZone(ZoneId.of("Asia/Bangkok")).toInstant());
-
         details.setSubject("[OASIP] " + newEvent.getEventCategory().getEventCategoryName() + " @ " + date);
         details.setRecipient(newEvent.getBookingEmail());
         details.setMsgBody("Booking name :: " + newEvent.getBookingName() +
@@ -195,7 +194,7 @@ public class EventServices {
                         "\nWhen :: " + newEvent.getEventStartTime() + " - " + newEvent.getEventEndTime() +
                         "\nNotes :: " + newEvent.getEventNotes());
 
-        emailService.sendSimpleMail(details);
+//        emailService.sendSimpleMail(details);
     }
 
     // DELETE
