@@ -65,6 +65,7 @@ public class EventServices {
     public List<SimpleEventDTO> getAllEvents(Authentication auth) {
         check();
 
+        if(auth == null) throw new ResponseStatusException(UNAUTHORIZED , "Access Denied");
         String role = String.valueOf(auth.getAuthorities().toArray()[0]);
         String email = auth.getPrincipal().toString();
 
@@ -94,6 +95,8 @@ public class EventServices {
     }
 
     public ResponseEntity getEventById(Integer id, Authentication auth ){
+
+        if(auth == null) throw new ResponseStatusException(UNAUTHORIZED , "Access Denied");
         String role = String.valueOf(auth.getAuthorities().toArray()[0]);
         String email = String.valueOf(auth.getPrincipal());
         //Check role if admin
@@ -116,7 +119,7 @@ public class EventServices {
             }
         }
 
-        throw new ResponseStatusException(INTERNAL_SERVER_ERROR , "Something went wrong.");
+        throw new ResponseStatusException(FORBIDDEN , "Something went wrong.");
     }
 
     public List<TimeDTO> getEventByCatIdAndDate(Integer catId , String date){
@@ -198,6 +201,8 @@ public class EventServices {
     // DELETE
     public ResponseEntity delete(Integer id, Authentication auth) {
 
+        if(auth == null) throw new ResponseStatusException(UNAUTHORIZED , "Access Denied");
+
         String role = String.valueOf(auth.getAuthorities().toArray()[0]);
         String email = auth.getPrincipal().toString();
 
@@ -221,6 +226,8 @@ public class EventServices {
 
     // PUT
     public ResponseEntity update(Integer id , PutEventDTO editEvent , Authentication auth){
+
+        if(auth == null) throw new ResponseStatusException(UNAUTHORIZED , "Access Denied");
 
         String role = String.valueOf(auth.getAuthorities().toArray()[0]);
         String email = auth.getPrincipal().toString();
