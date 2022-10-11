@@ -82,9 +82,9 @@
       </div>
       <div class="space-y-6">
         <!-- Input - Email -->
-        <div class="relative" >
+        <div class="relative">
           <input
-          :disabled="userRole !== 'admin'"
+            :disabled="userRole"
             type="text"
             id="email"
             v-model="email"
@@ -180,7 +180,7 @@
             type="date"
             id="dateTime"
             v-model="selectDate"
-            :min="currentDate"
+            :min="moment().format('YYYY-MM-DD')"
             @input="computeTimePeriod"
             @change="startTime = -1"
             class="block l-w-612 h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
@@ -309,11 +309,13 @@
 
 <script setup>
 import { ref } from '@vue/reactivity';
+import moment from 'moment';
 import { computed, onBeforeMount, onBeforeUpdate } from '@vue/runtime-core';
 import {
   getAllCategory,
   createEvent,
   getEventByCatAndDate,
+  getRefreshToken,
 } from '../services/FetchServices.js';
 import { useRoute, useRouter } from 'vue-router';
 
@@ -340,7 +342,7 @@ const clinics = ref([]);
 const clinicId = ref(0);
 const clinicIndex = ref();
 const fullName = ref('');
-const email = ref(localStorage.getItem('userEmail'));
+const email = ref(userRole ? localStorage.getItem('userEmail') : '');
 const note = ref('');
 const currentDate = computed(() => {
   const date = ref(new Date().getFullYear());
@@ -383,12 +385,13 @@ const submit = async (name, mail, start, categoryId, notes) => {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + localStorage.getItem('access_token'),
+      Authorization: localStorage.getItem('access_token')
+        ? 'Bearer ' + localStorage.getItem('access_token')
+        : '',
     },
     body: JSON.stringify({
       bookingName: name,
-      bookingEmail:
-        userRole === 'admin' ? mail : localStorage.getItem('userEmail'),
+      bookingEmail: mail,
       eventStartTime: start,
       categoryId: categoryId,
       eventNotes: notes,
@@ -402,7 +405,9 @@ const submit = async (name, mail, start, categoryId, notes) => {
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
-            Authorization: 'Bearer ' + localStorage.getItem('access_token'),
+            Authorization: localStorage.getItem('access_token')
+              ? 'Bearer ' + localStorage.getItem('access_token')
+              : '',
           },
           body: JSON.stringify({
             bookingName: name,
@@ -447,21 +452,6 @@ const submit = async (name, mail, start, categoryId, notes) => {
         }, 4000);
       }
     });
-
-  // if (status == 500 || status == 400) {
-  //   ERROR.value = true;
-  //   SUCCESFUL.value = false;
-  //   setTimeout(function () {
-  //     ERROR.value = false;
-  //   }, 4000);
-  // } else {
-  //   SUCCESFUL.value = true;
-  //   setTimeout(function () {
-  //     myRouter.push({
-  //       name: 'Home',
-  //     });
-  //   }, 2000);
-  // }
 };
 
 // GET - All TimeBooked start time
