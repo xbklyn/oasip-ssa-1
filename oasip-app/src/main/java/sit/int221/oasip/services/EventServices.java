@@ -186,7 +186,7 @@ public class EventServices {
         System.out.println("In sending email");
         EmailDTO details = new EmailDTO();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM-dd-yy");
-        Date date = Date.from(newEvent.getEventStartTime().toInstant().atZone(ZoneId.systemDefault()).toInstant());
+        Date date = Date.from(newEvent.getEventStartTime().toInstant().atZone(ZoneId.of("Asia/Bangkok")).toInstant());
 
         details.setSubject("[OASIP] " + newEvent.getEventCategory().getEventCategoryName() + " @ " + date);
         details.setRecipient(newEvent.getBookingEmail());
