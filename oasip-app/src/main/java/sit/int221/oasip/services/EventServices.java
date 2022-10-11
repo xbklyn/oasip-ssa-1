@@ -194,7 +194,7 @@ public class EventServices {
                         "\nWhen :: " + newEvent.getEventStartTime() + " - " + newEvent.getEventEndTime() +
                         "\nNotes :: " + newEvent.getEventNotes());
 
-//        emailService.sendSimpleMail(details);
+        emailService.sendSimpleMail(details);
     }
 
     // DELETE
