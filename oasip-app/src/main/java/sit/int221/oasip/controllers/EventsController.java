@@ -19,6 +19,7 @@ import sit.int221.oasip.services.EventServices;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
 
@@ -48,7 +49,7 @@ public class EventsController {
     public ResponseEntity getEventById(
             @PathVariable Integer id,
             Authentication auth
-    ) {
+    ) throws IOException {
         return eventServices.getEventById(id , auth);
     }
 
