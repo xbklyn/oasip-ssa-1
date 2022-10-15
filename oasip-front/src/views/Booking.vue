@@ -73,10 +73,10 @@
 
     <!-- Step 2 - Fill infomation -->
     <div
-      class="l-w-824 h-64 mx-auto flex m-12 duration-150 ease-in-out transition"
+      class="l-w-824 h-84 mx-auto flex m-12 duration-150 ease-in-out transition"
       v-show="clinicId"
     >
-      <div class="w-52 h-64 place-items-center">
+      <div class="w-52 h-84 place-items-center">
         <h2>Step 2</h2>
         <p class="l-text-xxs">Fill your infomation.</p>
       </div>
@@ -155,6 +155,21 @@
           >
             Note {{ note.length }}/500
           </label>
+        </div>
+
+        <!-- Input - Attachment -->
+        <div class="relative">
+          <div>
+            <label class="block mb-2 text-sm text-gray-900" for="file_input"
+              >Attachment</label
+            >
+            <input
+              class="block w-full text-sm text-gray-900 border"
+              id="file_input"
+              type="file"
+              ref="file"
+            />
+          </div>
         </div>
       </div>
     </div>
