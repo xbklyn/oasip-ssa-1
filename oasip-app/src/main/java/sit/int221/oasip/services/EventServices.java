@@ -105,13 +105,13 @@ public class EventServices {
         //Check role if admin
         Event event = eventRepository.findById(id).orElseThrow(() ->
                 new ResponseStatusException(NOT_FOUND, id + "does not exist."));
-        String user_dir = event.getUser() == null ? "guest" : "user/" + event.getUser().getId();
+        String user_dir = event.getUser() == null ? "guest" : "user/" + "user_" + event.getUser().getId();
 
         switch (role) {
             case "admin" : {
-                Path filePath = Paths.get(fileProperties.getUpload_dir() + "/" + user_dir + "/" + event.getBookingId());
+                Path filePath = Paths.get(fileProperties.getUpload_dir() + "/" + user_dir + "/" + "event_" + event.getBookingId());
                 if(Files.exists(filePath)){
-                    Path toFile = Files.list(filePath).collect(Collectors.toList()).get(1);
+                    Path toFile = Files.list(filePath).collect(Collectors.toList()).get(0);
 
                     Resource file = fileService.loadFileAsResource(String.valueOf(toFile));
                     String uri = file.getURI().toString();
@@ -122,6 +122,7 @@ public class EventServices {
 
                     return ResponseEntity.status(200).body("File existed");
                 }else{
+                    System.out.println("No file in this event");
                     return ResponseEntity.status(200).body(modelMapper.map(event , DetailEventDTO.class));
                 }
             }

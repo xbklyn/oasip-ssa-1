@@ -37,8 +37,8 @@ public class FileService {
 
     public String store(MultipartFile file , Event event) {
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-        String user_dir = event.getUser() == null ? "guest" : "user/" + event.getUser().getId().toString();
-        String event_id = event.getBookingId().toString();
+        String user_dir = event.getUser() == null ? "guest" : "user/" + "user_" + event.getUser().getId().toString();
+        String event_id = "event_" + event.getBookingId().toString();
 
         try {
             if (fileName.contains("..")) { throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Sorry! Filename contains invalid path sequence " + fileName);}
