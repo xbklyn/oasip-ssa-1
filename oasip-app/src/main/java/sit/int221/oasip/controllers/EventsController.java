@@ -6,6 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.web.multipart.MultipartFile;
 import sit.int221.oasip.dtos.event.DetailEventDTO;
 import sit.int221.oasip.dtos.event.PostEventDTO;
 import sit.int221.oasip.dtos.event.PutEventDTO;
@@ -18,6 +19,7 @@ import sit.int221.oasip.services.EventServices;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
 
@@ -47,7 +49,7 @@ public class EventsController {
     public ResponseEntity getEventById(
             @PathVariable Integer id,
             Authentication auth
-    ) {
+    ) throws IOException {
         return eventServices.getEventById(id , auth);
     }
 
@@ -66,11 +68,12 @@ public class EventsController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("")
     public ResponseEntity createEvent(
-           @Valid @RequestBody PostEventDTO newEvent,
+           @Valid @RequestPart("body") PostEventDTO newEvent,
+           @RequestPart("file") MultipartFile file,
            HttpServletRequest req,
            Authentication auth
     ) throws MethodArgumentNotValidException, ParseException {
-        return eventServices.save(newEvent , req , auth);
+        return eventServices.save(newEvent,file , req , auth);
     }
 
 //  DELETE Method

@@ -1,34 +1,37 @@
 package sit.int221.oasip.services;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import sit.int221.oasip.dtos.Email.EmailDTO;
 import sit.int221.oasip.dtos.event.*;
 import sit.int221.oasip.dtos.time.TimeDTO;
 import sit.int221.oasip.entities.Event;
 import sit.int221.oasip.entities.EventOwner;
-import sit.int221.oasip.entities.Eventcategory;
 import sit.int221.oasip.entities.User;
-import sit.int221.oasip.errors.ErrorAdvice;
+import sit.int221.oasip.properties.FileProperties;
 import sit.int221.oasip.repositories.*;
 import sit.int221.oasip.utils.ListMapper;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -41,21 +44,23 @@ public class EventServices {
     private final ListMapper listMapper;
     private final EventCategoryRepository eventCategoryRepository;
     private final StatusRepository statusRepository;
-    private final ErrorAdvice errorAdvice;
     private final UserRepository userRepository;
     private final EventOwnerRepository eventOwnerRepository;
     private final EmailService emailService;
+    private final FileService fileService;
+    private final FileProperties fileProperties;
 
-    public EventServices(EventRepository eventRepository, ModelMapper modelMapper, ListMapper listMapper, EventCategoryRepository eventCategoryRepository, StatusRepository statusRepository, ErrorAdvice errorAdvice, UserRepository userRepository, EventOwnerRepository eventOwnerRepository, EmailService emailService) {
+    public EventServices(EventRepository eventRepository, ModelMapper modelMapper, ListMapper listMapper, EventCategoryRepository eventCategoryRepository, StatusRepository statusRepository, UserRepository userRepository, EventOwnerRepository eventOwnerRepository, EmailService emailService, FileService fileService, FileProperties fileProperties) {
         this.eventRepository = eventRepository;
         this.modelMapper = modelMapper;
         this.listMapper = listMapper;
         this.eventCategoryRepository = eventCategoryRepository;
         this.statusRepository = statusRepository;
-        this.errorAdvice = errorAdvice;
         this.userRepository = userRepository;
         this.eventOwnerRepository = eventOwnerRepository;
         this.emailService = emailService;
+        this.fileService = fileService;
+        this.fileProperties = fileProperties;
     }
 
     // GET
@@ -91,18 +96,35 @@ public class EventServices {
         throw new ResponseStatusException(INTERNAL_SERVER_ERROR, "Something went wrong.");
     }
 
-    public ResponseEntity getEventById(Integer id, Authentication auth ){
+    public ResponseEntity getEventById(Integer id, Authentication auth ) throws IOException {
 
         if(auth == null) throw new ResponseStatusException(UNAUTHORIZED , "Access Denied");
         String role = String.valueOf(auth.getAuthorities().toArray()[0]);
         String email = String.valueOf(auth.getPrincipal());
+
         //Check role if admin
         Event event = eventRepository.findById(id).orElseThrow(() ->
                 new ResponseStatusException(NOT_FOUND, id + "does not exist."));
+        String user_dir = event.getUser() == null ? "guest" : "user/" + "user_" + event.getUser().getId();
 
         switch (role) {
             case "admin" : {
-                return ResponseEntity.status(200).body(modelMapper.map(event , DetailEventDTO.class));
+                Path filePath = Paths.get(fileProperties.getUpload_dir() + "/" + user_dir + "/" + "event_" + event.getBookingId());
+                if(Files.exists(filePath)){
+                    Path toFile = Files.list(filePath).collect(Collectors.toList()).get(0);
+
+                    Resource file = fileService.loadFileAsResource(String.valueOf(toFile));
+                    String uri = file.getURI().toString();
+//                    String url = MvcUriComponentsBuilder
+//                            .fromMethodName(FileController.class, "getFile", file.getFilename()).build().toString();
+                    System.out.println(uri);
+//                    DetailEventWithFileDTO eventWithFileDTO = new DetailEventWithFileDTO(event, file.getFilename() , file.getURL().toString());
+
+                    return ResponseEntity.status(200).body("File existed");
+                }else{
+                    System.out.println("No file in this event");
+                    return ResponseEntity.status(200).body(modelMapper.map(event , DetailEventDTO.class));
+                }
             }
             case "lecturer" : {
                 return eventOwnerRepository.findByEventCategoryAndUser(event.getEventCategory() , userRepository.findByUserEmail(email).get(0)) != null
@@ -125,7 +147,7 @@ public class EventServices {
     }
 
     // POST
-    public ResponseEntity save(PostEventDTO newEvent, HttpServletRequest req, Authentication auth) throws MethodArgumentNotValidException, ParseException {
+    public ResponseEntity save(PostEventDTO newEvent, MultipartFile file , HttpServletRequest req, Authentication auth) throws MethodArgumentNotValidException, ParseException {
 
         String role =  auth == null ? "" : String.valueOf(auth.getAuthorities().toArray()[0]);
         String email = auth == null ? "" : auth.getPrincipal().toString();
@@ -138,12 +160,14 @@ public class EventServices {
                     return ResponseEntity.status(400).body("Booking email must be the same as the student's email!");
 
                 Event created_event = createEvent(newEvent);
+                fileService.store(file ,created_event);
                 sendEmail(created_event);
                 return ResponseEntity.status(201).body("Sucessfully Created!");
             }
             default: {
                 System.out.println("In default case");
                 Event created_event = createEvent(newEvent);
+                fileService.store(file ,created_event);
                 sendEmail(created_event);
                 return ResponseEntity.status(201).body("Sucessfully Created!");
             }
@@ -184,10 +208,7 @@ public class EventServices {
         EmailDTO details = new EmailDTO();
         String start = DateTimeFormatter.ofPattern("E MMM dd, yyyy HH:mm").withZone(ZoneId.of("Asia/Bangkok")).format(newEvent.getEventStartTime().toInstant());
         String end = DateTimeFormatter.ofPattern("HH:mm").withZone(ZoneId.of("Asia/Bangkok")).format(newEvent.getEventEndTime().toInstant());
-//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM-dd-yy");
-//        System.out.println("Old date :: " + newEvent.getEventStartTime());
-//        Date date = Date.from(newEvent.getEventStartTime().toInstant().atZone(ZoneId.systemDefault()).toInstant());
-//        System.out.println(simpleDateFormat.format(date));
+
         details.setSubject("[OASIP] " + newEvent.getEventCategory().getEventCategoryName() + " @ " + start + " - " + end + " (ICT)");
         details.setRecipient(newEvent.getBookingEmail());
         details.setMsgBody("Booking name :: " + newEvent.getBookingName() +
