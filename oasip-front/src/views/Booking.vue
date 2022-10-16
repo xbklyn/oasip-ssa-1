@@ -168,6 +168,7 @@
               id="file_input"
               type="file"
               ref="file"
+              @change="onFileChange"
             />
           </div>
         </div>
@@ -388,29 +389,47 @@ const dateTime = computed(() => {
     `${selectDate.value}T${TimePeriod.value[startTime.value].startTime}`,
   );
 });
+const fileUpload = ref('');
+const onFileChange = (e) => {
+  let files = e.target.files || e.dataTransfer.files;
+  if (!files.length) return;
+  fileUpload.value = files[0];
+  console.log(fileUpload.value);
+};
 
 // FUNCTION
 // CREATE - Event
 const SUCCESFUL = ref(false);
 const ERROR = ref(false);
 const submit = async (name, mail, start, categoryId, notes) => {
+  let body = new Blob(
+    [
+      JSON.stringify({
+        bookingName: name,
+        bookingEmail: mail,
+        eventStartTime: start,
+        categoryId: categoryId,
+        eventNotes: notes,
+      }),
+    ],
+    { type: 'application/json' },
+  );
+
+  let payload = new FormData();
+  // let filePayload = new FormData(fileUpload.value);
+  payload.append('file', fileUpload.value);
+  payload.append('body', body);
   // let status = await createEvent(name, mail, start, categoryId, notes);
   await fetch(`${import.meta.env.VITE_BASE_URL}/events`, {
     method: 'POST',
     headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
+      // Accept: 'multipart/form-data',
+      // 'Content-Type': 'multipart/form-data',
       Authorization: localStorage.getItem('access_token')
         ? 'Bearer ' + localStorage.getItem('access_token')
         : '',
     },
-    body: JSON.stringify({
-      bookingName: name,
-      bookingEmail: mail,
-      eventStartTime: start,
-      categoryId: categoryId,
-      eventNotes: notes,
-    }),
+    body: payload,
   })
     .then(async (res) => {
       if (res.status === 401) {
@@ -418,19 +437,13 @@ const submit = async (name, mail, start, categoryId, notes) => {
         return fetch(`${import.meta.env.VITE_BASE_URL}/events}`, {
           method: 'POST',
           headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
+            // Accept: 'multipart/form-data',
+            // 'Content-Type': 'multipart/form-data',
             Authorization: localStorage.getItem('access_token')
               ? 'Bearer ' + localStorage.getItem('access_token')
               : '',
           },
-          body: JSON.stringify({
-            bookingName: name,
-            bookingEmail: mail,
-            eventStartTime: start,
-            categoryId: categoryId,
-            eventNotes: notes,
-          }),
+          body: payload,
         });
       }
       if (res.status === 403) {
