@@ -459,16 +459,10 @@ const submit = async (name, mail, start, categoryId, notes) => {
     ],
     { type: 'application/json' },
   );
-  // let JSONBody = JSON.stringify({
-  //   bookingName: name,
-  //   bookingEmail: mail,
-  //   eventStartTime: start,
-  //   categoryId: categoryId,
-  //   eventNotes: notes,
-  // });
+  console.log(fileUpload.value);
   let payload = new FormData();
   // let filePayload = new FormData(fileUpload.value);
-  payload.append('file', fileUpload.value);
+  if (fileUpload.value) payload.append('file', fileUpload.value);
   payload.append('body', body);
   // let status = await createEvent(name, mail, start, categoryId, notes);
   await fetch(`${import.meta.env.VITE_BASE_URL}/events`, {
