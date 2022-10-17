@@ -69,7 +69,7 @@ public class EventsController {
     @PostMapping("")
     public ResponseEntity createEvent(
            @Valid @RequestPart("body") PostEventDTO newEvent,
-           @RequestPart("file") MultipartFile file,
+           @RequestPart(value = "file" ,required = false) MultipartFile file,
            HttpServletRequest req,
            Authentication auth
     ) throws MethodArgumentNotValidException, ParseException {
