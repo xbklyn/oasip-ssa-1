@@ -1,7 +1,6 @@
 package sit.int221.oasip.services;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -22,6 +21,7 @@ import sit.int221.oasip.utils.ListMapper;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -106,39 +106,57 @@ public class EventServices {
         Event event = eventRepository.findById(id).orElseThrow(() ->
                 new ResponseStatusException(NOT_FOUND, id + "does not exist."));
         String user_dir = event.getUser() == null ? "guest" : "user/" + "user_" + event.getUser().getId();
+        Path filePath = Paths.get(fileProperties.getUpload_dir() + "/" + user_dir + "/" + "event_" + event.getBookingId());
 
         switch (role) {
-            case "admin" : {
-                Path filePath = Paths.get(fileProperties.getUpload_dir() + "/" + user_dir + "/" + "event_" + event.getBookingId());
-                if(Files.exists(filePath)){
-                    Path toFile = Files.list(filePath).collect(Collectors.toList()).get(0);
-
-                    Resource file = fileService.loadFileAsResource(String.valueOf(toFile));
-                    String uri = file.getURI().toString();
-//                    String url = MvcUriComponentsBuilder
-//                            .fromMethodName(FileController.class, "getFile", file.getFilename()).build().toString();
-                    System.out.println(uri);
-//                    DetailEventWithFileDTO eventWithFileDTO = new DetailEventWithFileDTO(event, file.getFilename() , file.getURL().toString());
-
-                    return ResponseEntity.status(200).body("File existed");
-                }else{
-                    System.out.println("No file in this event");
-                    return ResponseEntity.status(200).body(modelMapper.map(event , DetailEventDTO.class));
-                }
-            }
             case "lecturer" : {
                 return eventOwnerRepository.findByEventCategoryAndUser(event.getEventCategory() , userRepository.findByUserEmail(email).get(0)) != null
-                            ? ResponseEntity.status(200).body(modelMapper.map(event, DetailEventDTO.class))
-                            : ResponseEntity.status(403).body("Access Denied");
+                    ? ResponseEntity.status(200).body(modelMapper.map(event, DetailEventDTO.class))
+                    : ResponseEntity.status(403).body("Access Denied");
             }
+            case "admin" : {
+                return getEventResponseEntity(event, filePath);
+            }
+
             case "student" : {
-                return eventRepository.findById(id).orElseThrow().getBookingEmail().equals(userRepository.findByUserEmail(email).get(0).getUserEmail())
-                            ? ResponseEntity.status(200).body(modelMapper.map(event, DetailEventDTO.class))
-                            : ResponseEntity.status(403).body("Access Denied");
+                if(!eventRepository.findById(id).orElseThrow().getBookingEmail().equals(userRepository.findByUserEmail(email).get(0).getUserEmail()))
+                {return ResponseEntity.status(403).body("Access Denied");}
+
+                return getEventResponseEntity(event, filePath);
             }
         }
 
         throw new ResponseStatusException(FORBIDDEN , "Something went wrong.");
+    }
+
+    private ResponseEntity getEventResponseEntity(Event event, Path filePath) throws IOException {
+        Map<String, String> file = checkFile(String.valueOf(filePath));
+        if(file.isEmpty()){
+            System.out.println("No file");
+            return ResponseEntity.status(200).body(modelMapper.map(event , DetailEventDTO.class));
+
+        }else{
+            DetailEventWithFileDTO detailEventWithFileDTO = modelMapper.map(event,DetailEventWithFileDTO.class);
+            detailEventWithFileDTO.setFileName(file.get("fileName"));
+            detailEventWithFileDTO.setFileURL(file.get("fileURL"));
+            System.out.println("Have file");
+            return ResponseEntity.status(200).body(detailEventWithFileDTO);
+        }
+    }
+
+    private Map<String , String> checkFile(String directories) throws IOException {
+        Map<String,String> fileInfo = new HashMap<>();
+        if(Files.exists(Path.of(directories))){
+            //Get a file
+            Path toFile = Files.list(Path.of(directories)).collect(Collectors.toList()).get(0);
+
+            //Create a file URL
+            URL fileURL = new URL(fileProperties.getHost() + toFile);
+            String fileName = fileService.loadFileAsResource(String.valueOf(toFile)).getFilename();
+            fileInfo.put("fileURL", String.valueOf(fileURL));
+            fileInfo.put("fileName" , fileName);
+        }
+        return fileInfo;
     }
 
     public List<TimeDTO> getEventByCatIdAndDate(Integer catId , String date){
