@@ -43,7 +43,9 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
       - /home/spadmin/certs:/etc/nginx/certs
-      - /home/spadmin/uploads/:/oasipssa1/
+      - type: bind
+        source: /home/spadmin/uploads/
+        target: /oasipssa1/
     links:
       - oasipfe
       - oasipbe
