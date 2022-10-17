@@ -159,7 +159,7 @@
 
         <!-- Input - Attachment -->
         <div class="relative">
-          <div>
+          <!-- <div>
             <label class="block mb-2 text-sm text-gray-900" for="file_input"
               >Attachment</label
             >
@@ -170,7 +170,47 @@
               ref="file"
               @change="onFileChange"
             />
+          </div> -->
+          <div class="flex justify-center items-center w-full">
+            <label
+              for="file_input"
+              class="flex flex-col justify-center items-center w-full h-36 border-2 border-slate-300 border-dashed cursor-pointer hover:bg-slate-100"
+            >
+              <div class="flex flex-col justify-center items-center pt-5 pb-6">
+                <p class="mb-2 text-sm text-gray-500">
+                  <span class="font-semibold">Click to upload</span>
+                </p>
+                <p class="text-xs text-gray-500">Any type (MAX. 10 MB)</p>
+              </div>
+              <input
+                type="file"
+                class="hidden"
+                id="file_input"
+                @input="onFileChange"
+              />
+            </label>
           </div>
+        </div>
+
+        <div class="flex gap-x-6" v-if="fileUpload">
+          <p class="space-x-4">
+            <span class="text-sm">{{ fileUpload.name }}</span>
+            <span class="text-xs">
+              {{ (fileUpload.size / 1024 / 1024).toFixed(2) }} MB</span
+            >
+          </p>
+          <button @click="removeFileUpload">
+            <div
+              class="w-4 h-4 rounded-full hover:bg-gray-500 hover:text-white flex justify-center items-center duration-150"
+            >
+              <svg width="12" height="12" viewBox="0 0 24 24">
+                <path
+                  fill="currentColor"
+                  d="M6.4 19L5 17.6l5.6-5.6L5 6.4L6.4 5l5.6 5.6L17.6 5L19 6.4L13.4 12l5.6 5.6l-1.4 1.4l-5.6-5.6Z"
+                />
+              </svg>
+            </div>
+          </button>
         </div>
       </div>
     </div>
@@ -392,10 +432,10 @@ const dateTime = computed(() => {
 const fileUpload = ref('');
 const onFileChange = (e) => {
   let files = e.target.files || e.dataTransfer.files;
-  if (e.target.file[0].size / 1024 / 1024 > 10)
+  if (e.target.files[0].size / 1024 / 1024 > 10)
     return alert('File size must be less than 10 MB');
   fileUpload.value = files[0];
-  // console.log(fileUpload.value);
+  console.log(fileUpload.value);
 };
 
 // FUNCTION
@@ -481,6 +521,10 @@ const submit = async (name, mail, start, categoryId, notes) => {
         }, 4000);
       }
     });
+};
+
+const removeFileUpload = () => {
+  fileUpload.value = '';
 };
 
 // GET - All TimeBooked start time
