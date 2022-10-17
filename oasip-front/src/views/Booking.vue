@@ -494,7 +494,7 @@ const submit = async (name, mail, start, categoryId, notes) => {
               ? 'Bearer ' + localStorage.getItem('access_token')
               : '',
           },
-          body: payload,
+          body: fileUpload ? payload : JSONBody,
         });
       }
       if (res.status === 403) {
