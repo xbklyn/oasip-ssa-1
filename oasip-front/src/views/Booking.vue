@@ -392,9 +392,10 @@ const dateTime = computed(() => {
 const fileUpload = ref('');
 const onFileChange = (e) => {
   let files = e.target.files || e.dataTransfer.files;
-  if (!files.length) return;
+  if (e.target.file[0].size / 1024 / 1024 > 10)
+    return alert('File size must be less than 10 MB');
   fileUpload.value = files[0];
-  console.log(fileUpload.value);
+  // console.log(fileUpload.value);
 };
 
 // FUNCTION
