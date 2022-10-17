@@ -177,22 +177,22 @@ public class EventServices {
                 if (!newEvent.getBookingEmail().equals(email))
                     return ResponseEntity.status(400).body("Booking email must be the same as the student's email!");
 
-                Event created_event = createEvent(newEvent);
+                Event created_event = createEvent(newEvent , file);
                 fileService.store(file ,created_event);
                 sendEmail(created_event);
                 return ResponseEntity.status(201).body("Sucessfully Created!");
             }
             default: {
                 System.out.println("In default case");
-                Event created_event = createEvent(newEvent);
-                fileService.store(file ,created_event);
+                Event created_event = createEvent(newEvent, file);
+//                fileService.store(file ,created_event);
                 sendEmail(created_event);
                 return ResponseEntity.status(201).body("Sucessfully Created!");
             }
         }
     }
 
-    private Event createEvent(PostEventDTO newEvent){
+    private Event createEvent(PostEventDTO newEvent ,MultipartFile file){
         //Check future date
         if(newEvent.getEventStartTime().before(new Date()))
             throw new ResponseStatusException(BAD_REQUEST, "Time must be in a future");
@@ -218,6 +218,7 @@ public class EventServices {
                 : null;
 
         event.setUser(user);
+        if(file != null){ fileService.store(file , event); }
         return eventRepository.saveAndFlush(event);
     }
 
