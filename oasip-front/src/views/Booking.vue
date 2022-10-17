@@ -440,8 +440,6 @@ const onFileChange = (e) => {
     lastModified: files[0].lastModified,
   });
   fileUpload.value = currentFile;
-
-  console.log(fileUpload.value);
 };
 
 // FUNCTION
@@ -461,7 +459,13 @@ const submit = async (name, mail, start, categoryId, notes) => {
     ],
     { type: 'application/json' },
   );
-
+  let JSONBody = JSON.stringify({
+    bookingName: name,
+    bookingEmail: mail,
+    eventStartTime: start,
+    categoryId: categoryId,
+    eventNotes: notes,
+  });
   let payload = new FormData();
   // let filePayload = new FormData(fileUpload.value);
   payload.append('file', fileUpload.value);
@@ -476,7 +480,7 @@ const submit = async (name, mail, start, categoryId, notes) => {
         ? 'Bearer ' + localStorage.getItem('access_token')
         : '',
     },
-    body: payload,
+    body: fileUpload ? payload : JSONBody,
   })
     .then(async (res) => {
       if (res.status === 401) {
