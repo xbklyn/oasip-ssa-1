@@ -468,7 +468,7 @@ const submit = async (name, mail, start, categoryId, notes) => {
   // });
   let payload = new FormData();
   // let filePayload = new FormData(fileUpload.value);
-  payload.append('file', fileUpload.value ? fileUpload.value : null);
+  payload.append('file', fileUpload.value);
   payload.append('body', body);
   // let status = await createEvent(name, mail, start, categoryId, notes);
   await fetch(`${import.meta.env.VITE_BASE_URL}/events`, {
