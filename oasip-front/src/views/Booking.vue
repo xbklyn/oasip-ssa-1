@@ -459,16 +459,16 @@ const submit = async (name, mail, start, categoryId, notes) => {
     ],
     { type: 'application/json' },
   );
-  let JSONBody = JSON.stringify({
-    bookingName: name,
-    bookingEmail: mail,
-    eventStartTime: start,
-    categoryId: categoryId,
-    eventNotes: notes,
-  });
+  // let JSONBody = JSON.stringify({
+  //   bookingName: name,
+  //   bookingEmail: mail,
+  //   eventStartTime: start,
+  //   categoryId: categoryId,
+  //   eventNotes: notes,
+  // });
   let payload = new FormData();
   // let filePayload = new FormData(fileUpload.value);
-  payload.append('file', fileUpload.value);
+  payload.append('file', fileUpload.value ? fileUpload.value : null);
   payload.append('body', body);
   // let status = await createEvent(name, mail, start, categoryId, notes);
   await fetch(`${import.meta.env.VITE_BASE_URL}/events`, {
@@ -480,7 +480,7 @@ const submit = async (name, mail, start, categoryId, notes) => {
         ? 'Bearer ' + localStorage.getItem('access_token')
         : '',
     },
-    body: fileUpload ? payload : JSONBody,
+    body: payload,
   })
     .then(async (res) => {
       if (res.status === 401) {
@@ -494,7 +494,7 @@ const submit = async (name, mail, start, categoryId, notes) => {
               ? 'Bearer ' + localStorage.getItem('access_token')
               : '',
           },
-          body: fileUpload ? payload : JSONBody,
+          body: payload,
         });
       }
       if (res.status === 403) {
