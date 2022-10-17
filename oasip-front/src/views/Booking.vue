@@ -431,10 +431,16 @@ const dateTime = computed(() => {
 });
 const fileUpload = ref('');
 const onFileChange = (e) => {
-  let files = e.target.files || e.dataTransfer.files;
   if (e.target.files[0].size / 1024 / 1024 > 10)
     return alert('File size must be less than 10 MB');
-  fileUpload.value = files[0];
+
+  let files = e.target.files || e.dataTransfer.files;
+  let currentFile = new File([files[0]], files[0].name.split(' ').join('_'), {
+    type: files[0].type,
+    lastModified: files[0].lastModified,
+  });
+  fileUpload.value = currentFile;
+
   console.log(fileUpload.value);
 };
 
