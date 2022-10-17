@@ -178,14 +178,14 @@ public class EventServices {
                     return ResponseEntity.status(400).body("Booking email must be the same as the student's email!");
 
                 Event created_event = createEvent(newEvent , file);
-                fileService.store(file ,created_event);
+                if(file != null) {fileService.store(file ,created_event);}
                 sendEmail(created_event);
                 return ResponseEntity.status(201).body("Sucessfully Created!");
             }
             default: {
                 System.out.println("In default case");
                 Event created_event = createEvent(newEvent, file);
-//                fileService.store(file ,created_event);
+                if(file != null) {fileService.store(file ,created_event);}
                 sendEmail(created_event);
                 return ResponseEntity.status(201).body("Sucessfully Created!");
             }
@@ -218,7 +218,6 @@ public class EventServices {
                 : null;
 
         event.setUser(user);
-        if(file != null){ fileService.store(file , event); }
         return eventRepository.saveAndFlush(event);
     }
 
