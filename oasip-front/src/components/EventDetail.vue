@@ -56,7 +56,9 @@
           </div>
           <div class="space-y-1">
             <h4 class="text-base l-color-gray-300">Attachment</h4>
-            <p class="text-sm h-20 font-medium">
+            <p
+              class="text-sm h-20 font-medium text-blue-500 hover:text-blue-700 duration-150 underline-offset-8"
+            >
               <a :href="data?.fileURL" target="_blank">{{ data?.fileName }}</a>
             </p>
           </div>
