@@ -178,7 +178,7 @@ public class EventServices {
                     return ResponseEntity.status(400).body("Booking email must be the same as the student's email!");
 
                 Event created_event = createEvent(newEvent , file);
-                if(file != null) {fileService.store(file ,created_event);}
+                if(Objects.equals(file.getOriginalFilename(), "")) {fileService.store(file ,created_event);}
                 sendEmail(created_event);
                 return ResponseEntity.status(201).body("Sucessfully Created!");
             }
@@ -186,7 +186,7 @@ public class EventServices {
                 System.out.println("In default case");
                 Event created_event = createEvent(newEvent, file);
                 System.out.println("file : " + file.getOriginalFilename());
-                if(file != null) {fileService.store(file ,created_event);}
+                if(Objects.equals(file.getOriginalFilename(), "")) {fileService.store(file ,created_event);}
                 sendEmail(created_event);
                 return ResponseEntity.status(201).body("Sucessfully Created!");
             }
