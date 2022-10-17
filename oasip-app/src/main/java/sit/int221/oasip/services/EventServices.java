@@ -185,6 +185,7 @@ public class EventServices {
             default: {
                 System.out.println("In default case");
                 Event created_event = createEvent(newEvent, file);
+                System.out.println("file : " + file.getOriginalFilename());
                 if(file != null) {fileService.store(file ,created_event);}
                 sendEmail(created_event);
                 return ResponseEntity.status(201).body("Sucessfully Created!");
