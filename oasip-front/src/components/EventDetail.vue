@@ -48,10 +48,16 @@
             <h4 class="text-base l-color-gray-300">Duration</h4>
             <p class="text-sm font-medium">{{ data?.eventDuration }} Min.</p>
           </div>
-          <div class="grid col-span-4 space-y-1">
+          <div class="grid col-span-2 space-y-1">
             <h4 class="text-base l-color-gray-300">Note</h4>
             <p class="text-sm h-20 font-medium">
               {{ data?.eventNotes == '' ? 'No description' : data?.eventNotes }}
+            </p>
+          </div>
+          <div class="space-y-1">
+            <h4 class="text-base l-color-gray-300">Attachment</h4>
+            <p class="text-sm h-20 font-medium">
+              <a :href="data?.fileURL" target="_blank">{{ data?.fileName }}</a>
             </p>
           </div>
         </div>
