@@ -30,8 +30,8 @@ jobs:
       - name: Clear storage
         run: |
           docker-compose rm -vf oasipfe oasipbe oasipdb nginx_proxy
-          rm -r /home/spadmin/uploads/guest
-          rm -r /home/spadmin/uploads/user
+          rm -rf /home/spadmin/uploads/guest || true
+          rm -rf /home/spadmin/uploads/user || true
       # Runs a set of commands using the runners shell
       - name: Build deploy
         run: |
