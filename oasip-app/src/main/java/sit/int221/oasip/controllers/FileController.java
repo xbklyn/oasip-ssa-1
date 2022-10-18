@@ -37,7 +37,6 @@ public class FileController {
     @ResponseBody
     public ResponseEntity<Resource> serveFile(@RequestParam("path") String filename, HttpServletRequest request) {
         // Load file as Resource
-        System.out.println(filename);
         Resource resource = fileService.loadFileAsResource(filename);
 
         // Try to determine file's content type
