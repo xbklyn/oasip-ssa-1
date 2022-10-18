@@ -13,7 +13,6 @@ import sit.int221.oasip.utils.ListMapper;
 import java.util.Properties;
 
 @Configuration
-@EnableAsync
 public class ApplicationConfig {
     @Bean
     public ModelMapper modelMapper() {

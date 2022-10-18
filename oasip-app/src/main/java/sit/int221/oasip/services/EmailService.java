@@ -19,7 +19,6 @@ public class EmailService {
         this.mailSender = mailSender;
     }
 
-    @Async
     public String sendSimpleMail(EmailDTO details){
         try {
 
