@@ -3,6 +3,7 @@ package sit.int221.oasip.services;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import sit.int221.oasip.dtos.Email.EmailDTO;
 import sit.int221.oasip.dtos.event.PostEventDTO;
@@ -18,6 +19,7 @@ public class EmailService {
         this.mailSender = mailSender;
     }
 
+    @Async
     public String sendSimpleMail(EmailDTO details){
         try {
 
