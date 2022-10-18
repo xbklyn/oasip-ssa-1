@@ -7,7 +7,6 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import sit.int221.oasip.properties.FileProperties;
 
 @SpringBootApplication
-@EnableAsync
 @EnableConfigurationProperties({
 		FileProperties.class
 })
