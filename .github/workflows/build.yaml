@@ -23,13 +23,20 @@ jobs:
       - uses: actions/checkout@v3
 
       # Runs a single command using the runners shell
-      - name: compose-down & delete images
+      - name: Shutdown container
         run: |
           docker-compose down
-          docker-compose rm -svf oasipfe oasipbe oasipdb nginx_proxy 
-
+          
+      - name: Clear storage
+        run: |
+          docker-compose rm -vf oasipfe oasipbe oasipdb nginx_proxy
+          rm -rf /home/spadmin/uploads/guest || true
+          rm -rf /home/spadmin/uploads/user || true
       # Runs a set of commands using the runners shell
-      - name: build and deploy
+      - name: Build deploy
         run: |
           docker-compose up -d --build
-          docker image prune
+          
+      - name: Remove used images
+        run: |
+          docker image prune -af
