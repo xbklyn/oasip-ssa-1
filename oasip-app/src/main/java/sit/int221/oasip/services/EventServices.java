@@ -244,17 +244,22 @@ public class EventServices {
 
         String role = String.valueOf(auth.getAuthorities().toArray()[0]);
         String email = auth.getPrincipal().toString();
-
+        Event event = eventRepository.findById(id).orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Event not foun"));
+        String user_dir = event.getUser() == null ? "guest" : "user/" + "user_" + event.getUser().getId();
+        String path = fileProperties.getUpload_dir() + '/' + user_dir + '/' + "event_" + event.getBookingId();
+        System.out.println(path + " " + Files.exists(Path.of(path)));
         switch (role) {
             case "lecturer" :
                 return ResponseEntity.status(403).body("Access Denied");
             case "admin" : {
+                fileService.deleteDir(path);
                 eventRepository.deleteById(id);
                 check();
                 return ResponseEntity.status(200).body("Successfully deleted!");
             }
             case "student" : {
                 if(!email.equals(eventRepository.findById(id).orElseThrow().getUser().getUserEmail())) return ResponseEntity.status(403).body("Access Denied");
+                fileService.deleteDir(path);
                 eventRepository.deleteById(id);
                 check();
                 return ResponseEntity.status(200).body("Successfully deleted!");
@@ -264,7 +269,7 @@ public class EventServices {
     }
 
     // PUT
-    public ResponseEntity update(Integer id , PutEventDTO editEvent , Authentication auth){
+    public ResponseEntity update(Integer id , PutEventDTO editEvent , MultipartFile file ,Authentication auth) throws IOException {
 
         if(auth == null) throw new ResponseStatusException(UNAUTHORIZED , "Access Denied");
 
@@ -273,16 +278,33 @@ public class EventServices {
 
         Event event = eventRepository.findById(id).orElseThrow(() ->
                 new ResponseStatusException(NOT_FOUND));
-
+        String user_dir = event.getUser() == null ? "guest" : "user/" + "user_" + event.getUser().getId();
+        String path = fileProperties.getUpload_dir() +'/' +  user_dir + "/event_" + event.getBookingId();
         switch (role) {
             case "lecturer" :
                 return ResponseEntity.status(403).body("Access Denied");
             case "admin" : {
-
+                System.out.println("Admin");
+                if(file != null) {
+                    System.out.println("Files is not null");
+                    fileService.deleteFile(path + '/' + file.getOriginalFilename());
+                    fileService.store(file, event);
+                }else {
+                    System.out.println("file is null");
+                    System.out.println("Path " + path);
+                    if(Files.exists(Path.of(path))){
+                        System.out.println("File is existed.");
+                        Path toFile = Files.list(Path.of(path)).collect(Collectors.toList()).get(0);
+                        System.out.println("File path" + toFile);
+                        fileService.deleteFile(String.valueOf(toFile));
+                        System.out.println("file deleted");
+                    }
+                }
                 return ResponseEntity.status(200).body(updateEvent(id,editEvent,event));
             }
             case "student" : {
                 if(!email.equals(event.getUser().getUserEmail())) return ResponseEntity.status(403).body("Access Denied");
+                if(file != null) {fileService.store(file, event);}
                 return ResponseEntity.status(200).body(updateEvent(id,editEvent,event));
             }
         }

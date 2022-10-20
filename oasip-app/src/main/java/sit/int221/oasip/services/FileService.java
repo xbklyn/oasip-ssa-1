@@ -1,5 +1,6 @@
 package sit.int221.oasip.services;
 
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -24,27 +25,30 @@ import java.nio.file.StandardCopyOption;
 public class FileService {
 
     private final Path fileStorageLocation;
+
     @Autowired
     public FileService(FileProperties fileProperties) {
         this.fileStorageLocation = Paths.get(fileProperties.getUpload_dir()).toAbsolutePath().normalize();
-        try{
+        try {
             Files.createDirectories(this.fileStorageLocation);
-        }catch (Exception e) {
+        } catch (Exception e) {
             throw new RuntimeException(
-                "Could not create the directory where the uploaded files will be stored.", e);
+                    "Could not create the directory where the uploaded files will be stored.", e);
         }
     }
 
-    public String store(MultipartFile file , Event event) {
+    public String store(MultipartFile file, Event event) {
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         String user_dir = event.getUser() == null ? "guest" : "user/" + "user_" + event.getUser().getId().toString();
         String event_id = "event_" + event.getBookingId().toString();
 
         try {
-            if (fileName.contains("..")) { throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Sorry! Filename contains invalid path sequence " + fileName);}
+            if (fileName.contains("..")) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Sorry! Filename contains invalid path sequence " + fileName);
+            }
             Path current_dir = this.fileStorageLocation.resolve(user_dir + "/" + event_id);
             Path target = Files.createDirectories(current_dir.resolve(fileName));
-            System.out.println(target.toString()    );
+            System.out.println(target.toString());
             Files.copy(file.getInputStream(), target, StandardCopyOption.REPLACE_EXISTING);
             return fileName;
         } catch (Exception ex) {
@@ -53,16 +57,36 @@ public class FileService {
         }
     }
 
-    public Resource loadFileAsResource(String fileName) { try {
-        Path filePath = this.fileStorageLocation.resolve(fileName).normalize();
-        Resource resource = new UrlResource(filePath.toUri());
-        if (resource.exists()) {
-            return resource;
+    public Resource loadFileAsResource(String fileName) {
+        try {
+            Path filePath = this.fileStorageLocation.resolve(fileName).normalize();
+            Resource resource = new UrlResource(filePath.toUri());
+            if (resource.exists()) {
+                return resource;
+            } else {
+                throw new RuntimeException("File not found " + fileName);
+            }
+        } catch (MalformedURLException ex) {
+            throw new RuntimeException("File not found " + fileName, ex);
         }
-        else {
-            throw new RuntimeException("File not found " + fileName); }
-    } catch (MalformedURLException ex) {
-        throw new RuntimeException("File not found " + fileName, ex); }
     }
 
+    public void deleteDir(String path) {
+        try {
+            System.out.println(path);
+            FileUtils.deleteDirectory(new File(path));
+        } catch (Exception ex) {
+//            throw new RuntimeException("Could not store file " + fileName + ". Please try again!", ex); }
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Could not delete file " + path + ". Please try again!");
+        }
+    }
+
+    public boolean deleteFile(String path){
+        try{
+            System.out.println(path);
+            return Files.deleteIfExists(Path.of(path));
+        } catch (IOException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Could not delete file " + path + ". Please try again!");
+        }
+    }
 }

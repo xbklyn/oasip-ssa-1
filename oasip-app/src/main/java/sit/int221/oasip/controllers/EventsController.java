@@ -92,11 +92,12 @@ public class EventsController {
         @ResponseStatus(HttpStatus.OK)
         @PutMapping("/{id}")
         public ResponseEntity edit(
-                @Valid @RequestBody PutEventDTO editEventDTO,
+                @Valid @RequestPart("body") PutEventDTO editEventDTO,
+                @RequestPart(value = "file" , required = false) MultipartFile file,
                 @PathVariable Integer id,
                 Authentication auth
-                ){
-            return eventServices.update(id , editEventDTO, auth);
+                ) throws IOException {
+            return eventServices.update(id , editEventDTO,file,  auth);
         }
 
 
