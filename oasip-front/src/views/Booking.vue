@@ -159,18 +159,6 @@
 
         <!-- Input - Attachment -->
         <div class="relative">
-          <!-- <div>
-            <label class="block mb-2 text-sm text-gray-900" for="file_input"
-              >Attachment</label
-            >
-            <input
-              class="block w-full text-sm text-gray-900 border"
-              id="file_input"
-              type="file"
-              ref="file"
-              @change="onFileChange"
-            />
-          </div> -->
           <div class="flex justify-center items-center w-full">
             <label
               for="file_input"
