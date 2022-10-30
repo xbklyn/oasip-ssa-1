@@ -146,8 +146,10 @@ public class EventServices {
 
     private Map<String , String> checkFile(String directories) throws IOException {
         Map<String,String> fileInfo = new HashMap<>();
+        System.out.println("Is file existed? : " + Path.of(directories));
         if(Files.exists(Path.of(directories))){
             //Get a file
+            System.out.println("Have file");
             Path toFile = Files.list(Path.of(directories)).collect(Collectors.toList()).get(0);
 
             //Create a file URL
