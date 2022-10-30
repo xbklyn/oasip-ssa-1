@@ -447,7 +447,7 @@ const submit = async (name, mail, start, categoryId, notes) => {
     ],
     { type: 'application/json' },
   );
-  console.log(fileUpload.value);
+  // console.log(fileUpload.value);
   let payload = new FormData();
   // let filePayload = new FormData(fileUpload.value);
   if (fileUpload.value) payload.append('file', fileUpload.value);

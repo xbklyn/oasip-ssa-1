@@ -81,7 +81,7 @@
           Edit
         </button>
         <button
-        :disabled="userRole === 'lecturer'"
+          :disabled="userRole === 'lecturer'"
           @click="show = true"
           class="w-20 h-8 bg-red-500 text-white font-medium hover:bg-red-700 hover:text-white duration-150 disabled:border-gray-300 disabled:bg-gray-200 disabled:border disabled:text-gray-400"
         >
@@ -269,7 +269,7 @@ onBeforeMount(async () => {
 
 const userRole = computed(() => {
   try {
-    return localStorage.getItem("userRole");
+    return localStorage.getItem('userRole');
   } catch (error) {
     return false;
   }
@@ -358,27 +358,37 @@ const deleteEvent = async (eventId) => {
 const SUCCESFUL = ref(false);
 const ERROR = ref(false);
 const editEvent = async (event) => {
+  let body = new Blob(
+    [
+      JSON.stringify({
+        eventNotes: event.note,
+        eventStartTime: event.time,
+      }),
+    ],
+    { type: 'application/json' },
+  );
+  let payload = new FormData();
+  if (event.file) payload.append('file', event.file);
+  payload.append('body', body);
   await fetch(`${import.meta.env.VITE_BASE_URL}/events/${event.id}`, {
     method: 'PUT',
     headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + localStorage.getItem('access_token'),
+      Authorization: localStorage.getItem('access_token')
+        ? 'Bearer ' + localStorage.getItem('access_token')
+        : '',
     },
-    body: JSON.stringify({
-      eventNotes: event.note,
-      eventStartTime: event.time,
-    }),
+    body: payload,
   }).then(async (res) => {
     if (res.status === 401) {
       await getRefreshToken();
       return await fetch(`${import.meta.env.VITE_BASE_URL}/events/${event}`, {
-        method: 'GET',
+        method: 'PUT',
         headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + localStorage.getItem('access_token'),
+          Authorization: localStorage.getItem('access_token')
+            ? 'Bearer ' + localStorage.getItem('access_token')
+            : '',
         },
+        body: payload,
       });
     }
     if (res.ok) {

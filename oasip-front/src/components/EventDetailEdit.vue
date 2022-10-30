@@ -241,6 +241,7 @@
           - {{ `${time.endTime.split(':')[0]}:${time.endTime.split(':')[1]}` }}
         </button>
       </div>
+      {{ currentData }}
 
       <div class="l-w-612 h-px bg-black mx-auto mb-6"></div>
     </div>
@@ -379,7 +380,7 @@ const currentData = computed(() => {
     id: params.id,
     email: prop.data.bookingEmail,
     name: prop.data.bookingName,
-    file: prop.data.fileName,
+    file: fileUpload.value ? fileUpload.value : null,
     note: note.value,
     time: TimePeriodWithDate.value[
       startTime.value == -1 ? indexOfTime.value - 1 : startTime.value
@@ -580,11 +581,11 @@ const reset = () => {
 // Check file
 const oldFile = ref(prop.data.fileName);
 const removeOldFile = () => {
-  oldFile.value = '';
+  oldFile.value = null;
 };
+
 const fileUpload = ref('');
 const onFileChange = (e) => {
-  oldFile.value = '';
   if (e.target.files[0].size / 1024 / 1024 > 10)
     return alert('File size must be less than 10 MB');
 
@@ -596,7 +597,7 @@ const onFileChange = (e) => {
   fileUpload.value = currentFile;
 };
 const removeFileUpload = () => {
-  fileUpload.value = '';
+  fileUpload.value = null;
 };
 </script>
 
