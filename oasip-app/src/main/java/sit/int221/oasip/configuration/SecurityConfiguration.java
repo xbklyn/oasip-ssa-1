@@ -44,14 +44,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManagerBean());
         customAuthenticationFilter.setFilterProcessesUrl("/api/auth/login");
-        http.csrf().disable()
+        http.csrf().disable().cors()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().authorizeHttpRequests().antMatchers("/files/**").permitAll()
                 .and().authorizeHttpRequests().antMatchers("/api/auth/refresh_token" ,"/api/auth/login","/api/auth/check").permitAll()
                 .and().authorizeHttpRequests().antMatchers(HttpMethod.GET , "/api/category").permitAll()
                 .and().authorizeHttpRequests().antMatchers(HttpMethod.POST , "/api/events").permitAll()
                 .and().authorizeHttpRequests().antMatchers("/api/events/{categoryId}","/api/events/{categoryId}/{date}").permitAll()
-                .and().cors()
                 .and().authorizeHttpRequests().antMatchers( "/api/users/**" , "/api/auth/match").hasAuthority("admin")
                 .and().authorizeHttpRequests().anyRequest().authenticated()
                 .and().addFilter(customAuthenticationFilter)
