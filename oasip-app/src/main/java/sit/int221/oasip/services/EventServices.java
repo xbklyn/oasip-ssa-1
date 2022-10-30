@@ -290,7 +290,9 @@ public class EventServices {
                 if(file != null) {
                     System.out.println("Files is not null");
                     fileService.deleteFile(path + '/' + file.getOriginalFilename());
+                    System.out.println("-- Delete old file --- ");
                     fileService.store(file, event);
+                    System.out.println("--- Store new file named: " + file.getOriginalFilename());
                 }else {
                     System.out.println("file is null");
                     System.out.println("Path " + path);
