@@ -146,7 +146,7 @@ public class EventServices {
 
     private Map<String , String> checkFile(String directories) throws IOException {
         Map<String,String> fileInfo = new HashMap<>();
-        System.out.println("Is file existed? : " + Path.of(directories));
+        System.out.println("Is file existed? : " + Files.exists(Path.of(directories)));
         if(Files.exists(Path.of(directories))){
             //Get a file
             System.out.println("Have file");
