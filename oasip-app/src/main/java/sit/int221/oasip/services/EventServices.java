@@ -286,30 +286,34 @@ public class EventServices {
                 return ResponseEntity.status(403).body("Access Denied");
             case "admin" : {
                 System.out.println("Admin");
-                if(file != null) {
-                    System.out.println("Files is not null");
-                    fileService.deleteDir(path);
-                    System.out.println("-- Delete old file --- ");
-                    fileService.store(file, event);
-                    System.out.println("--- Store new file named: " + file.getOriginalFilename());
-                }else {
-                    System.out.println("No files in body");
-                    System.out.println("File is existed. No need to do anything");
-                    Path toFile = Files.list(Path.of(path)).collect(Collectors.toList()).get(0);
-                    System.out.println("File path to delete" + toFile);
-                    fileService.deleteDir(path);
-                    System.out.println("Existed file deleted");
-                }
-                return ResponseEntity.status(200).body(updateEvent(id,editEvent,event));
+                return getResponseEntity(id, editEvent, file, event, path);
             }
             case "student" : {
+                System.out.println("Student");
                 if(!email.equals(event.getUser().getUserEmail())) return ResponseEntity.status(403).body("Access Denied");
-                if(file != null) {fileService.store(file, event);}
-                return ResponseEntity.status(200).body(updateEvent(id,editEvent,event));
+                return getResponseEntity(id, editEvent, file, event, path);
             }
         }
 
         throw new ResponseStatusException(INTERNAL_SERVER_ERROR, "Something went wrong");
+    }
+
+    private ResponseEntity getResponseEntity(Integer id, PutEventDTO editEvent, MultipartFile file, Event event, String path) throws IOException {
+        if(file != null) {
+            System.out.println("Files is not null");
+            fileService.deleteDir(path);
+            System.out.println("-- Delete old file --- ");
+            fileService.store(file, event);
+            System.out.println("--- Store new file named: " + file.getOriginalFilename());
+        }else {
+            System.out.println("No files in body");
+            System.out.println("File is existed. No need to do anything");
+            Path toFile = Files.list(Path.of(path)).collect(Collectors.toList()).get(0);
+            System.out.println("File path to delete" + toFile);
+            fileService.deleteDir(path);
+            System.out.println("Existed file deleted");
+        }
+        return ResponseEntity.status(200).body(updateEvent(id,editEvent,event));
     }
 
     public void check(){
