@@ -1,5 +1,6 @@
 <template>
   <div>
+    {{ oldFile }}
     <!-- Step 1 - Select clinic -->
     <div class="l-w-824 h-36 mx-auto mt-24 grid justify-center">
       <div class="l-w-612">
@@ -360,6 +361,7 @@ defineEmits(['edit', 'getDate']);
 
 onBeforeMount(async () => {
   TimeBooked.value = await getTime.value;
+  await getOldFile();
 });
 
 const getTime = computed(async () => {
@@ -380,7 +382,7 @@ const currentData = computed(() => {
     id: params.id,
     email: prop.data.bookingEmail,
     name: prop.data.bookingName,
-    file: fileUpload.value ? fileUpload.value : null,
+    file: fileUpload.value ? fileUpload.value : '',
     note: note.value,
     time: TimePeriodWithDate.value[
       startTime.value == -1 ? indexOfTime.value - 1 : startTime.value
@@ -579,7 +581,17 @@ const reset = () => {
 };
 
 // Check file
-const oldFile = ref(prop.data.fileName);
+
+const oldFile = ref('');
+const getOldFile = async () => {
+  let res = await fetch(`${prop.data.fileURL}`, {
+    method: 'GET',
+  });
+  oldFile.value = await res;
+  const file = new FileReader(`${prop.data.fileURL}`);
+  console.log(file);
+};
+
 const removeOldFile = () => {
   oldFile.value = null;
 };
