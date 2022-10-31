@@ -139,7 +139,6 @@ public class EventServices {
             DetailEventWithFileDTO detailEventWithFileDTO = modelMapper.map(event,DetailEventWithFileDTO.class);
             detailEventWithFileDTO.setFileName(file.get("fileName"));
             detailEventWithFileDTO.setFileURL(file.get("fileURL"));
-            System.out.println("Have file");
             return ResponseEntity.status(200).body(detailEventWithFileDTO);
         }
     }
@@ -300,7 +299,7 @@ public class EventServices {
                         System.out.println("File is existed. Have to delete.");
                         Path toFile = Files.list(Path.of(path)).collect(Collectors.toList()).get(0);
                         System.out.println("File path to delete" + toFile);
-                        fileService.deleteFile(String.valueOf(toFile));
+                        fileService.deleteDir(path);
                         System.out.println("Existed file deleted");
                     }else {
                         System.out.println("No file changed");
