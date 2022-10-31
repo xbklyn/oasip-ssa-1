@@ -1,6 +1,5 @@
 <template>
   <div>
-    {{ oldFile }}
     <!-- Step 1 - Select clinic -->
     <div class="l-w-824 h-36 mx-auto mt-24 grid justify-center">
       <div class="l-w-612">
@@ -140,11 +139,14 @@
             </button>
           </div>
           <!-- old file -->
-          <div class="flex gap-x-6" v-else>
+          <!-- <div class="flex gap-x-6" v-else>
             <p class="space-x-4">
-              <span class="text-sm">{{ oldFile }}</span>
+              <span class="text-sm">{{ oldFile.name }}</span>
+              <span class="text-xs">
+                {{ (oldFile.size / 1024 / 1024).toFixed(2) }} MB</span
+              >
             </p>
-            <button @click="removeOldFile" v-if="oldFile">
+            <button @click="removeOldFile">
               <div
                 class="w-4 h-4 rounded-full hover:bg-gray-500 hover:text-white flex justify-center items-center duration-150"
               >
@@ -156,7 +158,7 @@
                 </svg>
               </div>
             </button>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -242,7 +244,8 @@
           - {{ `${time.endTime.split(':')[0]}:${time.endTime.split(':')[1]}` }}
         </button>
       </div>
-      {{ currentData }}
+      <!-- {{ currentData }}
+      {{ oldFile }} -->
 
       <div class="l-w-612 h-px bg-black mx-auto mb-6"></div>
     </div>
@@ -361,7 +364,14 @@ defineEmits(['edit', 'getDate']);
 
 onBeforeMount(async () => {
   TimeBooked.value = await getTime.value;
-  await getOldFile();
+  fileUpload.value = await toDataURL(prop.data.fileURL).then((dataUrl) => {
+    // console.log('Here is Base64 Url', dataUrl);
+    let fileData = dataURLtoFile(dataUrl, prop.data.fileName);
+    // console.log('Here is JavaScript File Object', fileData);
+    if (fileData.name === 'undefined') return null;
+    return fileData;
+  });
+  // console.log(fileUpload.value);
 });
 
 const getTime = computed(async () => {
@@ -382,7 +392,7 @@ const currentData = computed(() => {
     id: params.id,
     email: prop.data.bookingEmail,
     name: prop.data.bookingName,
-    file: fileUpload.value ? fileUpload.value : '',
+    file: fileUpload.value,
     note: note.value,
     time: TimePeriodWithDate.value[
       startTime.value == -1 ? indexOfTime.value - 1 : startTime.value
@@ -583,17 +593,35 @@ const reset = () => {
 // Check file
 
 const oldFile = ref('');
-const getOldFile = async () => {
-  let res = await fetch(`${prop.data.fileURL}`, {
-    method: 'GET',
-  });
-  oldFile.value = await res;
-  const file = new FileReader(`${prop.data.fileURL}`);
-  console.log(file);
-};
 
 const removeOldFile = () => {
   oldFile.value = null;
+};
+
+const toDataURL = (url) =>
+  fetch(url)
+    .then((response) => response.blob())
+    .then(
+      (blob) =>
+        new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onloadend = () => resolve(reader.result);
+          reader.onerror = reject;
+          reader.readAsDataURL(blob);
+        }),
+    );
+
+const dataURLtoFile = (dataurl, filename) => {
+  if (!dataurl.length) return null;
+  let arr = dataurl.split(','),
+    mime = arr[0].match(/:(.*?);/)[1],
+    bstr = atob(arr[1]),
+    n = bstr.length,
+    u8arr = new Uint8Array(n);
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+  return new File([u8arr], filename, { type: mime });
 };
 
 const fileUpload = ref('');
@@ -607,6 +635,7 @@ const onFileChange = (e) => {
     lastModified: files[0].lastModified,
   });
   fileUpload.value = currentFile;
+  // console.log(fileUpload.value);
 };
 const removeFileUpload = () => {
   fileUpload.value = null;
