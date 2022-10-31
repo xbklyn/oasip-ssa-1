@@ -289,19 +289,22 @@ public class EventServices {
                 System.out.println("Admin");
                 if(file != null) {
                     System.out.println("Files is not null");
-                    fileService.deleteFile(path + '/' + file.getOriginalFilename());
+                    fileService.deleteDir(path);
                     System.out.println("-- Delete old file --- ");
                     fileService.store(file, event);
                     System.out.println("--- Store new file named: " + file.getOriginalFilename());
                 }else {
-                    System.out.println("file is null");
-                    System.out.println("Path " + path);
+                    System.out.println("No files in body");
+                    System.out.println("Path : " + path);
                     if(Files.exists(Path.of(path))){
-                        System.out.println("File is existed.");
+                        System.out.println("File is existed. Have to delete.");
                         Path toFile = Files.list(Path.of(path)).collect(Collectors.toList()).get(0);
-                        System.out.println("File path" + toFile);
+                        System.out.println("File path to delete" + toFile);
                         fileService.deleteFile(String.valueOf(toFile));
-                        System.out.println("file deleted");
+                        System.out.println("Existed file deleted");
+                    }else {
+                        System.out.println("No file changed");
+                        System.out.println("Old file : " + Files.list(Path.of(path)).collect(Collectors.toList()).get(0) );
                     }
                 }
                 return ResponseEntity.status(200).body(updateEvent(id,editEvent,event));
