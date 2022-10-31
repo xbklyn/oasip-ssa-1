@@ -368,7 +368,7 @@ const editEvent = async (event) => {
     { type: 'application/json' },
   );
   let payload = new FormData();
-  if (event.file) payload.append('file', event.file);
+  payload.append('file', event.file);
   payload.append('body', body);
   await fetch(`${import.meta.env.VITE_BASE_URL}/events/${event.id}`, {
     method: 'PUT',
