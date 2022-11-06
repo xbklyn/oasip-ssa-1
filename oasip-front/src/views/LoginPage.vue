@@ -39,6 +39,17 @@
               Login
             </button>
           </div>
+          <!-- log in with microsoft account -->
+          <div
+            class="h-12 flex items-center justify-center my-2 bg-gray-100 hover:bg-gray-300"
+          >
+            <button
+              class="w-full h-12 text-xs font-light text-center flex items-center justify-center gap-2"
+            >
+              <img src="../assets/ms_symbol.png" />
+              <p>Login with microsoft</p>
+            </button>
+          </div>
           <div class="h-12 flex items-center justify-center">
             <button
               @click="backToHome"
