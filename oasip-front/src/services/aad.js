@@ -8,7 +8,7 @@ const msalConfig = {
     authority: "https://login.microsoftonline.com/6f4432dc-20d2-441d-b1db-ac3380ba633d/",
     // Full redirect URL, in form of http://localhost:3000
     // redirectUri: "http://localhost:3000/",
-    redirectUri: "http://intproj21.sit.kmutt.ac.th/ssa1",
+    redirectUri: "https://intproj21.sit.kmutt.ac.th/ssa1",
   },
   cache: {
     cacheLocation: "localStorage", // This configures where your cache will be stored
