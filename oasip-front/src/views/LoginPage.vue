@@ -45,9 +45,10 @@
           >
             <button
               class="w-full h-12 text-xs font-light text-center flex items-center justify-center gap-2"
+              @click="login_with_ms()"
             >
               <img src="../assets/ms_symbol.png" />
-              <p>Login with microsoft</p>
+              <p >Login with microsoft</p>
             </button>
           </div>
           <div class="h-12 flex items-center justify-center">
@@ -68,6 +69,8 @@
 import { ref } from '@vue/reactivity';
 import { useRouter } from 'vue-router';
 import { useStoreToken } from '../stores/token';
+import add from '../services/aad'
+import aad from '../services/aad';
 
 const myRouter = useRouter();
 const useToken = useStoreToken();
@@ -120,7 +123,13 @@ const userLogin = async () => {
     }
   });
 };
-
+const login_with_ms = () => {
+  console.log("loggin in");
+  aad.login()
+    .then((account) => {
+      console.log(account);
+    })
+}
 const backToHome = () => {
   myRouter.push({
     name: 'Home',
