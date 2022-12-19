@@ -12,10 +12,13 @@
         "@microsoft/microsoft-graph-client": "^3.0.4",
         "axios": "^0.27.2",
 <<<<<<< HEAD
+<<<<<<< HEAD
         "esbuild": "^0.16.9",
         "epic-spinners": "^2.0.0",
 =======
 >>>>>>> parent of eefeaee (:adhesive_bandage: add esbuild)
+=======
+>>>>>>> parent of 5a9bbe9 (add: baseloader component)
         "json-server": "^0.17.0",
         "moment": "^2.29.4",
         "msal": "^1.4.17",

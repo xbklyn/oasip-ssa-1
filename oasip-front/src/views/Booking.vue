@@ -1,9 +1,5 @@
 <template>
   <div class="l-w-full mb-12 mx-auto justify-center">
-    <div v-if="isBookLoaded">
-      <BaseLoader />
-    </div>
-
     <!-- Menu - Breadcrumbs -->
     <div class="l-w-824 mx-auto mt-12 mb-4">
       <div class="flex items-center">
@@ -75,70 +71,13 @@
 
     <div class="l-w-824 h-px bg-black mx-auto" v-show="clinicId"></div>
 
-    <!-- Step 2 - Select time period -->
-    <div class="l-w-824 h-full mx-auto flex m-12 mb-12" v-show="clinicId">
-      <div class="w-52 h-24 place-items-center">
-        <h2>Step 2<span class="text-red-500">*</span></h2>
-        <p class="l-text-xxs">Select time period.</p>
-      </div>
-      <div class="l-w-612 h-full grid gap-6">
-        <!-- Input - Date -->
-        <div class="relative">
-          <input
-            type="date"
-            id="dateTime"
-            v-model="selectDate"
-            :min="moment().format('YYYY-MM-DD')"
-            @input="computeTimePeriod"
-            @change="startTime = -1"
-            class="block l-w-612 h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-            placeholder=" "
-          />
-          <label
-            for="dateTime"
-            class="absolute text-sm l-color-gray-300 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
-          >
-            Date
-          </label>
-        </div>
-
-        <!-- Box - Time selector -->
-        <div
-          class="h-48 l-w-612 grid grid-cols-5 gap-6 mt-6 overflow-y-auto"
-          v-show="selectDate"
-        >
-          <button
-            v-for="(time, index) in TimePeriod"
-            :key="index"
-            @click="startTime = index"
-            :class="[
-              'h-8 text-sm duration-150 bg-white',
-              startTime == index ? 'bg-blue-500 text-white border-0' : '',
-              isOverlap(index)
-                ? ' text-gray-300'
-                : 'hover:bg-blue-500 hover:text-white border border-gray-300 hover:border-none',
-            ]"
-            :disabled="isOverlap(index)"
-          >
-            {{
-              `${time.startTime.split(':')[0]}:${time.startTime.split(':')[1]}`
-            }}
-            -
-            {{ `${time.endTime.split(':')[0]}:${time.endTime.split(':')[1]}` }}
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <div class="l-w-824 h-px bg-black mx-auto" v-show="selectDate"></div>
-
-    <!-- Step 3 - Fill infomation -->
+    <!-- Step 2 - Fill infomation -->
     <div
       class="l-w-824 h-84 mx-auto flex m-12 duration-150 ease-in-out transition"
-      v-show="selectDate"
+      v-show="clinicId"
     >
       <div class="w-52 h-84 place-items-center">
-        <h2>Step 3</h2>
+        <h2>Step 2</h2>
         <p class="l-text-xxs">Fill your infomation.</p>
       </div>
       <div class="space-y-6">
@@ -264,13 +203,68 @@
       </div>
     </div>
 
-    <!-- <div
+    <div
       class="l-w-824 h-px bg-black mx-auto"
       v-show="fullName !== '' && email !== ''"
-    ></div> -->
+    ></div>
+
+    <!-- Step 3 - Select time period -->
+    <div
+      class="l-w-824 h-full mx-auto flex m-12 mb-12"
+      v-show="fullName !== '' && email !== ''"
+    >
+      <div class="w-52 h-24 place-items-center">
+        <h2>Step 3<span class="text-red-500">*</span></h2>
+        <p class="l-text-xxs">Select time period.</p>
+      </div>
+      <div class="l-w-612 h-full grid gap-6">
+        <!-- Input - Date -->
+        <div class="relative">
+          <input
+            type="date"
+            id="dateTime"
+            v-model="selectDate"
+            :min="moment().format('YYYY-MM-DD')"
+            @input="computeTimePeriod"
+            @change="startTime = -1"
+            class="block l-w-612 h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+            placeholder=" "
+          />
+          <label
+            for="dateTime"
+            class="absolute text-sm l-color-gray-300 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
+          >
+            Date
+          </label>
+        </div>
+
+        <!-- Box - Time selector -->
+        <div class="h-48 l-w-612 grid grid-cols-5 gap-6 mt-6 overflow-y-auto">
+          <button
+            v-for="(time, index) in TimePeriod"
+            :key="index"
+            @click="startTime = index"
+            :class="[
+              'h-8 text-sm duration-150 bg-white',
+              startTime == index ? 'bg-blue-500 text-white border-0' : '',
+              isOverlap(index)
+                ? ' text-gray-300'
+                : 'hover:bg-blue-500 hover:text-white border border-gray-300 hover:border-none',
+            ]"
+            :disabled="isOverlap(index)"
+          >
+            {{
+              `${time.startTime.split(':')[0]}:${time.startTime.split(':')[1]}`
+            }}
+            -
+            {{ `${time.endTime.split(':')[0]}:${time.endTime.split(':')[1]}` }}
+          </button>
+        </div>
+      </div>
+    </div>
 
     <!-- Alert - If booked error -->
-    <!-- <div
+    <div
       v-if="ERROR"
       class="alert l-w-824 mx-auto duration-150 mb-12 flex p-4 mt-2 pb-4 text-sm text-red-700 border place-items-center"
       role="alert"
@@ -295,7 +289,8 @@
         <span class="font-medium">Error! </span> Somthing want wrong, Please try
         again.
       </div>
-    </div> -->
+    </div>
+    <!-- Button - Submition -->
     <div class="l-w-824 h-12 mx-auto">
       <button
         :class="[
@@ -310,7 +305,7 @@
     </div>
 
     <!-- Alert - If booked succesfully -->
-    <!-- <div
+    <div
       v-if="SUCCESFUL"
       class="alert bg-black/30 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full h-full"
     >
@@ -352,7 +347,7 @@
           </div>
         </div>
       </div>
-    </div> -->
+    </div>
   </div>
 </template>
 
@@ -367,8 +362,6 @@ import {
   getRefreshToken,
 } from '../services/FetchServices.js';
 import { useRoute, useRouter } from 'vue-router';
-import Swal from 'sweetalert2';
-import BaseLoader from '../components/bases/BaseLoader.vue';
 
 // HOOK
 onBeforeMount(async () => {
@@ -387,7 +380,6 @@ onBeforeUpdate(async () => {
 });
 
 // ATTIBUTE
-const isBookLoaded = ref(false)
 let userRole = localStorage.getItem('userRole');
 const myRouter = useRouter();
 const clinics = ref([]);
@@ -440,11 +432,9 @@ const onFileChange = (e) => {
 
 // FUNCTION
 // CREATE - Event
-// const SUCCESFUL = ref(false);
-// const ERROR = ref(false);
-
+const SUCCESFUL = ref(false);
+const ERROR = ref(false);
 const submit = async (name, mail, start, categoryId, notes) => {
-  isBookLoaded.value = true
   let body = new Blob(
     [
       JSON.stringify({
@@ -490,59 +480,37 @@ const submit = async (name, mail, start, categoryId, notes) => {
         });
       }
       if (res.status === 403) {
-        // ERROR.value = true;
-        // SUCCESFUL.value = false;
-        // setTimeout(function () {
-        //   ERROR.value = false;
-        // }, 4000);
-        await Swal.fire({
-          icon: 'error',
-          title: 'Something went wrong, please try again.',
-        });
-        isBookLoaded.value = false
-        return;
-      }
-      if (res.ok) {
-        // SUCCESFUL.value = true;
-        await Swal.fire({
-          icon: 'success',
-          title: 'Booked',
-          text: 'Your information is already submited.',
-        });
+        ERROR.value = true;
+        SUCCESFUL.value = false;
         setTimeout(function () {
-          myRouter.push({
-            name: 'Home',
-          });
-        }, 1);
-        isBookLoaded.value = false
+          ERROR.value = false;
+        }, 4000);
         return;
       }
-    })
-    .then(async (res) => {
       if (res.ok) {
-        // SUCCESFUL.value = true;
-        await Swal.fire({
-          icon: 'success',
-          title: 'Booked',
-          text: 'Your information is already submited.',
-        });
+        SUCCESFUL.value = true;
         setTimeout(function () {
           myRouter.push({
             name: 'Home',
           });
         }, 2000);
-        isBookLoaded.value = false
+        return;
+      }
+    })
+    .then((res) => {
+      if (res.ok) {
+        SUCCESFUL.value = true;
+        setTimeout(function () {
+          myRouter.push({
+            name: 'Home',
+          });
+        }, 2000);
       } else {
-        // ERROR.value = true;
-        // SUCCESFUL.value = false;
-        // setTimeout(function () {
-        //   ERROR.value = false;
-        // }, 4000);
-        await Swal.fire({
-          icon: 'error',
-          title: 'Something went wrong, please try again.',
-        });
-        isBookLoaded.value = false
+        ERROR.value = true;
+        SUCCESFUL.value = false;
+        setTimeout(function () {
+          ERROR.value = false;
+        }, 4000);
       }
     });
 };
