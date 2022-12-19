@@ -71,6 +71,7 @@ import { useRouter } from 'vue-router';
 import { useStoreToken } from '../stores/token';
 import add from '../services/aad'
 import aad from '../services/aad';
+import Swal from 'sweetalert2';
 
 const myRouter = useRouter();
 const useToken = useStoreToken();
@@ -98,8 +99,7 @@ const userLogin = async () => {
         body: JSON.stringify(login.value),
       }).then(async (res) => {
         if (res.ok) {
-          alert('Login Successfully');
-
+          // alert('Login Successfully');
           let token = await res.json();
           localStorage.setItem('access_token', token.access_token);
           localStorage.setItem('refresh_token', token.refresh_token);
@@ -110,6 +110,13 @@ const userLogin = async () => {
           let userEmail = JSON.parse(`${tokenDecode[0]}}`);
           localStorage.setItem('userEmail', userEmail.sub);
           localStorage.setItem('userRole', userRole.role[0]);
+
+          await Swal.fire({
+            icon: 'success',
+            title: 'Login Successfully',
+            // text: 'Please try again.',
+          });
+
           setTimeout(function () {
             location.reload(1);
           }, 1);
@@ -118,7 +125,14 @@ const userLogin = async () => {
         }
       });
     } else {
-      alert('Invalid email or password, please try again.');
+      // alert('Invalid email or password, please try again.');
+
+      await Swal.fire({
+        icon: 'error',
+        title: 'Invalid email or password, please try again.',
+        // text: 'Please try again.',
+      });
+
       return (responeError.value = await res.json());
     }
   });
