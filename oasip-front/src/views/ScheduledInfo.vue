@@ -254,7 +254,7 @@
 <script setup>
 import { ref } from '@vue/reactivity';
 import { computed, onBeforeMount } from '@vue/runtime-core';
-import { deleteEventById, editEventById } from '../services/FetchServices.js';
+import { deleteEventById, editEventById , getRefreshToken } from '../services/FetchServices.js';
 import { useRoute, useRouter } from 'vue-router';
 import EventDetail from '../components/EventDetail.vue';
 import EventDetailEdit from '../components/EventDetailEdit.vue';
@@ -381,7 +381,7 @@ const editEvent = async (event) => {
   }).then(async (res) => {
     if (res.status === 401) {
       await getRefreshToken();
-      return await fetch(`${import.meta.env.VITE_BASE_URL}/events/${event}`, {
+      return await fetch(`${import.meta.env.VITE_BASE_URL}/events/${event.id}`, {
         method: 'PUT',
         headers: {
           Authorization: localStorage.getItem('access_token')
