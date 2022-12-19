@@ -1,10 +1,14 @@
 <template>
-  <div class="l-w-824 mx-auto mt-12 scroll-smooth" id="top">
-    <!-- Menu - Breadcrumbs -->
+  <div>
+    <div v-if="isClinicLoaded">
+      <BaseLoader />
+    </div>
+    <div class="l-w-824 mx-auto mt-12 scroll-smooth" id="top">
+      <!-- Menu - Breadcrumbs -->
     <div class="l-w-824 mx-auto mb-4">
       <div class="flex items-center">
         <router-link
-          :to="{ name: 'Home' }"
+        :to="{ name: 'Home' }"
           class="inline-flex items-center text-sm font-medium l-color-blue hover:text-blue-600 hover:underline hover:underline-offset-4"
         >
           <svg class="w-5 h-5 mr-1" viewBox="0 0 512 512">
@@ -231,17 +235,22 @@
       </div>
     </div>
   </div>
+</div>
 </template>
 
 <script setup>
 import { computed, onBeforeMount, ref } from '@vue/runtime-core';
-import { getAllCategory, editCategoryById } from '../services/FetchServices.js';
+import { getAllCategory, editCategoryById, getRefreshToken } from '../services/FetchServices.js';
+import BaseLoader from '../components/bases/BaseLoader.vue';
 
 onBeforeMount(async () => {
+  isClinicLoaded.value = true
   const res = await getAllCategory();
   CLINICS.value = res; // Get all category
+  isClinicLoaded.value = false
 });
 
+const isClinicLoaded = ref(false)
 const isClinicNamevalid = ref(false);
 const isClinicNameLengthValid = ref(false);
 const isDurationValid = ref(false);
@@ -332,17 +341,54 @@ const reset = () => {
 const SUCCESFUL = ref(false);
 const ERROR = ref(false);
 const updateCategory = async (category) => {
-  let status = await editCategoryById(category);
-  if (status == 500 || status == 400) {
-    SUCCESFUL.value = false;
-    ERROR.value = true;
-  } else {
+  const res = await fetch(
+    `${import.meta.env.VITE_BASE_URL}/category/${category.categoryId}`,
+    {
+      method: 'PUT',
+      headers: {
+        'Content-type': 'application/json',
+        Authorization: localStorage.getItem('access_token')
+          ? 'Bearer ' + localStorage.getItem('access_token')
+          : '',
+      },
+      body: JSON.stringify({
+        eventCategoryName: category.eventCategoryName,
+        eventCategoryDuration: category.eventCategoryDuration,
+        eventCategoryDescription: category.eventCategoryDescription,
+      }),
+    },
+  );
+
+  if (res.status === 200) {
     ERROR.value = false;
     SUCCESFUL.value = true;
     setTimeout(function () {
       window.location.reload(1);
     }, 2000);
+    return
   }
+
+  const err = await getRefreshToken();
+  if(err === 401){
+    setTimeout(() => {
+      myRouter.push('/login');
+    }, 500);
+    return
+  }
+
+  return updateCategory(category)
+
+  // let status = await editCategoryById(category);
+  // if (status == 500 || status == 400) {
+  //   SUCCESFUL.value = false;
+  //   ERROR.value = true;
+  // } else {
+  //   ERROR.value = false;
+  //   SUCCESFUL.value = true;
+  //   setTimeout(function () {
+  //     window.location.reload(1);
+  //   }, 2000);
+  // }
 };
 
 // CHECK - All validation

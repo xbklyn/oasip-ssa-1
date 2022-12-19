@@ -79,6 +79,7 @@ import Swal from 'sweetalert2';
 
 const myRouter = useRouter();
 const useToken = useStoreToken();
+const { setAccessToken, setUserRole, setUserEmail } = useToken
 const login = ref({
   email: '',
   rawPassword: '',
@@ -105,7 +106,6 @@ const userLogin = async () => {
         body: JSON.stringify(login.value),
       }).then(async (res) => {
         if (res.ok) {
-          // alert('Login Successfully');
           let token = await res.json();
           localStorage.setItem('access_token', token.access_token);
           localStorage.setItem('refresh_token', token.refresh_token);
@@ -117,24 +117,20 @@ const userLogin = async () => {
           localStorage.setItem('userEmail', userEmail.sub);
           localStorage.setItem('userRole', userRole.role[0]);
 
+          setAccessToken(token.access_token)
+          setUserRole(localStorage.getItem('userRole'))
+          setUserEmail(localStorage.getItem('userEmail'))
           
           await Swal.fire({
             icon: 'success',
             title: 'Login Successfully',
-            // text: 'Please try again.',
           });
           isLoaded.value = false;
-
-          setTimeout(function () {
-            location.reload(1);
-          }, 1);
           myRouter.push('/');
         } else {
         }
       });
     } else {
-      // alert('Invalid email or password, please try again.');
-
       await Swal.fire({
         icon: 'error',
         title: 'Invalid email or password, please try again.',

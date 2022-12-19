@@ -98,7 +98,7 @@
 
         <!-- Input - Attachment -->
         <div class="relative">
-          <div class="flex justify-center items-center w-full">
+          <div class="flex justify-center items-center w-full mb-2">
             <label
               for="file_input"
               class="flex flex-col justify-center items-center w-full h-36 border-2 border-slate-300 border-dashed cursor-pointer hover:bg-slate-100"
@@ -118,13 +118,14 @@
             </label>
           </div>
           <!-- add new file attachment -->
-          <div class="flex gap-x-6" v-if="fileUpload">
-            <p class="space-x-4">
-              <span class="text-sm">{{ fileUpload.name }}</span>
-              <span class="text-xs">
+          <div class="flex l-w-612 items-center" v-if="fileUpload">
+            <p class="space-x-4 truncate">
+              {{ fileUpload.name }}
+              
+            </p>
+            <span class="flex justify-center text-xs w-full">
                 {{ (fileUpload.size / 1024 / 1024).toFixed(2) }} MB</span
               >
-            </p>
             <button @click="removeFileUpload">
               <div
                 class="w-4 h-4 rounded-full hover:bg-gray-500 hover:text-white flex justify-center items-center duration-150"
@@ -288,8 +289,8 @@
       v-if="SUCCESFUL"
       class="alert bg-black/30 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full h-full"
     > -->
-      
-      <!-- <div
+
+    <!-- <div
         class="relative p-4 w-full h-full grid place-items-center justify-center"
       >
         <div

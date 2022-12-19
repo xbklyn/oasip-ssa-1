@@ -1,4 +1,10 @@
+import { createPinia } from 'pinia'
+const pinia = createPinia();
 import { useRouter } from 'vue-router';
+import { useStoreToken } from '../stores/token';
+
+const tokenStore = useStoreToken(pinia);
+const { setAccessToken, setUserRole, setUserEmail } = tokenStore;
 const myRouter = useRouter();
 import Swal from 'sweetalert2';
 
@@ -32,7 +38,7 @@ export const getAllEvents = async () => {
         await Swal.fire({
           icon: 'error',
           title: 'Ops.',
-          text: 'Your session is end, please login again.'
+          text: 'Your session is end, please login again.',
         });
         myRouter.push('/login');
       }
@@ -187,43 +193,36 @@ export const editCategoryById = async (category) => {
 };
 
 export const getRefreshToken = async () => {
-  console.log('token expired');
-  if (!localStorage.getItem('refresh_token')) {
-    alert('You session is ended, Please login');
-    myRouter.push('/');
-  } else {
-    const res = await fetch(
-      `${import.meta.env.VITE_BASE_URL}/auth/refresh_token`,
-      {
-        method: 'GET',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + localStorage.getItem('refresh_token'),
-        },
+  const res = await fetch(
+    `${import.meta.env.VITE_BASE_URL}/auth/refresh_token`,
+    {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + localStorage.getItem('refresh_token'),
       },
-    );
+    },
+  );
 
-    if (res.status === 200) {
-      let token = await res.json();
-      localStorage.setItem('access_token', token.access_token);
-      localStorage.setItem('refresh_token', token.refresh_token);
-    } else {
-      localStorage.clear();
-      //     alert('You session is ended, Please login');
-    }
-
-    // .then(async (res) => {
-    //   if (!res.ok) {
-    //     localStorage.clear();
-    //     alert('You session is ended, Please login');
-    //   }
-    //   if (res.ok) {
-    //     let token = await res.json();
-    //     localStorage.setItem('access_token', token.access_token);
-    //     localStorage.setItem('refresh_token', token.refresh_token);
-    //   }
-    // });
+  if (res.status === 200) {
+    console.log('get refresh');
+    let token = await res.json();
+    localStorage.setItem('access_token', token.access_token);
+    localStorage.setItem('refresh_token', token.refresh_token);
+    setAccessToken(token.access_token);
+    // setUserRole(localStorage.getItem('userRole'));
+    // setUserEmail(localStorage.getItem('userEmail'));
+    return 200;
+  } else {
+    console.log('token expired');
+    localStorage.clear();
+    await Swal.fire({
+      icon: 'error',
+      title: 'Sorry',
+      text: `You session is ended or, you haven't logged in`,
+    });
+    return 401;
   }
 };
 

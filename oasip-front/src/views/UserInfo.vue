@@ -1,6 +1,10 @@
 <template>
-  <div class="w-[824px] mx-auto mt-12 scroll-smooth" id="top">
-    <!-- Menu - Breadcrumbs -->
+  <div>
+    <div v-if="isUserLoaded">
+      <BaseLoader />
+    </div>
+    <div class="w-[824px] mx-auto mt-12 scroll-smooth" id="top">
+      <!-- Menu - Breadcrumbs -->
     <div class="w-[824px] mx-auto mb-4">
       <div class="flex items-center">
         <router-link
@@ -276,20 +280,26 @@
       </div>
     </div>
   </div>
+</div>
 </template>
 
 <script setup>
 import { computed, ref } from '@vue/reactivity';
 import { onBeforeMount } from '@vue/runtime-core';
 import { useRoute, useRouter } from 'vue-router';
+import { getRefreshToken } from '../services/FetchServices.js';
 import moment from 'moment';
 import Description from '../components/commons/lists/Description.vue';
+import Swal from 'sweetalert2';
+import BaseLoader from '../components/bases/BaseLoader.vue';
 const { params } = useRoute();
 
 onBeforeMount(async () => {
+  isUserLoaded.value = true
   await getUserById(params.id);
+  isUserLoaded.value = false
 });
-
+const isUserLoaded = ref(false)
 const myRouter = useRouter();
 const user = ref({});
 const confirmBox = ref(false);
@@ -393,122 +403,79 @@ const errorAlert = () => {
 };
 
 // Fetch service
-
-const getRefreshToken = async () => {
-  // const refresh_token = localStorage.getItem('refresh_token');
-  let res = await fetch(`${import.meta.env.VITE_BASE_URL}/auth/refresh_token`, {
-    method: 'GET',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + localStorage.getItem('refresh_token'),
-    },
-  }).then(async (res) => {
-    if (!res.ok) {
-      localStorage.removeItem('access_token');
-      localStorage.removeItem('refresh_token');
-      localStorage.removeItem('userRole');
-      alert('Your session has expired. Please log in again.');
-      setTimeout(() => {
-        location.reload(1);
-      }, 1);
-      myRouter.push('/');
-    }
-    if (res.ok) {
-      let token = await res.json();
-      localStorage.setItem('access_token', token.access_token);
-      localStorage.setItem('refresh_token', token.refresh_token);
-    }
-  });
-};
-
 // GET METHOD - Get user by Id
 const getUserById = async (id) => {
-  await fetch(`${import.meta.env.VITE_BASE_URL}/users/${id}`, {
+  const res = await fetch(`${import.meta.env.VITE_BASE_URL}/users/${id}`, {
     method: 'GET',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + localStorage.getItem('access_token'),
     },
-  })
-    .then(async (res) => {
-      if (!res.ok) {
-        await getRefreshToken();
-        return await fetch(`${import.meta.env.VITE_BASE_URL}/users/${id}`, {
-          method: 'GET',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            Authorization: 'Bearer ' + localStorage.getItem('access_token'),
-          },
-        });
-      }
-      return (user.value = await res.json());
-    })
-    .then(async (res) => {
-      if (res.ok) return (user.value = await res.json());
-    })
-    .catch(async (e) => {
-      myRouter.push('/');
-    });
+  });
+
+  if (res.status === 200) {
+    return (user.value = await res.json());
+  }
+
+  const status = await getRefreshToken();
+  if (status === 401) {
+    setTimeout(async () => {
+      await myRouter.push('/login');
+    }, 500);
+    return;
+  }
+
+  return getUserById(id);
 };
 
 // DELETE METHOD - Delete user
 const deleteUserById = async () => {
-  await fetch(`${import.meta.env.VITE_BASE_URL}/users/${params.id}`, {
-    method: 'DELETE',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + localStorage.getItem('access_token'),
+  const res = await fetch(
+    `${import.meta.env.VITE_BASE_URL}/users/${params.id}`,
+    {
+      method: 'DELETE',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + localStorage.getItem('access_token'),
+      },
     },
-  })
-    .then(async (res) => {
-      if (!res.ok) {
-        await getRefreshToken();
-        return await fetch(
-          `${import.meta.env.VITE_BASE_URL}/users/${params.id}`,
-          {
-            method: 'DELETE',
-            headers: {
-              Accept: 'application/json',
-              'Content-Type': 'application/json',
-              Authorization: 'Bearer ' + localStorage.getItem('access_token'),
-            },
-          },
-        );
-      }
-      if (res.ok) {
-        successAlert();
-        myRouter.push({
-          name: `users-manage`,
-        });
-        return;
-      } else {
-        errorAlert();
-        return (responeError.value = await res.json());
-      }
-    })
-    .then((res) => {
-      successAlert();
-      myRouter.push({
-        name: `users-manage`,
-      });
-      return;
+  );
+
+  if (res.status === 200) {
+    await Swal.fire({
+      icon: 'success',
+      title: 'Deleted user successfully',
     });
+    myRouter.push({
+      name: `users-manage`,
+    });
+    return;
+  }
+
+  const status = await getRefreshToken();
+  if (status === 401) {
+    setTimeout(async () => {
+      await myRouter.push('/login');
+    }, 500);
+    return;
+  }
+
+  return deleteUserById();
 };
 
 // PUT METHOD - Edit user
 const putUser = async () => {
   if (validSameData.value) {
-    successAlert();
-    setTimeout(() => {
+    await Swal.fire({
+      icon: 'success',
+      title: 'User successfully',
+    });
       editMode.value = false;
-    }, 1500);
     return;
   }
-  await fetch(`${import.meta.env.VITE_BASE_URL}/users/${params.id}`, {
+  const res = await fetch(`${import.meta.env.VITE_BASE_URL}/users/${params.id}`, {
     method: 'PUT',
     headers: {
       Accept: 'application/json',
@@ -517,43 +484,31 @@ const putUser = async () => {
     },
     body: JSON.stringify(userEdit.value),
   })
-    .then(async (res) => {
-      if (!res.ok) {
-        await getRefreshToken();
-        return await fetch(
-          `${import.meta.env.VITE_BASE_URL}/users/${params.id}`,
-          {
-            method: 'PUT',
-            headers: {
-              Accept: 'application/json',
-              'Content-Type': 'application/json',
-              Authorization: 'Bearer ' + localStorage.getItem('access_token'),
-            },
-          },
-        );
-      }
-      if (res.ok) {
-        successAlert();
-        setTimeout(() => {
-          editMode.value = false;
-        }, 1500);
-        responeError.value = {};
-        await getUserById(params.id);
-        return;
-      } else {
-        errorAlert();
-        return (responeError.value = await res.json());
-      }
-    })
-    .then(async (res) => {
-      successAlert();
-      setTimeout(() => {
-        editMode.value = false;
-      }, 1500);
-      responeError.value = {};
-      await getUserById(params.id);
-      return;
+
+  if(res.status === 200){
+    await Swal.fire({
+      icon: 'success',
+      title: 'User updated successfully',
     });
+    await getUserById(params.id);
+    editMode.value = false;
+    responeError.value = {};
+    return;
+  }
+
+  if(res.status === 400){
+    return responeError.value = await res.json()
+  }
+
+  const status = await getRefreshToken();
+  if (status === 401) {
+    setTimeout(async () => {
+      await myRouter.push('/login');
+    }, 500);
+    return;
+  }
+
+  return putUser()
 };
 </script>
 

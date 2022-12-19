@@ -28,9 +28,9 @@
         <p class="font-light text-sm l-color-gray-300">
           Users must follow the following steps<br />
           Step 1 : Select the clinic you want to book.<br />
-          Step 2 : Fill in your information<br />
-          Step 3 : Select the date you wish to book. and select the desired time
-          slot in the available time slots
+          Step 2 : Select the date you wish to book. and select the desired time
+          slot in the available time slots<br />
+          Step 3 : Fill in your information
         </p>
       </div>
     </div>
@@ -359,7 +359,7 @@
 <script setup>
 import { ref } from '@vue/reactivity';
 import moment from 'moment';
-import { computed, onBeforeMount, onBeforeUpdate } from '@vue/runtime-core';
+import { computed, onBeforeMount, onBeforeUpdate, onMounted } from '@vue/runtime-core';
 import {
   getAllCategory,
   createEvent,
@@ -371,9 +371,11 @@ import Swal from 'sweetalert2';
 import BaseLoader from '../components/bases/BaseLoader.vue';
 
 // HOOK
-onBeforeMount(async () => {
+onMounted(async () => {
+  isBookLoaded.value = true
   const res = await getAllCategory();
   clinics.value = res; // All category
+  isBookLoaded.value = false
 });
 
 const getTime = computed(async () => {
@@ -586,16 +588,29 @@ const submit = async (name, mail, start, categoryId, notes) => {
       text: 'Your information is already submited.',
     });
     setTimeout(function () {
-      myRouter.push({
-        name: 'Home',
-      });
-    }, 1);
+      myRouter.push('/');
+    }, 500);
     isBookLoaded.value = false;
     return;
   }
 
-  await getRefreshToken();
-  return submit()
+  if(res.status === 400) {
+    await Swal.fire({
+      icon: 'error',
+      title: 'Sorry, something went wrong please try again.',
+    });
+    isBookLoaded.value = false;
+    return
+  }
+
+  const err = await getRefreshToken();
+  if(err === 401){
+    setTimeout(() => {
+      myRouter.push('/login');
+    }, 500);
+    return
+  }
+  return submit(name, mail, start, categoryId, notes);
 };
 
 const removeFileUpload = () => {

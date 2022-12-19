@@ -116,12 +116,10 @@
     <!-- Data - Scheduled Detail Editing mode -->
     <EventDetailEdit
       :data="eventInfoById"
-      @edit="editEvent($event)"
+      @edit="editEvent"
       :duration="eventInfoById?.eventDuration"
       :MAX="480"
       :BREAK="5"
-      :SUCCESFUL="SUCCESFUL"
-      :ERROR="ERROR"
       v-else
     />
 
@@ -162,111 +160,33 @@
           </div>
         </div>
       </div>
-
-      <!-- ALERT - Succesfully -->
-      <div
-        v-if="SUCCESFUL"
-        class="alert bg-black/40 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full h-full"
-      >
-        <div
-          class="relative p-4 w-full h-full grid place-items-center justify-center"
-        >
-          <div
-            class="relative bg-white shadow l-w-520 h-72 grid place-items-center"
-          >
-            <div class="grid place-items-center gap-6">
-              <div class="grid justify-center">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  xmlns:xlink="http://www.w3.org/1999/xlink"
-                  aria-hidden="true"
-                  role="img"
-                  class="iconify iconify--clarity text-emerald-500"
-                  width="96"
-                  height="96"
-                  preserveAspectRatio="xMidYMid meet"
-                  viewBox="0 0 36 36"
-                >
-                  <path
-                    fill="currentColor"
-                    d="M18 2a16 16 0 1 0 16 16A16 16 0 0 0 18 2Zm10.45 10.63L15.31 25.76L7.55 18a1.4 1.4 0 0 1 2-2l5.78 5.78l11.14-11.13a1.4 1.4 0 1 1 2 2Z"
-                    class="clr-i-solid clr-i-solid-path-1"
-                  ></path>
-                  <path fill="none" d="M0 0h36v36H0z"></path>
-                </svg>
-              </div>
-              <div class="text-center">
-                <h2 class="text-xl font-semibold text-emerald-700 mb-2">
-                  DONE!
-                </h2>
-                <p class="text-md l-color-gray-300">
-                  Your scheduled is already deleted.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ALERT - Error -->
-      <div
-        v-if="ERROR"
-        class="alert bg-black/40 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full h-full"
-      >
-        <div
-          class="relative p-4 w-full h-full grid place-items-center justify-center"
-        >
-          <div
-            class="relative bg-white shadow l-w-520 h-72 grid place-items-center"
-          >
-            <div class="grid place-items-center gap-6">
-              <div class="grid justify-center">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  xmlns:xlink="http://www.w3.org/1999/xlink"
-                  aria-hidden="true"
-                  role="img"
-                  class="iconify iconify--material-symbols text-orange-400"
-                  width="96"
-                  height="96"
-                  preserveAspectRatio="xMidYMid meet"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    fill="currentColor"
-                    d="M12 22q-2.075 0-3.9-.788q-1.825-.787-3.175-2.137q-1.35-1.35-2.137-3.175Q2 14.075 2 12t.788-3.9q.787-1.825 2.137-3.175q1.35-1.35 3.175-2.138Q9.925 2 12 2t3.9.787q1.825.788 3.175 2.138q1.35 1.35 2.137 3.175Q22 9.925 22 12t-.788 3.9q-.787 1.825-2.137 3.175q-1.35 1.35-3.175 2.137Q14.075 22 12 22Zm-1-9h2V7h-2Zm1 4q.425 0 .713-.288Q13 16.425 13 16t-.287-.713Q12.425 15 12 15t-.712.287Q11 15.575 11 16t.288.712Q11.575 17 12 17Z"
-                  ></path>
-                </svg>
-              </div>
-              <div class="text-center">
-                <h2 class="text-xl font-semibold text-orange-400 mb-2">
-                  WARNING!
-                </h2>
-                <p class="text-md l-color-gray-300">
-                  Something want wrong, Please try again.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref } from '@vue/reactivity';
-import { computed, onBeforeMount } from '@vue/runtime-core';
-import { deleteEventById, editEventById } from '../services/FetchServices.js';
+import { computed, onBeforeMount, onMounted } from '@vue/runtime-core';
+import {
+  deleteEventById,
+  editEventById,
+  getRefreshToken,
+} from '../services/FetchServices.js';
 import { useRoute, useRouter } from 'vue-router';
 import EventDetail from '../components/EventDetail.vue';
 import EventDetailEdit from '../components/EventDetailEdit.vue';
 import BaseLoader from '../components/bases/BaseLoader.vue';
 import Swal from 'sweetalert2';
+import { useStoreToken } from '../stores/token.js';
+import { storeToRefs } from 'pinia';
+const tokenStore = useStoreToken();
+const { getIsLogged, getUserRole, getUserEmail, getAccessToken } =
+  storeToRefs(tokenStore);
+const { setAccessToken } = tokenStore;
 const { params } = useRoute();
 
 // HOOK
-onBeforeMount(async () => {
+onMounted(async () => {
   // const res = await getEventById(params.id)
   // eventInfoById.value = res
   await getEventById();
@@ -280,8 +200,9 @@ const userRole = computed(() => {
   }
 });
 
-const getEventById = async (id) => {
-  let res = await fetch(
+const getEventById = async () => {
+  isLoad.value = true;
+  const res = await fetch(
     `${import.meta.env.VITE_BASE_URL}/events/${params.id}`,
     {
       method: 'GET',
@@ -292,12 +213,44 @@ const getEventById = async (id) => {
       },
     },
   );
-  if (res.ok) {
+
+  if (res.status === 200) {
+    isLoad.value = false;
     return (eventInfoById.value = await res.json());
-  } else {
-    alert(`You don't have permissions`);
-    return myRouter.push('/scheduled');
   }
+
+  if (res.status === 400) {
+    await Swal.fire({
+      icon: 'error',
+      title: 'Sorry, something went wrong please try again.',
+    });
+    isLoad.value = false;
+    return;
+  }
+
+  if (res.status === 401 && localStorage.getItem('access_token')) {
+    await Swal.fire({
+      icon: 'error',
+      title: `Sorry`,
+      text: `You don't have permissions.`,
+    });
+    setTimeout(() => {
+      myRouter.push('/scheduled');
+    }, 500);
+    isLoad.value = false;
+    return;
+  }
+
+  const status = await getRefreshToken();
+  if (status === 401) {
+    setTimeout(() => {
+      myRouter.push('/login');
+    }, 500);
+    isLoad.value = false;
+    return;
+  }
+
+  return getEventById();
 };
 
 // ATTIBUTE
@@ -308,70 +261,116 @@ const modifyMode = ref(false);
 const myRouter = useRouter();
 const isLoad = ref(false);
 // FUNCTION
+
 // DELETE - Event
 const deleteEvent = async (eventId) => {
-  await fetch(`${import.meta.env.VITE_BASE_URL}/events/${eventId}`, {
-    method: 'DELETE',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + localStorage.getItem('access_token'),
+  isLoad.value = true;
+  const res = await fetch(
+    `${import.meta.env.VITE_BASE_URL}/events/${eventId}`,
+    {
+      method: 'DELETE',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + localStorage.getItem('access_token'),
+      },
     },
-  }).then(async (res) => {
-    if (res.status === 401) {
-      await getRefreshToken();
-      return await fetch(`${import.meta.env.VITE_BASE_URL}/events/${eventId}`, {
-        method: 'GET',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + localStorage.getItem('access_token'),
-        },
-      });
-    }
-    if (res.ok) {
-      isLoad.value = false;
-      await Swal.fire({
-            icon: 'success',
-            title: 'Delete Successfully',
-            // text: 'Please try again.',
-      });
-      
-      setTimeout(function () {
-        location.reload(1);
-        myRouter.go(-1);
-      }, 2000);
-    } else {
-      isLoad.value = false;
-      await Swal.fire({
-        icon: 'error',
-        title: 'Something went wrong, please try again.',
-        // text: 'Please try again.',
-      });
-      setTimeout(function () {
-        ERROR.value = false;
-      }, 2000);
-    }
-  });
-  //   let status = await deleteEventById(eventId);
-  //   if (status == 500 || status == 400) {
-  //     ERROR.value = true;
-  //     setTimeout(function () {
-  //       ERROR.value = false;
-  //     }, 2000);
-  //   } else {
-  //     SUCCESFUL.value = true;
-  //     ERROR.value = false;
-  //     setTimeout(function () {
-  //       location.reload(1);
-  //       myRouter.go(-1);
-  //     }, 2000);
-  //   }
+  );
+
+  if (res.status === 200) {
+    await Swal.fire({
+      icon: 'success',
+      title: 'Delete Successfully',
+    });
+    isLoad.value = false;
+    setTimeout(function () {
+      location.reload(1);
+      myRouter.go(-1);
+    }, 500);
+    return;
+  }
+
+  if (res.status === 400) {
+    await Swal.fire({
+      icon: 'error',
+      title: 'Sorry, something went wrong please try again.',
+    });
+    isLoad.value = false;
+    return;
+  }
+
+  const status = await getRefreshToken();
+  if (status === 401) {
+    setTimeout(() => {
+      myRouter.push('/login');
+    }, 500);
+    return;
+  }
+
+  return deleteEvent(eventId);
 };
 
+// const editEvent = async (event) => {
+//   isLoad.value = true;
+//   let body = new Blob(
+//     [
+//       JSON.stringify({
+//         eventNotes: event.note,
+//         eventStartTime: event.time,
+//       }),
+//     ],
+//     { type: 'application/json' },
+//   );
+//   let payload = new FormData();
+//   payload.append('file', event.file);
+//   payload.append('body', body);
+//   await fetch(`${import.meta.env.VITE_BASE_URL}/events/${event.id}`, {
+//     method: 'PUT',
+//     headers: {
+//       Authorization: localStorage.getItem('access_token')
+//         ? 'Bearer ' + localStorage.getItem('access_token')
+//         : '',
+//     },
+//     body: payload,
+//   }).then(async (res) => {
+//     if (res.status === 401) {
+//       await getRefreshToken();
+//       return await fetch(`${import.meta.env.VITE_BASE_URL}/events/${event.id}`, {
+//         method: 'PUT',
+//         headers: {
+//           Authorization: localStorage.getItem('access_token')
+//             ? 'Bearer ' + localStorage.getItem('access_token')
+//             : '',
+//         },
+//         body: payload,
+//       });
+//     }
+//     if (res.ok) {
+//       isLoad.value = false;
+//       await Swal.fire({
+//         icon: 'success',
+//         title: 'We have your schedule updated!',
+//         // text: 'Please try again.',
+//       });
+//       setTimeout(function () {
+//         location.reload(1);
+//         myRouter.go(-1);
+//       }, 1000);
+//     } else {
+//       isLoad.value = false;
+//       await Swal.fire({
+//         icon: 'error',
+//         title: 'Something went wrong, please try again.',
+//         // text: 'Please try again.',
+//       });
+//       setTimeout(function () {
+//         ERROR.value = false;
+//       }, 1000);
+//     }
+//   });
+// }
+
 // EDIT - Event
-const SUCCESFUL = ref(false);
-const ERROR = ref(false);
 const editEvent = async (event) => {
   isLoad.value = true;
   let body = new Blob(
@@ -386,50 +385,48 @@ const editEvent = async (event) => {
   let payload = new FormData();
   payload.append('file', event.file);
   payload.append('body', body);
-  await fetch(`${import.meta.env.VITE_BASE_URL}/events/${event.id}`, {
-    method: 'PUT',
-    headers: {
-      Authorization: localStorage.getItem('access_token')
-        ? 'Bearer ' + localStorage.getItem('access_token')
-        : '',
+
+  const res = await fetch(
+    `${import.meta.env.VITE_BASE_URL}/events/${event.id}`,
+    {
+      method: 'PUT',
+      Accept: 'multipart/form-data',
+      'Content-Type': 'multipart/form-data',
+      headers: {
+        Authorization: `Bearer ${getAccessToken.value}`,
+      },
+      body: payload,
     },
-    body: payload,
-  }).then(async (res) => {
-    if (res.status === 401) {
-      await getRefreshToken();
-      return await fetch(`${import.meta.env.VITE_BASE_URL}/events/${event}`, {
-        method: 'PUT',
-        headers: {
-          Authorization: localStorage.getItem('access_token')
-            ? 'Bearer ' + localStorage.getItem('access_token')
-            : '',
-        },
-        body: payload,
-      });
-    }
-    if (res.ok) {
-      isLoad.value = false;
-      await Swal.fire({
-        icon: 'success',
-        title: 'We have your schedule updated!',
-        // text: 'Please try again.',
-      });
-      setTimeout(function () {
-        location.reload(1);
-        myRouter.go(-1);
-      }, 1000);
-    } else {
-      isLoad.value = false;
-      await Swal.fire({
-        icon: 'error',
-        title: 'Something went wrong, please try again.',
-        // text: 'Please try again.',
-      });
-      setTimeout(function () {
-        ERROR.value = false;
-      }, 1000);
-    }
-  });
+  );
+
+  if (res.status === 200) {
+    await Swal.fire({
+      icon: 'success',
+      title: 'Success',
+      text: 'Your information is already updated.',
+    });
+    setTimeout(function () {
+      myRouter.push('/');
+    }, 500);
+    isLoad.value = false;
+    return;
+  }
+
+  if (res.status === 401) {
+    console.log('401');
+    return;
+  }
+
+  const err = await getRefreshToken();
+  if (err === 401) {
+    setTimeout(() => {
+      myRouter.push('/login');
+    }, 500);
+    isLoad.value = false;
+    return;
+  }
+
+  return editEvent(event);
 };
 </script>
 

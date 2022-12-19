@@ -58,7 +58,7 @@
       <div class="box10 absolute w-2 h-2 rounded-full bg-blue-800"></div>
 
       <!-- Dash board -->
-      <div
+      <!-- <div
         class="grid px-12 md:grid-cols-2 xl:grid-cols-4 md:l-w-full gap-12 mt-24 mx-auto"
       >
         <div
@@ -126,12 +126,12 @@
             </p>
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
 
     <!-- Clinics -->
     <div>
-      <div class="l-bg-gray w-full pb-24">
+      <div class="l-bg-gray w-full pb-24 px-8">
         <div class="mx-auto">
           <div class="mx-auto p-16">
             <h2 class="font-bold text-4xl md:mt-24">Clinics</h2>
@@ -289,22 +289,17 @@
 import { ref } from '@vue/reactivity';
 import { computed, onBeforeMount, onMounted } from '@vue/runtime-core';
 import moment from 'moment';
-import { getAllCategory } from '../services/FetchServices.js';
+import { getAllCategory, getAllEvents } from '../services/FetchServices.js';
 import { formatDate } from '../services/moment';
 // import moment from 'moment';
 // import 'moment/locale/th';
 
-onBeforeMount(async () => {
-  // const res = await getAllEvents();
-  // const temp = await getAllCategory();
-  // AllEventsData.value = res;
-  // AllCategory.value = temp.sort((c) => -1);
-});
 
-onMounted(() => {
-  setInterval(() => {
-    currentTime();
-  }, 1000);
+onMounted(async () => {
+  // const res = await getAllEvents();
+  const temp = await getAllCategory();
+  // AllEventsData.value = res;
+  AllCategory.value = temp.sort((c) => -1);
 });
 
 const AllEventsData = ref([]);

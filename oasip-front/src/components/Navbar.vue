@@ -35,7 +35,7 @@
 
       <!-- Scheduled -->
       <div
-        v-if="userRole"
+        v-if="getUserRole"
         :class="[
           'grid place-items-center l-color-navi h-24 w-24',
           $route.name == 'Scheduled'
@@ -57,7 +57,7 @@
       <router-link
         :to="{ name: 'Booking' }"
         class="flex place-items-center"
-        v-if="userRole == null || userRole !== 'lecturer'"
+        v-if="getUserRole == null || getUserRole !== 'lecturer'"
       >
         <button
           class="w-28 h-10 bg-white font-light text-sm grid place-items-center border border-green-600 text-green-600 hover:bg-gradient-to-tl to-emerald-400 from-lime-500 hover:border-none hover:text-white hover:border-2 duration-150"
@@ -69,7 +69,7 @@
       <router-link
         :to="{ name: 'Login' }"
         class="flex place-items-center"
-        v-if="checkToken"
+        v-if="!getIsLogged"
       >
         <button
           class="w-28 h-10 bg-white font-light text-sm grid place-items-center border border-blue-600 text-blue-600 hover:bg-blue-600 hover:border-none hover:text-white hover:border-2 duration-150"
@@ -79,7 +79,7 @@
       </router-link>
 
       <!-- Profile -->
-      <div class="relative inline-block text-left cursor-pointer" v-if="!checkToken">
+      <div class="relative inline-block text-left cursor-pointer" v-if="getIsLogged">
         <div class="flex items-center space-x-3" @click="opencloseMenu">
           <img
             class="p-[2px] h-12 w-12 rounded-full border-2 border-white hover:border-blue-600 duration-150"
@@ -87,7 +87,7 @@
             alt=""
           />
           <div class="border-b border-white hover:border-blue-600 focus:border-blue-600 duration-150">
-            <p>{{ userEmail }}</p>
+            <p class="text-sm">{{ getUserEmail }}</p>
           </div>
         </div>
 
@@ -98,9 +98,9 @@
           <div class="py-1" role="none">
             <div class="px-4 py-2">
               <p class="text-xs l-color-gray-300 truncate">
-                Login as <span>{{ userEmail }}</span>
+                Login as <span>{{ getUserEmail }}</span>
               </p>
-              <p class="l-text-xxs l-color-gray-300">Role: {{ userRole }}</p>
+              <p class="l-text-xxs l-color-gray-300">Role: {{ getUserRole }}</p>
             </div>
             <router-link
               :to="{ name: 'account' }"
@@ -153,43 +153,50 @@
 <script setup>
 import { ref, computed, onBeforeMount, onMounted } from '@vue/runtime-core';
 import { useRouter } from 'vue-router';
+import { useStoreToken } from '../stores/token.js'
 import Swal from 'sweetalert2';
+import { storeToRefs } from 'pinia';
 const myRouter = useRouter();
+const tokenStore = useStoreToken()
+const { getIsLogged, getUserRole, getUserEmail } = storeToRefs(tokenStore)
+const { setAccessToken } = tokenStore
 
-const access_token = computed(() => {
-  try {
-    return localStorage.getItem('access_token');
-  } catch (error) {
-    return null;
-  }
-});
-const userRole = computed(() => {
-  try {
-    return localStorage.getItem('userRole');
-  } catch (error) {
-    return null;
-  }
-});
-const userEmail = computed(() => {
-  try {
-    return localStorage.getItem('userEmail');
-  } catch (error) {
-    return false;
-  }
-});
-const refresh_token = computed(() => {
-  try {
-    return localStorage.getItem('refresh_token');
-  } catch (error) {
-    return null;
-  }
-});
-const checkToken = computed(() => {
-  if (!access_token.value || !refresh_token.value) {
-    return true;
-  }
-  return false;
-});
+// const access_token = computed(() => {
+//   try {
+//     return localStorage.getItem('access_token');
+//   } catch (error) {
+//     return null;
+//   }
+// });
+// const userRole = computed(() => {
+//   try {
+//     return localStorage.getItem('userRole');
+//   } catch (error) {
+//     return null;
+//   }
+// });
+// const userEmail = computed(() => {
+//   try {
+//     return localStorage.getItem('userEmail');
+//   } catch (error) {
+//     return false;
+//   }
+// });
+// const refresh_token = computed(() => {
+//   try {
+//     return localStorage.getItem('refresh_token');
+//   } catch (error) {
+//     return null;
+//   }
+// });
+// const checkToken = computed(() => {
+//   if (!access_token.value || !refresh_token.value) {
+//     return true;
+//   }
+//   return false;
+// });
+
+
 const sign_out = async () => {
   // localStorage.removeItem('access_token');
   // localStorage.removeItem('refresh_token');
@@ -198,11 +205,9 @@ const sign_out = async () => {
   await Swal.fire({
     icon: 'success',
     title: 'Logout Successfully',
-    // text: 'Please try again.',
   });
-  setTimeout(() => {
-    location.reload(1);
-  });
+  setAccessToken(null)
+  showUserMenu.value = false
   myRouter.push('/');
 };
 const showUserMenu = ref(false);

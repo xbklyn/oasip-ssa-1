@@ -1,6 +1,11 @@
 <template>
-  <div class="w-[824px] mx-auto mt-12 scroll-smooth" id="top">
-    <!-- Menu - Breadcrumbs -->
+  <div>
+    <div v-if="isUserLoaded">
+      <BaseLoader />
+    </div>
+
+    <div class="w-[824px] mx-auto mt-12 scroll-smooth" id="top">
+      <!-- Menu - Breadcrumbs -->
     <div class="w-[824px] mx-auto mb-4">
       <div class="flex items-center">
         <router-link
@@ -69,11 +74,11 @@
               name="role"
               :value="'lecturer'"
               v-model="addNewUser.role"
-            />
-            <label for="" class="mr-1">Lecturer</label>
-          </div>
-          <div class="mx-2">
-            <input
+              />
+              <label for="" class="mr-1">Lecturer</label>
+            </div>
+            <div class="mx-2">
+              <input
               class="mr-1"
               type="radio"
               name="role"
@@ -92,8 +97,8 @@
               :class="[
                 'w-full h-12 pl-2 text-sm bg-transparent border-2 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer',
                 responeError?.details?.userEmail
-                  ? 'border-red-500 focus:border-red-500'
-                  : '',
+                ? 'border-red-500 focus:border-red-500'
+                : '',
               ]"
               placeholder=" "
             />
@@ -257,6 +262,7 @@
       </div>
     </div>
   </div>
+</div>
 </template>
 
 <script setup>
@@ -269,24 +275,32 @@ import {
   watch,
 } from '@vue/runtime-core';
 import UserList from '../components/commons/users/UserList.vue';
+import { getRefreshToken } from '../services/FetchServices.js';
 import { useStoreToken } from '../stores/token';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
+import Swal from 'sweetalert2';
+import BaseLoader from '../components/bases/BaseLoader.vue';
 
 onBeforeMount(async () => {
+  isUserLoaded.value = true
   await getAllUsers();
+  isUserLoaded.value = false
 });
 
 const myRouter = useRouter();
 const useToken = useStoreToken();
+const isUserLoaded = ref(false)
 const users = ref([]);
 const addNewUser = ref({
-  role: '',
+  role: 'student',
   userName: '',
   userEmail: '',
+  password: '',
+  confirmPassword: '',
 });
 const defaultUser = ref({
-  role: '',
+  role: 'student',
   userName: '',
   userEmail: '',
   password: '',
@@ -299,11 +313,9 @@ const SUCCESFUL = ref(false);
 const ERROR = ref(false);
 
 const addDialogClosed = () => {
-  nextTick(() => {
-    addDialog.value = false;
-    addNewUser.value = Object.assign({}, defaultUser.value);
-    responeError.value = Object.assign({}, defaultResponeError.value);
-  });
+  addDialog.value = false;
+  addNewUser.value = Object.assign({}, defaultUser.value);
+  responeError.value = Object.assign({}, defaultResponeError.value);
 };
 
 // Computed
@@ -327,73 +339,43 @@ const isSamePassword = computed(() => {
 });
 
 // Fetch service
-
-//GET METHOD - Get refresh token
-const getRefreshToken = async () => {
-  // const refresh_token = localStorage.getItem('refresh_token');
-  let res = await fetch(`${import.meta.env.VITE_BASE_URL}/auth/refresh_token`, {
-    method: 'GET',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + localStorage.getItem('refresh_token'),
-    },
-  }).then(async (res) => {
-    if (!res.ok) {
-      localStorage.removeItem('access_token');
-      localStorage.removeItem('refresh_token');
-      localStorage.removeItem('userRole');
-      alert('Your session has expired. Please log in again.');
-      setTimeout(() => {
-        location.reload(1);
-      }, 1);
-      myRouter.push('/');
-    }
-    if (res.ok) {
-      let token = await res.json();
-      localStorage.setItem('access_token', token.access_token);
-      localStorage.setItem('refresh_token', token.refresh_token);
-    }
-  });
-};
-
 // GET METHOD - Get all users
 const getAllUsers = async () => {
-  const cat = localStorage.getItem('access_token');
-  const refresh_token = localStorage.getItem('refresh_token');
-  await fetch(`${import.meta.env.VITE_BASE_URL}/users`, {
+  const res = await fetch(`${import.meta.env.VITE_BASE_URL}/users`, {
     method: 'GET',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + cat,
+      Authorization: 'Bearer ' + localStorage.getItem('access_token'),
     },
-  })
-    .then(async (res) => {
-      if (!res.ok) {
-        await getRefreshToken();
-        return await fetch(`${import.meta.env.VITE_BASE_URL}/users`, {
-          method: 'GET',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            Authorization: 'Bearer ' + localStorage.getItem('access_token'),
-          },
-        });
-      }
-      return (users.value = await res.json());
-    })
-    .then(async (res) => {
-      if (res.ok) return (users.value = await res.json());
-    })
-    .catch(async (e) => {
-      myRouter.push('/');
+  });
+
+  if (res.status === 200) {
+    return users.value = await res.json();
+  }
+
+  if (res.status === 400) {
+    await Swal.fire({
+      icon: 'error',
+      title: 'Sorry, something went wrong please try again.',
     });
+    return;
+  }
+
+  const status = await getRefreshToken();
+  if (status === 401) {
+    setTimeout(async () => {
+      await myRouter.push('/login');
+    }, 500);
+    return;
+  }
+
+  return getAllUsers();
 };
 
 // POST METHOD - Create new user
 const postNewUser = async () => {
-  await fetch(`${import.meta.env.VITE_BASE_URL}/users`, {
+  const res = await fetch(`${import.meta.env.VITE_BASE_URL}/users`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -401,56 +383,36 @@ const postNewUser = async () => {
       Authorization: 'Bearer ' + localStorage.getItem('access_token'),
     },
     body: JSON.stringify(addNewUser.value),
-  })
-    .then(async (res) => {
-      if (res.status === 401) {
-        await getRefreshToken();
-        return await fetch(`${import.meta.env.VITE_BASE_URL}/users`, {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            Authorization: 'Bearer ' + localStorage.getItem('access_token'),
-          },
-        });
-      }
-      if (res.ok) {
-        SUCCESFUL.value = true;
-        ERROR.value = false;
-        setTimeout(function () {
-          SUCCESFUL.value = false;
-        }, 1500);
-        await getAllUsers();
-        addDialogClosed();
-        return;
-      } else {
-        SUCCESFUL.value = false;
-        ERROR.value = true;
-        setTimeout(function () {
-          ERROR.value = false;
-        }, 1500);
-        return (responeError.value = await res.json());
-      }
-    })
-    .then(async (res) => {
-      if (res.ok) {
-        SUCCESFUL.value = true;
-        ERROR.value = false;
-        setTimeout(function () {
-          SUCCESFUL.value = false;
-        }, 1500);
-        await getAllUsers();
-        addDialogClosed();
-        return;
-      } else {
-        SUCCESFUL.value = false;
-        ERROR.value = true;
-        setTimeout(function () {
-          ERROR.value = false;
-        }, 1500);
-        return (responeError.value = await res.json());
-      }
+  });
+
+  if (res.status === 201) {
+    await Swal.fire({
+      icon: 'success',
+      title: 'User is successfully created ',
     });
+    await getAllUsers();
+    addDialogClosed();
+    return;
+  }
+
+  if (res.status === 400) {
+    // SUCCESFUL.value = false;
+    // ERROR.value = true;
+    // setTimeout(function () {
+    //   ERROR.value = false;
+    // }, 1500);
+    return (responeError.value = await res.json());
+  }
+
+  const status = await getRefreshToken();
+  if (status === 401) {
+    setTimeout(async () => {
+      await myRouter.push('/login');
+    }, 500);
+    return;
+  }
+
+  return postNewUser();
 };
 </script>
 
