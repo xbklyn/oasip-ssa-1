@@ -27,12 +27,14 @@
               class="hover:text-blue-500 duration-150"
               >Scheduled
             </router-link>
-            <router-link v-if="userRole && userRole !== 'lecturer'"
+            <router-link
+              v-if="getUserRole && getUserRole !== 'lecturer'"
               :to="{ name: 'Booking' }"
               class="hover:text-blue-500 duration-150"
               >Booking
             </router-link>
             <router-link
+              v-if="getUserRole && getUserRole !== 'lecturer'"
               :to="{ name: 'Manage' }"
               class="hover:text-blue-500 duration-150"
               >Manage
@@ -592,14 +594,19 @@
 </template>
 
 <script setup>
-  import {  computed } from '@vue/runtime-core';
-  const userRole = computed(() => {
-  try {
-    return localStorage.getItem('userRole');
-  } catch (error) {
-    return false;
-  }
-});
+import { computed } from '@vue/runtime-core';
+import { useStoreToken } from '../stores/token.js';
+const tokenStore = useStoreToken();
+const { getIsLogged, getUserRole, getUserEmail } = storeToRefs(tokenStore);
+const { setAccessToken } = tokenStore;
+
+// const userRole = computed(() => {
+//   try {
+//     return localStorage.getItem('userRole');
+//   } catch (error) {
+//     return false;
+//   }
+// });
 </script>
 
 <style></style>

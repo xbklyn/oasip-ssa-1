@@ -19,6 +19,7 @@
           </p>
         </router-link>
         <router-link
+          v-if="getUserRole === 'admin'"
           :to="{ name: 'clinic-manage' }"
           class="font-normal c flex gap-2 hover:text-blue-300 duration-150"
         >
@@ -31,7 +32,7 @@
           </p>
         </router-link>
         <router-link
-          v-if="role === 'admin'"
+          v-if="getUserRole === 'admin'"
           :to="{ name: 'users-manage' }"
           class="font-normal c flex gap-2 hover:text-blue-300 duration-150"
         >
@@ -112,6 +113,11 @@
 </template>
 
 <script setup>
+import { useStoreToken } from '../stores/token.js';
+const tokenStore = useStoreToken();
+const { getIsLogged, getUserRole, getUserEmail } = storeToRefs(tokenStore);
+const { setAccessToken } = tokenStore;
+
 const role = localStorage.getItem('userRole');
 </script>
 
