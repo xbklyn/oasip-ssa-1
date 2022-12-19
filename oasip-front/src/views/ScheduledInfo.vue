@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div v-if="isLoad">
+      <BaseLoader />
+    </div>
     <!-- Menu - Breadcrumbs -->
     <div class="l-w-10-12 mx-auto mt-12 mb-4">
       <ol class="inline-flex items-center space-x-1">
@@ -258,6 +261,8 @@ import { deleteEventById, editEventById } from '../services/FetchServices.js';
 import { useRoute, useRouter } from 'vue-router';
 import EventDetail from '../components/EventDetail.vue';
 import EventDetailEdit from '../components/EventDetailEdit.vue';
+import BaseLoader from '../components/bases/BaseLoader.vue';
+import Swal from 'sweetalert2';
 const { params } = useRoute();
 
 // HOOK
@@ -301,7 +306,7 @@ const CATEGORY = ref({});
 const show = ref(false);
 const modifyMode = ref(false);
 const myRouter = useRouter();
-
+const isLoad = ref(false);
 // FUNCTION
 // DELETE - Event
 const deleteEvent = async (eventId) => {
@@ -325,14 +330,24 @@ const deleteEvent = async (eventId) => {
       });
     }
     if (res.ok) {
-      SUCCESFUL.value = true;
-      ERROR.value = false;
+      isLoad.value = false;
+      await Swal.fire({
+            icon: 'success',
+            title: 'Delete Successfully',
+            // text: 'Please try again.',
+      });
+      
       setTimeout(function () {
         location.reload(1);
         myRouter.go(-1);
       }, 2000);
     } else {
-      ERROR.value = true;
+      isLoad.value = false;
+      await Swal.fire({
+        icon: 'error',
+        title: 'Something went wrong, please try again.',
+        // text: 'Please try again.',
+      });
       setTimeout(function () {
         ERROR.value = false;
       }, 2000);
@@ -358,6 +373,7 @@ const deleteEvent = async (eventId) => {
 const SUCCESFUL = ref(false);
 const ERROR = ref(false);
 const editEvent = async (event) => {
+  isLoad.value = true;
   let body = new Blob(
     [
       JSON.stringify({
@@ -392,17 +408,26 @@ const editEvent = async (event) => {
       });
     }
     if (res.ok) {
-      SUCCESFUL.value = true;
-      ERROR.value = false;
+      isLoad.value = false;
+      await Swal.fire({
+        icon: 'success',
+        title: 'We have your schedule updated!',
+        // text: 'Please try again.',
+      });
       setTimeout(function () {
         location.reload(1);
         myRouter.go(-1);
-      }, 2000);
+      }, 1000);
     } else {
-      ERROR.value = true;
+      isLoad.value = false;
+      await Swal.fire({
+        icon: 'error',
+        title: 'Something went wrong, please try again.',
+        // text: 'Please try again.',
+      });
       setTimeout(function () {
         ERROR.value = false;
-      }, 2000);
+      }, 1000);
     }
   });
 };

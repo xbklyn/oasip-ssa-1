@@ -284,11 +284,12 @@
         Update
       </button>
     </div>
-    <div
+    <!-- <div
       v-if="SUCCESFUL"
       class="alert bg-black/30 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full h-full"
-    >
-      <div
+    > -->
+      
+      <!-- <div
         class="relative p-4 w-full h-full grid place-items-center justify-center"
       >
         <div
@@ -325,8 +326,8 @@
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      </div> -->
+    <!-- </div> -->
   </div>
 </template>
 

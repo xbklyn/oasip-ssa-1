@@ -53,7 +53,7 @@
     </div>
 
     <!-- Booking && Manage -->
-    <div class="grid grid-cols-2 justify-self-end gap-x-6 mr-4">
+    <div class="flex  justify-self-end gap-x-6 mr-4">
       <router-link
         :to="{ name: 'Booking' }"
         class="flex place-items-center"
@@ -79,16 +79,16 @@
       </router-link>
 
       <!-- Profile -->
-      <div class="relative inline-block text-left" v-if="!checkToken">
-        <div class="flex-shrink-0" @click="opencloseMenu">
+      <div class="relative inline-block text-left cursor-pointer" v-if="!checkToken">
+        <div class="flex items-center space-x-3" @click="opencloseMenu">
           <img
-            class="h-12 w-12 rounded-full"
+            class="p-[2px] h-12 w-12 rounded-full border-2 border-white hover:border-blue-600 duration-150"
             src="../assets/profile.png"
             alt=""
           />
-          <!-- <div>
+          <div class="border-b border-white hover:border-blue-600 focus:border-blue-600 duration-150">
             <p>{{ userEmail }}</p>
-          </div> -->
+          </div>
         </div>
 
         <div
@@ -207,10 +207,11 @@ const sign_out = async () => {
 };
 const showUserMenu = ref(false);
 const opencloseMenu = () => {
-  if (showUserMenu.value == false) {
-    return (showUserMenu.value = true);
-  }
-  showUserMenu.value = false;
+  // if (showUserMenu.value == false) {
+  //   return (showUserMenu.value = true);
+  // }
+  // showUserMenu.value = false;
+  showUserMenu.value = !showUserMenu.value
 };
 </script>
 
