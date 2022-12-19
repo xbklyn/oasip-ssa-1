@@ -94,10 +94,8 @@
         >
           <div class="py-1" role="none">
             <div class="px-4 py-2">
-              <p class="text-xs l-color-gray-300 truncate">
-                Login as <span>{{ userEmail }}</span>
-              </p>
-              <p class="l-text-xxs l-color-gray-300">Role: {{ userRole }}</p>
+              <p class="text-xs l-color-gray-300 truncate">Login as <span>{{ userEmail }}</span></p>
+              <p class="l-text-xxs l-color-gray-300" >Role: {{ userRole }}</p>
             </div>
             <router-link
               :to="{ name: 'account' }"
@@ -148,35 +146,34 @@
 </template>
 
 <script setup>
-import { ref, computed, onBeforeMount, onMounted } from '@vue/runtime-core';
-import { useRouter } from 'vue-router';
-import Swal from 'sweetalert2';
+import { ref, computed, onBeforeMount, onMounted } from "@vue/runtime-core";
+import { useRouter } from "vue-router";
 const myRouter = useRouter();
 
 const access_token = computed(() => {
   try {
-    return localStorage.getItem('access_token');
+    return localStorage.getItem("access_token");
   } catch (error) {
     return null;
   }
 });
 const userRole = computed(() => {
   try {
-    return localStorage.getItem('userRole');
+    return localStorage.getItem("userRole");
   } catch (error) {
     return null;
   }
 });
 const userEmail = computed(() => {
   try {
-    return localStorage.getItem('userEmail');
+    return localStorage.getItem("userEmail");
   } catch (error) {
     return false;
   }
 });
 const refresh_token = computed(() => {
   try {
-    return localStorage.getItem('refresh_token');
+    return localStorage.getItem("refresh_token");
   } catch (error) {
     return null;
   }
@@ -187,20 +184,15 @@ const checkToken = computed(() => {
   }
   return false;
 });
-const sign_out = async () => {
+const sign_out = () => {
   // localStorage.removeItem('access_token');
   // localStorage.removeItem('refresh_token');
   // localStorage.removeItem('userRole');
   localStorage.clear();
-  await Swal.fire({
-    icon: 'success',
-    title: 'Logout Successfully',
-    // text: 'Please try again.',
-  });
   setTimeout(() => {
     location.reload(1);
   });
-  myRouter.push('/');
+  myRouter.push("/");
 };
 const showUserMenu = ref(false);
 const opencloseMenu = () => {
