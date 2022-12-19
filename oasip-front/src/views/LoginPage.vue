@@ -106,12 +106,12 @@ const userLogin = async () => {
           let tokenSplit = token.access_token.split('.');
           let tokenPayload = tokenSplit[1];
           let tokenDecode = atob(tokenPayload).split(',');
+          // console.log(tokenDecode)
           let userRole = JSON.parse(`{${tokenDecode[1]}}`);
           let userEmail = JSON.parse(`${tokenDecode[0]}}`);
           localStorage.setItem('userEmail', userEmail.sub);
           localStorage.setItem('userRole', userRole.role[0]);
 
-          
           await Swal.fire({
             icon: 'success',
             title: 'Login Successfully',
