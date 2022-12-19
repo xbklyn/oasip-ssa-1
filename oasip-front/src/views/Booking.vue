@@ -387,7 +387,7 @@ onBeforeUpdate(async () => {
 });
 
 // ATTIBUTE
-const isBookLoaded = ref(false)
+const isBookLoaded = ref(false);
 let userRole = localStorage.getItem('userRole');
 const myRouter = useRouter();
 const clinics = ref([]);
@@ -443,8 +443,113 @@ const onFileChange = (e) => {
 // const SUCCESFUL = ref(false);
 // const ERROR = ref(false);
 
+// const submit = async (name, mail, start, categoryId, notes) => {
+//   isBookLoaded.value = true
+//   let body = new Blob(
+//     [
+//       JSON.stringify({
+//         bookingName: name,
+//         bookingEmail: mail,
+//         eventStartTime: start,
+//         categoryId: categoryId,
+//         eventNotes: notes,
+//       }),
+//     ],
+//     { type: 'application/json' },
+//   );
+//   // console.log(fileUpload.value);
+//   let payload = new FormData();
+//   // let filePayload = new FormData(fileUpload.value);
+//   if (fileUpload.value) payload.append('file', fileUpload.value);
+//   payload.append('body', body);
+//   // let status = await createEvent(name, mail, start, categoryId, notes);
+//   await fetch(`${import.meta.env.VITE_BASE_URL}/events`, {
+//     method: 'POST',
+//     headers: {
+//       // Accept: 'multipart/form-data',
+//       // 'Content-Type': 'multipart/form-data',
+//       Authorization: localStorage.getItem('access_token')
+//         ? 'Bearer ' + localStorage.getItem('access_token')
+//         : '',
+//     },
+//     body: payload,
+//   })
+//     .then(async (res) => {
+//       if (res.status === 401) {
+//         await getRefreshToken();
+//         return fetch(`${import.meta.env.VITE_BASE_URL}/events}`, {
+//           method: 'POST',
+//           headers: {
+//             // Accept: 'multipart/form-data',
+//             // 'Content-Type': 'multipart/form-data',
+//             Authorization: localStorage.getItem('access_token')
+//               ? 'Bearer ' + localStorage.getItem('access_token')
+//               : '',
+//           },
+//           body: payload,
+//         });
+//       }
+//       if (res.status === 403) {
+//         // ERROR.value = true;
+//         // SUCCESFUL.value = false;
+//         // setTimeout(function () {
+//         //   ERROR.value = false;
+//         // }, 4000);
+//         await Swal.fire({
+//           icon: 'error',
+//           title: 'Something went wrong, please try again.',
+//         });
+//         isBookLoaded.value = false
+//         return;
+//       }
+//       if (res.ok) {
+//         // SUCCESFUL.value = true;
+//         await Swal.fire({
+//           icon: 'success',
+//           title: 'Booked',
+//           text: 'Your information is already submited.',
+//         });
+//         setTimeout(function () {
+//           myRouter.push({
+//             name: 'Home',
+//           });
+//         }, 1);
+//         isBookLoaded.value = false
+//         return;
+//       }
+//     })
+//     .then(async (res) => {
+//       if (res.ok) {
+//         // SUCCESFUL.value = true;
+//         await Swal.fire({
+//           icon: 'success',
+//           title: 'Booked',
+//           text: 'Your information is already submited.',
+//         });
+//         setTimeout(function () {
+//           myRouter.push({
+//             name: 'Home',
+//           });
+//         }, 2000);
+//         isBookLoaded.value = false
+//       } else {
+//         // ERROR.value = true;
+//         // SUCCESFUL.value = false;
+//         // setTimeout(function () {
+//         //   ERROR.value = false;
+//         // }, 4000);
+//         await Swal.fire({
+//           icon: 'error',
+//           title: 'Something went wrong, please try again.',
+//         });
+//         isBookLoaded.value = false
+//       }
+//     });
+// };
+
 const submit = async (name, mail, start, categoryId, notes) => {
-  isBookLoaded.value = true
+  isBookLoaded.value = true;
+
   let body = new Blob(
     [
       JSON.stringify({
@@ -457,13 +562,12 @@ const submit = async (name, mail, start, categoryId, notes) => {
     ],
     { type: 'application/json' },
   );
-  // console.log(fileUpload.value);
+
   let payload = new FormData();
-  // let filePayload = new FormData(fileUpload.value);
   if (fileUpload.value) payload.append('file', fileUpload.value);
   payload.append('body', body);
-  // let status = await createEvent(name, mail, start, categoryId, notes);
-  await fetch(`${import.meta.env.VITE_BASE_URL}/events`, {
+
+  const res = await fetch(`${import.meta.env.VITE_BASE_URL}/events`, {
     method: 'POST',
     headers: {
       // Accept: 'multipart/form-data',
@@ -473,78 +577,25 @@ const submit = async (name, mail, start, categoryId, notes) => {
         : '',
     },
     body: payload,
-  })
-    .then(async (res) => {
-      if (res.status === 401) {
-        await getRefreshToken();
-        return fetch(`${import.meta.env.VITE_BASE_URL}/events}`, {
-          method: 'POST',
-          headers: {
-            // Accept: 'multipart/form-data',
-            // 'Content-Type': 'multipart/form-data',
-            Authorization: localStorage.getItem('access_token')
-              ? 'Bearer ' + localStorage.getItem('access_token')
-              : '',
-          },
-          body: payload,
-        });
-      }
-      if (res.status === 403) {
-        // ERROR.value = true;
-        // SUCCESFUL.value = false;
-        // setTimeout(function () {
-        //   ERROR.value = false;
-        // }, 4000);
-        await Swal.fire({
-          icon: 'error',
-          title: 'Something went wrong, please try again.',
-        });
-        isBookLoaded.value = false
-        return;
-      }
-      if (res.ok) {
-        // SUCCESFUL.value = true;
-        await Swal.fire({
-          icon: 'success',
-          title: 'Booked',
-          text: 'Your information is already submited.',
-        });
-        setTimeout(function () {
-          myRouter.push({
-            name: 'Home',
-          });
-        }, 1);
-        isBookLoaded.value = false
-        return;
-      }
-    })
-    .then(async (res) => {
-      if (res.ok) {
-        // SUCCESFUL.value = true;
-        await Swal.fire({
-          icon: 'success',
-          title: 'Booked',
-          text: 'Your information is already submited.',
-        });
-        setTimeout(function () {
-          myRouter.push({
-            name: 'Home',
-          });
-        }, 2000);
-        isBookLoaded.value = false
-      } else {
-        // ERROR.value = true;
-        // SUCCESFUL.value = false;
-        // setTimeout(function () {
-        //   ERROR.value = false;
-        // }, 4000);
-        await Swal.fire({
-          icon: 'error',
-          title: 'Something went wrong, please try again.',
-        });
-        isBookLoaded.value = false
-      }
+  });
+
+  if (res.status === 201) {
+    await Swal.fire({
+      icon: 'success',
+      title: 'Booked',
+      text: 'Your information is already submited.',
     });
+    setTimeout(function () {
+      myRouter.push({
+        name: 'Home',
+      });
+    }, 1);
+    isBookLoaded.value = false;
+    return;
+  }
+
+  await getRefreshToken();
+  return submit()
 };
 
 const removeFileUpload = () => {

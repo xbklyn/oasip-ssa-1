@@ -97,7 +97,7 @@
 
     <!-- LIST - All events scheduled -->
     <div class="bg-slate-50">
-      <BaseEvent :data="sortByDate" :status="status" @delete="events($event)" />
+      <BaseEvent :data="sortByDate" :status="status" :is-event-loaded="isEventLoaded" @delete="events($event)" />
     </div>
   </div>
 </template>
@@ -117,10 +117,49 @@ onBeforeMount(async () => {
   allEventCategory.value = temp;
 });
 
+const isEventLoaded = ref(false)
 const AllEventsData = ref([]);
 const allEventCategory = ref([]);
 
+// const getEvents = async () => {
+//   isEventLoaded.value = true
+//   const res = await fetch(`${import.meta.env.VITE_BASE_URL}/events`, {
+//     method: 'GET',
+//     headers: {
+//       Accept: 'application/json',
+//       'Content-Type': 'application/json',
+//       Authorization: 'Bearer ' + localStorage.getItem('access_token'),
+//     },
+//   })
+//     .then(async (res) => {
+//       if (res.status === 401) {
+//         console.log('token expired')
+//         await getRefreshToken();
+//         return await fetch(`${import.meta.env.VITE_BASE_URL}/events`, {
+//           method: 'GET',
+//           headers: {
+//             Accept: 'application/json',
+//             'Content-Type': 'application/json',
+//             Authorization: 'Bearer ' + localStorage.getItem('access_token'),
+//           },
+//         });
+//       }
+//       return await res.json();
+//     })
+//     .then((data) => {
+//       // if (res.ok) {
+//       // console.log(data);
+//       isEventLoaded.value = false
+//       return (AllEventsData.value = data);
+//       // return await res.json();
+//     }).catch((err) => {
+//       isEventLoaded.value = false
+//       myRouter.push('/')
+//     })
+// };
+
 const getEvents = async () => {
+  isEventLoaded.value = true
   const res = await fetch(`${import.meta.env.VITE_BASE_URL}/events`, {
     method: 'GET',
     headers: {
@@ -129,28 +168,15 @@ const getEvents = async () => {
       Authorization: 'Bearer ' + localStorage.getItem('access_token'),
     },
   })
-    .then(async (res) => {
-      if (!res.ok) {
-        await getRefreshToken();
-        return await fetch(`${import.meta.env.VITE_BASE_URL}/events`, {
-          method: 'GET',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            Authorization: 'Bearer ' + localStorage.getItem('access_token'),
-          },
-        });
-      }
-      return await res.json();
-    })
-    .then((data) => {
-      // if (res.ok) {
-      console.log(data);
-      return (AllEventsData.value = data);
-      // return await res.json();
-    }).catch((err) => {
-      myRouter.push('/')
-    })
+
+  if(res.status === 200){
+    AllEventsData.value = await res.json()
+    isEventLoaded.value = false
+    return;
+  }
+
+  await getRefreshToken()
+  return getEvents()
 };
 
 // Filter - event category

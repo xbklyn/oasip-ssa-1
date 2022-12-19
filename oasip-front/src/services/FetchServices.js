@@ -1,5 +1,6 @@
 import { useRouter } from 'vue-router';
 const myRouter = useRouter();
+import Swal from 'sweetalert2';
 
 //GET METHOD - All event
 export const getAllEvents = async () => {
@@ -28,6 +29,11 @@ export const getAllEvents = async () => {
         return await res.json();
       }
       if (retry.status === 401) {
+        await Swal.fire({
+          icon: 'error',
+          title: 'Ops.',
+          text: 'Your session is end, please login again.'
+        });
         myRouter.push('/login');
       }
     }
@@ -181,28 +187,43 @@ export const editCategoryById = async (category) => {
 };
 
 export const getRefreshToken = async () => {
+  console.log('token expired');
   if (!localStorage.getItem('refresh_token')) {
     alert('You session is ended, Please login');
     myRouter.push('/');
   } else {
-    await fetch(`${import.meta.env.VITE_BASE_URL}/auth/refresh_token`, {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + localStorage.getItem('refresh_token'),
+    const res = await fetch(
+      `${import.meta.env.VITE_BASE_URL}/auth/refresh_token`,
+      {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + localStorage.getItem('refresh_token'),
+        },
       },
-    }).then(async (res) => {
-      if (!res.ok) {
-        localStorage.clear();
-        alert('You session is ended, Please login');
-      }
-      if (res.ok) {
-        let token = await res.json();
-        localStorage.setItem('access_token', token.access_token);
-        localStorage.setItem('refresh_token', token.refresh_token);
-      }
-    });
+    );
+
+    if (res.status === 200) {
+      let token = await res.json();
+      localStorage.setItem('access_token', token.access_token);
+      localStorage.setItem('refresh_token', token.refresh_token);
+    } else {
+      localStorage.clear();
+      //     alert('You session is ended, Please login');
+    }
+
+    // .then(async (res) => {
+    //   if (!res.ok) {
+    //     localStorage.clear();
+    //     alert('You session is ended, Please login');
+    //   }
+    //   if (res.ok) {
+    //     let token = await res.json();
+    //     localStorage.setItem('access_token', token.access_token);
+    //     localStorage.setItem('refresh_token', token.refresh_token);
+    //   }
+    // });
   }
 };
 

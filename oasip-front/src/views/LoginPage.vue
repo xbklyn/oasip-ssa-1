@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div v-if="isLoaded">
+      <BaseLoader />
+    </div>
     <div class="flex items-center justify-center w-full h-screen">
       <div class="grid gap-y-6 l-w-612">
         <div class="text-center">
@@ -48,7 +51,7 @@
               @click="login_with_ms()"
             >
               <img src="../assets/ms_symbol.png" />
-              <p >Login with microsoft</p>
+              <p>Login with microsoft</p>
             </button>
           </div>
           <div class="h-12 flex items-center justify-center">
@@ -69,7 +72,8 @@
 import { ref } from '@vue/reactivity';
 import { useRouter } from 'vue-router';
 import { useStoreToken } from '../stores/token';
-import add from '../services/aad'
+import BaseLoader from '../components/bases/BaseLoader.vue';
+import add from '../services/aad';
 import aad from '../services/aad';
 import Swal from 'sweetalert2';
 
@@ -79,9 +83,11 @@ const login = ref({
   email: '',
   rawPassword: '',
 });
+const isLoaded = ref(false);
 const responeError = ref({});
 
 const userLogin = async () => {
+  isLoaded.value = true;
   responeError.value = {};
   await fetch(`${import.meta.env.VITE_BASE_URL}/auth/check`, {
     method: 'POST',
@@ -117,6 +123,7 @@ const userLogin = async () => {
             title: 'Login Successfully',
             // text: 'Please try again.',
           });
+          isLoaded.value = false;
 
           setTimeout(function () {
             location.reload(1);
@@ -133,18 +140,17 @@ const userLogin = async () => {
         title: 'Invalid email or password, please try again.',
         // text: 'Please try again.',
       });
-
+      isLoaded.value = false;
       return (responeError.value = await res.json());
     }
   });
 };
 const login_with_ms = () => {
-  console.log("loggin in");
-  aad.login()
-    .then((account) => {
-      console.log(account);
-    })
-}
+  console.log('loggin in');
+  aad.login().then((account) => {
+    console.log(account);
+  });
+};
 const backToHome = () => {
   myRouter.push({
     name: 'Home',
