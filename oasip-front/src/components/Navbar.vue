@@ -86,6 +86,9 @@
             src="../assets/profile.png"
             alt=""
           />
+          <!-- <div>
+            <p>{{ userEmail }}</p>
+          </div> -->
         </div>
 
         <div
