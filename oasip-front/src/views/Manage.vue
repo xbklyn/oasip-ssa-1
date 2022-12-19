@@ -114,9 +114,11 @@
 
 <script setup>
 import { useStoreToken } from '../stores/token.js';
+import { storeToRefs } from 'pinia';
 const tokenStore = useStoreToken();
 const { getIsLogged, getUserRole, getUserEmail } = storeToRefs(tokenStore);
 const { setAccessToken } = tokenStore;
+
 
 const role = localStorage.getItem('userRole');
 </script>

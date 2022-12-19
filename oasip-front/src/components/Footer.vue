@@ -596,6 +596,7 @@
 <script setup>
 import { computed } from '@vue/runtime-core';
 import { useStoreToken } from '../stores/token.js';
+import { storeToRefs } from 'pinia';
 const tokenStore = useStoreToken();
 const { getIsLogged, getUserRole, getUserEmail } = storeToRefs(tokenStore);
 const { setAccessToken } = tokenStore;
