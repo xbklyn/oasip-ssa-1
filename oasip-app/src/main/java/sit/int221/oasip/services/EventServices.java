@@ -305,13 +305,27 @@ public class EventServices {
             System.out.println("-- Delete old file --- ");
             fileService.store(file, event);
             System.out.println("--- Store new file named: " + file.getOriginalFilename());
+
+
+            // 1. Have file -> Change
+            // 2. no file -> add
+            // 3. have file -> do nothing
         }else {
+
+            //1. no file -> no add
+            //2. have  file -> delete
             System.out.println("No files in body");
-            System.out.println("File is existed. No need to do anything");
-            Path toFile = Files.list(Path.of(path)).collect(Collectors.toList()).get(0);
-            System.out.println("File path to delete" + toFile);
-            fileService.deleteDir(path);
-            System.out.println("Existed file deleted");
+            System.out.println("Path : " + path);
+
+            if(!Files.exists(Path.of(path))){
+                System.out.println("No file before update");
+            }else {
+                Path toFile = Files.list(Path.of(path)).collect(Collectors.toList()).get(0);
+                System.out.println("File path to delete" + toFile);
+                fileService.deleteDir(path);
+                System.out.println("Existed file deleted");
+            }
+
         }
         return ResponseEntity.status(200).body(updateEvent(id,editEvent,event));
     }
