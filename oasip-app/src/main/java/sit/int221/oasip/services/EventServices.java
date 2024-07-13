@@ -3,27 +3,35 @@ package sit.int221.oasip.services;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
-import sit.int221.oasip.dtos.*;
+import sit.int221.oasip.dtos.Email.EmailDTO;
+import sit.int221.oasip.dtos.event.*;
+import sit.int221.oasip.dtos.time.TimeDTO;
 import sit.int221.oasip.entities.Event;
-import sit.int221.oasip.errors.ErrorAdvice;
-import sit.int221.oasip.repositories.EventCategoryRepository;
-import sit.int221.oasip.repositories.EventRepository;
-import sit.int221.oasip.repositories.StatusRepository;
+import sit.int221.oasip.entities.EventOwner;
+import sit.int221.oasip.entities.User;
+import sit.int221.oasip.properties.FileProperties;
+import sit.int221.oasip.repositories.*;
 import sit.int221.oasip.utils.ListMapper;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.io.IOException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.text.ParseException;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -36,30 +44,120 @@ public class EventServices {
     private final ListMapper listMapper;
     private final EventCategoryRepository eventCategoryRepository;
     private final StatusRepository statusRepository;
-    private final ErrorAdvice errorAdvice;
+    private final UserRepository userRepository;
+    private final EventOwnerRepository eventOwnerRepository;
+    private final EmailService emailService;
+    private final FileService fileService;
+    private final FileProperties fileProperties;
 
-    public EventServices(EventRepository eventRepository, ModelMapper modelMapper, ListMapper listMapper, EventCategoryRepository eventCategoryRepository, StatusRepository statusRepository, ErrorAdvice errorAdvice) {
+    public EventServices(EventRepository eventRepository, ModelMapper modelMapper, ListMapper listMapper, EventCategoryRepository eventCategoryRepository, StatusRepository statusRepository, UserRepository userRepository, EventOwnerRepository eventOwnerRepository, EmailService emailService, FileService fileService, FileProperties fileProperties) {
         this.eventRepository = eventRepository;
         this.modelMapper = modelMapper;
         this.listMapper = listMapper;
         this.eventCategoryRepository = eventCategoryRepository;
         this.statusRepository = statusRepository;
-        this.errorAdvice = errorAdvice;
+        this.userRepository = userRepository;
+        this.eventOwnerRepository = eventOwnerRepository;
+        this.emailService = emailService;
+        this.fileService = fileService;
+        this.fileProperties = fileProperties;
     }
 
     // GET
-    public List<SimpleEventDTO> getAllEvents() {
-       check();
-       return listMapper.mapList(eventRepository.findAll(
-                Sort.by("eventStartTime").descending()
-        ), SimpleEventDTO.class, modelMapper);
+    public List<SimpleEventDTO> getAllEvents(Authentication auth) {
+        check();
+
+        if(auth == null) throw new ResponseStatusException(UNAUTHORIZED , "Access Denied");
+        String role = String.valueOf(auth.getAuthorities().toArray()[0]);
+        String email = auth.getPrincipal().toString();
+
+        switch (role) {
+            case "lecturer": {
+                System.out.println("In lecturer case");
+                User user = userRepository.findByUserEmail(String.valueOf(auth.getPrincipal())).get(0);
+                List<EventOwner> eventOwner = eventOwnerRepository.findByUser(user);
+                List<Event> events = new ArrayList<>();
+                eventOwner.forEach(e -> {
+                    List<Event> eventList = eventRepository.findByEventCategory(e.getEventCategory());
+                    events.addAll(eventList);
+                });
+                return listMapper.mapList(events, SimpleEventDTO.class, modelMapper);
+            }
+            case "admin": {
+                return listMapper.mapList(eventRepository.findAll(
+                        Sort.by("eventStartTime").descending()
+                ), SimpleEventDTO.class, modelMapper);
+            }
+            case "student" : {
+                List<Event> events = eventRepository.getByUserEmail(String.valueOf(auth.getPrincipal()));
+                return listMapper.mapList(events, SimpleEventDTO.class , modelMapper);
+            }
+        }
+        throw new ResponseStatusException(INTERNAL_SERVER_ERROR, "Something went wrong.");
     }
 
-    public EventDetailDTO getEventById(Integer id ){
+    public ResponseEntity getEventById(Integer id, Authentication auth ) throws IOException {
+
+        if(auth == null) throw new ResponseStatusException(UNAUTHORIZED , "Access Denied");
+        String role = String.valueOf(auth.getAuthorities().toArray()[0]);
+        String email = String.valueOf(auth.getPrincipal());
+
+        //Check role if admin
         Event event = eventRepository.findById(id).orElseThrow(() ->
-            new ResponseStatusException(NOT_FOUND, id + "does not exist."));
-        check();
-        return modelMapper.map(event, EventDetailDTO.class);
+                new ResponseStatusException(NOT_FOUND, id + "does not exist."));
+        String user_dir = event.getUser() == null ? "guest" : "user/" + "user_" + event.getUser().getId();
+        Path filePath = Paths.get(fileProperties.getUpload_dir() + "/" + user_dir + "/" + "event_" + event.getBookingId());
+
+        switch (role) {
+            case "lecturer" : {
+                return eventOwnerRepository.findByEventCategoryAndUser(event.getEventCategory() , userRepository.findByUserEmail(email).get(0)) != null
+                    ? ResponseEntity.status(200).body(modelMapper.map(event, DetailEventDTO.class))
+                    : ResponseEntity.status(403).body("Access Denied");
+            }
+            case "admin" : {
+                return getEventResponseEntity(event, filePath);
+            }
+
+            case "student" : {
+                if(!eventRepository.findById(id).orElseThrow().getBookingEmail().equals(userRepository.findByUserEmail(email).get(0).getUserEmail()))
+                {return ResponseEntity.status(403).body("Access Denied");}
+
+                return getEventResponseEntity(event, filePath);
+            }
+        }
+
+        throw new ResponseStatusException(FORBIDDEN , "Something went wrong.");
+    }
+
+    private ResponseEntity getEventResponseEntity(Event event, Path filePath) throws IOException {
+        Map<String, String> file = checkFile(String.valueOf(filePath));
+        if(file.isEmpty()){
+            System.out.println("No file");
+            return ResponseEntity.status(200).body(modelMapper.map(event , DetailEventDTO.class));
+
+        }else{
+            DetailEventWithFileDTO detailEventWithFileDTO = modelMapper.map(event,DetailEventWithFileDTO.class);
+            detailEventWithFileDTO.setFileName(file.get("fileName"));
+            detailEventWithFileDTO.setFileURL(file.get("fileURL"));
+            return ResponseEntity.status(200).body(detailEventWithFileDTO);
+        }
+    }
+
+    private Map<String , String> checkFile(String directories) throws IOException {
+        Map<String,String> fileInfo = new HashMap<>();
+        System.out.println("Is file existed? : " + Files.exists(Path.of(directories)));
+        if(Files.exists(Path.of(directories))){
+            //Get a file
+            System.out.println("Have file");
+            Path toFile = Files.list(Path.of(directories)).collect(Collectors.toList()).get(0);
+
+            //Create a file URL
+            URL fileURL = new URL(fileProperties.getHost() + toFile);
+            String fileName = fileService.loadFileAsResource(String.valueOf(toFile)).getFilename();
+            fileInfo.put("fileURL", String.valueOf(fileURL));
+            fileInfo.put("fileName" , fileName);
+        }
+        return fileInfo;
     }
 
     public List<TimeDTO> getEventByCatIdAndDate(Integer catId , String date){
@@ -68,49 +166,168 @@ public class EventServices {
     }
 
     // POST
-    public ResponseEntity save(PostEventDTO newEvent, HttpServletRequest req) throws MethodArgumentNotValidException {
+    public ResponseEntity save(PostEventDTO newEvent, MultipartFile file , HttpServletRequest req, Authentication auth) throws MethodArgumentNotValidException, ParseException {
+
+        String role =  auth == null ? "" : String.valueOf(auth.getAuthorities().toArray()[0]);
+        String email = auth == null ? "" : auth.getPrincipal().toString();
+
+        switch (role) {
+            case "lecturer":
+                return ResponseEntity.status(403).body("Access Denied");
+            case "student": {
+                if (!newEvent.getBookingEmail().equals(email))
+                    return ResponseEntity.status(400).body("Booking email must be the same as the student's email!");
+
+                Event created_event = createEvent(newEvent , file);
+                if(file != null) {fileService.store(file ,created_event);}
+                sendEmail(created_event);
+                return ResponseEntity.status(201).body("Sucessfully Created!");
+            }
+            default: {
+                System.out.println("In default case");
+                Event created_event = createEvent(newEvent, file);
+                if(file != null) {fileService.store(file ,created_event);}
+                sendEmail(created_event);
+                return ResponseEntity.status(201).body("Sucessfully Created!");
+            }
+        }
+    }
+
+    private Event createEvent(PostEventDTO newEvent ,MultipartFile file){
         //Check future date
         if(newEvent.getEventStartTime().before(new Date()))
-            return ResponseEntity.status(400).body(errorAdvice.getResponseEntity("eventStartTime" , "Time must be in a future" , req));
+            throw new ResponseStatusException(BAD_REQUEST, "Time must be in a future");
+
         //Check valid Email
         String regex = "^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
         if(!newEvent.getBookingEmail().matches(regex))
-            return ResponseEntity.status(400).body(errorAdvice.getResponseEntity("bookingEmail" , "must be a well-formed email address" , req));
+            throw new ResponseStatusException(BAD_REQUEST, "Email must be a well-formed email address");
 
         Event event = modelMapper.map(newEvent, Event.class);
+
         event.setEventCategory(eventCategoryRepository.findById(newEvent.getCategoryId()).orElseThrow(() ->
-            new ResponseStatusException(NOT_FOUND)));
+                new ResponseStatusException(NOT_FOUND)));
         event.setStatus(statusRepository.findById(3).orElseThrow());
         event.setEventDuration(event.getEventCategory().getEventCategoryDuration());
+
         //Add to end time
         LocalDateTime endTime = newEvent.getEventStartTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().plus(Duration.of(event.getEventDuration(), ChronoUnit.MINUTES));
         event.setEventEndTime(Date.from(endTime.atZone(ZoneId.systemDefault()).toInstant()));
-        //Check Overlap
-        if(checkIsOverlap(event))
-            return ResponseEntity.status(400).body(errorAdvice.getResponseEntity("eventStartTime" , "Time is overlapping" , req));
-        check();
-        return ResponseEntity.status(201).body(eventRepository.saveAndFlush(event));
+
+        User user = userRepository.findByUserEmail(newEvent.getBookingEmail()).size() != 0
+                ? userRepository.findByUserEmail(newEvent.getBookingEmail()).get(0)
+                : null;
+
+        event.setUser(user);
+        return eventRepository.saveAndFlush(event);
+    }
+
+    private void sendEmail(Event newEvent) throws ParseException {
+        System.out.println("In sending email");
+        EmailDTO details = new EmailDTO();
+        String start = DateTimeFormatter.ofPattern("E MMM dd, yyyy HH:mm").withZone(ZoneId.of("Asia/Bangkok")).format(newEvent.getEventStartTime().toInstant());
+        String end = DateTimeFormatter.ofPattern("HH:mm").withZone(ZoneId.of("Asia/Bangkok")).format(newEvent.getEventEndTime().toInstant());
+
+        details.setSubject("[OASIP] " + newEvent.getEventCategory().getEventCategoryName() + " @ " + start + " - " + end + " (ICT)");
+        details.setRecipient(newEvent.getBookingEmail());
+        details.setMsgBody("Booking name :: " + newEvent.getBookingName() +
+                        "\nClinic :: " + newEvent.getEventCategory().getEventCategoryName() +
+                        "\nWhen :: " + start + " - " + end + " (ICT)" +
+                        "\nNotes :: " + newEvent.getEventNotes());
+
+        emailService.sendSimpleMail(details);
     }
 
     // DELETE
-    public void delete(Integer id) {
-        eventRepository.deleteById(id);
-        check();
+    public ResponseEntity delete(Integer id, Authentication auth) {
+
+        if(auth == null) throw new ResponseStatusException(UNAUTHORIZED , "Access Denied");
+
+        String role = String.valueOf(auth.getAuthorities().toArray()[0]);
+        String email = auth.getPrincipal().toString();
+        Event event = eventRepository.findById(id).orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Event not foun"));
+        String user_dir = event.getUser() == null ? "guest" : "user/" + "user_" + event.getUser().getId();
+        String path = fileProperties.getUpload_dir() + '/' + user_dir + '/' + "event_" + event.getBookingId();
+        System.out.println(path + " " + Files.exists(Path.of(path)));
+        switch (role) {
+            case "lecturer" :
+                return ResponseEntity.status(403).body("Access Denied");
+            case "admin" : {
+                fileService.deleteDir(path);
+                eventRepository.deleteById(id);
+                check();
+                return ResponseEntity.status(200).body("Successfully deleted!");
+            }
+            case "student" : {
+                if(!email.equals(eventRepository.findById(id).orElseThrow().getUser().getUserEmail())) return ResponseEntity.status(403).body("Access Denied");
+                fileService.deleteDir(path);
+                eventRepository.deleteById(id);
+                check();
+                return ResponseEntity.status(200).body("Successfully deleted!");
+            }
+        }
+        throw new ResponseStatusException(INTERNAL_SERVER_ERROR, "Something went wrong");
     }
 
     // PUT
-    public Event update(Integer id , PutEventDTO editEvent){
+    public ResponseEntity update(Integer id , PutEventDTO editEvent , MultipartFile file ,Authentication auth) throws IOException {
+
+        if(auth == null) throw new ResponseStatusException(UNAUTHORIZED , "Access Denied");
+
+        String role = String.valueOf(auth.getAuthorities().toArray()[0]);
+        String email = auth.getPrincipal().toString();
+
         Event event = eventRepository.findById(id).orElseThrow(() ->
-            new ResponseStatusException(NOT_FOUND));
-        //  Set new details
-        event.setEventNotes(editEvent.getEventNotes());
-        if (editEvent.getEventStartTime().getTime() != event.getEventStartTime().getTime()) {
-            event.setEventStartTime(editEvent.getEventStartTime());
-            LocalDateTime endTime = event.getEventStartTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().plus(Duration.of(event.getEventDuration(), ChronoUnit.MINUTES));
-            event.setEventEndTime(Date.from(endTime.atZone(ZoneId.systemDefault()).toInstant()));
+                new ResponseStatusException(NOT_FOUND));
+        String user_dir = event.getUser() == null ? "guest" : "user/" + "user_" + event.getUser().getId();
+        String path = fileProperties.getUpload_dir() +'/' +  user_dir + "/event_" + event.getBookingId();
+        switch (role) {
+            case "lecturer" :
+                return ResponseEntity.status(403).body("Access Denied");
+            case "admin" : {
+                System.out.println("Admin");
+                return getResponseEntity(id, editEvent, file, event, path);
+            }
+            case "student" : {
+                System.out.println("Student");
+                if(!email.equals(event.getUser().getUserEmail())) return ResponseEntity.status(403).body("Access Denied");
+                return getResponseEntity(id, editEvent, file, event, path);
+            }
         }
-        check();
-        return eventRepository.saveAndFlush(event);
+
+        throw new ResponseStatusException(INTERNAL_SERVER_ERROR, "Something went wrong");
+    }
+
+    private ResponseEntity getResponseEntity(Integer id, PutEventDTO editEvent, MultipartFile file, Event event, String path) throws IOException {
+        if(file != null) {
+            System.out.println("Files is not null");
+            fileService.deleteDir(path);
+            System.out.println("-- Delete old file --- ");
+            fileService.store(file, event);
+            System.out.println("--- Store new file named: " + file.getOriginalFilename());
+
+
+            // 1. Have file -> Change
+            // 2. no file -> add
+            // 3. have file -> do nothing
+        }else {
+
+            //1. no file -> no add
+            //2. have  file -> delete
+            System.out.println("No files in body");
+            System.out.println("Path : " + path);
+
+            if(!Files.exists(Path.of(path))){
+                System.out.println("No file before update");
+            }else {
+                Path toFile = Files.list(Path.of(path)).collect(Collectors.toList()).get(0);
+                System.out.println("File path to delete" + toFile);
+                fileService.deleteDir(path);
+                System.out.println("Existed file deleted");
+            }
+
+        }
+        return ResponseEntity.status(200).body(updateEvent(id,editEvent,event));
     }
 
     public void check(){
@@ -118,6 +335,19 @@ public class EventServices {
         eventRepository.checkStatusComplete();
     }
 
+    private Event updateEvent(Integer id , PutEventDTO detail , Event event){
+
+        event.setEventNotes(detail.getEventNotes());
+
+        if (detail.getEventStartTime().getTime() != event.getEventStartTime().getTime()) {
+            event.setEventStartTime(detail.getEventStartTime());
+            LocalDateTime endTime = event.getEventStartTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().plus(Duration.of(event.getEventDuration(), ChronoUnit.MINUTES));
+            event.setEventEndTime(Date.from(endTime.atZone(ZoneId.systemDefault()).toInstant()));
+        }
+
+        check();
+        return eventRepository.saveAndFlush(event);
+    }
     // CHECK OVERLAP
     private boolean checkIsOverlap(Event PostEvent) {
         List<Event> allEvent = eventRepository.getByCategoryAndDate(

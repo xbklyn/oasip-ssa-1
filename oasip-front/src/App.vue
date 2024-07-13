@@ -1,13 +1,21 @@
 <template>
   <div class="scroll-smooth">
     <div>
-      <Navbar v-show="$route.name == 'NotFound' ? false : true" />
+      <Navbar
+        v-show="
+          $route.name == 'NotFound' || $route.name == 'Login' ? false : true
+        "
+      />
     </div>
     <div class="mx-auto">
       <router-view></router-view>
     </div>
     <div>
-      <Footer v-show="$route.name == 'NotFound' ? false : true" />
+      <Footer
+        v-show="
+          $route.name == 'NotFound' || $route.name == 'Login' ? false : true
+        "
+      />
     </div>
   </div>
 </template>
@@ -17,7 +25,19 @@ import Navbar from './components/Navbar.vue';
 import Footer from './components/Footer.vue';
 
 import { useRoute, useRouter } from 'vue-router';
+import { onMounted } from '@vue/runtime-core';
+import { useStoreToken } from './stores/token';
+
 const myRouter = useRouter();
+const tokenStore = useStoreToken()
+const { setAccessToken, setUserRole, setUserEmail } = tokenStore
+
+
+onMounted(()=>{
+  setAccessToken(localStorage.getItem('access_token'))
+  setUserRole(localStorage.getItem('userRole'))
+  setUserEmail(localStorage.getItem('userEmail'))
+})
 
 myRouter.beforeEach((to, from, next) => {
   document.title = to.meta.title;

@@ -1,8 +1,10 @@
-package sit.int221.oasip.dtos;
+package sit.int221.oasip.dtos.event;
+
+import sit.int221.oasip.entities.User;
 
 import java.util.Date;
 
-public class EventDetailDTO {
+public class DetailEventDTO {
     private Integer id;
     private String bookingName;
     private String bookingEmail;
@@ -15,7 +17,11 @@ public class EventDetailDTO {
     private String eventCategoryDuration;
     private String eventNotes;
     private Integer statusId;
+    private Integer userId;
 
+    public Integer getUserId() {return userId;}
+
+    public void setUserId(Integer userId) {this.userId = userId;}
 
     public Integer getId() {
         return id;

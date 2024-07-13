@@ -2,26 +2,37 @@ package sit.int221.oasip.controllers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
-import sit.int221.oasip.dtos.*;
+import org.springframework.web.multipart.MultipartFile;
+import sit.int221.oasip.dtos.event.DetailEventDTO;
+import sit.int221.oasip.dtos.event.PostEventDTO;
+import sit.int221.oasip.dtos.event.PutEventDTO;
+import sit.int221.oasip.dtos.event.SimpleEventDTO;
+import sit.int221.oasip.dtos.time.TimeDTO;
 import sit.int221.oasip.entities.Event;
 import sit.int221.oasip.repositories.EventRepository;
+import sit.int221.oasip.repositories.UserRepository;
 import sit.int221.oasip.services.EventServices;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.List;
 
-
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/api/events")
 public class EventsController {
 
+    private final UserRepository userRepository;
     private final EventServices eventServices;
 
-    public EventsController(EventRepository erepo, EventServices eventServices) {
+    public EventsController(EventRepository erepo, UserRepository userRepository, EventServices eventServices) {
+        this.userRepository = userRepository;
         this.eventServices = eventServices;
     }
 
@@ -29,16 +40,17 @@ public class EventsController {
 
     //GET All
     @GetMapping("")
-    public List<SimpleEventDTO> getAllEvents() {
-        return eventServices.getAllEvents();
+    public List<SimpleEventDTO> getAllEvents(Authentication auth) {
+        return eventServices.getAllEvents(auth);
     }
 
     //GET by id
     @GetMapping("/{id}")
-    public EventDetailDTO getEventById(
-            @PathVariable Integer id
-    ) {
-        return eventServices.getEventById(id);
+    public ResponseEntity getEventById(
+            @PathVariable Integer id,
+            Authentication auth
+    ) throws IOException {
+        return eventServices.getEventById(id , auth);
     }
 
     @GetMapping("/{categoryId}/{date}")
@@ -56,31 +68,36 @@ public class EventsController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("")
     public ResponseEntity createEvent(
-           @Valid @RequestBody PostEventDTO newEvent,
-           HttpServletRequest req
-    ) throws MethodArgumentNotValidException {
-        return eventServices.save(newEvent , req);
+           @Valid @RequestPart("body") PostEventDTO newEvent,
+           @RequestPart(value = "file" ,required = false) MultipartFile file,
+           HttpServletRequest req,
+           Authentication auth
+    ) throws MethodArgumentNotValidException, ParseException {
+        return eventServices.save(newEvent,file , req , auth);
     }
 
 //  DELETE Method
 
 //  Delete existing event
     @DeleteMapping("/{id}")
-    public void delete(
-            @PathVariable Integer id
+    public ResponseEntity delete(
+            @PathVariable Integer id,
+            Authentication auth
     ){
-        eventServices.delete(id);
+        return eventServices.delete(id, auth);
     }
 
 //         PUT Method
 //        //Update Event
         @ResponseStatus(HttpStatus.OK)
         @PutMapping("/{id}")
-        public Event edit(
-                @Valid @RequestBody PutEventDTO editEventDTO,
-                @PathVariable Integer id
-                ){
-            return eventServices.update(id , editEventDTO);
+        public ResponseEntity edit(
+                @Valid @RequestPart("body") PutEventDTO editEventDTO,
+                @RequestPart(value = "file" , required = false) MultipartFile file,
+                @PathVariable Integer id,
+                Authentication auth
+                ) throws IOException {
+            return eventServices.update(id , editEventDTO,file,  auth);
         }
 
 

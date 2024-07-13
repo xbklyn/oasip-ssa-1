@@ -1,4 +1,4 @@
-package sit.int221.oasip.dtos;
+package sit.int221.oasip.dtos.event;
 
 import java.util.Date;
 

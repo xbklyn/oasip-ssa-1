@@ -3,14 +3,15 @@
     <!-- HEADER -->
     <div class="w-srceen h-full py-24 l-color-navi">
       <p class="text-center font-light">Welcome to</p>
-      <h1 class="text-8xl font-medium text-center leading-relaxed mb-6">
+      <h1
+        class="text-4xl xl:text-8xl font-medium text-center leading-relaxed xl:leading-relaxed mb-6"
+      >
         Online Appointment<br />
         Sevice for Integrated<br />
         Project Clinic
-        <p>{{ formatDate(time) }}</p>
       </h1>
 
-      <p class="l-w-824 text-center mx-auto">
+      <p class="text-center mx-auto text-xs md:text-base">
         Website for booking a teacher's consultation.
       </p>
       <router-link
@@ -57,7 +58,9 @@
       <div class="box10 absolute w-2 h-2 rounded-full bg-blue-800"></div>
 
       <!-- Dash board -->
-      <div class="grid grid-cols-4 l-w-full gap-x-12 mt-24 mx-auto">
+      <!-- <div
+        class="grid px-12 md:grid-cols-2 xl:grid-cols-4 md:l-w-full gap-12 mt-24 mx-auto"
+      >
         <div
           class="bg-white drop-shadow-md flex hover:scale-105 duration-150 ease-in-out"
         >
@@ -123,35 +126,37 @@
             </p>
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
 
     <!-- Clinics -->
     <div>
-      <div class="l-bg-gray w-full pb-24">
-        <div class="l-w-full mx-auto px-4">
-          <div class="l-w-full mx-auto py-16">
-            <h2 class="font-bold text-4xl mt-24">Clinics</h2>
+      <div class="l-bg-gray w-full pb-24 px-8">
+        <div class="mx-auto">
+          <div class="mx-auto p-16">
+            <h2 class="font-bold text-4xl md:mt-24">Clinics</h2>
             <div>
-              <div class="grid grid-cols-3 gap-12 mt-12">
+              <div class="grid md:grid-cols-2 xl:grid-cols-3 gap-12 mt-12">
                 <div
                   v-for="(clinic, index) in AllCategory"
                   :key="index"
-                  class="group relative"
+                  class="grid w-full"
                 >
-                  <div class="w-96 h-80 bg-white overflow-hidden duration-150">
+                  <div class="duration-150">
                     <img
                       :src="clinicImages[index].img"
-                      class="w-full h-full object-center object-cover"
+                      class="w-full object-center object-cover bg-center"
                     />
                   </div>
-                  <h3 class="grid grid-cols-2 mt-6 text-sm text-gray-500 mb-2">
+                  <h3
+                    class="grid grid-cols-2 w-full mt-6 text-sm text-gray-500 mb-2"
+                  >
                     {{ clinic.eventCategoryName
                     }}<span class="justify-self-end font-medium text-xs"
                       >Duration {{ clinic.eventCategoryDuration }} Mins.</span
                     >
                   </h3>
-                  <p class="text-base font-medium text-gray-900">
+                  <p class="text-base font-medium text-gray-900 truncate">
                     {{
                       clinic.eventCategoryDescription.length == 0
                         ? 'No description'
@@ -168,34 +173,36 @@
 
     <!-- Team member -->
     <div class="bg-black w-full">
-      <div class="grid grid-cols-2 text-white mx-auto">
-        <div class="grid grid-rows-5 mt-24 ml-24">
+      <div class="grid grid-cols-2 text-white mx-auto py-12 px-6">
+        <div class="grid grid-rows-5 xl:mt-24 xl:ml-24">
           <div class="row-span-4">
-            <p class="text-white text-xl font-light">
+            <p class="text-white text-sm xl:text-xl font-light">
               “มังค์กี้กระป๋องกระแป๋งหำหดตดไหม้”
             </p>
           </div>
           <div class="">
-            <h1 class="text-xl font-light">SSA-1 Team</h1>
-            <h2 class="text-md font-light">
+            <h1 class="text-sm xl:text-xl font-light">SSA-1 Team</h1>
+            <h2 class="text-xs xl:text-md font-light">
               Adviser | Dr. Sunisa Sathapornvajana
             </h2>
           </div>
         </div>
-        <div class="justify-self-end mr-24 grid grid-rows-2 mb-24">
+        <div class="justify-self-end xl:mr-24 grid grid-rows-2 mb-24">
           <div class="grid gap-12 row-start-2">
             <div class="flex">
-              <div class="w-24 h-24 inline-block">
+              <div class="w-16 h-16 xl:w-24 xl:h-24 inline-block">
                 <img
-                  class="container h-24 rounded-full"
+                  class="container h-16 xl:h-24 rounded-full"
                   src="../assets/profile/std-026-2.jpeg"
                   alt=""
                   width="96"
                 />
               </div>
               <div class="ml-6">
-                <p class="text-xs font-semibold">63130500026</p>
-                <h1 class="text-2xl font-semibold">Chotiwit Souyan</h1>
+                <p class="text-xs xl:text-xs font-semibold">63130500026</p>
+                <h1 class="text-xs xl:text-2xl font-semibold">
+                  Chotiwit Souyan
+                </h1>
                 <a
                   href="https://github.com/xbklyn"
                   target="_blank"
@@ -204,24 +211,27 @@
                     src="../assets/component/gitHub.png"
                     width="24"
                     class="hover:scale-110 duration-150"
-                  /><span class="grid place-items-center text-sm ml-2"
+                  /><span
+                    class="grid place-items-center text-xs xl:text-sm ml-2"
                     >xbklyn</span
                   ></a
                 >
               </div>
             </div>
             <div class="flex">
-              <div class="w-24 h-24 inline-block">
+              <div class="w-16 h-16 xl:w-24 xl:h-24 inline-block">
                 <img
-                  class="container h-24 rounded-full"
+                  class="container h-16 xl:h-24 rounded-full"
                   src="../assets/profile/std-034-2.jpeg"
                   alt=""
                   width="96"
                 />
               </div>
               <div class="ml-6">
-                <p class="text-xs font-semibold">63130500034</p>
-                <h1 class="text-2xl font-semibold">Nuttida Meeboon</h1>
+                <p class="text-xs xl:text-xs font-semibold">63130500034</p>
+                <h1 class="text-xs xl:text-2xl font-semibold">
+                  Nuttida Meeboon
+                </h1>
                 <a
                   href="https://github.com/NUTTIDA-donut"
                   target="_blank"
@@ -230,7 +240,8 @@
                     src="../assets/component/gitHub.png"
                     width="24"
                     class="hover:scale-110 duration-150"
-                  /><span class="grid place-items-center text-sm ml-2"
+                  /><span
+                    class="grid place-items-center text-xs xl:text-sm ml-2"
                     >NUTTIDA-donut</span
                   ></a
                 >
@@ -238,17 +249,19 @@
             </div>
             <div>
               <div class="flex">
-                <div class="w-24 h-24 inline-block">
+                <div class="w-16 h-16 xl:w-24 xl:h-24 inline-block">
                   <img
-                    class="container h-24 rounded-full"
+                    class="container h-16 xl:h-24 rounded-full"
                     src="../assets/profile/std-065.jpeg"
                     alt=""
                     width="96"
                   />
                 </div>
                 <div class="ml-6">
-                  <p class="text-xs font-semibold">63130500065</p>
-                  <h1 class="text-2xl font-semibold">Narawich Kumpusa</h1>
+                  <p class="text-xs xl:text-xs font-semibold">63130500065</p>
+                  <h1 class="text-xs xl:text-2xl font-semibold">
+                    Narawich Kumpusa
+                  </h1>
                   <a
                     href="https://github.com/catintheboxx"
                     target="_blank"
@@ -257,7 +270,8 @@
                       src="../assets/component/gitHub.png"
                       width="24"
                       class="hover:scale-110 duration-150"
-                    /><span class="grid place-items-center text-sm ml-2"
+                    /><span
+                      class="grid place-items-center text-xs xl:text-sm ml-2"
                       >catintheboxx</span
                     ></a
                   >
@@ -275,22 +289,17 @@
 import { ref } from '@vue/reactivity';
 import { computed, onBeforeMount, onMounted } from '@vue/runtime-core';
 import moment from 'moment';
-import { getAllEvents, getAllCategory } from '../services/FetchServices.js';
+import { getAllCategory, getAllEvents } from '../services/FetchServices.js';
 import { formatDate } from '../services/moment';
 // import moment from 'moment';
 // import 'moment/locale/th';
 
-onBeforeMount(async () => {
-  const res = await getAllEvents();
-  const temp = await getAllCategory();
-  AllEventsData.value = res;
-  AllCategory.value = temp.sort((c) => -1);
-});
 
-onMounted(() => {
-  setInterval(() => {
-    currentTime();
-  }, 1000);
+onMounted(async () => {
+  // const res = await getAllEvents();
+  const temp = await getAllCategory();
+  // AllEventsData.value = res;
+  AllCategory.value = temp.sort((c) => -1);
 });
 
 const AllEventsData = ref([]);

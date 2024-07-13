@@ -2,7 +2,7 @@ package sit.int221.oasip.controllers;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sit.int221.oasip.dtos.PutCategoryDTO;
+import sit.int221.oasip.dtos.category.PutCategoryDTO;
 import sit.int221.oasip.entities.Eventcategory;
 import sit.int221.oasip.services.EventCategoryService;
 
@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/api/category")
 public class EventCategoryController {
